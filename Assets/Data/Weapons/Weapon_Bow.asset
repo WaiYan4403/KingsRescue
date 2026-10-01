@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
+  m_Name: Weapon_Bow
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
+  displayName: Bow
+  description: Fires arrows up the screen.
+  icon: {fileID: 0}
+  fireMode: 1
+  projectilePrefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
+  orbitPrefab: {fileID: 0}
+  effectPrefab: {fileID: 0}
+  usesGlobalProjectileCount: 1
+  comboDelay: 0.12
+  levels:
+  - upgradeText: 
+    damage: 9
+    cooldown: 0.7
+    count: 1
+    pierce: 0
+    area: 1
+    projectileSpeed: 14
+    lifetime: 1.8
+    knockback: 0
+    arcDegrees: 150
+    spreadDegrees: 14
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: +1 arrow
+    damage: 9
+    cooldown: 0.7
+    count: 2
+    pierce: 0
+    area: 1
+    projectileSpeed: 14
+    lifetime: 1.8
+    knockback: 0
+    arcDegrees: 150
+    spreadDegrees: 14
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Pierce 1
+    damage: 9
+    cooldown: 0.7
+    count: 2
+    pierce: 1
+    area: 1
+    projectileSpeed: 14
+    lifetime: 1.8
+    knockback: 0
+    arcDegrees: 150
+    spreadDegrees: 16
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Three-arrow volley
+    damage: 14
+    cooldown: 0.7
+    count: 3
+    pierce: 1
+    area: 1
+    projectileSpeed: 14
+    lifetime: 1.8
+    knockback: 0
+    arcDegrees: 150
+    spreadDegrees: 22
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Faster, more pierce
+    damage: 14
+    cooldown: 0.5
+    count: 3
+    pierce: 3
+    area: 1
+    projectileSpeed: 16
+    lifetime: 1.8
+    knockback: 0
+    arcDegrees: 150
+    spreadDegrees: 22
+    rehitInterval: 0.45
+    orbitSpeed: 0.7

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{61a9638a-8bff-49bc-b6f2-c9822b8fc50e}">
+		<property name="assetPath">
+			<value>BGM/King’s Rescue Gameplay Theme.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>100.80002083333333</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d179f290-fc04-40b5-9d8e-847297a80cb2}</destination>
+		</relationship>
+	</object>
+</objects>

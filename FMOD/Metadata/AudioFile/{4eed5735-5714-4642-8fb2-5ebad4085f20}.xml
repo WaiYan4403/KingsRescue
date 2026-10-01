@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{4eed5735-5714-4642-8fb2-5ebad4085f20}">
+		<property name="assetPath">
+			<value>King's Rescue Gameover.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>58.37833333333333</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d179f290-fc04-40b5-9d8e-847297a80cb2}</destination>
+		</relationship>
+	</object>
+</objects>

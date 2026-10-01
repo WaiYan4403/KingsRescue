@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_Skelly
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Skelly
+  prefab: {fileID: 7657488641991038239, guid: 67ef1452bf5d44907b2b0588c453103e, type: 3}
+  maxHealth: 20
+  contactDamage: 14
+  contactInterval: 0.6
+  contactRadius: 0.55
+  moveSpeed: 1
+  scrollInfluence: 1
+  turnResponsiveness: 6
+  followChance: 1
+  giveUpWhenPassedChance: 0.6
+  separationRadius: 2.5
+  separationStrength: 2.8
+  xpValue: 3
+  coinDropChance: 0.12
+  healthDropChance: 0.015
+  healthGrowthPerMinute: 0.35
+  damageGrowthPerMinute: 0.12

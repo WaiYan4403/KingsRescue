@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3790a49b1a1404c47bc133269e63f039, type: 3}
+  m_Name: Upgrade_Plate
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.UpgradeDefinition
+  kind: 2
+  weight: 80
+  weapon: {fileID: 0}
+  passive: {fileID: 11400000, guid: 912204986dbe046bf98cb9899550874f, type: 2}
+  coinAmount: 25
+  titleOverride: 
+  descriptionOverride: 
+  iconOverride: {fileID: 0}
