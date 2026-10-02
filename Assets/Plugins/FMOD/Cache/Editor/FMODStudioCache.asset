@@ -80,7 +80,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 1181797513702969885}
   cacheVersion: 131860
-  cacheTime: 639254304629123115
+  cacheTime: 639264589166168288
   SerializableEventsDict:
   - key: "event:/Music/King\u2019s Rescue Menu Theme"
     index: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   Path: FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639253274479421844
+  lastModified: 639264589165872117
   FileSizes:
   - Name: Desktop
     Value: 996
@@ -176,7 +176,7 @@ MonoBehaviour:
   Path: FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639253274479397239
+  lastModified: 639264589165872117
   FileSizes:
   - Name: Desktop
     Value: 1074
@@ -196,7 +196,7 @@ MonoBehaviour:
   Path: FMOD/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 639254304629123115
+  lastModified: 639264589166168288
   FileSizes:
   - Name: Desktop
     Value: 3975616

@@ -1,0 +1,577 @@
+fileFormatVersion: 2
+guid: c70160325ec6e564895e77c4273f48cb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4682605282682271081
+    second: LevelUp-Scroll-Sheet_0
+  - first:
+      213: 6311418129007216110
+    second: LevelUp-Scroll-Sheet_1
+  - first:
+      213: 2625790189233247308
+    second: LevelUp-Scroll-Sheet_2
+  - first:
+      213: -1555861771724885114
+    second: LevelUp-Scroll-Sheet_3
+  - first:
+      213: 9091989166689694121
+    second: LevelUp-Scroll-Sheet_4
+  - first:
+      213: -8374573753813608778
+    second: LevelUp-Scroll-Sheet_5
+  - first:
+      213: 8021751229079145391
+    second: LevelUp-Scroll-Sheet_6
+  - first:
+      213: -1729225488411224364
+    second: LevelUp-Scroll-Sheet_7
+  - first:
+      213: -3768008437788128508
+    second: LevelUp-Scroll-Sheet_8
+  - first:
+      213: 6346155950444800817
+    second: LevelUp-Scroll-Sheet_9
+  - first:
+      213: 3487918280332962848
+    second: LevelUp-Scroll-Sheet_10
+  - first:
+      213: 1769858763883704515
+    second: LevelUp-Scroll-Sheet_11
+  - first:
+      213: -3921484216223925068
+    second: LevelUp-Scroll-Sheet_12
+  - first:
+      213: -6624928293907271898
+    second: LevelUp-Scroll-Sheet_13
+  - first:
+      213: -2837117514174492645
+    second: LevelUp-Scroll-Sheet_14
+  - first:
+      213: 7073038333952966374
+    second: LevelUp-Scroll-Sheet_15
+  - first:
+      213: -684745721470990933
+    second: LevelUp-Scroll-Sheet_16
+  - first:
+      213: -6457581682300038346
+    second: LevelUp-Scroll-Sheet_17
+  - first:
+      213: -6503133427064026922
+    second: LevelUp-Scroll-Sheet_18
+  - first:
+      213: -317646704461293688
+    second: LevelUp-Scroll-Sheet_19
+  - first:
+      213: 7779932873534175001
+    second: LevelUp-Scroll-Sheet_20
+  - first:
+      213: -4507000726922356800
+    second: LevelUp-Scroll-Sheet_21
+  - first:
+      213: -2101483508518697823
+    second: LevelUp-Scroll-Sheet_22
+  - first:
+      213: 7691207927705282240
+    second: LevelUp-Scroll-Sheet_23
+  - first:
+      213: 1495263478779646374
+    second: LevelUp-Scroll-Sheet_24
+  - first:
+      213: -2343666607240887714
+    second: LevelUp-Scroll-Sheet_25
+  - first:
+      213: 4556035563171083513
+    second: LevelUp-Scroll-Sheet_26
+  - first:
+      213: 4842399692398134028
+    second: LevelUp-Scroll-Sheet_27
+  - first:
+      213: -6292627852656334411
+    second: LevelUp-Scroll-Sheet_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79a0b5e0e4b040fb0800000000000000
+      internalID: -4682605282682271081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee58f685959a69750800000000000000
+      internalID: 6311418129007216110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4414fbd34ea07420800000000000000
+      internalID: 2625790189233247308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6837ab046f7786ae0800000000000000
+      internalID: -1555861771724885114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a13d36c9fb3d2e70800000000000000
+      internalID: 9091989166689694121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b651a29a8987cb80800000000000000
+      internalID: -8374573753813608778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 967
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fabc0d5ed3cf25f60800000000000000
+      internalID: 8021751229079145391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 1128
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d692b2849e8008e0800000000000000
+      internalID: -1729225488411224364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 1289
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40bc6f22a4855bbc0800000000000000
+      internalID: -3768008437788128508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1450
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13b6e7ba633121850800000000000000
+      internalID: 6346155950444800817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 1611
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02c66d83233976030800000000000000
+      internalID: 3487918280332962848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 1772
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c076eb2b2dcf8810800000000000000
+      internalID: 1769858763883704515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 1933
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bcfbabd1e61499c0800000000000000
+      internalID: -3921484216223925068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 2094
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62fe83b21d68f04a0800000000000000
+      internalID: -6624928293907271898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUp-Scroll-Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 2255
+        y: 1
+        width: 160
+        height: 321
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b10179d07a880a8d0800000000000000
+      internalID: -2837117514174492645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: e0815d5d730b8aa43ac09406be2d7ff7
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":160.0,"y":321.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      LevelUp-Scroll-Sheet_0: -4682605282682271081
+      LevelUp-Scroll-Sheet_1: 6311418129007216110
+      LevelUp-Scroll-Sheet_10: 3487918280332962848
+      LevelUp-Scroll-Sheet_11: 1769858763883704515
+      LevelUp-Scroll-Sheet_12: -3921484216223925068
+      LevelUp-Scroll-Sheet_13: -6624928293907271898
+      LevelUp-Scroll-Sheet_14: -2837117514174492645
+      LevelUp-Scroll-Sheet_2: 2625790189233247308
+      LevelUp-Scroll-Sheet_3: -1555861771724885114
+      LevelUp-Scroll-Sheet_4: 9091989166689694121
+      LevelUp-Scroll-Sheet_5: -8374573753813608778
+      LevelUp-Scroll-Sheet_6: 8021751229079145391
+      LevelUp-Scroll-Sheet_7: -1729225488411224364
+      LevelUp-Scroll-Sheet_8: -3768008437788128508
+      LevelUp-Scroll-Sheet_9: 6346155950444800817
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

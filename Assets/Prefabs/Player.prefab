@@ -153,7 +153,7 @@ MonoBehaviour:
   forwardSpeedFactor: 1
   animator: {fileID: 0}
   spriteRenderer: {fileID: 0}
-  speedParameter: Speed
+  speedParameter: MoveSpeed
 --- !u!114 &4460760701475635381
 MonoBehaviour:
   m_ObjectHideFlags: 0

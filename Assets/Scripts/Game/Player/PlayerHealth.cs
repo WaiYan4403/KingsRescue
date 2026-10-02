@@ -16,6 +16,7 @@ namespace KingsRescue.Player
         [SerializeField] private float invulnerabilityDuration = 0.5f;
 
         [SerializeField] private SpriteRenderer flashTarget;
+        [SerializeField] private Animator animator;
         [SerializeField, Range(0f, 1f)] private float invulnerableAlpha = 0.45f;
 
         private PlayerStats stats;
@@ -46,6 +47,11 @@ namespace KingsRescue.Player
             if (flashTarget == null)
             {
                 flashTarget = GetComponentInChildren<SpriteRenderer>();
+            }
+
+            if (animator == null)
+            {
+                animator = GetComponent<Animator>();
             }
         }
 
@@ -157,6 +163,7 @@ namespace KingsRescue.Player
             {
                 RestoreVisual();
             }
+            animator.SetInteger("Health", (int)Current);
         }
 
         private void RestoreVisual()

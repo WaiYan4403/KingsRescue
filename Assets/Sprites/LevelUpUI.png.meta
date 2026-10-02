@@ -1,0 +1,501 @@
+fileFormatVersion: 2
+guid: fdf651e72baa02e4aa714f40d8dbcb5d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1677937059928240808
+    second: LevelUpUI_0
+  - first:
+      213: -3522461574936482408
+    second: LevelUpUI_1
+  - first:
+      213: 1535453758426610404
+    second: LevelUpUI_2
+  - first:
+      213: -6987840827686033055
+    second: LevelUpUI_3
+  - first:
+      213: 5677343709083684781
+    second: LevelUpUI_4
+  - first:
+      213: 4448661063640708861
+    second: LevelUpUI_5
+  - first:
+      213: 4377705722553851728
+    second: LevelUpUI_6
+  - first:
+      213: 2121863657926801249
+    second: LevelUpUI_7
+  - first:
+      213: 3656226753655065450
+    second: LevelUpUI_8
+  - first:
+      213: -6488392832381908080
+    second: LevelUpUI_9
+  - first:
+      213: -8539311163094732328
+    second: LevelUpUI_10
+  - first:
+      213: -8380823520659928216
+    second: LevelUpUI_11
+  - first:
+      213: 4264082269980880025
+    second: LevelUpUI_12
+  - first:
+      213: -8818801286232017321
+    second: LevelUpUI_13
+  - first:
+      213: -5165119510024695320
+    second: LevelUpUI_14
+  - first:
+      213: -6117963693551436286
+    second: LevelUpUI_15
+  - first:
+      213: 4479523821319986298
+    second: LevelUpUI_16
+  - first:
+      213: 8537313553428429543
+    second: LevelUpUI_17
+  - first:
+      213: 5391426316493133309
+    second: LevelUpUI_18
+  - first:
+      213: 1388772546370597485
+    second: LevelUpUI_19
+  - first:
+      213: 7480343005828701472
+    second: LevelUpUI_20
+  - first:
+      213: 1248613273595858607
+    second: LevelUpUI_21
+  - first:
+      213: -592013889155018435
+    second: LevelUpUI_22
+  - first:
+      213: -309078542917738170
+    second: LevelUpUI_23
+  - first:
+      213: 7547678181655790311
+    second: LevelUpUI_24
+  - first:
+      213: -7620776788533944232
+    second: LevelUpUI_25
+  - first:
+      213: -6436162212709048143
+    second: LevelUpUI_26
+  - first:
+      213: -3184782107477701905
+    second: LevelUpUI_27
+  - first:
+      213: 1347619374834976185
+    second: LevelUpUI_28
+  - first:
+      213: -4883897130895696962
+    second: LevelUpUI_29
+  - first:
+      213: -321774265637209906
+    second: LevelUpUI_30
+  - first:
+      213: 6972187604675077297
+    second: LevelUpUI_31
+  - first:
+      213: -8344734167022631237
+    second: LevelUpUI_32
+  - first:
+      213: 4387596538117416433
+    second: LevelUpUI_33
+  - first:
+      213: -2062521526375575552
+    second: LevelUpUI_34
+  - first:
+      213: 7342209410513185493
+    second: LevelUpUI_35
+  - first:
+      213: 4380916024578560224
+    second: LevelUpUI_36
+  - first:
+      213: -7050039798120115001
+    second: LevelUpUI_37
+  - first:
+      213: 6808314524211642004
+    second: LevelUpUI_38
+  - first:
+      213: -7219987303053974712
+    second: LevelUpUI_39
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LevelUpUI_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 95
+        width: 129
+        height: 226
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85d83835225c6b8e0800000000000000
+      internalID: -1677937059928240808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_1
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 278
+        width: 112
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89da2f24cd3bd1fc0800000000000000
+      internalID: -3522461574936482408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_2
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 253
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea7e00ee070f4510800000000000000
+      internalID: 1535453758426610404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_5
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 230
+        width: 110
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df67a68daa1dcbd30800000000000000
+      internalID: 4448661063640708861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_9
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 252
+        width: 69
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09b8fae881994f5a0800000000000000
+      internalID: -6488392832381908080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_14
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 209
+        width: 100
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e1d98eeb2fc158b0800000000000000
+      internalID: -5165119510024695320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_29
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 190
+        width: 82
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebb99697f69e83cb0800000000000000
+      internalID: -4883897130895696962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_36
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 176
+        width: 30
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e052dbc9e32ccc30800000000000000
+      internalID: 4380916024578560224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_39
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 65
+        width: 114
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84323ae0dc37dcb90800000000000000
+      internalID: -7219987303053974712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 33f696b1caa5afd40b4e29e21416a5a8
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      LevelUpUI_0: -1677937059928240808
+      LevelUpUI_1: -3522461574936482408
+      LevelUpUI_10: -8539311163094732328
+      LevelUpUI_11: -8380823520659928216
+      LevelUpUI_12: 4264082269980880025
+      LevelUpUI_13: -8818801286232017321
+      LevelUpUI_14: -5165119510024695320
+      LevelUpUI_15: -6117963693551436286
+      LevelUpUI_16: 4479523821319986298
+      LevelUpUI_17: 8537313553428429543
+      LevelUpUI_18: 5391426316493133309
+      LevelUpUI_19: 1388772546370597485
+      LevelUpUI_2: 1535453758426610404
+      LevelUpUI_20: 7480343005828701472
+      LevelUpUI_21: 1248613273595858607
+      LevelUpUI_22: -592013889155018435
+      LevelUpUI_23: -309078542917738170
+      LevelUpUI_24: 7547678181655790311
+      LevelUpUI_25: -7620776788533944232
+      LevelUpUI_26: -6436162212709048143
+      LevelUpUI_27: -3184782107477701905
+      LevelUpUI_28: 1347619374834976185
+      LevelUpUI_29: -4883897130895696962
+      LevelUpUI_3: -6987840827686033055
+      LevelUpUI_30: -321774265637209906
+      LevelUpUI_31: 6972187604675077297
+      LevelUpUI_32: -8344734167022631237
+      LevelUpUI_33: 4387596538117416433
+      LevelUpUI_34: -2062521526375575552
+      LevelUpUI_35: 7342209410513185493
+      LevelUpUI_36: 4380916024578560224
+      LevelUpUI_37: -7050039798120115001
+      LevelUpUI_38: 6808314524211642004
+      LevelUpUI_39: -7219987303053974712
+      LevelUpUI_4: 5677343709083684781
+      LevelUpUI_5: 4448661063640708861
+      LevelUpUI_6: 4377705722553851728
+      LevelUpUI_7: 2121863657926801249
+      LevelUpUI_8: 3656226753655065450
+      LevelUpUI_9: -6488392832381908080
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

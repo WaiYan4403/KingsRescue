@@ -22,7 +22,7 @@ namespace KingsRescue.Player
         [Header("Visuals")]
         [SerializeField] private Animator animator;
         [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private string speedParameter = "Speed";
+        [SerializeField] private string speedParameter = "MoveSpeed";
 
         private Rigidbody2D body;
         private PlayerStats stats;
@@ -116,10 +116,10 @@ namespace KingsRescue.Player
                 animator.SetFloat(speedParameterHash, velocity.magnitude);
             }
 
-            if (spriteRenderer != null && Mathf.Abs(velocity.x) > 0.05f)
+            /*if (spriteRenderer != null && Mathf.Abs(velocity.x) > 0.05f)
             {
                 spriteRenderer.flipX = velocity.x < 0f;
-            }
+            }*/
         }
 
         private bool HasAnimatorParameter(int hash)

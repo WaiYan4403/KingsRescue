@@ -1,25 +1,31 @@
 fileFormatVersion: 2
-guid: 0f84f8dea74ba4dc8ada124d84f14fca
+guid: 59602b2637c2672479d286295f15d023
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 54620541728290854
-    second: Sprite-0002-Sheet_0
+      213: -3476343274940658166
+    second: Lancer_Attack_Effects_0
   - first:
-      213: 7977414170037210279
-    second: Sprite-0002-Sheet_1
+      213: 3517964212427929003
+    second: Lancer_Attack_Effects_1
   - first:
-      213: -6017161630642107537
-    second: Sprite-0002-Sheet_2
+      213: 4054594189942567472
+    second: Lancer_Attack_Effects_2
   - first:
-      213: -774171364642349061
-    second: Sprite-0002-Sheet_3
+      213: -6344869942462719489
+    second: Lancer_Attack_Effects_3
   - first:
-      213: 4439951221471878829
-    second: Sprite-0002-Sheet_4
+      213: -1373118510185281445
+    second: Lancer_Attack_Effects_4
   - first:
-      213: 947299383180256026
-    second: Sprite-0002-Sheet_5
+      213: 6934130322411639503
+    second: Lancer_Attack_Effects_5
+  - first:
+      213: -1172328261103041579
+    second: Lancer_Attack_Effects_6
+  - first:
+      213: -2470940625377029970
+    second: Lancer_Attack_Effects_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -89,7 +95,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -137,30 +143,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sprite-0002-Sheet_0
+      name: Lancer_Attack_Effects_0
       rect:
         serializedVersion: 2
-        x: 32
-        y: 14
-        width: 16
-        height: 16
+        x: 1
+        y: 1
+        width: 64
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,20 +162,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6287723e71d02c000800000000000000
-      internalID: 54620541728290854
+      spriteID: a0e08dbb53c81cfc0800000000000000
+      internalID: -3476343274940658166
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite-0002-Sheet_1
+      name: Lancer_Attack_Effects_1
       rect:
         serializedVersion: 2
-        x: 112
-        y: 14
-        width: 16
-        height: 16
+        x: 66
+        y: 1
+        width: 64
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -191,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7ac4c37ebe775be60800000000000000
-      internalID: 7977414170037210279
+      spriteID: ba5bd4eefc152d030800000000000000
+      internalID: 3517964212427929003
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite-0002-Sheet_2
+      name: Lancer_Attack_Effects_2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 14
-        width: 16
-        height: 16
+        x: 131
+        y: 1
+        width: 64
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -213,20 +206,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f6b8771906fbe7ca0800000000000000
-      internalID: -6017161630642107537
+      spriteID: 032b3effeefc44830800000000000000
+      internalID: 4054594189942567472
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite-0002-Sheet_3
+      name: Lancer_Attack_Effects_3
       rect:
         serializedVersion: 2
-        x: 272
-        y: 14
-        width: 16
-        height: 16
+        x: 196
+        y: 1
+        width: 64
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -235,20 +228,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bff963fde379145f0800000000000000
-      internalID: -774171364642349061
+      spriteID: ff9d475676e72f7a0800000000000000
+      internalID: -6344869942462719489
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite-0002-Sheet_4
+      name: Lancer_Attack_Effects_4
       rect:
         serializedVersion: 2
-        x: 352
-        y: 14
-        width: 16
-        height: 16
+        x: 261
+        y: 1
+        width: 64
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -257,20 +250,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dae94efac10ed9d30800000000000000
-      internalID: 4439951221471878829
+      spriteID: b5884e57df3b1fce0800000000000000
+      internalID: -1373118510185281445
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite-0002-Sheet_5
+      name: Lancer_Attack_Effects_5
       rect:
         serializedVersion: 2
-        x: 432
-        y: 14
-        width: 16
-        height: 16
+        x: 326
+        y: 1
+        width: 64
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -279,8 +272,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a13e76e15cb752d00800000000000000
-      internalID: 947299383180256026
+      spriteID: fc25c952acafa3060800000000000000
+      internalID: 6934130322411639503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lancer_Attack_Effects_6
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 1
+        width: 64
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d34dc468ad0bbfe0800000000000000
+      internalID: -1172328261103041579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lancer_Attack_Effects_7
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 1
+        width: 64
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea01253c79475bdd0800000000000000
+      internalID: -2470940625377029970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lancer_Attack_Effects_8
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 1
+        width: 64
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd1d51866afa800479e5ec2ff8789d93
+      internalID: -814153951
       vertices: []
       indices: 
       edges: []
@@ -289,7 +348,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: c1b085c3ba9994c1aab0dadb973c0bd1
+    spriteID: 893112b4fa577c94da79b3bb7024bf05
     internalID: 0
     vertices: []
     indices: 
@@ -299,14 +358,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":80.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Sprite-0002-Sheet_0: 54620541728290854
-      Sprite-0002-Sheet_1: 7977414170037210279
-      Sprite-0002-Sheet_2: -6017161630642107537
-      Sprite-0002-Sheet_3: -774171364642349061
-      Sprite-0002-Sheet_4: 4439951221471878829
-      Sprite-0002-Sheet_5: 947299383180256026
+      Lancer_Attack_Effects_0: -3476343274940658166
+      Lancer_Attack_Effects_1: 3517964212427929003
+      Lancer_Attack_Effects_2: 4054594189942567472
+      Lancer_Attack_Effects_3: -6344869942462719489
+      Lancer_Attack_Effects_4: -1373118510185281445
+      Lancer_Attack_Effects_5: 6934130322411639503
+      Lancer_Attack_Effects_6: -1172328261103041579
+      Lancer_Attack_Effects_7: -2470940625377029970
+      Lancer_Attack_Effects_8: -814153951
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
