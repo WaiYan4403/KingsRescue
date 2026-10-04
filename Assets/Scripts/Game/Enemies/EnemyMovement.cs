@@ -24,6 +24,9 @@ namespace KingsRescue.Enemies
         [Tooltip("How far below the player counts as 'passed behind'.")]
         [SerializeField] private float passedMargin = 0.35f;
 
+        [Tooltip("Follow speed multiplier while chasing up the screen, against the scroll.")]
+        [SerializeField, Range(0.2f, 1f)] private float chaseUpSpeedFactor = 0.5f;
+
         private float moveSpeed = 2.4f;
         private float scrollInfluence = 1f;
         private float responsiveness = 6f;
@@ -123,6 +126,11 @@ namespace KingsRescue.Enemies
             if (toPlayer.sqrMagnitude <= 0.0001f)
             {
                 return cruise;
+            }
+
+            if (toPlayer.y > 0f)
+            {
+                speed *= chaseUpSpeedFactor;
             }
 
             return toPlayer.normalized * speed;

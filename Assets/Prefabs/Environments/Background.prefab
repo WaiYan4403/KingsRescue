@@ -195,6 +195,28 @@ MonoBehaviour:
   - prefab: {fileID: 889982214784732533, guid: 3104ab7cea58de84c8a43c765fbd4ea1, type: 3}
     weight: 10
   decorationCount: {x: 2, y: 4}
+  blockers:
+  - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
+    weight: 20
+  - prefab: {fileID: 3581756722814175934, guid: be90cd083ea06ef4aa3feab2a58b989a, type: 3}
+    weight: 20
+  - prefab: {fileID: 3581756722814175934, guid: 8a160641c134d5b4eb64dd4ff8d72f65, type: 3}
+    weight: 20
+  - prefab: {fileID: 3581756722814175934, guid: 5f33fe4a94797494888fc08fc59ce6b9, type: 3}
+    weight: 20
+  - prefab: {fileID: 3581756722814175934, guid: 65a76200d1b6306469793a804d63dd96, type: 3}
+    weight: 20
+  - prefab: {fileID: 3581756722814175934, guid: 713b893e809d40946bd8098ec8e6bfab, type: 3}
+    weight: 20
+  - prefab: {fileID: 889982214784732533, guid: b84926e40b61843b49e79fecb4988cf7, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: 5607fa0aaf77f2843b0b29a6c71bc501, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: 6a4ad3f1e2e80d54dae6cc1ddda33173, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: 349ab37b9de63da45a22f8e83f16a14a, type: 3}
+    weight: 15
+  blockerCount: {x: 1, y: 2}
   horizontalRange: 2.8
   verticalPadding: 1.2
   placementAttempts: 4

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
 using KingsRescue.InputControl;
+using KingsRescue.World;
 
 namespace KingsRescue.Player
 {
@@ -18,6 +20,17 @@ namespace KingsRescue.Player
 
         [Tooltip("Extra speed multiplier while running against the scroll, sold to the player as sprinting.")]
         [SerializeField, Range(0.5f, 1.5f)] private float forwardSpeedFactor = 1f;
+
+        [Tooltip("Speed multiplier while moving down the screen. Higher offsets the world scroll so down feels as quick as up.")]
+        [SerializeField, Range(1f, 3f)] private float backwardSpeedFactor = 1.5f;
+
+        [Header("Obstacles")]
+        [Tooltip("Body radius used to keep the hero out of rocks and trees. Larger than the foot collider so they cannot squeeze through.")]
+        [SerializeField] private float obstacleRadius = 0.45f;
+        [SerializeField] private float obstacleSkin = 0.04f;
+        [SerializeField] private int resolveIterations = 3;
+        [Tooltip("How hard contact shoves the hero left or right around a prop.")]
+        [SerializeField, Range(0f, 2f)] private float asideBias = 1.1f;
 
         [Header("Visuals")]
         [SerializeField] private Animator bodyAnimator;
@@ -92,10 +105,14 @@ namespace KingsRescue.Player
             {
                 desired.y *= forwardSpeedFactor;
             }
+            else if (desired.y < 0f)
+            {
+                desired.y *= backwardSpeedFactor;
+            }
 
             velocity = Vector2.MoveTowards(velocity, desired, acceleration * Time.fixedDeltaTime);
 
-            Vector2 next = body.position + velocity * Time.fixedDeltaTime;
+            Vector2 next = ResolveObstacles(body.position + velocity * Time.fixedDeltaTime);
 
             ArenaBounds bounds = ArenaBounds.Instance;
             if (bounds != null)
@@ -131,6 +148,80 @@ namespace KingsRescue.Player
             {
                 spriteRenderer.flipX = velocity.x < 0f;
             }*/
+        }
+
+        private Vector2 ResolveObstacles(Vector2 position)
+        {
+            List<BlockingObstacle> blockers = BlockingObstacle.Active;
+            if (blockers.Count == 0)
+            {
+                return position;
+            }
+
+            float minSep = obstacleRadius + obstacleSkin;
+            Vector2 pos = position;
+
+            for (int iter = 0; iter < resolveIterations; iter++)
+            {
+                bool pushed = false;
+
+                for (int i = 0; i < blockers.Count; i++)
+                {
+                    BlockingObstacle blocker = blockers[i];
+                    Collider2D col = blocker != null ? blocker.Collider : null;
+                    if (col == null || !col.enabled)
+                    {
+                        continue;
+                    }
+
+                    Vector2 closest = col.ClosestPoint(pos);
+                    Vector2 delta = pos - closest;
+                    float dist = delta.sqrMagnitude;
+                    bool inside = col.OverlapPoint(pos);
+
+                    if (!inside && dist >= minSep * minSep)
+                    {
+                        continue;
+                    }
+
+                    Vector2 fromCenter = pos - (Vector2)col.bounds.center;
+                    Vector2 normal;
+                    if (inside || dist < 0.0001f)
+                    {
+                        normal = fromCenter.sqrMagnitude > 0.0001f ? fromCenter.normalized : Vector2.right;
+                    }
+                    else
+                    {
+                        normal = delta / Mathf.Sqrt(dist);
+                    }
+
+                    float side = fromCenter.x;
+                    if (Mathf.Abs(side) < 0.08f)
+                    {
+                        side = inputAxis.x;
+                    }
+
+                    if (Mathf.Abs(side) < 0.01f)
+                    {
+                        side = fromCenter.x >= 0f ? 1f : -1f;
+                    }
+
+                    normal = (normal + new Vector2(Mathf.Sign(side), 0f) * asideBias).normalized;
+
+                    float currentSep = inside ? 0f : Mathf.Sqrt(dist);
+                    pos += normal * (minSep - currentSep);
+                    pushed = true;
+
+                    velocity -= normal * Mathf.Max(0f, Vector2.Dot(velocity, normal));
+                }
+
+                if (!pushed)
+                {
+                    break;
+                }
+            }
+
+            return pos;
         }
 
         /// <summary>

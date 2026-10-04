@@ -36,6 +36,10 @@ namespace KingsRescue.World
         [SerializeField] private PropEntry[] decorations = Array.Empty<PropEntry>();
         [SerializeField] private Vector2Int decorationCount = new Vector2Int(2, 4);
 
+        [Header("Blockers (stop the player)")]
+        [SerializeField] private PropEntry[] blockers = Array.Empty<PropEntry>();
+        [SerializeField] private Vector2Int blockerCount = new Vector2Int(1, 2);
+
         [Header("Placement")]
         [SerializeField] private float horizontalRange = 2.8f;
         [SerializeField] private float verticalPadding = 1.2f;
@@ -151,6 +155,7 @@ namespace KingsRescue.World
             if (spawned.Count == 0)
             {
                 SpawnProps(breakables, RandomCount(breakableCount), true);
+                SpawnProps(blockers, RandomCount(blockerCount), true);
                 SpawnProps(decorations, RandomCount(decorationCount), false);
                 return;
             }
@@ -166,11 +171,11 @@ namespace KingsRescue.World
                 }
             }
 
-            int missing = RandomCount(breakableCount) + RandomCount(decorationCount) - spawned.Count;
+            int missing = RandomCount(breakableCount) + RandomCount(blockerCount) + RandomCount(decorationCount) - spawned.Count;
             if (missing > 0)
             {
-                SpawnProps(breakables, Mathf.Min(missing, 1), true);
-                missing = RandomCount(breakableCount) + RandomCount(decorationCount) - spawned.Count;
+                SpawnProps(blockers, Mathf.Min(missing, 1), true);
+                missing = RandomCount(breakableCount) + RandomCount(blockerCount) + RandomCount(decorationCount) - spawned.Count;
                 if (missing > 0)
                 {
                     SpawnProps(decorations, missing, false);

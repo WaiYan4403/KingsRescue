@@ -5495,6 +5495,10 @@ PrefabInstance:
       propertyPath: effectAnimator
       value: 
       objectReference: {fileID: 1475397833}
+    - target: {fileID: 6642877413158286364, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: backwardSpeedFactor
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8711611143315047214, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -5593,8 +5597,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0079016555, y: -0.88496053}
-  m_Size: {x: 0.7945647, y: 0.25726655}
+  m_Offset: {x: -0.007901641, y: -0.7600862}
+  m_Size: {x: 0.79456484, y: 0.5070153}
   m_Direction: 1
 --- !u!1 &1424051017
 GameObject:
@@ -7528,6 +7532,8 @@ MonoBehaviour:
   - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
     weight: 100
   decorationCount: {x: 2, y: 4}
+  blockers: []
+  blockerCount: {x: 1, y: 2}
   horizontalRange: 2.8
   verticalPadding: 1.2
   placementAttempts: 4
