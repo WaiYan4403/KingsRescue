@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6496316480133569354}
   - component: {fileID: 5737741594478514764}
   - component: {fileID: 7623074706874594998}
+  - component: {fileID: 2116222282787672219}
   m_Layer: 0
   m_Name: Enemy_Skelly
   m_TagString: Untagged
@@ -34,7 +35,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -88,7 +89,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 2691162081737138541, guid: adabdbc6e88b3491e86b4b7e3294bf44, type: 3}
+  m_Sprite: {fileID: 6116230874708611872, guid: 40053dbf75604d145a06ad5aa2227aab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -140,6 +141,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7466754971828933079}
   chaseSlack: 1
   speedJitter: 0.12
+  passedMargin: 0.35
 --- !u!114 &799069422361106090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,3 +203,25 @@ MonoBehaviour:
   target: {fileID: 0}
   flashColor: {r: 1, g: 1, b: 1, a: 1}
   duration: 0.07
+--- !u!95 &2116222282787672219
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7657488641991038239}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 93d183c2a9b614a40a1c1f3b91b7e108, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

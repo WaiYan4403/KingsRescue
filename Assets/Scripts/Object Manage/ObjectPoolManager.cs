@@ -1,8 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using KingsRescue.Core;
 
-public class ObjectPoolManager : PersistentSingleton<ObjectPoolManager>
+/// <summary>
+/// Prefab-keyed pool used by environments, props, enemies, pickups and VFX.
+/// Tag-based SpawnFromPool remains for older callers.
+/// </summary>
+[DefaultExecutionOrder(-200)]
+public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
     [System.Serializable]
     public class Pool
@@ -13,148 +19,217 @@ public class ObjectPoolManager : PersistentSingleton<ObjectPoolManager>
     }
 
     public List<Pool> pools;
-    private Dictionary<string, Queue<GameObject>> poolDictionary;
-    private Dictionary<string, HashSet<GameObject>> activeObjects;
-    private Dictionary<string, Pool> poolConfigs;
 
-    [SerializeField] int expandBatchSize = 8;
+    private readonly Dictionary<string, HashSet<GameObject>> taggedActive = new Dictionary<string, HashSet<GameObject>>();
+    private readonly Dictionary<string, Pool> taggedConfigs = new Dictionary<string, Pool>();
 
-    private void Start()
+    private readonly Dictionary<GameObject, Stack<GameObject>> prefabPools = new Dictionary<GameObject, Stack<GameObject>>();
+    private readonly Dictionary<GameObject, Transform> prefabRoots = new Dictionary<GameObject, Transform>();
+
+    protected override void Awake()
     {
+        base.Awake();
         InitializePools();
     }
 
     private void InitializePools()
     {
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
-        activeObjects = new Dictionary<string, HashSet<GameObject>>();
-        poolConfigs = new Dictionary<string, Pool>();
-
-        if (pools == null) return;
-
-        foreach (var pool in pools)
+        if (pools == null)
         {
-            if (pool.prefab == null)
-            {
-                Debug.LogError($"[ObjectPoolManager] Prefab is null for pool with tag: {pool.tag}. Skipping this pool.");
-                continue;
-            }
-
-            Queue<GameObject> objectPool = new Queue<GameObject>();
-            activeObjects[pool.tag] = new HashSet<GameObject>();
-            poolConfigs[pool.tag] = pool;
-
-            for (int i = 0; i < pool.size; i++)
-            {
-                GameObject obj = Instantiate(pool.prefab, transform.position, Quaternion.identity);
-                if (obj == null) continue;
-
-                obj.transform.SetParent(transform);
-                obj.transform.localScale = Vector3.one;
-                obj.SetActive(false);
-                objectPool.Enqueue(obj);
-            }
-
-            poolDictionary[pool.tag] = objectPool;
-        }
-    }
-
-    public void ExpandPool(string tag, int additionalSize)
-    {
-        if (!poolConfigs.TryGetValue(tag, out Pool pool))
-        {
-            Debug.LogWarning($"[ObjectPoolManager] Pool with tag {tag} doesn't exist.");
             return;
         }
 
-        Queue<GameObject> objectPool = poolDictionary[tag];
-        for (int i = 0; i < additionalSize; i++)
+        for (int i = 0; i < pools.Count; i++)
         {
-            GameObject obj = Instantiate(pool.prefab, transform.position, Quaternion.identity);
-            obj.transform.SetParent(transform);
-            obj.transform.localScale = Vector3.one;
-            obj.SetActive(false);
-            objectPool.Enqueue(obj);
+            Pool pool = pools[i];
+            if (pool.prefab == null || string.IsNullOrEmpty(pool.tag))
+            {
+                continue;
+            }
+
+            taggedConfigs[pool.tag] = pool;
+            taggedActive[pool.tag] = new HashSet<GameObject>();
+            Prewarm(pool.prefab, pool.size);
+        }
+    }
+
+    public void Prewarm(GameObject prefab, int count)
+    {
+        if (prefab == null || count <= 0)
+        {
+            return;
+        }
+
+        Stack<GameObject> pool = GetPrefabPool(prefab);
+        for (int i = 0; i < count; i++)
+        {
+            GameObject instance = CreateInstance(prefab);
+            instance.SetActive(false);
+            pool.Push(instance);
+        }
+    }
+
+    public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
+    {
+        if (prefab == null)
+        {
+            Debug.LogError("[ObjectPoolManager] Spawn called with a null prefab.");
+            return null;
+        }
+
+        Stack<GameObject> pool = GetPrefabPool(prefab);
+        GameObject instance = pool.Count > 0 ? pool.Pop() : CreateInstance(prefab);
+
+        Transform t = instance.transform;
+        t.SetParent(parent != null ? parent : prefabRoots[prefab], false);
+        t.SetPositionAndRotation(position, rotation);
+        t.localScale = prefab.transform.localScale;
+
+        instance.SetActive(true);
+        instance.GetComponent<PooledObject>().NotifySpawned();
+        return instance;
+    }
+
+    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation, Transform parent = null) where T : Component
+    {
+        if (prefab == null)
+        {
+            return null;
+        }
+
+        GameObject instance = Spawn(prefab.gameObject, position, rotation, parent);
+        return instance != null ? instance.GetComponent<T>() : null;
+    }
+
+    public void Return(GameObject instance)
+    {
+        if (instance == null)
+        {
+            return;
+        }
+
+        PooledObject pooled = instance.GetComponent<PooledObject>();
+        if (pooled == null || pooled.SourcePrefab == null)
+        {
+            Destroy(instance);
+            return;
+        }
+
+        if (!pooled.IsSpawned)
+        {
+            return;
+        }
+
+        DOTween.Kill(instance.transform);
+        pooled.NotifyDespawned();
+        instance.SetActive(false);
+        instance.transform.SetParent(prefabRoots[pooled.SourcePrefab], false);
+        GetPrefabPool(pooled.SourcePrefab).Push(instance);
+    }
+
+    public void ReturnDelayed(GameObject instance, float delay)
+    {
+        if (instance != null)
+        {
+            StartCoroutine(ReturnRoutine(instance, delay));
         }
     }
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
-        if (!poolDictionary.TryGetValue(tag, out Queue<GameObject> queue))
+        if (!taggedConfigs.TryGetValue(tag, out Pool config) || config.prefab == null)
         {
             Debug.LogWarning($"[ObjectPoolManager] Pool with tag '{tag}' doesn't exist.");
             return null;
         }
 
-        // Expand in small batches to avoid hitching dozens of Instantiates at once.
-        if (queue.Count == 0)
-            ExpandPool(tag, Mathf.Max(1, expandBatchSize));
-
-        GameObject objectToSpawn = queue.Dequeue();
-
-        if (objectToSpawn == null)
+        GameObject instance = Spawn(config.prefab, position, rotation);
+        if (instance != null)
         {
-            if (!poolConfigs.TryGetValue(tag, out Pool config) || config.prefab == null)
-                return null;
+            if (!taggedActive.TryGetValue(tag, out HashSet<GameObject> activeSet))
+            {
+                activeSet = new HashSet<GameObject>();
+                taggedActive[tag] = activeSet;
+            }
 
-            objectToSpawn = Instantiate(config.prefab, transform.position, Quaternion.identity);
-            objectToSpawn.transform.SetParent(transform);
-            objectToSpawn.transform.localScale = Vector3.one;
+            activeSet.Add(instance);
         }
 
-        if (objectToSpawn.activeInHierarchy)
-        {
-            queue.Enqueue(objectToSpawn);
-            return null;
-        }
-
-        objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
-        objectToSpawn.transform.localScale = Vector3.one;
-
-        if (!activeObjects.TryGetValue(tag, out HashSet<GameObject> activeSet))
-        {
-            activeSet = new HashSet<GameObject>();
-            activeObjects[tag] = activeSet;
-        }
-        activeSet.Add(objectToSpawn);
-
-        return objectToSpawn;
+        return instance;
     }
 
     public void ReturnToPool(string tag, GameObject objectToReturn)
     {
-        if (!poolDictionary.TryGetValue(tag, out Queue<GameObject> queue))
+        if (objectToReturn == null)
+        {
+            return;
+        }
+
+        if (taggedActive.TryGetValue(tag, out HashSet<GameObject> activeSet) && !activeSet.Remove(objectToReturn))
+        {
+            return;
+        }
+
+        Return(objectToReturn);
+    }
+
+    public void ExpandPool(string tag, int additionalSize)
+    {
+        if (!taggedConfigs.TryGetValue(tag, out Pool pool) || pool.prefab == null)
         {
             Debug.LogWarning($"[ObjectPoolManager] Pool with tag {tag} doesn't exist.");
             return;
         }
 
-        if (objectToReturn == null)
-            return;
-
-        // Guard against double-returns corrupting the queue with duplicate refs.
-        if (activeObjects.TryGetValue(tag, out HashSet<GameObject> activeSet))
-        {
-            if (!activeSet.Remove(objectToReturn))
-                return;
-        }
-
-        DOTween.Kill(objectToReturn.transform);
-        objectToReturn.SetActive(false);
-        objectToReturn.transform.localScale = Vector3.one;
-        objectToReturn.transform.SetParent(transform);
-        queue.Enqueue(objectToReturn);
+        Prewarm(pool.prefab, additionalSize);
     }
 
     public int GetActiveObjectCount(string tag)
     {
-        return activeObjects.TryGetValue(tag, out HashSet<GameObject> set) ? set.Count : 0;
+        return taggedActive.TryGetValue(tag, out HashSet<GameObject> set) ? set.Count : 0;
     }
 
     public bool IsObjectActive(string tag, GameObject obj)
     {
-        return activeObjects.TryGetValue(tag, out HashSet<GameObject> set) && set.Contains(obj);
+        return taggedActive.TryGetValue(tag, out HashSet<GameObject> set) && set.Contains(obj);
+    }
+
+    private Stack<GameObject> GetPrefabPool(GameObject prefab)
+    {
+        if (prefabPools.TryGetValue(prefab, out Stack<GameObject> pool))
+        {
+            return pool;
+        }
+
+        pool = new Stack<GameObject>();
+        prefabPools.Add(prefab, pool);
+
+        var root = new GameObject($"Pool [{prefab.name}]").transform;
+        root.SetParent(transform, false);
+        prefabRoots.Add(prefab, root);
+        return pool;
+    }
+
+    private GameObject CreateInstance(GameObject prefab)
+    {
+        GetPrefabPool(prefab);
+
+        GameObject instance = Instantiate(prefab, prefabRoots[prefab]);
+        instance.name = prefab.name;
+
+        PooledObject pooled = instance.GetComponent<PooledObject>();
+        if (pooled == null)
+        {
+            pooled = instance.AddComponent<PooledObject>();
+        }
+
+        pooled.Bind(prefab);
+        return instance;
+    }
+
+    private System.Collections.IEnumerator ReturnRoutine(GameObject instance, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Return(instance);
     }
 }

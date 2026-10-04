@@ -20,9 +20,9 @@ MonoBehaviour:
   pattern: 0
   enemies:
   - enemy: {fileID: 11400000, guid: 3364a2f6ea47f4a68a3371c9db273c92, type: 2}
-    weight: 10
-  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
     weight: 5
+  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
+    weight: 7
   bursts:
   - atTime: 30
     enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}

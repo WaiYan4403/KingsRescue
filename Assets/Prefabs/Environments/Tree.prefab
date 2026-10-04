@@ -208,7 +208,7 @@ Transform:
   m_GameObject: {fileID: 2002214502306677859}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.66, y: 0, z: 0}
+  m_LocalPosition: {x: 4.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -350,6 +350,10 @@ MonoBehaviour:
   treeLeftShadowObj: {fileID: 8389792646761253264}
   treeRightObj: {fileID: 1301625727201656974}
   treeRightShadowObj: {fileID: 7670968442431402261}
+  treePrefab: {fileID: 0}
+  treesRoot: {fileID: 0}
+  spacingOverride: 0
+  overlap: 0.08
 --- !u!1 &7379342934350880048
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +380,7 @@ Transform:
   m_GameObject: {fileID: 7379342934350880048}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.66, y: 0, z: 0}
+  m_LocalPosition: {x: -4.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

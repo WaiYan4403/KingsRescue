@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
+using KingsRescue.World;
 
 public class TreesGenerator : MonoBehaviour, IPoolable
 {
@@ -78,7 +79,7 @@ public class TreesGenerator : MonoBehaviour, IPoolable
         {
             if (rows[i] != null)
             {
-                Destroy(rows[i].gameObject);
+                BackgroundSegment.Release(rows[i].gameObject);
             }
         }
 
@@ -99,11 +100,12 @@ public class TreesGenerator : MonoBehaviour, IPoolable
 
         for (int i = 0; i < count; i++)
         {
-            GameObject instance = Instantiate(treePrefab, treesRoot);
-            instance.name = treePrefab.name;
-            instance.transform.localPosition = new Vector3(0f, startY + i * spacing, 0f);
-            instance.transform.localRotation = Quaternion.identity;
-            instance.transform.localScale = treePrefab.transform.localScale;
+            Vector3 world = treesRoot.TransformPoint(new Vector3(0f, startY + i * spacing, 0f));
+            GameObject instance = BackgroundSegment.SpawnChild(treePrefab, world, treesRoot);
+            if (instance == null)
+            {
+                continue;
+            }
 
             TreesGenerator generator = instance.GetComponent<TreesGenerator>();
             if (generator != null)

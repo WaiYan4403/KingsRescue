@@ -16,7 +16,8 @@ namespace KingsRescue.Player
         [SerializeField] private float invulnerabilityDuration = 0.5f;
 
         [SerializeField] private SpriteRenderer flashTarget;
-        [SerializeField] private Animator animator;
+        [SerializeField] private Animator bodyAnimator;
+        [SerializeField] private Animator legAnimator;
         [SerializeField] private string healthParameter = "Health";
         [SerializeField] private string dieStateName = "Lancer_Die";
         [SerializeField, Range(0f, 1f)] private float invulnerableAlpha = 0.45f;
@@ -49,11 +50,6 @@ namespace KingsRescue.Player
             if (flashTarget == null)
             {
                 flashTarget = GetComponentInChildren<SpriteRenderer>();
-            }
-
-            if (animator == null)
-            {
-                animator = GetComponentInChildren<Animator>();
             }
         }
 
@@ -102,6 +98,8 @@ namespace KingsRescue.Player
 
             if (Current <= 0f)
             {
+                // Switch Music
+                GameMusicController.Instance.SetGameOverMusic();
                 RestoreVisual();
                 PlayDeathAnimation();
                 Died?.Invoke();
@@ -173,28 +171,29 @@ namespace KingsRescue.Player
 
         private void SyncAnimatorHealth()
         {
-            if (animator != null)
+            if (legAnimator != null && bodyAnimator != null)
             {
-                animator.SetInteger(healthParameter, (int)Current);
+                legAnimator.SetInteger(healthParameter, (int)Current);
+                bodyAnimator.SetInteger(healthParameter, (int)Current);
             }
         }
 
         private void PlayDeathAnimation()
         {
-            if (animator == null)
+            if (legAnimator == null && bodyAnimator == null)
             {
                 return;
             }
 
-            // Switch Music
-            GameMusicController.Instance.SetGameOverMusic();
-            
             // Game over freezes scaled time; keep the death clip running anyway.
-            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-            animator.SetInteger(healthParameter, 0);
+            legAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            bodyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            legAnimator.SetInteger(healthParameter, 0);
+            bodyAnimator.SetInteger(healthParameter, 0);
             if (!string.IsNullOrEmpty(dieStateName))
             {
-                animator.Play(dieStateName, 0, 0f);
+                legAnimator.Play(dieStateName, 0, 0f);
+                bodyAnimator.Play(dieStateName, 0, 0f);
             }
         }
 

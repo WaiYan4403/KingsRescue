@@ -20,7 +20,9 @@ namespace KingsRescue.Player
         [SerializeField, Range(0.5f, 1.5f)] private float forwardSpeedFactor = 1f;
 
         [Header("Visuals")]
-        [SerializeField] private Animator animator;
+        [SerializeField] private Animator bodyAnimator;
+        [SerializeField] private Animator legAnimator;
+        [SerializeField] private Animator effectAnimator;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private string speedParameter = "MoveSpeed";
 
@@ -52,11 +54,6 @@ namespace KingsRescue.Player
             body.bodyType = RigidbodyType2D.Kinematic;
             body.gravityScale = 0f;
             body.freezeRotation = true;
-
-            if (animator == null)
-            {
-                animator = GetComponentInChildren<Animator>();
-            }
 
             if (spriteRenderer == null)
             {
@@ -124,9 +121,10 @@ namespace KingsRescue.Player
 
         private void UpdateVisuals()
         {
-            if (animator != null && hasSpeedParameter)
+            if (legAnimator != null && bodyAnimator != null && hasSpeedParameter)
             {
-                animator.SetFloat(speedParameterHash, velocity.magnitude);
+                bodyAnimator.SetFloat(speedParameterHash, velocity.magnitude);
+                legAnimator.SetFloat(speedParameterHash, velocity.magnitude);
             }
 
             /*if (spriteRenderer != null && Mathf.Abs(velocity.x) > 0.05f)
@@ -137,12 +135,12 @@ namespace KingsRescue.Player
 
         private bool HasAnimatorParameter(int hash)
         {
-            if (animator == null || animator.runtimeAnimatorController == null)
+            if (bodyAnimator == null || bodyAnimator.runtimeAnimatorController == null)
             {
                 return false;
             }
 
-            AnimatorControllerParameter[] parameters = animator.parameters;
+            AnimatorControllerParameter[] parameters = bodyAnimator.parameters;
             for (int i = 0; i < parameters.Length; i++)
             {
                 if (parameters[i].nameHash == hash)
