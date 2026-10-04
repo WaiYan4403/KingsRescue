@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using KingsRescue.Data;
 using KingsRescue.Player;
 
 namespace KingsRescue.Core
@@ -22,6 +23,9 @@ namespace KingsRescue.Core
     {
         [Header("Scene References")]
         [SerializeField] private PlayerHealth playerHealth;
+
+        [Tooltip("Playable hero for this run. Their unique weapon is granted at start.")]
+        [SerializeField] private CharacterDefinition selectedCharacter;
 
         [Tooltip("Existing FMOD music controller. Optional; state changes are simply not scored without it.")]
         [SerializeField] private MusicController musicController;
@@ -46,6 +50,8 @@ namespace KingsRescue.Core
 
         public bool IsPlaying => State == GameState.Playing && (playerHealth == null || playerHealth.IsAlive);
 
+        public CharacterDefinition SelectedCharacter => selectedCharacter;
+
         public event Action<GameState> StateChanged;
 
         public event Action<int> KillsChanged;
@@ -59,6 +65,14 @@ namespace KingsRescue.Core
             if (playerHealth == null)
             {
                 playerHealth = FindAnyObjectByType<PlayerHealth>();
+            }
+
+            WeaponLoadout loadout = playerHealth != null
+                ? playerHealth.GetComponent<WeaponLoadout>()
+                : FindAnyObjectByType<WeaponLoadout>();
+            if (loadout != null && selectedCharacter != null)
+            {
+                loadout.BindCharacter(selectedCharacter);
             }
         }
 

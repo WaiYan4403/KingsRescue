@@ -10,17 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
-  m_Name: Weapon_Sword
+  m_Name: Weapon_Lance
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
-  displayName: Sword
-  description: A swinging blade that hunts the nearest enemy.
+  displayName: Lance
+  description: The lancer's signature weapon. Unlock new attack styles as it levels.
   icon: {fileID: 0}
   fireMode: 0
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 0}
-  effectPrefab: {fileID: 2008132676507572747, guid: 05670906181c14763a94f5cd7898f5fe, type: 3}
+  effectPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
-  comboDelay: 0.12
+  comboDelay: 0.35
+  fanProjectiles: 0
+  isUniqueWeapon: 1
+  usesCharacterAnimators: 1
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 03000000010000000200000003000000
   levels:
   - upgradeText: 
     damage: 12
@@ -35,10 +43,10 @@ MonoBehaviour:
     spreadDegrees: 14
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Wider, heavier swing
+  - upgradeText: Unlock the second thrust
     damage: 16
     cooldown: 0.85
-    count: 1
+    count: 2
     pierce: 0
     area: 2.2
     projectileSpeed: 12
@@ -48,10 +56,10 @@ MonoBehaviour:
     spreadDegrees: 14
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Two-hit combo
+  - upgradeText: Unlock the finishing strike
     damage: 16
     cooldown: 0.85
-    count: 2
+    count: 3
     pierce: 0
     area: 2.2
     projectileSpeed: 12
@@ -64,7 +72,7 @@ MonoBehaviour:
   - upgradeText: Longer reach
     damage: 22
     cooldown: 0.85
-    count: 2
+    count: 3
     pierce: 0
     area: 2.8
     projectileSpeed: 12
@@ -74,7 +82,7 @@ MonoBehaviour:
     spreadDegrees: 14
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Full spin. Hits everything around you
+  - upgradeText: Heavier blows
     damage: 30
     cooldown: 0.85
     count: 3
@@ -83,7 +91,7 @@ MonoBehaviour:
     projectileSpeed: 12
     lifetime: 0.25
     knockback: 0
-    arcDegrees: 360
+    arcDegrees: 200
     spreadDegrees: 14
     rehitInterval: 0.45
     orbitSpeed: 0.7

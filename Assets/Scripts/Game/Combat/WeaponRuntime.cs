@@ -86,7 +86,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            if (Time.time < nextFireTime)
+            if (Time.time < nextFireTime || comboRoutine != null)
             {
                 return;
             }
@@ -140,11 +140,11 @@ namespace KingsRescue.Combat
 
         private void FireMelee()
         {
-            int swings = ResolveCount();
+            int swings = ResolveMeleeSwings();
 
             if (swings <= 1)
             {
-                DoSwing(0);
+                DoSwing(0, swings);
                 return;
             }
 
@@ -162,14 +162,14 @@ namespace KingsRescue.Combat
 
             for (int i = 0; i < swings; i++)
             {
-                DoSwing(i);
+                DoSwing(i, swings);
                 yield return wait;
             }
 
             comboRoutine = null;
         }
 
-        private void DoSwing(int swingIndex)
+        private void DoSwing(int swingIndex, int swingCount)
         {
             WeaponLevel data = Data;
             Vector2 center = transform.position;
@@ -182,13 +182,89 @@ namespace KingsRescue.Combat
                 facing = Rotate(facing, tilt);
             }
 
+            PlayCharacterAttack(swingIndex, swingCount);
+
             float radius = ResolveArea();
             Targeting.DamageArc(center, facing, radius, data.arcDegrees, ResolveDamage(), data.knockback, gameObject);
 
-            SpawnEffect(center, facing, radius, data.lifetime);
+            if (!definition.usesCharacterAnimators)
+            {
+                SpawnEffect(center, facing, radius, data.lifetime);
+            }
+        }
+
+        private int ResolveMeleeSwings()
+        {
+            if (definition.usesCharacterAnimators)
+            {
+                int unlocked = definition.GetUnlockedAttackStages(level);
+                if (unlocked > 0)
+                {
+                    int bonus = definition.usesGlobalProjectileCount ? stats.BonusProjectiles : 0;
+                    return Mathf.Max(1, unlocked + bonus);
+                }
+            }
+
+            return ResolveCount();
+        }
+
+        private void PlayCharacterAttack(int swingIndex, int swingCount)
+        {
+            if (!definition.usesCharacterAnimators || owner == null)
+            {
+                return;
+            }
+
+            int unlocked = definition.GetUnlockedAttackStages(level);
+            if (unlocked <= 0)
+            {
+                return;
+            }
+
+            int stage = swingCount <= 1
+                ? unlocked
+                : Mathf.Clamp(swingIndex + 1, 1, unlocked);
+            owner.PlayAttackStage(definition.GetAttackTrigger(stage), definition.attackTriggers);
         }
 
         private void FireForwardShot()
+        {
+            int count = ResolveCount();
+            if (count <= 1 || definition.fanProjectiles)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    SpawnForwardShot(i, count);
+                }
+
+                return;
+            }
+
+            if (comboRoutine != null)
+            {
+                StopCoroutine(comboRoutine);
+            }
+
+            comboRoutine = StartCoroutine(StraightVolley(count));
+        }
+
+        private IEnumerator StraightVolley(int count)
+        {
+            var wait = new WaitForSeconds(Mathf.Max(0.02f, definition.comboDelay));
+
+            for (int i = 0; i < count; i++)
+            {
+                SpawnForwardShot(i, count);
+                if (i < count - 1)
+                {
+                    yield return wait;
+                }
+            }
+
+            comboRoutine = null;
+        }
+
+        private void SpawnForwardShot(int shotIndex, int shotCount)
         {
             if (definition.projectilePrefab == null)
             {
@@ -204,34 +280,30 @@ namespace KingsRescue.Combat
             }
 
             WeaponLevel data = Data;
-            int count = ResolveCount();
             Vector2 origin = transform.position;
-
-            // Retro shmup framing: shots travel up the screen, fanning out as the volley grows.
             Vector2 baseDirection = Vector2.up;
             float speed = data.projectileSpeed * stats.ProjectileSpeedMultiplier;
             float damage = ResolveDamage();
             int pierce = data.pierce + stats.BonusPierce;
             float area = ResolveArea();
 
-            for (int i = 0; i < count; i++)
+            float offset = 0f;
+            if (definition.fanProjectiles && shotCount > 1)
             {
-                float offset = count <= 1
-                    ? 0f
-                    : Mathf.Lerp(-data.spreadDegrees * 0.5f, data.spreadDegrees * 0.5f, i / (float)(count - 1));
-
-                Vector2 direction = Rotate(baseDirection, offset);
-                Projectile projectile = pool.Spawn(definition.projectilePrefab, origin, Quaternion.identity)
-                    .GetComponent<Projectile>();
-
-                if (projectile == null)
-                {
-                    Debug.LogError($"Projectile prefab '{definition.projectilePrefab.name}' has no Projectile component.", definition);
-                    return;
-                }
-
-                projectile.Launch(direction, speed, damage, pierce, data.lifetime, area, data.knockback, gameObject);
+                offset = Mathf.Lerp(-data.spreadDegrees * 0.5f, data.spreadDegrees * 0.5f, shotIndex / (float)(shotCount - 1));
             }
+
+            Vector2 direction = Rotate(baseDirection, offset);
+            Projectile projectile = pool.Spawn(definition.projectilePrefab, origin, Quaternion.identity)
+                .GetComponent<Projectile>();
+
+            if (projectile == null)
+            {
+                Debug.LogError($"Projectile prefab '{definition.projectilePrefab.name}' has no Projectile component.", definition);
+                return;
+            }
+
+            projectile.Launch(direction, speed, damage, pierce, data.lifetime, area, data.knockback, gameObject);
         }
 
         private void FireAura()

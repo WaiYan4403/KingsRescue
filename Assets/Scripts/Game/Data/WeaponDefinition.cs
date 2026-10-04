@@ -5,7 +5,7 @@ namespace KingsRescue.Data
 {
     public enum WeaponFireMode
     {
-        /// <summary>The hero's sword: a wedge swing toward the nearest threat. Starting weapon.</summary>
+        /// <summary>A wedge swing toward the nearest threat. Character signature weapons use this with body/effect attack stages.</summary>
         MeleeSwing = 0,
 
         /// <summary>Retro shmup volley fired up the screen.</summary>
@@ -86,8 +86,25 @@ namespace KingsRescue.Data
         [Tooltip("Whether the global Extra Projectiles stat adds to this weapon's count.")]
         public bool usesGlobalProjectileCount = true;
 
-        [Tooltip("Seconds between the individual swings of a multi-hit melee combo.")]
+        [Tooltip("Seconds between the individual swings of a multi-hit melee combo, or bolts of a straight volley.")]
         public float comboDelay = 0.12f;
+
+        [Tooltip("ForwardShot: when true, extra projectiles fan in an arc. When false, every shot travels straight forward.")]
+        public bool fanProjectiles = true;
+
+        [Header("Ownership")]
+        [Tooltip("Signature weapon for one playable character. Other heroes cannot pick it up or be offered it.")]
+        public bool isUniqueWeapon;
+
+        [Header("Character Animators")]
+        [Tooltip("Signature weapon: swings fire Attack-stage triggers on the player's body and effect animators.")]
+        public bool usesCharacterAnimators;
+
+        [Tooltip("Animator trigger names, one per unlockable attack stage (Attack1, Attack2, ...).")]
+        public string[] attackTriggers = { "Attack1", "Attack2", "Attack3" };
+
+        [Tooltip("Weapon level required to unlock each trigger. Missing entries default to stage index + 1.")]
+        public int[] attackStageUnlockLevels = { 1, 2, 3 };
 
         [Header("Levels (index 0 is level 1)")]
         public WeaponLevel[] levels = { new WeaponLevel() };
@@ -116,6 +133,51 @@ namespace KingsRescue.Data
 
             WeaponLevel data = GetLevel(level);
             return string.IsNullOrWhiteSpace(data.upgradeText) ? description : data.upgradeText;
+        }
+
+        public int GetUnlockedAttackStages(int weaponLevel)
+        {
+            if (attackTriggers == null || attackTriggers.Length == 0)
+            {
+                return 0;
+            }
+
+            int unlocked = 0;
+            for (int i = 0; i < attackTriggers.Length; i++)
+            {
+                if (string.IsNullOrEmpty(attackTriggers[i]))
+                {
+                    continue;
+                }
+
+                if (weaponLevel >= GetAttackStageUnlockLevel(i))
+                {
+                    unlocked++;
+                }
+            }
+
+            return unlocked;
+        }
+
+        public string GetAttackTrigger(int stage)
+        {
+            if (attackTriggers == null || attackTriggers.Length == 0)
+            {
+                return null;
+            }
+
+            int index = Mathf.Clamp(stage - 1, 0, attackTriggers.Length - 1);
+            return attackTriggers[index];
+        }
+
+        public int GetAttackStageUnlockLevel(int stageIndex)
+        {
+            if (attackStageUnlockLevels != null && stageIndex >= 0 && stageIndex < attackStageUnlockLevels.Length)
+            {
+                return Mathf.Max(1, attackStageUnlockLevels[stageIndex]);
+            }
+
+            return stageIndex + 1;
         }
     }
 }

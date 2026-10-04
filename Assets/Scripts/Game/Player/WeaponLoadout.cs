@@ -13,6 +13,10 @@ namespace KingsRescue.Player
     [RequireComponent(typeof(PlayerStats))]
     public class WeaponLoadout : MonoBehaviour
     {
+        [Tooltip("Playable hero. Their unique weapon is granted at run start.")]
+        [SerializeField] private CharacterDefinition character;
+
+        [Tooltip("Fallback unique weapon when no character is assigned.")]
         [SerializeField] private WeaponDefinition startingWeapon;
 
         [Tooltip("Parent for the weapon child objects. Defaults to this transform.")]
@@ -41,6 +45,12 @@ namespace KingsRescue.Player
 
         public IReadOnlyDictionary<PassiveDefinition, int> Passives => passiveLevels;
 
+        public CharacterDefinition Character => character;
+
+        public WeaponDefinition UniqueWeapon => character != null && character.uniqueWeapon != null
+            ? character.uniqueWeapon
+            : startingWeapon;
+
         private void Awake()
         {
             stats = GetComponent<PlayerStats>();
@@ -52,12 +62,36 @@ namespace KingsRescue.Player
             }
         }
 
+        public void BindCharacter(CharacterDefinition next)
+        {
+            if (next != null)
+            {
+                character = next;
+            }
+        }
+
         private void Start()
         {
-            if (startingWeapon != null)
+            WeaponDefinition unique = UniqueWeapon;
+            if (unique != null)
             {
-                AddOrLevelWeapon(startingWeapon);
+                AddOrLevelWeapon(unique);
             }
+        }
+
+        public bool CanReceiveWeapon(WeaponDefinition weapon)
+        {
+            if (weapon == null)
+            {
+                return false;
+            }
+
+            if (!weapon.isUniqueWeapon)
+            {
+                return true;
+            }
+
+            return weapon == UniqueWeapon || HasWeapon(weapon);
         }
 
         // --- Weapons ---------------------------------------------------------
@@ -81,7 +115,7 @@ namespace KingsRescue.Player
 
         public void AddOrLevelWeapon(WeaponDefinition weapon)
         {
-            if (weapon == null)
+            if (weapon == null || !CanReceiveWeapon(weapon))
             {
                 return;
             }

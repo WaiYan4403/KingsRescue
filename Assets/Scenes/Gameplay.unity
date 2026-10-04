@@ -353,6 +353,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 91a4fe0240f104cd2ab4be53bccca4b8, type: 2}
   - {fileID: 11400000, guid: 6cdaf8318951d4733a45146322aa261b, type: 2}
   - {fileID: 11400000, guid: eef310bc658514fd1a80294dcccb385d, type: 2}
+  - {fileID: 11400000, guid: c3d8f1a06b254e7a9e4c2d8f1b6a30e5, type: 2}
   fallback: {fileID: 11400000, guid: 3416b03ca38be41d49aa8fc4f5d9377e, type: 2}
   choiceCount: 4
   loadout: {fileID: 1395708462}
@@ -402,6 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Core.GameManager
   playerHealth: {fileID: 1395708460}
+  selectedCharacter: {fileID: 11400000, guid: e71432a8b005b0b43a42874f8e5aa19f, type: 2}
   musicController: {fileID: 0}
   menuSceneName: SampleScene
   gameOverDelay: 1.15
@@ -4415,7 +4417,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -349}
+  m_AnchoredPosition: {x: 345, y: -527}
   m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1182535708
@@ -4431,7 +4433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5529412}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

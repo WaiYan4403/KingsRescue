@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Weapon_Bow
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
   displayName: Bow
-  description: Fires arrows up the screen.
+  description: The archer's signature weapon. Fans a volley of arrows up the screen.
   icon: {fileID: 0}
   fireMode: 1
   projectilePrefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
@@ -21,6 +21,9 @@ MonoBehaviour:
   effectPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
   comboDelay: 0.12
+  fanProjectiles: 1
+  isUniqueWeapon: 1
+  usesCharacterAnimators: 0
   levels:
   - upgradeText: 
     damage: 9

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad1ee79a2daaea439512de2911edd41, type: 3}
+  m_Name: Character_Lancer
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.CharacterDefinition
+  displayName: Lancer
+  description: A front-line fighter whose unique weapon is the Lance.
+  portrait: {fileID: 0}
+  uniqueWeapon: {fileID: 11400000, guid: 601d542d4b3604ad2b77d5b4e0fa3a9b, type: 2}

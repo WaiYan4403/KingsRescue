@@ -57,10 +57,17 @@ namespace KingsRescue.Data
             switch (kind)
             {
                 case UpgradeKind.NewWeapon:
-                    return weapon != null && !loadout.HasWeapon(weapon) && loadout.HasRoomForWeapon;
+                    return weapon != null
+                        && !weapon.isUniqueWeapon
+                        && loadout.CanReceiveWeapon(weapon)
+                        && !loadout.HasWeapon(weapon)
+                        && loadout.HasRoomForWeapon;
 
                 case UpgradeKind.WeaponLevel:
-                    return weapon != null && loadout.HasWeapon(weapon) && !loadout.IsWeaponMaxed(weapon);
+                    return weapon != null
+                        && loadout.CanReceiveWeapon(weapon)
+                        && loadout.HasWeapon(weapon)
+                        && !loadout.IsWeaponMaxed(weapon);
 
                 case UpgradeKind.Passive:
                     if (passive == null || loadout.IsPassiveMaxed(passive))
@@ -84,7 +91,10 @@ namespace KingsRescue.Data
             {
                 case UpgradeKind.NewWeapon:
                 case UpgradeKind.WeaponLevel:
-                    loadout.AddOrLevelWeapon(weapon);
+                    if (loadout.CanReceiveWeapon(weapon))
+                    {
+                        loadout.AddOrLevelWeapon(weapon);
+                    }
                     break;
 
                 case UpgradeKind.Passive:
