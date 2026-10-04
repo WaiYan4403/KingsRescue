@@ -43,14 +43,22 @@ namespace KingsRescue.World
         [SerializeField] private float minHorizontalSeparation = 1.2f;
 
         private readonly List<GameObject> spawned = new List<GameObject>();
+        private readonly List<IPoolable[]> propPoolables = new List<IPoolable[]>();
+        private float cachedHeight;
 
         public float Height
         {
             get
             {
+                if (cachedHeight > 0f)
+                {
+                    return cachedHeight;
+                }
+
                 if (heightOverride > 0f)
                 {
-                    return heightOverride;
+                    cachedHeight = heightOverride;
+                    return cachedHeight;
                 }
 
                 SpriteRenderer renderer = groundRenderer != null
@@ -59,10 +67,12 @@ namespace KingsRescue.World
                 if (renderer != null && renderer.sprite != null)
                 {
                     float scaleY = Mathf.Abs(renderer.transform.localScale.y);
-                    return renderer.sprite.rect.height / renderer.sprite.pixelsPerUnit * scaleY;
+                    cachedHeight = renderer.sprite.rect.height / renderer.sprite.pixelsPerUnit * scaleY;
+                    return cachedHeight;
                 }
 
-                return 20f;
+                cachedHeight = 20f;
+                return cachedHeight;
             }
         }
 
@@ -105,10 +115,8 @@ namespace KingsRescue.World
 
         public void Prepare()
         {
-            ClearSpawned();
             trees?.Generate(Height);
-            SpawnProps(breakables, RandomCount(breakableCount), true);
-            SpawnProps(decorations, RandomCount(decorationCount), false);
+            RefreshProps();
         }
 
         public void ClearSpawned()
@@ -117,15 +125,90 @@ namespace KingsRescue.World
 
             for (int i = 0; i < spawned.Count; i++)
             {
-                Release(spawned[i]);
+                if (IsOwned(spawned[i]))
+                {
+                    Release(spawned[i]);
+                }
             }
 
             spawned.Clear();
+            propPoolables.Clear();
+        }
+
+        private void RefreshProps()
+        {
+            for (int i = spawned.Count - 1; i >= 0; i--)
+            {
+                if (IsOwned(spawned[i]))
+                {
+                    continue;
+                }
+
+                spawned.RemoveAt(i);
+                propPoolables.RemoveAt(i);
+            }
+
+            if (spawned.Count == 0)
+            {
+                SpawnProps(breakables, RandomCount(breakableCount), true);
+                SpawnProps(decorations, RandomCount(decorationCount), false);
+                return;
+            }
+
+            float lastX = float.NegativeInfinity;
+            for (int i = 0; i < spawned.Count; i++)
+            {
+                Relocate(spawned[i], true, ref lastX);
+                IPoolable[] poolables = propPoolables[i];
+                for (int p = 0; p < poolables.Length; p++)
+                {
+                    poolables[p].OnSpawned();
+                }
+            }
+
+            int missing = RandomCount(breakableCount) + RandomCount(decorationCount) - spawned.Count;
+            if (missing > 0)
+            {
+                SpawnProps(breakables, Mathf.Min(missing, 1), true);
+                missing = RandomCount(breakableCount) + RandomCount(decorationCount) - spawned.Count;
+                if (missing > 0)
+                {
+                    SpawnProps(decorations, missing, false);
+                }
+            }
         }
 
         private void SpawnProps(PropEntry[] entries, int count, bool trackSeparation)
         {
             float lastX = float.NegativeInfinity;
+            for (int n = 0; n < count; n++)
+            {
+                GameObject prefab = PickWeighted(entries);
+                if (prefab == null)
+                {
+                    return;
+                }
+
+                Vector3 local = PlaceLocal(trackSeparation, ref lastX);
+                Vector3 world = obstaclesRoot.TransformPoint(local);
+                GameObject instance = SpawnChild(prefab, world, obstaclesRoot);
+                if (instance == null)
+                {
+                    continue;
+                }
+
+                spawned.Add(instance);
+                propPoolables.Add(instance.GetComponentsInChildren<IPoolable>(true));
+            }
+        }
+
+        private void Relocate(GameObject instance, bool trackSeparation, ref float lastX)
+        {
+            instance.transform.localPosition = PlaceLocal(trackSeparation, ref lastX);
+        }
+
+        private Vector3 PlaceLocal(bool trackSeparation, ref float lastX)
+        {
             float half = Height * 0.5f;
             float yMin = -half + verticalPadding;
             float yMax = half - verticalPadding;
@@ -135,33 +218,23 @@ namespace KingsRescue.World
                 yMax = half;
             }
 
-            for (int n = 0; n < count; n++)
+            float x = RandomX();
+            if (trackSeparation)
             {
-                GameObject prefab = PickWeighted(entries);
-                if (prefab == null)
+                for (int i = 0; i < placementAttempts && Mathf.Abs(x - lastX) < minHorizontalSeparation; i++)
                 {
-                    return;
+                    x = RandomX();
                 }
 
-                float x = RandomX();
-                if (trackSeparation)
-                {
-                    for (int i = 0; i < placementAttempts && Mathf.Abs(x - lastX) < minHorizontalSeparation; i++)
-                    {
-                        x = RandomX();
-                    }
-
-                    lastX = x;
-                }
-
-                float y = UnityEngine.Random.Range(yMin, yMax);
-                Vector3 world = obstaclesRoot.TransformPoint(new Vector3(x, y, 0f));
-                GameObject instance = SpawnChild(prefab, world, obstaclesRoot);
-                if (instance != null)
-                {
-                    spawned.Add(instance);
-                }
+                lastX = x;
             }
+
+            return new Vector3(x, UnityEngine.Random.Range(yMin, yMax), 0f);
+        }
+
+        private bool IsOwned(GameObject instance)
+        {
+            return instance != null && instance.activeInHierarchy && instance.transform.parent == obstaclesRoot;
         }
 
         private float RandomX()

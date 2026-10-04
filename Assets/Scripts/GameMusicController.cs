@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using FMODUnity;
 
-public class GameMusicController : MonoBehaviour
+public class GameMusicController : Singleton<GameMusicController>
 {
     [SerializeField] private StudioEventEmitter musicEmitter;
 

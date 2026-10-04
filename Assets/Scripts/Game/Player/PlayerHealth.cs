@@ -17,6 +17,8 @@ namespace KingsRescue.Player
 
         [SerializeField] private SpriteRenderer flashTarget;
         [SerializeField] private Animator animator;
+        [SerializeField] private string healthParameter = "Health";
+        [SerializeField] private string dieStateName = "Lancer_Die";
         [SerializeField, Range(0f, 1f)] private float invulnerableAlpha = 0.45f;
 
         private PlayerStats stats;
@@ -51,7 +53,7 @@ namespace KingsRescue.Player
 
             if (animator == null)
             {
-                animator = GetComponent<Animator>();
+                animator = GetComponentInChildren<Animator>();
             }
         }
 
@@ -96,10 +98,12 @@ namespace KingsRescue.Player
 
             HealthChanged?.Invoke(Current, Max);
             Damaged?.Invoke();
+            SyncAnimatorHealth();
 
             if (Current <= 0f)
             {
                 RestoreVisual();
+                PlayDeathAnimation();
                 Died?.Invoke();
             }
         }
@@ -163,7 +167,35 @@ namespace KingsRescue.Player
             {
                 RestoreVisual();
             }
-            animator.SetInteger("Health", (int)Current);
+
+            SyncAnimatorHealth();
+        }
+
+        private void SyncAnimatorHealth()
+        {
+            if (animator != null)
+            {
+                animator.SetInteger(healthParameter, (int)Current);
+            }
+        }
+
+        private void PlayDeathAnimation()
+        {
+            if (animator == null)
+            {
+                return;
+            }
+
+            // Switch Music
+            GameMusicController.Instance.SetGameOverMusic();
+            
+            // Game over freezes scaled time; keep the death clip running anyway.
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            animator.SetInteger(healthParameter, 0);
+            if (!string.IsNullOrEmpty(dieStateName))
+            {
+                animator.Play(dieStateName, 0, 0f);
+            }
         }
 
         private void RestoreVisual()

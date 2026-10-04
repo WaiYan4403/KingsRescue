@@ -29,6 +29,9 @@ namespace KingsRescue.Spawning
         [Tooltip("Hard cap on simultaneous enemies. Protects WebGL frame time.")]
         [SerializeField] private int maxAliveEnemies = 140;
 
+        [Tooltip("Caps how many enemies enter the field in one frame so bursts do not hitch.")]
+        [SerializeField] private int maxSpawnsPerFrame = 4;
+
         [Tooltip("World-unit inset from the screen edge when picking a spawn x.")]
         [SerializeField] private float horizontalInset = 0.6f;
 
@@ -37,8 +40,17 @@ namespace KingsRescue.Spawning
         [SerializeField] private WaveDefinition endlessWave;
 
         private readonly List<WaveState> states = new List<WaveState>();
+        private readonly List<PendingSpawn> pending = new List<PendingSpawn>(32);
+        private int spawnedThisFrame;
 
         public int AliveCount => Enemy.Active.Count;
+
+        private struct PendingSpawn
+        {
+            public EnemyDefinition definition;
+            public Vector2 position;
+            public float runMinutes;
+        }
 
         private void Awake()
         {
@@ -63,6 +75,9 @@ namespace KingsRescue.Spawning
             {
                 return;
             }
+
+            spawnedThisFrame = 0;
+            FlushPending();
 
             float runTime = game.RunTime;
             float runMinutes = runTime / 60f;
@@ -226,11 +241,61 @@ namespace KingsRescue.Spawning
                 return;
             }
 
+            if (Enemy.Active.Count >= maxAliveEnemies)
+            {
+                return;
+            }
+
+            if (spawnedThisFrame >= Mathf.Max(1, maxSpawnsPerFrame))
+            {
+                pending.Add(new PendingSpawn
+                {
+                    definition = definition,
+                    position = position,
+                    runMinutes = runMinutes
+                });
+                return;
+            }
+
+            SpawnImmediate(definition, position, runMinutes);
+        }
+
+        private void FlushPending()
+        {
+            int written = 0;
+            for (int i = 0; i < pending.Count; i++)
+            {
+                if (spawnedThisFrame >= Mathf.Max(1, maxSpawnsPerFrame) || Enemy.Active.Count >= maxAliveEnemies)
+                {
+                    pending[written++] = pending[i];
+                    continue;
+                }
+
+                PendingSpawn spawn = pending[i];
+                SpawnImmediate(spawn.definition, spawn.position, spawn.runMinutes);
+            }
+
+            if (written < pending.Count)
+            {
+                pending.RemoveRange(written, pending.Count - written);
+            }
+        }
+
+        private void SpawnImmediate(EnemyDefinition definition, Vector2 position, float runMinutes)
+        {
+            PoolManager pool = PoolManager.Instance;
+            if (pool == null)
+            {
+                return;
+            }
+
             GameObject instance = pool.Spawn(definition.prefab, position, Quaternion.identity);
             if (instance == null)
             {
                 return;
             }
+
+            spawnedThisFrame++;
 
             Enemy enemy = instance.GetComponent<Enemy>();
             if (enemy == null)

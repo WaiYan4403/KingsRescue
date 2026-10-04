@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
-using KingsRescue.World;
 
 public class TreesGenerator : MonoBehaviour, IPoolable
 {
@@ -22,7 +21,8 @@ public class TreesGenerator : MonoBehaviour, IPoolable
 
     [SerializeField, Range(0f, 0.5f)] float overlap = 0.08f;
 
-    private readonly List<GameObject> spawned = new List<GameObject>();
+    private readonly List<TreesGenerator> rows = new List<TreesGenerator>();
+    private float cachedSpacing;
 
     private void Awake()
     {
@@ -54,13 +54,39 @@ public class TreesGenerator : MonoBehaviour, IPoolable
 
     public void Generate(float chunkHeight)
     {
-        ClearSpawned();
         if (treePrefab == null)
         {
             RandomizeTrees();
             return;
         }
 
+        if (rows.Count == 0)
+        {
+            Fill(chunkHeight);
+            return;
+        }
+
+        for (int i = 0; i < rows.Count; i++)
+        {
+            rows[i]?.RandomizeTrees();
+        }
+    }
+
+    public void ClearSpawned()
+    {
+        for (int i = 0; i < rows.Count; i++)
+        {
+            if (rows[i] != null)
+            {
+                Destroy(rows[i].gameObject);
+            }
+        }
+
+        rows.Clear();
+    }
+
+    private void Fill(float chunkHeight)
+    {
         float spacing = ResolveSpacing();
         if (spacing <= 0.01f)
         {
@@ -73,31 +99,32 @@ public class TreesGenerator : MonoBehaviour, IPoolable
 
         for (int i = 0; i < count; i++)
         {
-            float y = startY + i * spacing;
-            Vector3 world = treesRoot.TransformPoint(new Vector3(0f, y, 0f));
-            GameObject instance = BackgroundSegment.SpawnChild(treePrefab, world, treesRoot);
-            if (instance != null)
+            GameObject instance = Instantiate(treePrefab, treesRoot);
+            instance.name = treePrefab.name;
+            instance.transform.localPosition = new Vector3(0f, startY + i * spacing, 0f);
+            instance.transform.localRotation = Quaternion.identity;
+            instance.transform.localScale = treePrefab.transform.localScale;
+
+            TreesGenerator generator = instance.GetComponent<TreesGenerator>();
+            if (generator != null)
             {
-                spawned.Add(instance);
+                generator.RandomizeTrees();
+                rows.Add(generator);
             }
         }
     }
 
-    public void ClearSpawned()
-    {
-        for (int i = 0; i < spawned.Count; i++)
-        {
-            BackgroundSegment.Release(spawned[i]);
-        }
-
-        spawned.Clear();
-    }
-
     private float ResolveSpacing()
     {
+        if (cachedSpacing > 0f)
+        {
+            return cachedSpacing;
+        }
+
         if (spacingOverride > 0f)
         {
-            return spacingOverride;
+            cachedSpacing = spacingOverride;
+            return cachedSpacing;
         }
 
         float height = 3f;
@@ -111,7 +138,8 @@ public class TreesGenerator : MonoBehaviour, IPoolable
             }
         }
 
-        return height * (1f - overlap);
+        cachedSpacing = height * (1f - overlap);
+        return cachedSpacing;
     }
 
     private static void AssignRandom(Sprite[] sprites, SpriteRenderer target, SpriteRenderer shadow)

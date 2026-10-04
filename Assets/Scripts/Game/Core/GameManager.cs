@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using KingsRescue.Player;
@@ -29,6 +30,9 @@ namespace KingsRescue.Core
         [Tooltip("Scene to load when the player asks to leave the run. Leave empty to disable the button.")]
         [SerializeField] private string menuSceneName = "SampleScene";
 
+        [Tooltip("How long the death animation has to play before time freezes and the game-over panel appears.")]
+        [SerializeField] private float gameOverDelay = 1.15f;
+
         private int pendingLevelUps;
         private bool gameplayMusicStarted;
 
@@ -40,7 +44,7 @@ namespace KingsRescue.Core
 
         public int Coins { get; private set; }
 
-        public bool IsPlaying => State == GameState.Playing;
+        public bool IsPlaying => State == GameState.Playing && (playerHealth == null || playerHealth.IsAlive);
 
         public event Action<GameState> StateChanged;
 
@@ -181,6 +185,14 @@ namespace KingsRescue.Core
 
         private void OnPlayerDied()
         {
+            ScrollDirector.Instance?.SetScrolling(false);
+            StartCoroutine(GameOverAfterDeath());
+        }
+
+        private IEnumerator GameOverAfterDeath()
+        {
+            // Keep timeScale at 1 so the death clip can evaluate and play.
+            yield return new WaitForSecondsRealtime(Mathf.Max(0f, gameOverDelay));
             TriggerGameOver();
         }
 

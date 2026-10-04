@@ -69,12 +69,25 @@ namespace KingsRescue.Player
 
         private void Update()
         {
+            if (Health != null && !Health.IsAlive)
+            {
+                inputAxis = Vector2.zero;
+                velocity = Vector2.zero;
+                return;
+            }
+
             inputAxis = PlayerInputReader.Axis;
             UpdateVisuals();
         }
 
         private void FixedUpdate()
         {
+            if (Health != null && !Health.IsAlive)
+            {
+                velocity = Vector2.zero;
+                return;
+            }
+
             float maxSpeed = stats.MoveSpeed;
             Vector2 desired = inputAxis * maxSpeed;
 
