@@ -27,6 +27,12 @@ public class GameMusicController : Singleton<GameMusicController>
         }
     }
 
+    public void StopMusic()
+    {
+        musicEmitter.EventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        Debug.Log("Music stopped");
+    }
+
     public void SetGameplayMusic()
     {
         musicEmitter.EventInstance.setParameterByNameWithLabel(

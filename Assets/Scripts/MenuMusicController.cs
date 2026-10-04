@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using FMODUnity;
 
-public class MenuMusicController : MonoBehaviour
+public class MenuMusicController : Singleton<MenuMusicController>
 {
     [SerializeField] private StudioEventEmitter musicEmitter;
 
@@ -25,6 +25,12 @@ public class MenuMusicController : MonoBehaviour
         {
             SetOptionsMusic();
         }
+    }
+
+    public void StopMusic()
+    {
+        musicEmitter.EventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        Debug.Log("Music stopped");
     }
 
     public void SetMainMusic()

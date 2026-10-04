@@ -35,7 +35,7 @@ MonoBehaviour:
     cooldown: 0.85
     count: 1
     pierce: 0
-    area: 2.2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     knockback: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
     cooldown: 0.85
     count: 2
     pierce: 0
-    area: 2.2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     knockback: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
     cooldown: 0.85
     count: 3
     pierce: 0
-    area: 2.2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     knockback: 0
@@ -74,7 +74,7 @@ MonoBehaviour:
     cooldown: 0.85
     count: 3
     pierce: 0
-    area: 2.8
+    area: 2
     projectileSpeed: 12
     lifetime: 0.25
     knockback: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
     cooldown: 0.85
     count: 3
     pierce: 0
-    area: 2.8
+    area: 2
     projectileSpeed: 12
     lifetime: 0.25
     knockback: 0

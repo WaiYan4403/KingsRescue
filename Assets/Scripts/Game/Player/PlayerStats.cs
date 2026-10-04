@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Data;
+using KingsRescue.Meta;
 
 namespace KingsRescue.Player
 {
@@ -25,6 +26,7 @@ namespace KingsRescue.Player
         private readonly float[] flatBonuses = new float[StatTypes.Count];
         private readonly float[] percentBonuses = new float[StatTypes.Count];
         private readonly float[] cached = new float[StatTypes.Count];
+        private bool persistentApplied;
 
         public event Action StatsChanged;
 
@@ -55,6 +57,18 @@ namespace KingsRescue.Player
             }
 
             Recalculate(false);
+            ApplyPersistent(RunSession.SelectedCharacter);
+        }
+
+        public void ApplyPersistent(CharacterDefinition character)
+        {
+            if (persistentApplied || character == null)
+            {
+                return;
+            }
+
+            persistentApplied = true;
+            AddModifiers(MetaUpgradeCatalog.BuildModifiers(character));
         }
 
         public float Get(StatType stat)

@@ -72,6 +72,8 @@ namespace KingsRescue.Player
 
         private void Start()
         {
+            stats.ApplyPersistent(character);
+
             WeaponDefinition unique = UniqueWeapon;
             if (unique != null)
             {

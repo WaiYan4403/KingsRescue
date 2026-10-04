@@ -6,6 +6,7 @@ using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.InputControl;
 using KingsRescue.Progression;
+using System.Collections;
 
 namespace KingsRescue.UI
 {
@@ -18,6 +19,7 @@ namespace KingsRescue.UI
         [SerializeField] private GameObject root;
         [SerializeField] private UpgradeCardView[] cards;
         [SerializeField] private TMP_Text levelLabel;
+        [SerializeField] private Animator animator;
 
         private readonly List<UpgradeDefinition> choices = new List<UpgradeDefinition>(4);
         private VirtualJoystick joystick;
@@ -108,6 +110,7 @@ namespace KingsRescue.UI
             // Sit above HUD / joystick so GraphicRaycaster hits the cards first.
             root.transform.SetAsLastSibling();
             root.SetActive(true);
+            animator.SetTrigger("Open");
         }
 
         private void OnCardChosen(UpgradeDefinition upgrade)
@@ -129,8 +132,7 @@ namespace KingsRescue.UI
                 return;
             }
 
-            root.SetActive(false);
-            SetJoystickRaycasts(true);
+            StartCoroutine(DelayClose());
         }
 
         private void SetJoystickRaycasts(bool enabled)
@@ -139,6 +141,14 @@ namespace KingsRescue.UI
             {
                 joystickZone.raycastTarget = enabled;
             }
+        }
+
+        IEnumerator DelayClose()
+        {
+            animator.SetTrigger("Close");
+            yield return new WaitForSeconds(0.45f);
+            root.SetActive(false);
+            SetJoystickRaycasts(true);
         }
     }
 }

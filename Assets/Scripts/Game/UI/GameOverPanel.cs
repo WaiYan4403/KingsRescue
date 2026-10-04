@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using KingsRescue.Core;
 using KingsRescue.Progression;
+using System.Collections;
 
 namespace KingsRescue.UI
 {
@@ -22,6 +23,8 @@ namespace KingsRescue.UI
         [Header("Buttons")]
         [SerializeField] private Button restartButton;
         [SerializeField] private Button menuButton;
+
+        [SerializeField] private Animator animator;
 
         private void Awake()
         {
@@ -81,6 +84,7 @@ namespace KingsRescue.UI
 
             Populate();
             root.SetActive(true);
+            animator.SetTrigger("Open");
         }
 
         private void Populate()
@@ -112,11 +116,22 @@ namespace KingsRescue.UI
         private void OnRestart()
         {
             GameManager.Instance?.RestartRun();
+            GameMusicController.Instance.StopMusic();
+            StartCoroutine(DelayClose());
         }
 
         private void OnMenu()
         {
             GameManager.Instance?.ReturnToMenu();
+            GameMusicController.Instance.StopMusic();
+            StartCoroutine(DelayClose());
+        }
+
+        IEnumerator DelayClose()
+        {
+            animator.SetTrigger("Close");
+            yield return new WaitForSeconds(0.45f);
+            root.SetActive(false);
         }
     }
 }

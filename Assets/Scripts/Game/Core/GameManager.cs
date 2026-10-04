@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using KingsRescue.Data;
+using KingsRescue.Meta;
 using KingsRescue.Player;
+using KingsRescue.Progression;
 
 namespace KingsRescue.Core
 {
@@ -19,6 +21,7 @@ namespace KingsRescue.Core
     /// Owns the run: state machine, timer, score counters and the pause that the
     /// level-up screen rides on.
     /// </summary>
+    [DefaultExecutionOrder(-100)]
     public class GameManager : SingletonBehaviour<GameManager>
     {
         [Header("Scene References")]
@@ -32,7 +35,7 @@ namespace KingsRescue.Core
 
         [Header("Flow")]
         [Tooltip("Scene to load when the player asks to leave the run. Leave empty to disable the button.")]
-        [SerializeField] private string menuSceneName = "SampleScene";
+        [SerializeField] private string menuSceneName = "MainMenu";
 
         [Tooltip("How long the death animation has to play before time freezes and the game-over panel appears.")]
         [SerializeField] private float gameOverDelay = 1.15f;
@@ -62,18 +65,8 @@ namespace KingsRescue.Core
         {
             base.Awake();
 
-            if (playerHealth == null)
-            {
-                playerHealth = FindAnyObjectByType<PlayerHealth>();
-            }
-
-            WeaponLoadout loadout = playerHealth != null
-                ? playerHealth.GetComponent<WeaponLoadout>()
-                : FindAnyObjectByType<WeaponLoadout>();
-            if (loadout != null && selectedCharacter != null)
-            {
-                loadout.BindCharacter(selectedCharacter);
-            }
+            GameSettings.Apply();
+            ResolveSelectedPlayer();
         }
 
         private void OnEnable()
@@ -175,7 +168,70 @@ namespace KingsRescue.Core
                 return;
             }
 
+            RecordRun();
             SetState(GameState.GameOver);
+        }
+
+        private void ResolveSelectedPlayer()
+        {
+            if (RunSession.SelectedCharacter != null)
+            {
+                selectedCharacter = RunSession.SelectedCharacter;
+            }
+
+            if (playerHealth == null)
+            {
+                playerHealth = FindAnyObjectByType<PlayerHealth>();
+            }
+
+            if (selectedCharacter != null && selectedCharacter.playerPrefab != null)
+            {
+                PlayerHealth existing = playerHealth;
+                if (existing == null || !IsInstanceOf(existing.gameObject, selectedCharacter.playerPrefab))
+                {
+                    Vector3 position = existing != null ? existing.transform.position : new Vector3(0f, -5f, 0f);
+                    Quaternion rotation = existing != null ? existing.transform.rotation : Quaternion.identity;
+                    if (existing != null)
+                    {
+                        DestroyImmediate(existing.gameObject);
+                    }
+
+                    GameObject spawned = Instantiate(selectedCharacter.playerPrefab, position, rotation);
+                    spawned.name = selectedCharacter.playerPrefab.name;
+                    playerHealth = spawned.GetComponent<PlayerHealth>();
+                }
+            }
+
+            WeaponLoadout loadout = playerHealth != null
+                ? playerHealth.GetComponent<WeaponLoadout>()
+                : FindAnyObjectByType<WeaponLoadout>();
+            if (loadout != null && selectedCharacter != null)
+            {
+                loadout.BindCharacter(selectedCharacter);
+            }
+        }
+
+        private static bool IsInstanceOf(GameObject instance, GameObject prefab)
+        {
+            if (instance == null || prefab == null)
+            {
+                return false;
+            }
+
+            string instanceName = instance.name.Replace("(Clone)", string.Empty).Trim();
+            return instanceName == prefab.name;
+        }
+
+        private void RecordRun()
+        {
+            WeaponLoadout loadout = playerHealth != null
+                ? playerHealth.GetComponent<WeaponLoadout>()
+                : FindAnyObjectByType<WeaponLoadout>();
+            CharacterDefinition character = loadout != null ? loadout.Character : selectedCharacter;
+            int level = ExperienceSystem.Instance != null ? ExperienceSystem.Instance.Level : 1;
+
+            MetaProgress.AddCoins(Coins);
+            Leaderboard.Submit(character, RunTime, Kills, Coins, level);
         }
 
         public void RestartRun()

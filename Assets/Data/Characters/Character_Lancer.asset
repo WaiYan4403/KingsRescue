@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad1ee79a2daaea439512de2911edd41, type: 3}
   m_Name: Character_Lancer
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.CharacterDefinition
+  id: lancer
   displayName: Lancer
   description: A front-line fighter whose unique weapon is the Lance.
   portrait: {fileID: 0}
+  playerPrefab: {fileID: 1306224722766589929, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
   uniqueWeapon: {fileID: 11400000, guid: 601d542d4b3604ad2b77d5b4e0fa3a9b, type: 2}

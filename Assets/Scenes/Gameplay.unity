@@ -403,9 +403,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Core.GameManager
   playerHealth: {fileID: 1395708460}
-  selectedCharacter: {fileID: 11400000, guid: e71432a8b005b0b43a42874f8e5aa19f, type: 2}
+  selectedCharacter: {fileID: 11400000, guid: 1f8e2c4a6b704d3e9a12c8d5e7f0b3a1, type: 2}
   musicController: {fileID: 0}
-  menuSceneName: SampleScene
+  menuSceneName: MainMenu
   gameOverDelay: 1.15
 --- !u!114 &39098413
 MonoBehaviour:
@@ -1707,6 +1707,7 @@ MonoBehaviour:
   coinsLabel: {fileID: 1196606002}
   restartButton: {fileID: 1873708285}
   menuButton: {fileID: 824029327}
+  animator: {fileID: 445219708}
 --- !u!114 &445219706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6878,6 +6879,7 @@ MonoBehaviour:
   - {fileID: 620879980}
   - {fileID: 2036961825}
   levelLabel: {fileID: 1202286895}
+  animator: {fileID: 1845018247}
 --- !u!114 &1845018245
 MonoBehaviour:
   m_ObjectHideFlags: 0
