@@ -59,13 +59,19 @@ namespace KingsRescue.Progression
             float gain = amount * (stats != null ? stats.XpGain : 1f);
             CurrentXp += gain;
 
+            GameManager game = GameManager.Instance;
+            bool offerCards = game == null || game.CanOfferLevelUp;
+
             // A single fat gem can carry the player through several levels at once.
             while (CurrentXp >= XpToNext)
             {
                 CurrentXp -= XpToNext;
                 Level++;
                 XpToNext = ComputeRequirement(Level);
-                LeveledUp?.Invoke(Level);
+                if (offerCards)
+                {
+                    LeveledUp?.Invoke(Level);
+                }
             }
 
             XpChanged?.Invoke(CurrentXp, XpToNext);

@@ -22,6 +22,9 @@ namespace KingsRescue.Enemies
         private EnemyMovement movement;
         private ContactDamage contact;
         private EnemyDropper dropper;
+        private EnemyAttacker attacker;
+        private MeteorStrike meteor;
+        private EnemyDeathBurst deathBurst;
         private bool dying;
 
         public EnemyDefinition Definition => definition;
@@ -38,6 +41,9 @@ namespace KingsRescue.Enemies
             movement = GetComponent<EnemyMovement>();
             contact = GetComponent<ContactDamage>();
             dropper = GetComponent<EnemyDropper>();
+            attacker = GetComponent<EnemyAttacker>();
+            meteor = GetComponent<MeteorStrike>();
+            deathBurst = GetComponent<EnemyDeathBurst>();
         }
 
         private void OnEnable()
@@ -78,8 +84,24 @@ namespace KingsRescue.Enemies
 
             health.Configure(def.ScaledHealth(runMinutes));
             movement?.Configure(def);
-            contact?.Configure(def, runMinutes);
+            if (contact != null)
+            {
+                contact.enabled = def.dealsContactDamage;
+                if (def.dealsContactDamage)
+                {
+                    contact.Configure(def, runMinutes);
+                }
+            }
+
             dropper?.Configure(def);
+            attacker?.Configure(def, runMinutes);
+            meteor?.Configure(def, runMinutes);
+            deathBurst?.Configure(def, runMinutes);
+        }
+
+        public void SetSpawnHeading(Vector2 spawnPosition, SpawnPattern pattern)
+        {
+            movement?.SetSpawnHeading(spawnPosition, pattern);
         }
 
         private void OnDied(Health source, DamageInfo info)
@@ -91,6 +113,7 @@ namespace KingsRescue.Enemies
 
             dying = true;
 
+            deathBurst?.Trigger();
             GameManager.Instance?.RegisterKill();
             dropper?.DropRewards();
 

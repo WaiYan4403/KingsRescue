@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
   m_Name: Wave_01
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
-  label: Wave 1
+  label: 'Intro: Goblins'
   startTime: 0
-  duration: 60
-  spawnInterval: 1.4
+  duration: 35
+  spawnInterval: 1.35
   spawnsPerTick: 1
   pattern: 0
   enemies:
   - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
-    weight: 15
+    weight: 10
   bursts: []

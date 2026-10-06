@@ -58,6 +58,13 @@ namespace KingsRescue.UI
                 Debug.LogError("LevelUpPanel found no ExperienceSystem in the scene.", this);
             }
 
+            GameManager game = GameManager.Instance;
+            if (game != null)
+            {
+                game.StateChanged += OnStateChanged;
+                game.HeroDied += DismissImmediate;
+            }
+
             // Hidden only after subscribing, so this script may sit on the panel root itself.
             root.SetActive(false);
         }
@@ -69,16 +76,44 @@ namespace KingsRescue.UI
             {
                 xp.LeveledUp -= OnLeveledUp;
             }
+
+            GameManager game = GameManager.Instance;
+            if (game != null)
+            {
+                game.StateChanged -= OnStateChanged;
+                game.HeroDied -= DismissImmediate;
+            }
+        }
+
+        private void OnStateChanged(GameState state)
+        {
+            if (state == GameState.GameOver)
+            {
+                DismissImmediate();
+            }
         }
 
         private void OnLeveledUp(int level)
         {
-            GameManager.Instance?.PushLevelUpPause();
+            GameManager game = GameManager.Instance;
+            if (game == null || !game.CanOfferLevelUp)
+            {
+                return;
+            }
+
+            game.PushLevelUpPause();
             Present();
         }
 
         private void Present()
         {
+            GameManager game = GameManager.Instance;
+            if (game == null || !game.CanOfferLevelUp)
+            {
+                DismissImmediate();
+                return;
+            }
+
             UpgradeService service = UpgradeService.Instance;
             if (service == null)
             {
@@ -124,7 +159,13 @@ namespace KingsRescue.UI
             UpgradeService.Instance?.Apply(upgrade);
 
             GameManager game = GameManager.Instance;
-            bool moreQueued = game != null && game.PopLevelUpPause();
+            if (game == null || !game.CanOfferLevelUp)
+            {
+                DismissImmediate();
+                return;
+            }
+
+            bool moreQueued = game.PopLevelUpPause();
 
             if (moreQueued)
             {
@@ -133,6 +174,17 @@ namespace KingsRescue.UI
             }
 
             StartCoroutine(DelayClose());
+        }
+
+        private void DismissImmediate()
+        {
+            StopAllCoroutines();
+            if (root != null)
+            {
+                root.SetActive(false);
+            }
+
+            SetJoystickRaycasts(true);
         }
 
         private void SetJoystickRaycasts(bool enabled)

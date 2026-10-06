@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_07
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: 'Intro: Mages'
+  startTime: 220
+  duration: 45
+  spawnInterval: 1.05
+  spawnsPerTick: 1
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
+    weight: 7
+  - enemy: {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 2e2cec80d33ea2545a403595083dda63, type: 2}
+    weight: 12
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: 2e2cec80d33ea2545a403595083dda63, type: 2}
+    count: 2
+    pattern: 2

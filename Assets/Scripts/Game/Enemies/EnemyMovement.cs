@@ -7,8 +7,7 @@ using KingsRescue.Player;
 namespace KingsRescue.Enemies
 {
     /// <summary>
-    /// Enemies steer at the player, then a rolled subset gives up once they
-    /// slip below the player's Y and just keep flying down.
+    /// Enemies steer at the player, fly a locked heading, or hold a shooting ring.
     /// Nearby enemies also get a short-range push so crowds keep personal space.
     /// </summary>
     public class EnemyMovement : MonoBehaviour, IPoolable
@@ -34,10 +33,13 @@ namespace KingsRescue.Enemies
         private float giveUpWhenPassedChance = 0.45f;
         private float separationRadius = 0.8f;
         private float separationStrength = 3.25f;
+        private float preferredDistance = 4.5f;
         private float jitterFactor = 1f;
         private bool tracksPlayer;
         private bool givesUpWhenPassed;
         private Vector2 cruiseVelocity;
+        private Vector2 lockedHeading = Vector2.down;
+        private EnemyMoveStyle moveStyle = EnemyMoveStyle.Chase;
 
         private void Awake()
         {
@@ -50,6 +52,7 @@ namespace KingsRescue.Enemies
         public void OnSpawned()
         {
             cruiseVelocity = Vector2.zero;
+            lockedHeading = Vector2.down;
             jitterFactor = 1f + Random.Range(-speedJitter, speedJitter);
             RollFollowRole();
         }
@@ -67,9 +70,54 @@ namespace KingsRescue.Enemies
             giveUpWhenPassedChance = Mathf.Clamp01(definition.giveUpWhenPassedChance);
             separationRadius = Mathf.Max(0f, definition.separationRadius);
             separationStrength = Mathf.Max(0f, definition.separationStrength);
+            preferredDistance = Mathf.Max(1f, definition.preferredDistance);
+            moveStyle = definition.moveStyle;
+            lockedHeading = Vector2.down;
             jitterFactor = 1f + Random.Range(-speedJitter, speedJitter);
             cruiseVelocity = Vector2.zero;
             RollFollowRole();
+
+            if (moveStyle == EnemyMoveStyle.Charge)
+            {
+                tracksPlayer = true;
+                givesUpWhenPassed = false;
+            }
+            else if (moveStyle == EnemyMoveStyle.Straight)
+            {
+                tracksPlayer = false;
+            }
+            else if (moveStyle == EnemyMoveStyle.KeepDistance)
+            {
+                tracksPlayer = true;
+                givesUpWhenPassed = false;
+            }
+        }
+
+        public void SetSpawnHeading(Vector2 spawnPosition, SpawnPattern pattern)
+        {
+            if (moveStyle != EnemyMoveStyle.Straight)
+            {
+                return;
+            }
+
+            ArenaBounds bounds = ArenaBounds.Instance;
+            Vector2 center = bounds != null ? bounds.WorldRect.center : Vector2.zero;
+
+            switch (pattern)
+            {
+                case SpawnPattern.CrossScreen:
+                    lockedHeading = new Vector2(spawnPosition.x < center.x ? 1f : -1f, -0.28f).normalized;
+                    break;
+                case SpawnPattern.DiagonalDive:
+                    lockedHeading = new Vector2(spawnPosition.x < center.x ? 0.7f : -0.7f, -1f).normalized;
+                    break;
+                case SpawnPattern.Sides:
+                    lockedHeading = new Vector2(spawnPosition.x < center.x ? 1f : -1f, -0.15f).normalized;
+                    break;
+                default:
+                    lockedHeading = Vector2.down;
+                    break;
+            }
         }
 
         private void RollFollowRole()
@@ -87,7 +135,11 @@ namespace KingsRescue.Enemies
             bool onScreen = bounds == null || bounds.IsOnScreen(position, chaseSlack);
 
             Vector2 desired = Vector2.zero;
-            if (onScreen)
+            if (moveStyle == EnemyMoveStyle.Straight)
+            {
+                desired = lockedHeading * (moveSpeed * jitterFactor);
+            }
+            else if (onScreen)
             {
                 desired = BuildDesiredCruise(position);
             }
@@ -111,7 +163,17 @@ namespace KingsRescue.Enemies
             Vector2 cruise = Vector2.down * speed;
 
             Transform player = PlayerController.PlayerTransform;
-            if (player == null || !tracksPlayer)
+            if (player == null)
+            {
+                return cruise;
+            }
+
+            if (moveStyle == EnemyMoveStyle.KeepDistance)
+            {
+                return KeepDistanceCruise(position, player.position, speed);
+            }
+
+            if (!tracksPlayer)
             {
                 return cruise;
             }
@@ -128,12 +190,33 @@ namespace KingsRescue.Enemies
                 return cruise;
             }
 
-            if (toPlayer.y > 0f)
+            if (moveStyle != EnemyMoveStyle.Charge && toPlayer.y > 0f)
             {
                 speed *= chaseUpSpeedFactor;
             }
 
             return toPlayer.normalized * speed;
+        }
+
+        private Vector2 KeepDistanceCruise(Vector2 position, Vector2 player, float speed)
+        {
+            Vector2 toPlayer = player - position;
+            float distance = toPlayer.magnitude;
+            if (distance < 0.001f)
+            {
+                return Vector2.down * speed;
+            }
+
+            Vector2 radial = toPlayer / distance;
+            float error = distance - preferredDistance;
+            Vector2 tangent = new Vector2(-radial.y, radial.x);
+            Vector2 steer = radial * Mathf.Clamp(error, -1.5f, 1.5f) + tangent * 0.45f;
+            if (steer.sqrMagnitude < 0.0001f)
+            {
+                return Vector2.zero;
+            }
+
+            return steer.normalized * speed;
         }
 
         private Vector2 ComputeSeparation(Vector2 position)
@@ -164,7 +247,6 @@ namespace KingsRescue.Enemies
 
                 if (distSq < 0.000001f)
                 {
-                    // Same tile: pick a stable side so the pair does not sit on one pixel.
                     float sign = other.GetInstanceID() > GetInstanceID() ? 1f : -1f;
                     steer += new Vector2(sign, sign * 0.35f);
                     continue;

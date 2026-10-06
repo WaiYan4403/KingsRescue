@@ -12,19 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
   m_Name: Wave_02
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
-  label: Wave 2
-  startTime: 45
-  duration: 75
-  spawnInterval: 1
-  spawnsPerTick: 2
+  label: 'Intro: Bats'
+  startTime: 35
+  duration: 35
+  spawnInterval: 1.25
+  spawnsPerTick: 1
   pattern: 0
   enemies:
-  - enemy: {fileID: 11400000, guid: 3364a2f6ea47f4a68a3371c9db273c92, type: 2}
-    weight: 5
   - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
-    weight: 7
+    weight: 8
+  - enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+    weight: 10
   bursts:
-  - atTime: 30
-    enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
+  - atTime: 8
+    enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
     count: 8
-    pattern: 1
+    pattern: 4
+  - atTime: 22
+    enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+    count: 10
+    pattern: 5

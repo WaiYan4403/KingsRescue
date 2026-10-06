@@ -15,7 +15,13 @@ namespace KingsRescue.Data
         Sides = 2,
 
         /// <summary>Ring centred on the player, just outside the visible area.</summary>
-        SurroundPlayer = 3
+        SurroundPlayer = 3,
+
+        /// <summary>Left or right edge, flying across the road. Used by bat packs.</summary>
+        CrossScreen = 4,
+
+        /// <summary>Top corners diving diagonally through the field.</summary>
+        DiagonalDive = 5
     }
 
     /// <summary>

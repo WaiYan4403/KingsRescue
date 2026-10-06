@@ -50,6 +50,7 @@ namespace KingsRescue.Spawning
             public EnemyDefinition definition;
             public Vector2 position;
             public float runMinutes;
+            public SpawnPattern pattern;
         }
 
         private void Awake()
@@ -183,7 +184,7 @@ namespace KingsRescue.Spawning
                 int slot = count > 1 ? i : indexOffset;
                 int slotTotal = count > 1 ? count : groupSize;
 
-                Spawn(enemy, ResolveSpawnPoint(bounds, pattern, slot, slotTotal), runMinutes);
+                Spawn(enemy, ResolveSpawnPoint(bounds, pattern, slot, slotTotal), runMinutes, pattern);
             }
         }
 
@@ -222,12 +223,30 @@ namespace KingsRescue.Spawning
                     return center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
                 }
 
+                case SpawnPattern.CrossScreen:
+                {
+                    bool left = index % 2 == 0;
+                    float x = left ? bounds.LeftDespawnX + 0.4f : bounds.RightDespawnX - 0.4f;
+                    float y = Mathf.Lerp(world.yMin + 1.5f, world.yMax - 0.5f, total <= 1 ? Random.value : index / (float)Mathf.Max(1, total - 1));
+                    return new Vector2(x, y);
+                }
+
+                case SpawnPattern.DiagonalDive:
+                {
+                    float t = total <= 1 ? Random.value : index / (float)(total - 1);
+                    bool fromLeft = index % 2 == 0;
+                    float x = fromLeft
+                        ? Mathf.Lerp(world.xMin + horizontalInset, world.center.x, t)
+                        : Mathf.Lerp(world.center.x, world.xMax - horizontalInset, t);
+                    return new Vector2(x, bounds.TopSpawnY);
+                }
+
                 default:
                     return bounds.RandomTopSpawnPoint(horizontalInset);
             }
         }
 
-        private void Spawn(EnemyDefinition definition, Vector2 position, float runMinutes)
+        private void Spawn(EnemyDefinition definition, Vector2 position, float runMinutes, SpawnPattern pattern)
         {
             if (definition.prefab == null)
             {
@@ -252,12 +271,13 @@ namespace KingsRescue.Spawning
                 {
                     definition = definition,
                     position = position,
-                    runMinutes = runMinutes
+                    runMinutes = runMinutes,
+                    pattern = pattern
                 });
                 return;
             }
 
-            SpawnImmediate(definition, position, runMinutes);
+            SpawnImmediate(definition, position, runMinutes, pattern);
         }
 
         private void FlushPending()
@@ -272,7 +292,7 @@ namespace KingsRescue.Spawning
                 }
 
                 PendingSpawn spawn = pending[i];
-                SpawnImmediate(spawn.definition, spawn.position, spawn.runMinutes);
+                SpawnImmediate(spawn.definition, spawn.position, spawn.runMinutes, spawn.pattern);
             }
 
             if (written < pending.Count)
@@ -281,7 +301,7 @@ namespace KingsRescue.Spawning
             }
         }
 
-        private void SpawnImmediate(EnemyDefinition definition, Vector2 position, float runMinutes)
+        private void SpawnImmediate(EnemyDefinition definition, Vector2 position, float runMinutes, SpawnPattern pattern)
         {
             PoolManager pool = PoolManager.Instance;
             if (pool == null)
@@ -305,6 +325,7 @@ namespace KingsRescue.Spawning
             }
 
             enemy.Configure(definition, runMinutes);
+            enemy.SetSpawnHeading(position, pattern);
         }
     }
 }

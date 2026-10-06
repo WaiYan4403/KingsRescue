@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_Spider
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Spider
+  prefab: {fileID: 4860159253479769756, guid: 2fbf6070f9e7cdf4cbd24e8214400639, type: 3}
+  maxHealth: 8
+  contactDamage: 5
+  contactInterval: 0.7
+  contactRadius: 0.36
+  dealsContactDamage: 1
+  moveStyle: 2
+  moveSpeed: 2.3
+  scrollInfluence: 0.4
+  turnResponsiveness: 7
+  followChance: 1
+  giveUpWhenPassedChance: 0.15
+  separationRadius: 1.1
+  separationStrength: 2.5
+  preferredDistance: 4.2
+  attackStyle: 2
+  projectilePrefab: {fileID: 7342546010400522602, guid: 986222dfc11d3c44ebfb6215259f5530, type: 3}
+  attackInterval: 2.4
+  attackRange: 7.5
+  attackDamage: 3
+  projectileSpeed: 6.5
+  projectileLifetime: 2.8
+  projectileRadius: 0.34
+  projectileHoming: 0
+  slowFactor: 0.42
+  slowDuration: 2.4
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
+  xpValue: 2
+  coinDropChance: 0.06
+  healthDropChance: 0.015
+  healthGrowthPerMinute: 0.35
+  damageGrowthPerMinute: 0.12

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_08
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: 'Intro: Exploders'
+  startTime: 265
+  duration: 40
+  spawnInterval: 0.95
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
+    weight: 7
+  - enemy: {fileID: 11400000, guid: 6a9c470dde3195249a363888da2d3e1e, type: 2}
+    weight: 4
+  - enemy: {fileID: 11400000, guid: d448ec731ce1cd74d91f7aaa34a91106, type: 2}
+    weight: 11
+  bursts:
+  - atTime: 16
+    enemy: {fileID: 11400000, guid: d448ec731ce1cd74d91f7aaa34a91106, type: 2}
+    count: 5
+    pattern: 3

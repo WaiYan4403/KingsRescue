@@ -41,6 +41,7 @@ namespace KingsRescue.Player
 
         private Rigidbody2D body;
         private PlayerStats stats;
+        private PlayerStatus status;
         private Vector2 velocity;
         private Vector2 inputAxis;
         private int speedParameterHash;
@@ -62,6 +63,7 @@ namespace KingsRescue.Player
 
             body = GetComponent<Rigidbody2D>();
             stats = GetComponent<PlayerStats>();
+            status = GetComponent<PlayerStatus>();
             Health = GetComponent<PlayerHealth>();
 
             body.bodyType = RigidbodyType2D.Kinematic;
@@ -98,7 +100,7 @@ namespace KingsRescue.Player
                 return;
             }
 
-            float maxSpeed = stats.MoveSpeed;
+            float maxSpeed = stats.MoveSpeed * (status != null ? status.MoveScale : 1f);
             Vector2 desired = inputAxis * maxSpeed;
 
             if (desired.y > 0f)

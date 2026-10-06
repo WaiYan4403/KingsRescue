@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_Exploder
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Boom Slime
+  prefab: {fileID: 8309821208071821943, guid: 0317a6f0e122aad43b5c21ebe0414393, type: 3}
+  maxHealth: 6
+  contactDamage: 6
+  contactInterval: 0.5
+  contactRadius: 0.4
+  dealsContactDamage: 1
+  moveStyle: 0
+  moveSpeed: 2.8
+  scrollInfluence: 0.55
+  turnResponsiveness: 7
+  followChance: 1
+  giveUpWhenPassedChance: 0.25
+  separationRadius: 1.1
+  separationStrength: 2.2
+  preferredDistance: 4.5
+  attackStyle: 0
+  projectilePrefab: {fileID: 0}
+  attackInterval: 1.8
+  attackRange: 8
+  attackDamage: 8
+  projectileSpeed: 7
+  projectileLifetime: 3.5
+  projectileRadius: 0.28
+  projectileHoming: 0
+  slowFactor: 0.45
+  slowDuration: 2.2
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  deathBurstDamage: 14
+  deathBurstRadius: 1.55
+  xpValue: 2
+  coinDropChance: 0.05
+  healthDropChance: 0.02
+  healthGrowthPerMinute: 0.35
+  damageGrowthPerMinute: 0.12

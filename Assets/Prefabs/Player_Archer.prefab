@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1348653748630193198}
   - component: {fileID: 4457876508632528820}
   - component: {fileID: 1821572945072813839}
+  - component: {fileID: 8856426189125932596}
   m_Layer: 0
   m_Name: Player_Archer
   m_TagString: Untagged
@@ -101,7 +102,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PlayerController
   acceleration: 90
   forwardSpeedFactor: 1
-  animator: {fileID: 1821572945072813839}
+  backwardSpeedFactor: 1.5
+  obstacleRadius: 0.45
+  obstacleSkin: 0.04
+  resolveIterations: 3
+  asideBias: 1.1
+  bodyAnimator: {fileID: 0}
+  legAnimator: {fileID: 0}
+  effectAnimator: {fileID: 0}
   spriteRenderer: {fileID: 0}
   speedParameter: MoveSpeed
 --- !u!114 &4460760701475635381
@@ -118,7 +126,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PlayerHealth
   invulnerabilityDuration: 0.5
   flashTarget: {fileID: 0}
-  animator: {fileID: 0}
+  bodyAnimator: {fileID: 0}
+  legAnimator: {fileID: 0}
   healthParameter: Health
   dieStateName: Lancer_Die
   invulnerableAlpha: 0.45
@@ -174,6 +183,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8856426189125932596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306224722766589929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0209bb88bc92ae34b86f631d5d662d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PlayerStatus
 --- !u!1 &3468642812728596342
 GameObject:
   m_ObjectHideFlags: 0

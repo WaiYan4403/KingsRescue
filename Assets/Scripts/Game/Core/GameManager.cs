@@ -53,6 +53,15 @@ namespace KingsRescue.Core
 
         public bool IsPlaying => State == GameState.Playing && (playerHealth == null || playerHealth.IsAlive);
 
+        /// <summary>
+        /// Level-up cards are only legal while the hero is alive. Death and game-over
+        /// both suppress them so the overlay cannot cover the run summary.
+        /// </summary>
+        public bool CanOfferLevelUp =>
+            State != GameState.GameOver
+            && State != GameState.Boot
+            && (playerHealth == null || playerHealth.IsAlive);
+
         public CharacterDefinition SelectedCharacter => selectedCharacter;
 
         public event Action<GameState> StateChanged;
@@ -60,6 +69,9 @@ namespace KingsRescue.Core
         public event Action<int> KillsChanged;
 
         public event Action<int> CoinsChanged;
+
+        /// <summary>Fired as soon as HP hits zero, before the delayed game-over screen.</summary>
+        public event Action HeroDied;
 
         protected override void Awake()
         {
@@ -135,6 +147,11 @@ namespace KingsRescue.Core
         /// </summary>
         public void PushLevelUpPause()
         {
+            if (!CanOfferLevelUp)
+            {
+                return;
+            }
+
             pendingLevelUps++;
 
             if (State == GameState.Playing)
@@ -168,6 +185,7 @@ namespace KingsRescue.Core
                 return;
             }
 
+            pendingLevelUps = 0;
             RecordRun();
             SetState(GameState.GameOver);
         }
@@ -255,6 +273,8 @@ namespace KingsRescue.Core
 
         private void OnPlayerDied()
         {
+            pendingLevelUps = 0;
+            HeroDied?.Invoke();
             ScrollDirector.Instance?.SetScrolling(false);
             StartCoroutine(GameOverAfterDeath());
         }

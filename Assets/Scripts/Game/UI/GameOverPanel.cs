@@ -83,6 +83,7 @@ namespace KingsRescue.UI
             }
 
             Populate();
+            root.transform.SetAsLastSibling();
             root.SetActive(true);
             animator.SetTrigger("Open");
         }
