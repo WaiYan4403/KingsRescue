@@ -15,7 +15,19 @@ namespace KingsRescue.Data
         Orbit = 2,
 
         /// <summary>Pulsing damage field centred on the hero.</summary>
-        Aura = 3
+        Aura = 3,
+
+        /// <summary>Projectiles aimed at the nearest enemy, like Magic Wand or Knife.</summary>
+        AimedShot = 4,
+
+        /// <summary>Each projectile picks a random living enemy.</summary>
+        RandomShot = 5,
+
+        /// <summary>Damage bursts on random enemies, like Lightning Ring.</summary>
+        RandomStrike = 6,
+
+        /// <summary>Damaging zones dropped around the hero, like Santa Water.</summary>
+        GroundZone = 7
     }
 
     /// <summary>
@@ -77,7 +89,7 @@ namespace KingsRescue.Data
         [Header("Behaviour")]
         public WeaponFireMode fireMode = WeaponFireMode.MeleeSwing;
 
-        [Tooltip("ForwardShot: the projectile prefab. Needs a Projectile component.")]
+        [Tooltip("Projectile weapons: the prefab. Needs a Projectile component.")]
         public GameObject projectilePrefab;
 
         [Tooltip("Orbit: the blade prefab. Needs an OrbitBlade component.")]

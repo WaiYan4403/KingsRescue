@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
+  m_Name: Weapon_Axe
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
+  displayName: Axe
+  description: High damage, high Area. Flies at the nearest foe and keeps going.
+  icon: {fileID: 0}
+  fireMode: 4
+  projectilePrefab: {fileID: 9086646655045113726, guid: 4ba5cf8d98d4f3d4dbc602f01bf38a21, type: 3}
+  orbitPrefab: {fileID: 0}
+  effectPrefab: {fileID: 0}
+  usesGlobalProjectileCount: 1
+  comboDelay: 0.12
+  fanProjectiles: 1
+  isUniqueWeapon: 0
+  usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 010000000200000003000000
+  levels:
+  - upgradeText: 
+    damage: 22
+    cooldown: 1.6
+    count: 1
+    pierce: 2
+    area: 1.45
+    projectileSpeed: 8
+    lifetime: 1.4
+    maxDistance: 5.5
+    knockback: 2.2
+    arcDegrees: 150
+    spreadDegrees: 28
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Heavier axe
+    damage: 28
+    cooldown: 1.6
+    count: 1
+    pierce: 2
+    area: 1.45
+    projectileSpeed: 8
+    lifetime: 1.4
+    maxDistance: 5.5
+    knockback: 2.2
+    arcDegrees: 150
+    spreadDegrees: 28
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: +1 axe
+    damage: 28
+    cooldown: 1.5
+    count: 2
+    pierce: 2
+    area: 1.55
+    projectileSpeed: 8
+    lifetime: 1.4
+    maxDistance: 6
+    knockback: 2.4
+    arcDegrees: 150
+    spreadDegrees: 32
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: More Area
+    damage: 28
+    cooldown: 1.4
+    count: 2
+    pierce: 3
+    area: 1.9
+    projectileSpeed: 8.5
+    lifetime: 1.5
+    maxDistance: 6.5
+    knockback: 2.4
+    arcDegrees: 150
+    spreadDegrees: 32
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Carnage
+    damage: 36
+    cooldown: 1.3
+    count: 2
+    pierce: 4
+    area: 2.1
+    projectileSpeed: 9
+    lifetime: 1.5
+    maxDistance: 7
+    knockback: 2.8
+    arcDegrees: 150
+    spreadDegrees: 36
+    rehitInterval: 0.45
+    orbitSpeed: 0.7

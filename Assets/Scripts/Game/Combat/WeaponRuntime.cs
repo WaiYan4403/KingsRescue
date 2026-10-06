@@ -18,6 +18,7 @@ namespace KingsRescue.Combat
         private const float TargetSearchRange = 14f;
 
         private readonly List<OrbitBlade> blades = new List<OrbitBlade>(8);
+        private readonly List<Enemy> strikeTargets = new List<Enemy>(16);
 
         private WeaponDefinition definition;
         private PlayerStats stats;
@@ -136,6 +137,18 @@ namespace KingsRescue.Combat
                     break;
                 case WeaponFireMode.ForwardShot:
                     FireForwardShot();
+                    break;
+                case WeaponFireMode.AimedShot:
+                    FireDirectedShot(false);
+                    break;
+                case WeaponFireMode.RandomShot:
+                    FireDirectedShot(true);
+                    break;
+                case WeaponFireMode.RandomStrike:
+                    FireRandomStrikes();
+                    break;
+                case WeaponFireMode.GroundZone:
+                    FireGroundZones();
                     break;
                 case WeaponFireMode.Aura:
                     FireAura();
@@ -312,6 +325,165 @@ namespace KingsRescue.Combat
 
             float range = data.maxDistance > 0.01f ? data.maxDistance : 6.5f;
             projectile.Launch(direction, speed, damage, pierce, ResolveDuration(), area, data.knockback, gameObject, range);
+        }
+
+        private void FireDirectedShot(bool randomTargets)
+        {
+            int count = ResolveCount();
+            Vector2 origin = transform.position;
+
+            if (count <= 1 || definition.fanProjectiles || randomTargets)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 direction = randomTargets
+                        ? ResolveRandomDirection(origin)
+                        : ResolveFacing(origin);
+                    SpawnDirectedShot(origin, direction, i, count);
+                }
+
+                return;
+            }
+
+            if (comboRoutine != null)
+            {
+                StopCoroutine(comboRoutine);
+            }
+
+            comboRoutine = StartCoroutine(DirectedVolley(count));
+        }
+
+        private IEnumerator DirectedVolley(int count)
+        {
+            var wait = new WaitForSeconds(Mathf.Max(0.02f, definition.comboDelay));
+            Vector2 origin = transform.position;
+            Vector2 direction = ResolveFacing(origin);
+
+            for (int i = 0; i < count; i++)
+            {
+                origin = transform.position;
+                SpawnDirectedShot(origin, direction, i, count);
+                if (i < count - 1)
+                {
+                    yield return wait;
+                }
+            }
+
+            comboRoutine = null;
+        }
+
+        private void SpawnDirectedShot(Vector2 origin, Vector2 baseDirection, int shotIndex, int shotCount)
+        {
+            if (definition.projectilePrefab == null)
+            {
+                Debug.LogError($"Weapon '{definition.name}' needs a projectile prefab.", definition);
+                enabled = false;
+                return;
+            }
+
+            PoolManager pool = PoolManager.Instance;
+            if (pool == null)
+            {
+                return;
+            }
+
+            WeaponLevel data = Data;
+            Vector2 aim = baseDirection.sqrMagnitude > 0.0001f ? baseDirection.normalized : Vector2.up;
+            float speed = data.projectileSpeed * stats.ProjectileSpeedMultiplier;
+            float damage = ResolveDamage();
+            int pierce = data.pierce + stats.BonusPierce;
+            float area = ResolveArea();
+
+            float offset = 0f;
+            if (definition.fanProjectiles && shotCount > 1)
+            {
+                offset = Mathf.Lerp(-data.spreadDegrees * 0.5f, data.spreadDegrees * 0.5f, shotIndex / (float)(shotCount - 1));
+            }
+
+            Vector2 direction = Rotate(aim, offset);
+            Projectile projectile = pool.Spawn(definition.projectilePrefab, origin, Quaternion.identity)
+                .GetComponent<Projectile>();
+
+            if (projectile == null)
+            {
+                Debug.LogError($"Projectile prefab '{definition.projectilePrefab.name}' has no Projectile component.", definition);
+                return;
+            }
+
+            float range = data.maxDistance > 0.01f ? data.maxDistance : 6.5f;
+            projectile.Launch(direction, speed, damage, pierce, ResolveDuration(), area, data.knockback, gameObject, range);
+        }
+
+        private Vector2 ResolveRandomDirection(Vector2 origin)
+        {
+            Targeting.CollectLiving(origin, TargetSearchRange, strikeTargets);
+            if (strikeTargets.Count == 0)
+            {
+                return ResolveFacing(origin);
+            }
+
+            Enemy enemy = strikeTargets[Random.Range(0, strikeTargets.Count)];
+            Vector2 toTarget = (Vector2)enemy.transform.position - origin;
+            if (toTarget.sqrMagnitude > 0.0001f)
+            {
+                lastFacing = toTarget.normalized;
+                return lastFacing;
+            }
+
+            return ResolveFacing(origin);
+        }
+
+        private void FireRandomStrikes()
+        {
+            Vector2 origin = transform.position;
+            int count = ResolveCount();
+            float radius = ResolveArea();
+            float damage = ResolveDamage();
+            float duration = ResolveDuration();
+            float knockback = Data.knockback;
+
+            Targeting.CollectLiving(origin, TargetSearchRange, strikeTargets);
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 point;
+                if (strikeTargets.Count > 0)
+                {
+                    int pick = Random.Range(0, strikeTargets.Count);
+                    point = strikeTargets[pick].transform.position;
+                    if (strikeTargets.Count > 1)
+                    {
+                        strikeTargets.RemoveAt(pick);
+                    }
+                }
+                else
+                {
+                    point = origin + ResolveFacing(origin) * Mathf.Max(1.2f, radius);
+                }
+
+                Targeting.DamageCircle(point, radius, damage, knockback, gameObject);
+                HitboxDisplay.Flash(point, radius, duration);
+                SpawnEffect(point, Vector2.up, radius, duration);
+            }
+        }
+
+        private void FireGroundZones()
+        {
+            Vector2 origin = transform.position;
+            int count = ResolveCount();
+            float spread = ResolveArea() * 1.7f;
+            float puddle = Mathf.Max(0.7f, ResolveArea() * 0.55f);
+            float damage = ResolveDamage();
+            float duration = ResolveDuration();
+            float knockback = Data.knockback;
+
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 point = origin + Random.insideUnitCircle * spread;
+                Targeting.DamageCircle(point, puddle, damage, knockback, gameObject);
+                HitboxDisplay.Flash(point, puddle, duration);
+                SpawnEffect(point, Vector2.up, puddle, duration);
+            }
         }
 
         private void FireAura()

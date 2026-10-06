@@ -39,6 +39,28 @@ namespace KingsRescue.Combat
             return best;
         }
 
+        /// <summary>Living, targetable enemies within range. Order is undefined.</summary>
+        public static void CollectLiving(Vector2 from, float maxRange, List<Enemy> results)
+        {
+            results.Clear();
+            float maxSqr = maxRange * maxRange;
+            List<Enemy> active = Enemy.Active;
+
+            for (int i = 0; i < active.Count; i++)
+            {
+                Enemy enemy = active[i];
+                if (enemy == null || !enemy.IsAlive || (enemy.Health != null && enemy.Health.Untargetable))
+                {
+                    continue;
+                }
+
+                if (((Vector2)enemy.transform.position - from).sqrMagnitude <= maxSqr)
+                {
+                    results.Add(enemy);
+                }
+            }
+        }
+
         /// <summary>Fills <paramref name="results"/> with living targets whose bodies touch the circle.</summary>
         public static void Overlap(Vector2 center, float radius, List<Health> results)
         {
