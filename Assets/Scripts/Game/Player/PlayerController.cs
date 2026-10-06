@@ -46,6 +46,7 @@ namespace KingsRescue.Player
         private Vector2 inputAxis;
         private int speedParameterHash;
         private bool hasSpeedParameter;
+        private readonly List<Collider2D> overlappingObstacles = new List<Collider2D>(8);
 
         public Vector2 Velocity => velocity;
 
@@ -165,65 +166,150 @@ namespace KingsRescue.Player
 
             for (int iter = 0; iter < resolveIterations; iter++)
             {
-                bool pushed = false;
-
-                for (int i = 0; i < blockers.Count; i++)
+                CollectOverlaps(pos, blockers, minSep);
+                if (overlappingObstacles.Count == 0)
                 {
-                    BlockingObstacle blocker = blockers[i];
-                    Collider2D col = blocker != null ? blocker.Collider : null;
-                    if (col == null || !col.enabled)
-                    {
-                        continue;
-                    }
+                    break;
+                }
 
+                float escapeX = SharedEscapeX(pos, minSep);
+                bool cluster = overlappingObstacles.Count > 1;
+
+                for (int i = 0; i < overlappingObstacles.Count; i++)
+                {
+                    Collider2D col = overlappingObstacles[i];
                     Vector2 closest = col.ClosestPoint(pos);
                     Vector2 delta = pos - closest;
                     float dist = delta.sqrMagnitude;
                     bool inside = col.OverlapPoint(pos);
-
-                    if (!inside && dist >= minSep * minSep)
-                    {
-                        continue;
-                    }
-
                     Vector2 fromCenter = pos - (Vector2)col.bounds.center;
-                    Vector2 normal;
+
+                    Vector2 geometric;
                     if (inside || dist < 0.0001f)
                     {
-                        normal = fromCenter.sqrMagnitude > 0.0001f ? fromCenter.normalized : Vector2.right;
+                        geometric = fromCenter.sqrMagnitude > 0.0001f ? fromCenter.normalized : new Vector2(escapeX, 0f);
                     }
                     else
                     {
-                        normal = delta / Mathf.Sqrt(dist);
+                        geometric = delta / Mathf.Sqrt(dist);
                     }
 
-                    float side = fromCenter.x;
-                    if (Mathf.Abs(side) < 0.08f)
+                    Vector2 normal;
+                    if (cluster)
                     {
-                        side = inputAxis.x;
-                    }
+                        // Every overlapping rock shoves the same way so a sandwich cannot pin the hero.
+                        float pushY = Mathf.Min(0f, geometric.y);
+                        normal = new Vector2(escapeX, pushY);
+                        if (normal.sqrMagnitude < 0.0001f)
+                        {
+                            normal = new Vector2(escapeX, 0f);
+                        }
 
-                    if (Mathf.Abs(side) < 0.01f)
+                        normal = (normal.normalized + new Vector2(escapeX, 0f) * asideBias).normalized;
+                    }
+                    else
                     {
-                        side = fromCenter.x >= 0f ? 1f : -1f;
-                    }
+                        float side = fromCenter.x;
+                        if (Mathf.Abs(side) < 0.08f)
+                        {
+                            side = inputAxis.x;
+                        }
 
-                    normal = (normal + new Vector2(Mathf.Sign(side), 0f) * asideBias).normalized;
+                        if (Mathf.Abs(side) < 0.01f)
+                        {
+                            side = escapeX;
+                        }
+
+                        normal = (geometric + new Vector2(Mathf.Sign(side), 0f) * asideBias).normalized;
+                    }
 
                     float currentSep = inside ? 0f : Mathf.Sqrt(dist);
                     pos += normal * (minSep - currentSep);
-                    pushed = true;
 
-                    velocity -= normal * Mathf.Max(0f, Vector2.Dot(velocity, normal));
-                }
-
-                if (!pushed)
-                {
-                    break;
+                    // Keep sliding along the surface; only kill speed aimed into the rock.
+                    float into = Vector2.Dot(velocity, -normal);
+                    if (into > 0f)
+                    {
+                        velocity += normal * into;
+                    }
                 }
             }
 
             return pos;
+        }
+
+        private void CollectOverlaps(Vector2 pos, List<BlockingObstacle> blockers, float minSep)
+        {
+            overlappingObstacles.Clear();
+            float minSepSq = minSep * minSep;
+
+            for (int i = 0; i < blockers.Count; i++)
+            {
+                BlockingObstacle blocker = blockers[i];
+                Collider2D col = blocker != null ? blocker.Collider : null;
+                if (col == null || !col.enabled)
+                {
+                    continue;
+                }
+
+                Vector2 closest = col.ClosestPoint(pos);
+                float dist = (pos - closest).sqrMagnitude;
+                if (col.OverlapPoint(pos) || dist < minSepSq)
+                {
+                    overlappingObstacles.Add(col);
+                }
+            }
+        }
+
+        /// <summary>
+        /// One shared left/right for the whole overlapping pile: already-on-this-side,
+        /// then stick input, then whichever side of the road still has room.
+        /// </summary>
+        private float SharedEscapeX(Vector2 pos, float minSep)
+        {
+            float centroidX = 0f;
+            for (int i = 0; i < overlappingObstacles.Count; i++)
+            {
+                centroidX += overlappingObstacles[i].bounds.center.x;
+            }
+
+            centroidX /= overlappingObstacles.Count;
+            float offset = pos.x - centroidX;
+            float escape;
+            if (Mathf.Abs(offset) > 0.12f)
+            {
+                escape = Mathf.Sign(offset);
+            }
+            else if (Mathf.Abs(inputAxis.x) > 0.2f)
+            {
+                escape = Mathf.Sign(inputAxis.x);
+            }
+            else
+            {
+                escape = 1f;
+                ArenaBounds room = ArenaBounds.Instance;
+                if (room != null)
+                {
+                    Rect play = room.PlayRect;
+                    escape = (play.xMax - pos.x) >= (pos.x - play.xMin) ? 1f : -1f;
+                }
+            }
+
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds != null)
+            {
+                Rect play = bounds.PlayRect;
+                if (escape < 0f && pos.x - minSep <= play.xMin + 0.05f)
+                {
+                    escape = 1f;
+                }
+                else if (escape > 0f && pos.x + minSep >= play.xMax - 0.05f)
+                {
+                    escape = -1f;
+                }
+            }
+
+            return escape;
         }
 
         /// <summary>
