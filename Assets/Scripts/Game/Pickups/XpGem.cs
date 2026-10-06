@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Player;
 using KingsRescue.Progression;
@@ -5,13 +6,18 @@ using KingsRescue.Progression;
 namespace KingsRescue.Pickups
 {
     /// <summary>
-    /// The EXP gem every kill leaves behind.
+    /// EXP gem. Three denominations exist: small, medium and large.
     /// </summary>
     public class XpGem : Pickup
     {
-        [SerializeField] private int value = 1;
+        public const int SmallValue = 1;
+        public const int MediumValue = 5;
+        public const int LargeValue = 10;
+        public const int MaxGemsPerDrop = 8;
 
-        [Tooltip("Optional tiers, brightest last. The gem picks the highest tier its value reaches.")]
+        [SerializeField] private int value = SmallValue;
+
+        [Tooltip("Brightest last. The gem uses the highest tier its value reaches.")]
         [SerializeField] private Tier[] tiers;
 
         [SerializeField] private SpriteRenderer spriteRenderer;
@@ -20,11 +26,21 @@ namespace KingsRescue.Pickups
         private struct Tier
         {
             public int minValue;
+            public Sprite sprite;
             public Color color;
             public float scale;
         }
 
-        private Vector3 baseScale;
+        private static readonly int[] Denominations = { LargeValue, MediumValue, SmallValue };
+
+        private static readonly Tier[] DefaultTiers =
+        {
+            new Tier { minValue = SmallValue, color = Color.white, scale = 1f },
+            new Tier { minValue = MediumValue, color = Color.white, scale = 1f },
+            new Tier { minValue = LargeValue, color = Color.white, scale = 1f }
+        };
+
+        private Vector3 baseScale = Vector3.one;
 
         private void Awake()
         {
@@ -48,6 +64,25 @@ namespace KingsRescue.Pickups
             ApplyTier();
         }
 
+        /// <summary>
+        /// Breaks a kill's EXP into the three gem sizes, largest first.
+        /// </summary>
+        public static void Split(int totalXp, List<int> dest)
+        {
+            dest.Clear();
+            int remaining = Mathf.Max(0, totalXp);
+
+            for (int i = 0; i < Denominations.Length; i++)
+            {
+                int amount = Denominations[i];
+                while (remaining >= amount && dest.Count < MaxGemsPerDrop)
+                {
+                    dest.Add(amount);
+                    remaining -= amount;
+                }
+            }
+        }
+
         protected override void OnCollected(PlayerController hero)
         {
             ExperienceSystem.Instance?.AddXp(value);
@@ -55,23 +90,28 @@ namespace KingsRescue.Pickups
 
         private void ApplyTier()
         {
-            if (tiers == null || tiers.Length == 0)
-            {
-                return;
-            }
+            Tier[] source = tiers != null && tiers.Length > 0 ? tiers : DefaultTiers;
+            Tier chosen = source[0];
+            int best = int.MinValue;
 
-            Tier chosen = tiers[0];
-            for (int i = 0; i < tiers.Length; i++)
+            for (int i = 0; i < source.Length; i++)
             {
-                if (value >= tiers[i].minValue)
+                int min = source[i].minValue;
+                if (value >= min && min >= best)
                 {
-                    chosen = tiers[i];
+                    best = min;
+                    chosen = source[i];
                 }
             }
 
             if (spriteRenderer != null)
             {
-                spriteRenderer.color = chosen.color;
+                if (chosen.sprite != null)
+                {
+                    spriteRenderer.sprite = chosen.sprite;
+                }
+
+                spriteRenderer.color = chosen.color.a > 0.01f ? chosen.color : Color.white;
             }
 
             float scale = chosen.scale <= 0f ? 1f : chosen.scale;

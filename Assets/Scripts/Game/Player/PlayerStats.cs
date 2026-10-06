@@ -43,6 +43,8 @@ namespace KingsRescue.Player
         public float CoinGain => cached[(int)StatType.CoinGain];
         public float Armor => cached[(int)StatType.Armor];
         public float HpRegen => cached[(int)StatType.HpRegen];
+        public float Luck => cached[(int)StatType.Luck];
+        public float DurationMultiplier => cached[(int)StatType.Duration];
 
         private void Awake()
         {

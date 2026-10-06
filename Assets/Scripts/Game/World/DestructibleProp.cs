@@ -1,7 +1,10 @@
 using UnityEngine;
 using KingsRescue.Combat;
 using KingsRescue.Core;
+using KingsRescue.Data;
 using KingsRescue.Pickups;
+using KingsRescue.Player;
+using KingsRescue.Progression;
 
 namespace KingsRescue.World
 {
@@ -20,6 +23,11 @@ namespace KingsRescue.World
 
         [SerializeField] private GameObject healthPrefab;
         [SerializeField, Range(0f, 1f)] private float healthDropChance = 0.08f;
+
+        [Header("Chest")]
+        [Tooltip("Chests can unlock a random weapon or passive. Luck raises that chance.")]
+        [SerializeField] private bool isChest;
+        [SerializeField, Range(0f, 1f)] private float rareDropChance = 0.2f;
 
         [Header("Feedback")]
         [SerializeField] private GameObject breakEffectPrefab;
@@ -89,6 +97,7 @@ namespace KingsRescue.World
             }
 
             Vector2 origin = transform.position;
+            float luck = ResolveLuck();
 
             if (coinPrefab != null)
             {
@@ -100,10 +109,46 @@ namespace KingsRescue.World
                 }
             }
 
-            if (healthPrefab != null && Random.value < healthDropChance)
+            if (healthPrefab != null && Random.value < Mathf.Clamp01(healthDropChance * luck))
             {
                 SpawnPickup(pool, healthPrefab, origin);
             }
+
+            if (isChest)
+            {
+                TryDropRareItem(pool, origin, luck);
+            }
+        }
+
+        private void TryDropRareItem(PoolManager pool, Vector2 origin, float luck)
+        {
+            float chance = Mathf.Clamp01(rareDropChance * luck);
+            if (Random.value >= chance)
+            {
+                return;
+            }
+
+            UpgradeService upgrades = UpgradeService.Instance;
+            if (upgrades != null && upgrades.TryGrantRandomItem(out UpgradeDefinition granted))
+            {
+                Debug.Log($"Lucky chest unlocked {granted.Title(upgrades.Loadout)}.", this);
+                return;
+            }
+
+            if (coinPrefab == null)
+            {
+                return;
+            }
+
+            int bonus = Mathf.Max(3, coinValue * 5);
+            CoinPickup coin = SpawnPickup(pool, coinPrefab, origin) as CoinPickup;
+            coin?.SetValue(bonus);
+        }
+
+        private static float ResolveLuck()
+        {
+            PlayerStats stats = Object.FindAnyObjectByType<PlayerStats>();
+            return stats != null ? Mathf.Max(0.1f, stats.Luck) : 1f;
         }
 
         private Pickup SpawnPickup(PoolManager pool, GameObject prefab, Vector2 origin)

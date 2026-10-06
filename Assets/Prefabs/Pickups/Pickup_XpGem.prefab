@@ -125,5 +125,17 @@ MonoBehaviour:
   maxAttractSpeed: 20
   collectRadius: 0.4
   value: 1
-  tiers: []
+  tiers:
+  - minValue: 1
+    sprite: {fileID: 867964550, guid: c4196c348234fc141ae0302bc479c583, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    scale: 1
+  - minValue: 5
+    sprite: {fileID: 1770542664, guid: c4196c348234fc141ae0302bc479c583, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    scale: 1
+  - minValue: 10
+    sprite: {fileID: 883126635, guid: c4196c348234fc141ae0302bc479c583, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    scale: 1
   spriteRenderer: {fileID: 8493715260256196254}

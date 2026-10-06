@@ -60,9 +60,19 @@ namespace KingsRescue.UI
             int level = MetaProgress.GetLevel(character, stat);
             bool maxed = level >= offer.maxLevel;
             int cost = offer.CostForNext(level);
-            string bonus = offer.mode == ModifierMode.Percent
-                ? $"+{offer.perLevel * 100f:0}% / lv"
-                : $"+{offer.perLevel:0.##} / lv";
+            string bonus;
+            if (offer.stat == StatType.AttackSpeed)
+            {
+                bonus = $"-{offer.perLevel * 100f:0}% / lv";
+            }
+            else if (offer.mode == ModifierMode.Percent)
+            {
+                bonus = $"+{offer.perLevel * 100f:0}% / lv";
+            }
+            else
+            {
+                bonus = $"+{offer.perLevel:0.##} / lv";
+            }
 
             if (label != null)
             {

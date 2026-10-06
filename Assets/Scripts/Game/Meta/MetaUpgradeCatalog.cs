@@ -40,7 +40,14 @@ namespace KingsRescue.Meta
             new MetaUpgradeOffer(StatType.AttackSpeed, ModifierMode.Percent, 0.05f, 10, 35),
             new MetaUpgradeOffer(StatType.MoveSpeed, ModifierMode.Flat, 0.25f, 8, 30),
             new MetaUpgradeOffer(StatType.Area, ModifierMode.Percent, 0.05f, 8, 30),
-            new MetaUpgradeOffer(StatType.Armor, ModifierMode.Flat, 1f, 8, 40)
+            new MetaUpgradeOffer(StatType.Armor, ModifierMode.Flat, 1f, 8, 40),
+            new MetaUpgradeOffer(StatType.HpRegen, ModifierMode.Flat, 0.35f, 10, 30),
+            new MetaUpgradeOffer(StatType.Luck, ModifierMode.Percent, 0.08f, 10, 40),
+            new MetaUpgradeOffer(StatType.Duration, ModifierMode.Percent, 0.08f, 8, 35),
+            new MetaUpgradeOffer(StatType.ProjectileCount, ModifierMode.Flat, 1f, 5, 50),
+            new MetaUpgradeOffer(StatType.MagnetRadius, ModifierMode.Percent, 0.15f, 8, 30),
+            new MetaUpgradeOffer(StatType.XpGain, ModifierMode.Percent, 0.08f, 10, 35),
+            new MetaUpgradeOffer(StatType.CoinGain, ModifierMode.Percent, 0.10f, 10, 35)
         };
 
         public static bool TryGet(StatType stat, out MetaUpgradeOffer offer)

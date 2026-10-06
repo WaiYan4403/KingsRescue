@@ -94,6 +94,44 @@ namespace KingsRescue.Progression
             upgrade.Apply(loadout, stats);
         }
 
+        /// <summary>
+        /// Grants one random legal weapon or passive. Used by lucky chest drops.
+        /// Returns false when the loadout has nothing left to unlock.
+        /// </summary>
+        public bool TryGrantRandomItem(out UpgradeDefinition granted)
+        {
+            granted = null;
+            if (loadout == null || stats == null)
+            {
+                return false;
+            }
+
+            candidates.Clear();
+            for (int i = 0; i < pool.Count; i++)
+            {
+                UpgradeDefinition entry = pool[i];
+                if (entry == null || entry == fallback || entry.kind == UpgradeKind.CoinBonus)
+                {
+                    continue;
+                }
+
+                if (entry.IsAvailable(loadout, stats))
+                {
+                    candidates.Add(entry);
+                }
+            }
+
+            UpgradeDefinition picked = DrawWeighted();
+            if (picked == null)
+            {
+                return false;
+            }
+
+            picked.Apply(loadout, stats);
+            granted = picked;
+            return true;
+        }
+
         private UpgradeDefinition DrawWeighted()
         {
             float total = 0f;

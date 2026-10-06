@@ -114,6 +114,11 @@ namespace KingsRescue.Combat
             return Data.area * stats.AreaMultiplier;
         }
 
+        private float ResolveDuration()
+        {
+            return Data.lifetime * Mathf.Max(0.1f, stats.DurationMultiplier);
+        }
+
         private int ResolveCount()
         {
             int bonus = definition.usesGlobalProjectileCount ? stats.BonusProjectiles : 0;
@@ -186,11 +191,12 @@ namespace KingsRescue.Combat
 
             float radius = ResolveArea();
             Targeting.DamageArc(center, facing, radius, data.arcDegrees, ResolveDamage(), data.knockback, gameObject);
-            HitboxDisplay.Flash(center, radius, data.lifetime);
+            float duration = ResolveDuration();
+            HitboxDisplay.Flash(center, radius, duration);
 
             if (!definition.usesCharacterAnimators)
             {
-                SpawnEffect(center, facing, radius, data.lifetime);
+                SpawnEffect(center, facing, radius, duration);
             }
         }
 
@@ -305,7 +311,7 @@ namespace KingsRescue.Combat
             }
 
             float range = data.maxDistance > 0.01f ? data.maxDistance : 6.5f;
-            projectile.Launch(direction, speed, damage, pierce, data.lifetime, area, data.knockback, gameObject, range);
+            projectile.Launch(direction, speed, damage, pierce, ResolveDuration(), area, data.knockback, gameObject, range);
         }
 
         private void FireAura()
@@ -315,7 +321,7 @@ namespace KingsRescue.Combat
             float radius = ResolveArea();
 
             Targeting.DamageCircle(center, radius, ResolveDamage(), data.knockback, gameObject);
-            SpawnEffect(center, Vector2.up, radius, data.lifetime);
+            SpawnEffect(center, Vector2.up, radius, ResolveDuration());
         }
 
         // --- Orbit -----------------------------------------------------------

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
 using KingsRescue.Data;
@@ -18,6 +19,8 @@ namespace KingsRescue.Enemies
         [Header("Scatter")]
         [SerializeField] private float popSpeed = 2.2f;
 
+        private readonly List<int> gemValues = new List<int>(XpGem.MaxGemsPerDrop);
+
         private EnemyDefinition definition;
 
         public void Configure(EnemyDefinition def)
@@ -36,8 +39,12 @@ namespace KingsRescue.Enemies
 
             if (xpGemPrefab != null && definition.xpValue > 0)
             {
-                XpGem gem = SpawnPickup(xpGemPrefab, origin) as XpGem;
-                gem?.SetValue(definition.xpValue);
+                XpGem.Split(definition.xpValue, gemValues);
+                for (int i = 0; i < gemValues.Count; i++)
+                {
+                    XpGem gem = SpawnPickup(xpGemPrefab, origin) as XpGem;
+                    gem?.SetValue(gemValues[i]);
+                }
             }
 
             if (coinPrefab != null && Random.value < definition.coinDropChance)

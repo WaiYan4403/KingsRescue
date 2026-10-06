@@ -129,6 +129,8 @@ MonoBehaviour:
   coinValue: 1
   healthPrefab: {fileID: 5825566481984973083, guid: fdd50c17fb5ba4e36844d6d9a97408b5, type: 3}
   healthDropChance: 0.08
+  isChest: 1
+  rareDropChance: 0.2
   breakEffectPrefab: {fileID: 0}
   popSpeed: 3.2
 --- !u!114 &4267158263200352304

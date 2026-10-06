@@ -19,7 +19,9 @@ namespace KingsRescue.Data
         XpGain = 9,
         CoinGain = 10,
         Armor = 11,
-        HpRegen = 12
+        HpRegen = 12,
+        Luck = 13,
+        Duration = 14
     }
 
     public enum ModifierMode
@@ -56,7 +58,7 @@ namespace KingsRescue.Data
 
     public static class StatTypes
     {
-        public const int Count = 13;
+        public const int Count = 15;
 
         /// <summary>
         /// Base values used when a <see cref="KingsRescue.Player.PlayerStats"/> field is left at its default.
@@ -79,6 +81,8 @@ namespace KingsRescue.Data
                 case StatType.CoinGain: return 1f;
                 case StatType.Armor: return 0f;
                 case StatType.HpRegen: return 0f;
+                case StatType.Luck: return 1f;
+                case StatType.Duration: return 1f;
                 default: return 0f;
             }
         }
@@ -90,16 +94,18 @@ namespace KingsRescue.Data
                 case StatType.MaxHp: return "Max HP";
                 case StatType.MoveSpeed: return "Move Speed";
                 case StatType.Damage: return "Damage";
-                case StatType.AttackSpeed: return "Attack Speed";
+                case StatType.AttackSpeed: return "Cooldown";
                 case StatType.Area: return "Area";
                 case StatType.ProjectileSpeed: return "Projectile Speed";
-                case StatType.ProjectileCount: return "Extra Projectiles";
+                case StatType.ProjectileCount: return "Amount";
                 case StatType.Pierce: return "Pierce";
-                case StatType.MagnetRadius: return "Pickup Radius";
-                case StatType.XpGain: return "EXP Gain";
-                case StatType.CoinGain: return "Coin Gain";
+                case StatType.MagnetRadius: return "Magnet";
+                case StatType.XpGain: return "Growth";
+                case StatType.CoinGain: return "Greed";
                 case StatType.Armor: return "Armor";
-                case StatType.HpRegen: return "HP Regen";
+                case StatType.HpRegen: return "Recovery";
+                case StatType.Luck: return "Luck";
+                case StatType.Duration: return "Duration";
                 default: return stat.ToString();
             }
         }

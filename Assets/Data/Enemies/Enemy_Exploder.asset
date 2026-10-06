@@ -47,7 +47,7 @@ MonoBehaviour:
   meteorRadius: 1.15
   deathBurstDamage: 14
   deathBurstRadius: 1.55
-  xpValue: 2
+  xpValue: 5
   coinDropChance: 0.05
   healthDropChance: 0.02
   healthGrowthPerMinute: 0.35
