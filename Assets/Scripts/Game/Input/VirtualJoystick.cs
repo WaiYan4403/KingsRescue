@@ -28,10 +28,8 @@ namespace KingsRescue.InputControl
         [Tooltip("Spawn the stick under the thumb instead of keeping it in a fixed spot.")]
         [SerializeField] private bool floatingOrigin = true;
 
-        [Tooltip("Fade the stick out while no finger is down.")]
+        [Tooltip("Hide the stick until a finger is down. The touch zone still receives input.")]
         [SerializeField] private bool hideWhenIdle = true;
-
-        [SerializeField, Range(0f, 1f)] private float idleAlpha = 0.25f;
 
         private RectTransform touchZone;
         private Canvas canvas;
@@ -77,7 +75,7 @@ namespace KingsRescue.InputControl
                 graphic.raycastTarget = true;
             }
 
-            ApplyIdleVisuals();
+            ShowStick(false);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -90,15 +88,12 @@ namespace KingsRescue.InputControl
             activePointerId = eventData.pointerId;
             IsHeld = true;
 
+            ShowStick(true);
+
             if (floatingOrigin && background != null &&
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(touchZone, eventData.position, uiCamera, out Vector2 local))
             {
                 background.anchoredPosition = local;
-            }
-
-            if (canvasGroup != null)
-            {
-                canvasGroup.alpha = 1f;
             }
 
             UpdateFromPointer(eventData);
@@ -178,14 +173,22 @@ namespace KingsRescue.InputControl
                 background.anchoredPosition = restPosition;
             }
 
-            ApplyIdleVisuals();
+            ShowStick(false);
         }
 
-        private void ApplyIdleVisuals()
+        private void ShowStick(bool visible)
         {
+            if (background == null)
+            {
+                return;
+            }
+
+            bool show = visible || !hideWhenIdle;
+            background.gameObject.SetActive(show);
+
             if (canvasGroup != null)
             {
-                canvasGroup.alpha = hideWhenIdle ? idleAlpha : 1f;
+                canvasGroup.alpha = show ? 1f : 0f;
             }
         }
     }

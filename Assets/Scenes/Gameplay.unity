@@ -5019,7 +5019,6 @@ MonoBehaviour:
   deadZone: 0.15
   floatingOrigin: 1
   hideWhenIdle: 1
-  idleAlpha: 0.25
 --- !u!114 &1255154148
 MonoBehaviour:
   m_ObjectHideFlags: 0
