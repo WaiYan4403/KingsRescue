@@ -32,7 +32,7 @@ namespace KingsRescue.Spawning
         [Tooltip("Caps how many enemies enter the field in one frame so bursts do not hitch.")]
         [SerializeField] private int maxSpawnsPerFrame = 4;
 
-        [Tooltip("World-unit inset from the screen edge when picking a spawn x.")]
+        [Tooltip("World-unit inset from the world edge when picking a spawn x.")]
         [SerializeField] private float horizontalInset = 0.6f;
 
         [Header("Fallback")]
@@ -189,14 +189,14 @@ namespace KingsRescue.Spawning
 
         private Vector2 ResolveSpawnPoint(ArenaBounds bounds, SpawnPattern pattern, int index, int total)
         {
-            Rect screen = bounds.ScreenRect;
+            Rect world = bounds.WorldRect;
 
             switch (pattern)
             {
                 case SpawnPattern.TopLine:
                 {
                     float t = total <= 1 ? 0.5f : index / (float)(total - 1);
-                    float x = Mathf.Lerp(screen.xMin + horizontalInset, screen.xMax - horizontalInset, t);
+                    float x = Mathf.Lerp(world.xMin + horizontalInset, world.xMax - horizontalInset, t);
                     return new Vector2(x, bounds.TopSpawnY);
                 }
 
@@ -204,7 +204,7 @@ namespace KingsRescue.Spawning
                 {
                     bool left = index % 2 == 0;
                     float x = left ? bounds.LeftDespawnX + 0.5f : bounds.RightDespawnX - 0.5f;
-                    float y = Random.Range(screen.center.y, screen.yMax);
+                    float y = Random.Range(world.center.y, world.yMax);
                     return new Vector2(x, y);
                 }
 
@@ -212,9 +212,9 @@ namespace KingsRescue.Spawning
                 {
                     Vector2 center = PlayerController.Instance != null
                         ? (Vector2)PlayerController.Instance.transform.position
-                        : screen.center;
+                        : world.center;
 
-                    float radius = Mathf.Max(screen.width, screen.height) * 0.6f;
+                    float radius = Mathf.Max(world.width, world.height) * 0.6f;
                     float angle = total <= 1
                         ? Random.value * Mathf.PI * 2f
                         : index / (float)total * Mathf.PI * 2f;

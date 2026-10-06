@@ -7,8 +7,8 @@ using KingsRescue.World;
 namespace KingsRescue.Player
 {
     /// <summary>
-    /// Repositions the hero inside the screen. The world is what moves, so holding "up"
-    /// means running ahead of the scroll rather than travelling anywhere.
+    /// Repositions the hero inside the authored world boundary. The world is what
+    /// moves, so holding "up" means running ahead of the scroll rather than travelling anywhere.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(PlayerStats))]

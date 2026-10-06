@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 39098409}
   - component: {fileID: 39098408}
   - component: {fileID: 39098417}
+  - component: {fileID: 39098419}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -541,6 +542,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Core.ArenaBounds
   targetCamera: {fileID: 34958646}
+  worldBoundary: {fileID: 0}
+  worldSize: {x: 13, y: 0}
   paddingLeft: 2
   paddingRight: 2
   paddingTop: 2
@@ -591,6 +594,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
   pools: []
+--- !u!114 &39098419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39098406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 737672b003e08014ca677099fa9a081e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.HitboxDisplay
+  markerPrefab: {fileID: 2996400921592246358, guid: 612fa08fd99e6bf4fb3ccc982e18a9be, type: 3}
+  showHitboxes: 1
+  flashLifetime: 0.2
 --- !u!1 &63217093
 GameObject:
   m_ObjectHideFlags: 0

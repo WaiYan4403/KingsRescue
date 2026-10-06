@@ -186,6 +186,7 @@ namespace KingsRescue.Combat
 
             float radius = ResolveArea();
             Targeting.DamageArc(center, facing, radius, data.arcDegrees, ResolveDamage(), data.knockback, gameObject);
+            HitboxDisplay.Flash(center, radius, data.lifetime);
 
             if (!definition.usesCharacterAnimators)
             {

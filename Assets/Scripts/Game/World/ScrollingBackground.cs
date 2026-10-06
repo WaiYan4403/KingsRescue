@@ -115,7 +115,7 @@ namespace KingsRescue.World
                 }
             }
 
-            if (lowest.TopY > bounds.BottomDespawnY)
+            if (lowest.TopY > bounds.ScreenDespawnY)
             {
                 return;
             }
