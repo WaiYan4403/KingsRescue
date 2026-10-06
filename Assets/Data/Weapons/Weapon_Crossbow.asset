@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Weapon_Crossbow
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
   displayName: Crossbow
-  description: Bolts fire straight up the screen. Extra shots become a forward burst, not a fan.
+  description: Bolts fire straight up the screen. Extra shots become a forward burst,
+    not a fan.
   icon: {fileID: 0}
   fireMode: 1
   projectilePrefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
@@ -24,6 +25,11 @@ MonoBehaviour:
   fanProjectiles: 0
   isUniqueWeapon: 0
   usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 010000000200000003000000
   levels:
   - upgradeText: 
     damage: 12
@@ -33,6 +39,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 18
     lifetime: 1.8
+    maxDistance: 5.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 0
@@ -46,6 +53,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 18
     lifetime: 1.8
+    maxDistance: 5.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 0
@@ -59,6 +67,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 18
     lifetime: 1.8
+    maxDistance: 6
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 0
@@ -72,6 +81,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 20
     lifetime: 1.8
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 0
@@ -85,6 +95,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 20
     lifetime: 1.8
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 0

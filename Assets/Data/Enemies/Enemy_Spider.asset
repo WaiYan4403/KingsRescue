@@ -30,13 +30,15 @@ MonoBehaviour:
   preferredDistance: 4.2
   attackStyle: 2
   projectilePrefab: {fileID: 7342546010400522602, guid: 986222dfc11d3c44ebfb6215259f5530, type: 3}
+  meteorDefinition: {fileID: 0}
   attackInterval: 2.4
-  attackRange: 7.5
+  attackRange: 6
   attackDamage: 3
   projectileSpeed: 6.5
   projectileLifetime: 2.8
   projectileRadius: 0.34
   projectileHoming: 0
+  projectileMaxDistance: 6.5
   slowFactor: 0.42
   slowDuration: 2.4
   meteorWarning: 1.1

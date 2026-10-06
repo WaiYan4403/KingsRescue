@@ -22,6 +22,8 @@ namespace KingsRescue.Combat
         private float knockback;
         private int pierceRemaining;
         private float expireAt;
+        private float maxTravel;
+        private float traveled;
         private GameObject source;
         private float radiusScale = 1f;
 
@@ -35,7 +37,7 @@ namespace KingsRescue.Combat
             alreadyHit.Clear();
         }
 
-        public void Launch(Vector2 direction, float speed, float damageAmount, int pierce, float lifetime, float areaScale, float knockbackForce, GameObject owner)
+        public void Launch(Vector2 direction, float speed, float damageAmount, int pierce, float lifetime, float areaScale, float knockbackForce, GameObject owner, float maxDistance = 0f)
         {
             Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
 
@@ -45,6 +47,8 @@ namespace KingsRescue.Combat
             knockback = knockbackForce;
             radiusScale = Mathf.Max(0.1f, areaScale);
             expireAt = Time.time + Mathf.Max(0.05f, lifetime);
+            maxTravel = maxDistance;
+            traveled = 0f;
             source = owner;
             alreadyHit.Clear();
 
@@ -60,10 +64,12 @@ namespace KingsRescue.Combat
         private void Update()
         {
             float dt = Time.deltaTime;
+            float step = velocity.magnitude * dt;
             Vector2 position = (Vector2)transform.position + velocity * dt;
             transform.position = position;
+            traveled += step;
 
-            if (Time.time >= expireAt)
+            if ((maxTravel > 0f && traveled >= maxTravel) || Time.time >= expireAt)
             {
                 Recycle(false);
                 return;

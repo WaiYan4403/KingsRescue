@@ -27,6 +27,9 @@ namespace KingsRescue.Combat
 
         public bool IsAlive => Current > 0f;
 
+        /// <summary>When true, weapons skip this body (jump / vanish windows).</summary>
+        public bool Untargetable { get; set; }
+
         /// <summary>Raised whenever damage lands and the target survives it.</summary>
         public event Action<Health, DamageInfo> Damaged;
 
@@ -51,6 +54,7 @@ namespace KingsRescue.Combat
         public void OnSpawned()
         {
             Current = maxHealth;
+            Untargetable = false;
         }
 
         public void OnDespawned()
@@ -66,7 +70,7 @@ namespace KingsRescue.Combat
 
         public void TakeDamage(in DamageInfo info)
         {
-            if (!IsAlive || info.Amount <= 0f)
+            if (!IsAlive || Untargetable || info.Amount <= 0f)
             {
                 return;
             }

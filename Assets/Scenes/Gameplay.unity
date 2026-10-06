@@ -334,6 +334,8 @@ MonoBehaviour:
   maxSpawnsPerFrame: 4
   horizontalInset: 0.6
   endlessWave: {fileID: 11400000, guid: e642deaac3ce449c69a6bfe707eac6be, type: 2}
+  firstBoss: {fileID: 11400000, guid: 43352040dfd5b22419f0892f3dceb510, type: 2}
+  firstBossTime: 120
 --- !u!114 &39098409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,6 +545,8 @@ MonoBehaviour:
     count: 30
   - prefab: {fileID: 7342546010400522602, guid: 986222dfc11d3c44ebfb6215259f5530, type: 3}
     count: 24
+  - prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
+    count: 1
 --- !u!114 &39098414
 MonoBehaviour:
   m_ObjectHideFlags: 0

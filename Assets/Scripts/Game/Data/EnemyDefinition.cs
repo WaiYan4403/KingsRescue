@@ -36,6 +36,9 @@ namespace KingsRescue.Data
         public string displayName = "Enemy";
         public GameObject prefab;
 
+        [Tooltip("Timed encounter. Does not despawn off-screen and is spawned by WaveDirector, not the trickle table.")]
+        public bool isBoss;
+
         [Header("Combat")]
         public float maxHealth = 10f;
         public float contactDamage = 8f;
@@ -95,6 +98,9 @@ namespace KingsRescue.Data
         public float projectileLifetime = 3.5f;
         public float projectileRadius = 0.28f;
         public bool projectileHoming;
+
+        [Tooltip("World units a hostile shot may travel. 0 uses a default cap.")]
+        public float projectileMaxDistance = 6.5f;
 
         [Tooltip("Web only. 0.5 means half speed.")]
         [Range(0.1f, 1f)] public float slowFactor = 0.45f;

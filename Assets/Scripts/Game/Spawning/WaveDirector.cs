@@ -39,9 +39,16 @@ namespace KingsRescue.Spawning
         [Tooltip("Used once every authored wave has expired so the run never goes quiet.")]
         [SerializeField] private WaveDefinition endlessWave;
 
+        [Header("Boss")]
+        [SerializeField] private EnemyDefinition firstBoss;
+
+        [Tooltip("Seconds into the run when Slime King walks in.")]
+        [SerializeField] private float firstBossTime = 120f;
+
         private readonly List<WaveState> states = new List<WaveState>();
         private readonly List<PendingSpawn> pending = new List<PendingSpawn>(32);
         private int spawnedThisFrame;
+        private bool firstBossSpawned;
 
         public int AliveCount => Enemy.Active.Count;
 
@@ -82,6 +89,8 @@ namespace KingsRescue.Spawning
 
             float runTime = game.RunTime;
             float runMinutes = runTime / 60f;
+
+            TrySpawnFirstBoss(runTime, runMinutes);
 
             for (int i = 0; i < states.Count; i++)
             {
@@ -145,6 +154,24 @@ namespace KingsRescue.Spawning
 
                 SpawnGroup(enemy, 1, def.pattern, runMinutes, i, count);
             }
+        }
+
+        private void TrySpawnFirstBoss(float runTime, float runMinutes)
+        {
+            if (firstBossSpawned || firstBoss == null || firstBoss.prefab == null || runTime < firstBossTime)
+            {
+                return;
+            }
+
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds == null)
+            {
+                return;
+            }
+
+            Vector2 position = new Vector2(bounds.WorldRect.center.x, bounds.TopSpawnY);
+            SpawnImmediate(firstBoss, position, runMinutes, SpawnPattern.TopRandom);
+            firstBossSpawned = true;
         }
 
         private bool AllAuthoredWavesFinished(float runTime)

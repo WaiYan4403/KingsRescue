@@ -17,6 +17,8 @@ namespace KingsRescue.Enemies
         private Vector2 velocity;
         private float damage;
         private float expireAt;
+        private float maxTravel;
+        private float traveled;
         private float slowFactor;
         private float slowDuration;
         private bool homing;
@@ -31,13 +33,15 @@ namespace KingsRescue.Enemies
         {
         }
 
-        public void Launch(Vector2 direction, float speed, float damageAmount, float lifetime, float radius, float slow, float slowTime, bool homes, GameObject owner)
+        public void Launch(Vector2 direction, float speed, float damageAmount, float lifetime, float radius, float slow, float slowTime, bool homes, GameObject owner, float maxDistance = 0f)
         {
             Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.down;
             velocity = dir * Mathf.Max(0.5f, speed);
             damage = damageAmount;
             hitRadius = Mathf.Max(0.08f, radius);
             expireAt = Time.time + Mathf.Max(0.05f, lifetime);
+            maxTravel = maxDistance;
+            traveled = 0f;
             slowFactor = slow;
             slowDuration = slowTime;
             homing = homes;
@@ -59,11 +63,13 @@ namespace KingsRescue.Enemies
                 SteerTowardPlayer(dt);
             }
 
+            float step = velocity.magnitude * dt;
             Vector2 position = (Vector2)transform.position + velocity * dt;
             transform.position = position;
+            traveled += step;
             FaceVelocity();
 
-            if (Time.time >= expireAt)
+            if ((maxTravel > 0f && traveled >= maxTravel) || Time.time >= expireAt)
             {
                 Recycle();
                 return;

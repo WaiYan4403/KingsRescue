@@ -23,7 +23,7 @@ namespace KingsRescue.Combat
             for (int i = 0; i < active.Count; i++)
             {
                 Enemy enemy = active[i];
-                if (enemy == null || !enemy.IsAlive)
+                if (enemy == null || !enemy.IsAlive || (enemy.Health != null && enemy.Health.Untargetable))
                 {
                     continue;
                 }
@@ -48,7 +48,7 @@ namespace KingsRescue.Combat
             for (int i = 0; i < targets.Count; i++)
             {
                 Health target = targets[i];
-                if (target == null || !target.IsAlive)
+                if (target == null || !target.IsAlive || target.Untargetable)
                 {
                     continue;
                 }

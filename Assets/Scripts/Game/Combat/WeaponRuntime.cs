@@ -304,7 +304,8 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            projectile.Launch(direction, speed, damage, pierce, data.lifetime, area, data.knockback, gameObject);
+            float range = data.maxDistance > 0.01f ? data.maxDistance : 6.5f;
+            projectile.Launch(direction, speed, damage, pierce, data.lifetime, area, data.knockback, gameObject, range);
         }
 
         private void FireAura()

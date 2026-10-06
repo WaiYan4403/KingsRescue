@@ -25,6 +25,8 @@ namespace KingsRescue.Enemies
         private EnemyAttacker attacker;
         private MeteorStrike meteor;
         private EnemyDeathBurst deathBurst;
+        private SlimeKingBoss slimeKing;
+        private OffscreenDespawner despawner;
         private bool dying;
 
         public EnemyDefinition Definition => definition;
@@ -44,6 +46,8 @@ namespace KingsRescue.Enemies
             attacker = GetComponent<EnemyAttacker>();
             meteor = GetComponent<MeteorStrike>();
             deathBurst = GetComponent<EnemyDeathBurst>();
+            slimeKing = GetComponent<SlimeKingBoss>();
+            despawner = GetComponent<OffscreenDespawner>();
         }
 
         private void OnEnable()
@@ -97,6 +101,12 @@ namespace KingsRescue.Enemies
             attacker?.Configure(def, runMinutes);
             meteor?.Configure(def, runMinutes);
             deathBurst?.Configure(def, runMinutes);
+            if (despawner != null)
+            {
+                despawner.enabled = !def.isBoss;
+            }
+
+            slimeKing?.Configure(def, runMinutes);
         }
 
         public void SetSpawnHeading(Vector2 spawnPosition, SpawnPattern pattern)

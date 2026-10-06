@@ -24,6 +24,11 @@ MonoBehaviour:
   fanProjectiles: 1
   isUniqueWeapon: 1
   usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 010000000200000003000000
   levels:
   - upgradeText: 
     damage: 9
@@ -33,6 +38,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 14
     lifetime: 1.8
+    maxDistance: 6
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
@@ -46,6 +52,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 14
     lifetime: 1.8
+    maxDistance: 6
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
@@ -59,6 +66,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 14
     lifetime: 1.8
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 16
@@ -72,6 +80,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 14
     lifetime: 1.8
+    maxDistance: 7
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 22
@@ -85,6 +94,7 @@ MonoBehaviour:
     area: 1
     projectileSpeed: 16
     lifetime: 1.8
+    maxDistance: 7.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 22

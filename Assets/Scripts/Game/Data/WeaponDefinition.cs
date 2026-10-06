@@ -45,6 +45,9 @@ namespace KingsRescue.Data
         [Tooltip("Projectile lifetime, or the on-screen life of a swing effect.")]
         public float lifetime = 1.6f;
 
+        [Tooltip("ForwardShot only. World units a projectile may travel. 0 uses a default cap.")]
+        public float maxDistance = 6.5f;
+
         public float knockback = 0f;
 
         [Tooltip("MeleeSwing only. Width of the wedge in degrees. 360 hits all around.")]
