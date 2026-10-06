@@ -17,4 +17,5 @@ MonoBehaviour:
   description: A bow user whose unique weapon fans arrows up the screen.
   portrait: {fileID: 0}
   playerPrefab: {fileID: 1306224722766589929, guid: 3b8c4e6d0a124f5e9c7d2a1f8e5b3094, type: 3}
+  canFlipSprite: 0
   uniqueWeapon: {fileID: 11400000, guid: 344cc1c86173747aa81a4a4221739ce3, type: 2}

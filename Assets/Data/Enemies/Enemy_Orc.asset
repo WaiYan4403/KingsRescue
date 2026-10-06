@@ -14,10 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Orc
   prefab: {fileID: 4419999792255042887, guid: f49aa3ac6e0b446699823d901f7f98c2, type: 3}
+  isBoss: 0
+  canFlipSprite: 1
   maxHealth: 14
   contactDamage: 9
   contactInterval: 0.6
   contactRadius: 0.5
+  dealsContactDamage: 1
+  moveStyle: 0
   moveSpeed: 2
   scrollInfluence: 0.8
   turnResponsiveness: 6
@@ -25,6 +29,24 @@ MonoBehaviour:
   giveUpWhenPassedChance: 0.5
   separationRadius: 2.5
   separationStrength: 3.25
+  preferredDistance: 4.5
+  attackStyle: 0
+  projectilePrefab: {fileID: 0}
+  meteorDefinition: {fileID: 0}
+  attackInterval: 1.8
+  attackRange: 8
+  attackDamage: 8
+  projectileSpeed: 7
+  projectileLifetime: 3.5
+  projectileRadius: 0.28
+  projectileHoming: 0
+  projectileMaxDistance: 6.5
+  slowFactor: 0.45
+  slowDuration: 2.2
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
   xpValue: 1
   coinDropChance: 0.05
   healthDropChance: 0.015

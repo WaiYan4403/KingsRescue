@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Goblin Mage
   prefab: {fileID: 6029562587574041385, guid: ccedb2706cf9c3f439ffd89cdbf1d7d0, type: 3}
+  isBoss: 0
+  canFlipSprite: 1
   maxHealth: 12
   contactDamage: 5
   contactInterval: 0.8
@@ -38,6 +40,7 @@ MonoBehaviour:
   projectileLifetime: 4
   projectileRadius: 0.32
   projectileHoming: 0
+  projectileMaxDistance: 6.5
   slowFactor: 0.45
   slowDuration: 2.2
   meteorWarning: 1.15

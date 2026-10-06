@@ -42,6 +42,7 @@ namespace KingsRescue.Player
         private Rigidbody2D body;
         private PlayerStats stats;
         private PlayerStatus status;
+        private WeaponLoadout loadout;
         private Vector2 velocity;
         private Vector2 inputAxis;
         private int speedParameterHash;
@@ -65,6 +66,7 @@ namespace KingsRescue.Player
             body = GetComponent<Rigidbody2D>();
             stats = GetComponent<PlayerStats>();
             status = GetComponent<PlayerStatus>();
+            loadout = GetComponent<WeaponLoadout>();
             Health = GetComponent<PlayerHealth>();
 
             body.bodyType = RigidbodyType2D.Kinematic;
@@ -147,10 +149,15 @@ namespace KingsRescue.Player
                 legAnimator.SetFloat(speedParameterHash, velocity.magnitude);
             }
 
-            /*if (spriteRenderer != null && Mathf.Abs(velocity.x) > 0.05f)
+            if (CanFlipSprite() && spriteRenderer != null && Mathf.Abs(velocity.x) > 0.05f)
             {
                 spriteRenderer.flipX = velocity.x < 0f;
-            }*/
+            }
+        }
+
+        private bool CanFlipSprite()
+        {
+            return loadout != null && loadout.Character != null && loadout.Character.canFlipSprite;
         }
 
         private Vector2 ResolveObstacles(Vector2 position)

@@ -17,6 +17,10 @@ namespace KingsRescue.Data
         public Sprite portrait;
         public GameObject playerPrefab;
 
+        [Header("Visuals")]
+        [Tooltip("Mirror the hero sprite when moving left. Leave off if the animator already faces both ways, or the art is not reversible.")]
+        public bool canFlipSprite;
+
         public string Id => string.IsNullOrWhiteSpace(id) ? name : id;
 
         [Tooltip("Granted at run start. Other characters cannot pick this weapon up.")]

@@ -40,6 +40,7 @@ namespace KingsRescue.Enemies
         private Vector2 cruiseVelocity;
         private Vector2 lockedHeading = Vector2.down;
         private EnemyMoveStyle moveStyle = EnemyMoveStyle.Chase;
+        private bool canFlipSprite;
 
         private void Awake()
         {
@@ -72,10 +73,17 @@ namespace KingsRescue.Enemies
             separationStrength = Mathf.Max(0f, definition.separationStrength);
             preferredDistance = Mathf.Max(1f, definition.preferredDistance);
             moveStyle = definition.moveStyle;
+            canFlipSprite = definition.canFlipSprite;
             lockedHeading = Vector2.down;
             jitterFactor = 1f + Random.Range(-speedJitter, speedJitter);
             cruiseVelocity = Vector2.zero;
             RollFollowRole();
+
+            if (spriteRenderer != null && !canFlipSprite)
+            {
+                spriteRenderer.flipX = false;
+                spriteRenderer.flipY = false;
+            }
 
             if (moveStyle == EnemyMoveStyle.Charge)
             {
@@ -151,7 +159,7 @@ namespace KingsRescue.Enemies
 
             transform.position = position + total * dt;
 
-            if (spriteRenderer != null && Mathf.Abs(cruiseVelocity.x) > 0.05f)
+            if (canFlipSprite && spriteRenderer != null && Mathf.Abs(cruiseVelocity.x) > 0.05f)
             {
                 spriteRenderer.flipX = cruiseVelocity.x < 0f;
             }

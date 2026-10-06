@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Goblin Archer
   prefab: {fileID: 9032014044579634548, guid: a562de65538dba34882648035626a33d, type: 3}
+  isBoss: 0
+  canFlipSprite: 1
   maxHealth: 9
   contactDamage: 4
   contactInterval: 0.8

@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Slime King
   prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
   isBoss: 1
+  canFlipSprite: 0
   maxHealth: 360
   contactDamage: 12
   contactInterval: 0.55

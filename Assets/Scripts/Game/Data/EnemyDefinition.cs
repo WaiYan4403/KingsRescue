@@ -39,6 +39,10 @@ namespace KingsRescue.Data
         [Tooltip("Timed encounter. Does not despawn off-screen and is spawned by WaveDirector, not the trickle table.")]
         public bool isBoss;
 
+        [Header("Visuals")]
+        [Tooltip("Mirror the sprite when moving left. Turn off for art that is drawn facing a fixed direction.")]
+        public bool canFlipSprite = true;
+
         [Header("Combat")]
         public float maxHealth = 10f;
         public float contactDamage = 8f;

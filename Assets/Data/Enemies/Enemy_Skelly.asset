@@ -14,10 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Skelly
   prefab: {fileID: 7657488641991038239, guid: 67ef1452bf5d44907b2b0588c453103e, type: 3}
+  isBoss: 0
+  canFlipSprite: 1
   maxHealth: 20
   contactDamage: 14
   contactInterval: 0.6
   contactRadius: 0.55
+  dealsContactDamage: 1
+  moveStyle: 0
   moveSpeed: 3
   scrollInfluence: 1
   turnResponsiveness: 6
@@ -25,6 +29,24 @@ MonoBehaviour:
   giveUpWhenPassedChance: 0.6
   separationRadius: 2.5
   separationStrength: 2.8
+  preferredDistance: 4.5
+  attackStyle: 0
+  projectilePrefab: {fileID: 0}
+  meteorDefinition: {fileID: 0}
+  attackInterval: 1.8
+  attackRange: 8
+  attackDamage: 8
+  projectileSpeed: 7
+  projectileLifetime: 3.5
+  projectileRadius: 0.28
+  projectileHoming: 0
+  projectileMaxDistance: 6.5
+  slowFactor: 0.45
+  slowDuration: 2.2
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
   xpValue: 3
   coinDropChance: 0.12
   healthDropChance: 0.015

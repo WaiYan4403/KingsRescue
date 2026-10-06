@@ -17,4 +17,5 @@ MonoBehaviour:
   description: A front-line fighter whose unique weapon is the Lance.
   portrait: {fileID: 0}
   playerPrefab: {fileID: 1306224722766589929, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+  canFlipSprite: 0
   uniqueWeapon: {fileID: 11400000, guid: 601d542d4b3604ad2b77d5b4e0fa3a9b, type: 2}

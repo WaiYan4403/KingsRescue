@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Bat
   prefab: {fileID: 3371409198316295035, guid: c2ed9645d39677640b4fbaedd8919f77, type: 3}
+  isBoss: 0
+  canFlipSprite: 1
   maxHealth: 3
   contactDamage: 4
   contactInterval: 0.45
@@ -30,6 +32,7 @@ MonoBehaviour:
   preferredDistance: 4.5
   attackStyle: 0
   projectilePrefab: {fileID: 0}
+  meteorDefinition: {fileID: 0}
   attackInterval: 1.8
   attackRange: 8
   attackDamage: 8
@@ -37,6 +40,7 @@ MonoBehaviour:
   projectileLifetime: 3.5
   projectileRadius: 0.28
   projectileHoming: 0
+  projectileMaxDistance: 6.5
   slowFactor: 0.45
   slowDuration: 2.2
   meteorWarning: 1.1
