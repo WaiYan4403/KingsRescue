@@ -21,6 +21,7 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text healthLabel;
         [SerializeField] private TMP_Text levelLabel;
         [SerializeField] private TMP_Text timerLabel;
+        [SerializeField] private TMP_Text distanceLabel;
         [SerializeField] private TMP_Text coinLabel;
         [SerializeField] private TMP_Text killLabel;
 
@@ -95,7 +96,7 @@ namespace KingsRescue.UI
 
         private void Update()
         {
-            if (timerLabel == null || Time.unscaledTime < nextClockUpdate)
+            if (Time.unscaledTime < nextClockUpdate)
             {
                 return;
             }
@@ -103,13 +104,40 @@ namespace KingsRescue.UI
             nextClockUpdate = Time.unscaledTime + clockInterval;
 
             GameManager game = GameManager.Instance;
-            timerLabel.text = FormatClock(game != null ? game.RunTime : 0f);
+            float runTime = game != null ? game.RunTime : 0f;
+            string clock = FormatClock(runTime);
+            string distance = FormatDistance(ScrollDirector.DistanceMeters);
+
+            if (timerLabel != null)
+            {
+                timerLabel.text = clock;
+            }
+
+            if (distanceLabel != null)
+            {
+                distanceLabel.text = distance;
+            }
+            else if (timerLabel != null)
+            {
+                timerLabel.text = $"{clock}  {distance}";
+            }
         }
 
         public static string FormatClock(float seconds)
         {
             int total = Mathf.FloorToInt(Mathf.Max(0f, seconds));
             return $"{total / 60:00}:{total % 60:00}";
+        }
+
+        public static string FormatDistance(float meters)
+        {
+            float value = Mathf.Max(0f, meters);
+            if (value >= 1000f)
+            {
+                return $"{value / 1000f:0.#}km";
+            }
+
+            return $"{Mathf.FloorToInt(value)}m";
         }
 
         private void OnHealthChanged(float current, float max)

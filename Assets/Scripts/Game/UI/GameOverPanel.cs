@@ -94,7 +94,9 @@ namespace KingsRescue.UI
 
             if (timeLabel != null)
             {
-                timeLabel.text = HudView.FormatClock(game != null ? game.RunTime : 0f);
+                string clock = HudView.FormatClock(game != null ? game.RunTime : 0f);
+                string distance = HudView.FormatDistance(ScrollDirector.DistanceMeters);
+                timeLabel.text = $"{clock}  {distance}";
             }
 
             if (killsLabel != null)
