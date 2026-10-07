@@ -2,6 +2,7 @@ using UnityEngine;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
+using KingsRescue.Meta;
 using KingsRescue.Pickups;
 using KingsRescue.Player;
 using KingsRescue.Progression;
@@ -116,6 +117,7 @@ namespace KingsRescue.World
 
             if (isChest)
             {
+                AchievementProgress.RecordChest();
                 PowerUpCatalog.TryDrop(origin, true);
                 TryDropRareItem(pool, origin, luck);
             }

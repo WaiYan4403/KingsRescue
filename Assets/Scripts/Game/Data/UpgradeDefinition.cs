@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Meta;
 using KingsRescue.Player;
 
 namespace KingsRescue.Data
@@ -59,6 +60,7 @@ namespace KingsRescue.Data
                 case UpgradeKind.NewWeapon:
                     return weapon != null
                         && !weapon.isUniqueWeapon
+                        && AchievementProgress.IsWeaponUnlocked(weapon)
                         && loadout.CanReceiveWeapon(weapon)
                         && !loadout.HasWeapon(weapon)
                         && loadout.HasRoomForWeapon;

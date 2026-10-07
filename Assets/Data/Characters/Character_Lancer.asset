@@ -24,3 +24,4 @@ MonoBehaviour:
   powerUpDuration: 8
   startingStats: []
   extraLives: 0
+  unlockedByDefault: 1

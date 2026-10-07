@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_HireArcher
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: hire_archer
+  title: Hire the Archer
+  description: Spend 200 coins from your bank to recruit the Archer.
+  kind: 2
+  target: 200
+  enemy: {fileID: 0}
+  rewardCoins: 0
+  rewardCharacter: {fileID: 11400000, guid: 2a9f3d5b7c814e4f0b23d9e6f8a1c4b2, type: 2}
+  rewardWeapon: {fileID: 0}

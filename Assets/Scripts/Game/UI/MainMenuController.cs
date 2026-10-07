@@ -20,6 +20,7 @@ namespace KingsRescue.UI
         [SerializeField] private GameObject upgradePanel;
         [SerializeField] private GameObject settingsPanel;
         [SerializeField] private GameObject leaderboardPanel;
+        [SerializeField] private GameObject achievementPanel;
 
         [Header("Character")]
         [SerializeField] private CharacterSelectButton[] characterButtons;
@@ -36,6 +37,9 @@ namespace KingsRescue.UI
         [Header("Leaderboards")]
         [SerializeField] private TMP_Text[] leaderboardRows;
         [SerializeField] private TMP_Text leaderboardEmpty;
+
+        [Header("Achievements")]
+        [SerializeField] private AchievementListView achievementList;
 
         private CharacterDefinition selected;
 
@@ -56,6 +60,8 @@ namespace KingsRescue.UI
                 volumeSlider.SetValueWithoutNotify(GameSettings.Volume);
             }
 
+            AchievementProgress.EnsureLoaded();
+
             if (characterButtons != null)
             {
                 for (int i = 0; i < characterButtons.Length; i++)
@@ -67,7 +73,7 @@ namespace KingsRescue.UI
                 }
             }
 
-            if (selected == null)
+            if (selected == null || !AchievementProgress.IsCharacterUnlocked(selected))
             {
                 SelectDefault();
             }
@@ -118,6 +124,17 @@ namespace KingsRescue.UI
             MenuMusicController.Instance.SetOptionsMusic();
         }
 
+        public void ShowAchievements()
+        {
+            if (achievementList != null)
+            {
+                achievementList.Refresh();
+            }
+
+            Show(achievementPanel);
+            MenuMusicController.Instance.SetOptionsMusic();
+        }
+
         public void SelectCharacter(CharacterDefinition character)
         {
             if (character == null)
@@ -131,7 +148,7 @@ namespace KingsRescue.UI
 
         public void PlaySelected()
         {
-            if (selected == null)
+            if (selected == null || !AchievementProgress.IsCharacterUnlocked(selected))
             {
                 ShowCharacters();
                 return;
@@ -191,7 +208,9 @@ namespace KingsRescue.UI
             {
                 for (int i = 0; i < characterButtons.Length; i++)
                 {
-                    if (characterButtons[i] != null && characterButtons[i].Character != null)
+                    if (characterButtons[i] != null
+                        && characterButtons[i].Character != null
+                        && AchievementProgress.IsCharacterUnlocked(characterButtons[i].Character))
                     {
                         selected = characterButtons[i].Character;
                         return;
@@ -203,7 +222,8 @@ namespace KingsRescue.UI
             {
                 for (int i = 0; i < roster.characters.Length; i++)
                 {
-                    if (roster.characters[i] != null)
+                    if (roster.characters[i] != null
+                        && AchievementProgress.IsCharacterUnlocked(roster.characters[i]))
                     {
                         selected = roster.characters[i];
                         return;
@@ -223,7 +243,15 @@ namespace KingsRescue.UI
                 else
                 {
                     string weapon = selected.uniqueWeapon != null ? selected.uniqueWeapon.displayName : "None";
-                    characterDetail.text = $"{selected.displayName}\n{selected.description}\n\nUnique weapon: {weapon}";
+                    string body = $"{selected.displayName}\n{selected.description}\n\nUnique weapon: {weapon}";
+                    if (!AchievementProgress.IsCharacterUnlocked(selected))
+                    {
+                        AchievementDefinition unlock = AchievementCatalog.FindUnlockForCharacter(selected);
+                        string hint = unlock != null ? unlock.description : "Complete an achievement to unlock this hero.";
+                        body += $"\n\nLOCKED — {hint}";
+                    }
+
+                    characterDetail.text = body;
                 }
             }
 
@@ -236,7 +264,7 @@ namespace KingsRescue.UI
             {
                 if (characterButtons[i] != null)
                 {
-                    characterButtons[i].SetSelected(characterButtons[i].Character == selected);
+                    characterButtons[i].Refresh(characterButtons[i].Character == selected);
                 }
             }
         }
@@ -287,6 +315,7 @@ namespace KingsRescue.UI
             SetActive(upgradePanel, panel);
             SetActive(settingsPanel, panel);
             SetActive(leaderboardPanel, panel);
+            SetActive(achievementPanel, panel);
         }
 
         private static void SetActive(GameObject target, GameObject visible)

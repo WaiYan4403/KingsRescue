@@ -254,6 +254,7 @@ namespace KingsRescue.Core
             int level = ExperienceSystem.Instance != null ? ExperienceSystem.Instance.Level : 1;
 
             MetaProgress.AddCoins(Coins);
+            AchievementProgress.RecordSurvive(RunTime);
             Leaderboard.Submit(character, RunTime, Kills, Coins, level);
         }
 

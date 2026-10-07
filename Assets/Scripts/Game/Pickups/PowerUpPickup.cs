@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Meta;
 using KingsRescue.Player;
 
 namespace KingsRescue.Pickups
@@ -35,6 +36,7 @@ namespace KingsRescue.Pickups
 
         protected override void OnCollected(PlayerController hero)
         {
+            AchievementProgress.RecordPowerUp();
             PowerUpController power = hero.GetComponent<PowerUpController>();
             power?.Activate();
         }

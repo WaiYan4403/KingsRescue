@@ -72,6 +72,10 @@ namespace KingsRescue.Meta
             EnsureLoaded();
             data.coins = Mathf.Max(0, data.coins + amount);
             Persist();
+            if (amount > 0)
+            {
+                AchievementProgress.RecordCoinsEarned(amount);
+            }
         }
 
         public static int GetLevel(CharacterDefinition character, StatType stat)

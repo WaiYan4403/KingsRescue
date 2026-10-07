@@ -42,5 +42,9 @@ namespace KingsRescue.Data
 
         [Tooltip("Times this hero can come back from a killing blow in one run.")]
         public int extraLives;
+
+        [Header("Unlock")]
+        [Tooltip("Available on a fresh save with no achievement. The Lancer uses this.")]
+        public bool unlockedByDefault;
     }
 }

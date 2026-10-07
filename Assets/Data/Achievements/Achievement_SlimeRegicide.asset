@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_SlimeRegicide
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: slime_regicide
+  title: Slime Regicide
+  description: Defeat the Slime King.
+  kind: 1
+  target: 1
+  enemy: {fileID: 11400000, guid: 43352040dfd5b22419f0892f3dceb510, type: 2}
+  rewardCoins: 150
+  rewardCharacter: {fileID: 0}
+  rewardWeapon: {fileID: 0}

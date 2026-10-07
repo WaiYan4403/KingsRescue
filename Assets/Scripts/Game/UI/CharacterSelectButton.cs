@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using KingsRescue.Data;
+using KingsRescue.Meta;
 
 namespace KingsRescue.UI
 {
@@ -56,18 +57,44 @@ namespace KingsRescue.UI
 
         public void SetSelected(bool selected)
         {
+            Refresh(selected);
+        }
+
+        public void Refresh(bool selected)
+        {
+            bool unlocked = character != null && AchievementProgress.IsCharacterUnlocked(character);
+            ApplyLabel(unlocked);
+
             if (background != null)
             {
-                background.color = selected ? MenuUi.ButtonSelected : MenuUi.Button;
+                if (!unlocked)
+                {
+                    background.color = selected ? new Color(0.28f, 0.24f, 0.16f, 1f) : new Color(0.14f, 0.14f, 0.12f, 1f);
+                }
+                else
+                {
+                    background.color = selected ? MenuUi.ButtonSelected : MenuUi.Button;
+                }
             }
         }
 
         public void ApplyLabel()
         {
-            if (label != null && character != null)
+            ApplyLabel(character != null && AchievementProgress.IsCharacterUnlocked(character));
+        }
+
+        private void ApplyLabel(bool unlocked)
+        {
+            if (label == null || character == null)
             {
-                label.text = character.displayName;
+                return;
             }
+
+            label.enableWordWrapping = true;
+            label.fontSize = unlocked ? 28 : 20;
+            label.text = unlocked
+                ? character.displayName
+                : $"{character.displayName}\n{AchievementCatalog.UnlockHint(character)}";
         }
     }
 }

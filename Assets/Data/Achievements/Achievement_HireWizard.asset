@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_HireWizard
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: hire_wizard
+  title: Hire the Wizard
+  description: Spend 800 coins from your bank to recruit the Wizard.
+  kind: 2
+  target: 800
+  enemy: {fileID: 0}
+  rewardCoins: 0
+  rewardCharacter: {fileID: 11400000, guid: b61dcb022758b254e87054e45861cdbb, type: 2}
+  rewardWeapon: {fileID: 0}

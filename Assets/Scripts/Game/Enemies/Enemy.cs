@@ -3,6 +3,7 @@ using UnityEngine;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
+using KingsRescue.Meta;
 
 namespace KingsRescue.Enemies
 {
@@ -125,6 +126,7 @@ namespace KingsRescue.Enemies
 
             deathBurst?.Trigger();
             GameManager.Instance?.RegisterKill();
+            AchievementProgress.RecordKill(definition);
             dropper?.DropRewards();
 
             if (PoolManager.Instance != null)

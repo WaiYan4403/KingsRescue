@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_StormCaller
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: storm_caller
+  title: Storm Caller
+  description: Survive 3 minutes in a single run to unlock Lightning Ring.
+  kind: 3
+  target: 180
+  enemy: {fileID: 0}
+  rewardCoins: 0
+  rewardCharacter: {fileID: 0}
+  rewardWeapon: {fileID: 11400000, guid: aca7833362e6ce342950a59839830508, type: 2}
