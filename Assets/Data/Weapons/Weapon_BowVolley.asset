@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
+  m_Name: Weapon_BowVolley
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
+  displayName: Arrow Storm
+  description: Power-up form. Eight arrows fan up the road in the same curve as her
+    three-shot volley.
+  icon: {fileID: 0}
+  fireMode: 1
+  projectilePrefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
+  orbitPrefab: {fileID: 0}
+  effectPrefab: {fileID: 0}
+  usesGlobalProjectileCount: 0
+  comboDelay: 0.08
+  fanProjectiles: 1
+  isUniqueWeapon: 1
+  usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 010000000200000003000000
+  levels:
+  - upgradeText: 
+    damage: 16
+    cooldown: 1.05
+    count: 8
+    pierce: 2
+    area: 1.15
+    projectileSpeed: 16
+    lifetime: 1.8
+    maxDistance: 8.5
+    knockback: 0.6
+    arcDegrees: 150
+    spreadDegrees: 72
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: 
+    damage: 20
+    cooldown: 1
+    count: 8
+    pierce: 2
+    area: 1.2
+    projectileSpeed: 16.5
+    lifetime: 1.8
+    maxDistance: 8.8
+    knockback: 0.7
+    arcDegrees: 150
+    spreadDegrees: 76
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: 
+    damage: 26
+    cooldown: 0.95
+    count: 8
+    pierce: 3
+    area: 1.28
+    projectileSpeed: 17
+    lifetime: 1.8
+    maxDistance: 9.2
+    knockback: 0.8
+    arcDegrees: 150
+    spreadDegrees: 80
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: 
+    damage: 32
+    cooldown: 0.9
+    count: 8
+    pierce: 4
+    area: 1.36
+    projectileSpeed: 17.5
+    lifetime: 1.8
+    maxDistance: 9.6
+    knockback: 0.9
+    arcDegrees: 150
+    spreadDegrees: 84
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: 
+    damage: 40
+    cooldown: 0.85
+    count: 8
+    pierce: 5
+    area: 1.45
+    projectileSpeed: 18
+    lifetime: 1.8
+    maxDistance: 10
+    knockback: 1.1
+    arcDegrees: 150
+    spreadDegrees: 88
+    rehitInterval: 0.45
+    orbitSpeed: 0.7

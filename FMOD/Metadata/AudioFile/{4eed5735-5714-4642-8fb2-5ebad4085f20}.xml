@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{4eed5735-5714-4642-8fb2-5ebad4085f20}">
 		<property name="assetPath">
-			<value>King's Rescue Gameover.wav</value>
+			<value>BGM/King's Rescue Gameover.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>
