@@ -82,7 +82,7 @@ namespace KingsRescue.Meta
                 return true;
             }
 
-            if (!AchievementCatalog.IsWeaponGated(weapon))
+            if (!weapon.requiresUnlock)
             {
                 return true;
             }

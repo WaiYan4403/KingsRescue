@@ -31,6 +31,7 @@ namespace KingsRescue.Combat
         private int activeOrbitCount = -1;
         private Coroutine comboRoutine;
         private Vector2 lastFacing = Vector2.up;
+        private Vector2 lastMoveFacing = Vector2.up;
 
         public WeaponDefinition Definition => definition;
 
@@ -376,37 +377,25 @@ namespace KingsRescue.Combat
 
             if (randomTargets)
             {
-                Targeting.CollectLiving(origin, TargetSearchRange, strikeTargets);
-                for (int i = 0; i < count; i++)
-                {
-                    Vector2 direction;
-                    if (strikeTargets.Count > 0)
-                    {
-                        int pick = Random.Range(0, strikeTargets.Count);
-                        Vector2 toTarget = (Vector2)strikeTargets[pick].transform.position - origin;
-                        direction = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : ResolveFacing(origin);
-                        lastFacing = direction;
-                        if (strikeTargets.Count > 1)
-                        {
-                            strikeTargets.RemoveAt(pick);
-                        }
-                    }
-                    else
-                    {
-                        direction = ResolveFacing(origin);
-                    }
-
-                    SpawnDirectedShot(origin, direction, i, count);
-                }
-
+                FireAtCollectedTargets(origin, count, true);
                 return;
             }
+
+            if (definition.aimStyle == WeaponAimStyle.DistinctNearest)
+            {
+                FireAtCollectedTargets(origin, count, false);
+                return;
+            }
+
+            Vector2 aim = definition.aimStyle == WeaponAimStyle.Movement
+                ? ResolveMoveFacing()
+                : ResolveFacing(origin);
 
             if (count <= 1 || definition.fanProjectiles)
             {
                 for (int i = 0; i < count; i++)
                 {
-                    SpawnDirectedShot(origin, ResolveFacing(origin), i, count);
+                    SpawnDirectedShot(origin, aim, i, count);
                 }
 
                 return;
@@ -420,15 +409,69 @@ namespace KingsRescue.Combat
             comboRoutine = StartCoroutine(DirectedVolley(count));
         }
 
+        private void FireAtCollectedTargets(Vector2 origin, int count, bool randomTargets)
+        {
+            Targeting.CollectLiving(origin, TargetSearchRange, strikeTargets);
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 direction;
+                if (strikeTargets.Count > 0)
+                {
+                    int pick = randomTargets ? Random.Range(0, strikeTargets.Count) : IndexOfNearest(origin);
+                    Enemy locked = strikeTargets[pick];
+                    Vector2 toTarget = (Vector2)locked.transform.position - origin;
+                    direction = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : ResolveMoveFacing();
+                    lastFacing = direction;
+                    if (strikeTargets.Count > 1)
+                    {
+                        strikeTargets.RemoveAt(pick);
+                    }
+
+                    SpawnDirectedShot(origin, direction, i, count, locked);
+                    continue;
+                }
+                else
+                {
+                    direction = definition.aimStyle == WeaponAimStyle.Movement
+                        ? ResolveMoveFacing()
+                        : ResolveFacing(origin);
+                }
+
+                SpawnDirectedShot(origin, direction, i, count);
+            }
+        }
+
+        private int IndexOfNearest(Vector2 origin)
+        {
+            int best = 0;
+            float bestSqr = float.PositiveInfinity;
+            for (int i = 0; i < strikeTargets.Count; i++)
+            {
+                float sqr = ((Vector2)strikeTargets[i].transform.position - origin).sqrMagnitude;
+                if (sqr < bestSqr)
+                {
+                    bestSqr = sqr;
+                    best = i;
+                }
+            }
+
+            return best;
+        }
+
         private IEnumerator DirectedVolley(int count)
         {
             var wait = new WaitForSeconds(Mathf.Max(0.02f, definition.comboDelay));
-            Vector2 origin = transform.position;
-            Vector2 direction = ResolveFacing(origin);
+            bool moveAim = definition.aimStyle == WeaponAimStyle.Movement;
+            Vector2 direction = moveAim ? ResolveMoveFacing() : ResolveFacing(transform.position);
 
             for (int i = 0; i < count; i++)
             {
-                origin = transform.position;
+                Vector2 origin = transform.position;
+                if (moveAim)
+                {
+                    direction = ResolveMoveFacing();
+                }
+
                 SpawnDirectedShot(origin, direction, i, count);
                 if (i < count - 1)
                 {
@@ -439,7 +482,7 @@ namespace KingsRescue.Combat
             comboRoutine = null;
         }
 
-        private void SpawnDirectedShot(Vector2 origin, Vector2 baseDirection, int shotIndex, int shotCount)
+        private void SpawnDirectedShot(Vector2 origin, Vector2 baseDirection, int shotIndex, int shotCount, Enemy lockedTarget = null)
         {
             if (definition.projectilePrefab == null)
             {
@@ -478,7 +521,7 @@ namespace KingsRescue.Combat
             }
 
             float range = ResolveShotRange();
-            projectile.Launch(direction, speed, damage, pierce, ResolveShotLifetime(range), area, data.knockback, gameObject, range);
+            projectile.Launch(direction, speed, damage, pierce, ResolveShotLifetime(range), area, data.knockback, gameObject, range, definition.projectileHoming, lockedTarget);
         }
 
         private void FireRandomStrikes()
@@ -655,12 +698,17 @@ namespace KingsRescue.Combat
                 }
             }
 
+            return ResolveMoveFacing();
+        }
+
+        private Vector2 ResolveMoveFacing()
+        {
             if (owner != null && owner.Velocity.sqrMagnitude > 0.04f)
             {
-                lastFacing = owner.Velocity.normalized;
+                lastMoveFacing = owner.Velocity.normalized;
             }
 
-            return lastFacing;
+            return lastMoveFacing;
         }
 
         private void SpawnEffect(Vector2 center, Vector2 facing, float radius, float lifetime)

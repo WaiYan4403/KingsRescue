@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
+using KingsRescue.Enemies;
 
 namespace KingsRescue.Combat
 {
@@ -26,10 +27,16 @@ namespace KingsRescue.Combat
         private float traveled;
         private GameObject source;
         private float radiusScale = 1f;
+        private bool homing;
+        private float cruiseSpeed;
+        private Enemy homeTarget;
+        private const float HomingTurn = 7f;
 
         public void OnSpawned()
         {
             alreadyHit.Clear();
+            homing = false;
+            homeTarget = null;
         }
 
         public void OnDespawned()
@@ -37,11 +44,12 @@ namespace KingsRescue.Combat
             alreadyHit.Clear();
         }
 
-        public void Launch(Vector2 direction, float speed, float damageAmount, int pierce, float lifetime, float areaScale, float knockbackForce, GameObject owner, float maxDistance = 0f)
+        public void Launch(Vector2 direction, float speed, float damageAmount, int pierce, float lifetime, float areaScale, float knockbackForce, GameObject owner, float maxDistance = 0f, bool home = false, Enemy lockedTarget = null)
         {
             Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
 
-            velocity = dir * speed;
+            cruiseSpeed = Mathf.Max(0.1f, speed);
+            velocity = dir * cruiseSpeed;
             damage = damageAmount;
             pierceRemaining = pierce;
             knockback = knockbackForce;
@@ -50,20 +58,22 @@ namespace KingsRescue.Combat
             maxTravel = maxDistance;
             traveled = 0f;
             source = owner;
+            homing = home;
+            homeTarget = lockedTarget;
             alreadyHit.Clear();
 
-            if (rotateToDirection)
-            {
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
-                transform.rotation = Quaternion.Euler(0f, 0f, angle);
-            }
-
+            FaceVelocity(dir);
             HitboxDisplay.Follow(transform, hitRadius * radiusScale);
         }
 
         private void Update()
         {
             float dt = Time.deltaTime;
+            if (homing)
+            {
+                SteerTowardNearest(dt);
+            }
+
             float step = velocity.magnitude * dt;
             Vector2 position = (Vector2)transform.position + velocity * dt;
             transform.position = position;
@@ -83,6 +93,39 @@ namespace KingsRescue.Combat
             }
 
             CheckHits(position);
+        }
+
+        private void SteerTowardNearest(float dt)
+        {
+            Enemy target = homeTarget != null && homeTarget.IsAlive
+                ? homeTarget
+                : null;
+            if (target == null)
+            {
+                homing = false;
+                return;
+            }
+
+            Vector2 toTarget = (Vector2)target.transform.position - (Vector2)transform.position;
+            if (toTarget.sqrMagnitude < 0.0001f)
+            {
+                return;
+            }
+
+            Vector2 desired = toTarget.normalized * cruiseSpeed;
+            velocity = Vector2.Lerp(velocity, desired, 1f - Mathf.Exp(-HomingTurn * dt));
+            FaceVelocity(velocity);
+        }
+
+        private void FaceVelocity(Vector2 dir)
+        {
+            if (!rotateToDirection || dir.sqrMagnitude < 0.0001f)
+            {
+                return;
+            }
+
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
         private void CheckHits(Vector2 position)

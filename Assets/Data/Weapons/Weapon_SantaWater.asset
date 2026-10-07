@@ -23,6 +23,7 @@ MonoBehaviour:
   comboDelay: 0.1
   fanProjectiles: 0
   isUniqueWeapon: 0
+  requiresUnlock: 1
   usesCharacterAnimators: 0
   attackTriggers:
   - Attack1

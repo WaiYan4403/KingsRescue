@@ -30,6 +30,18 @@ namespace KingsRescue.Data
         GroundZone = 7
     }
 
+    public enum WeaponAimStyle
+    {
+        /// <summary>Throw toward the closest living enemy.</summary>
+        Nearest = 0,
+
+        /// <summary>Throw along the hero's walk direction. Standing still aims up the road.</summary>
+        Movement = 1,
+
+        /// <summary>Each projectile in the volley locks onto a different nearby enemy.</summary>
+        DistinctNearest = 2
+    }
+
     /// <summary>
     /// Per-level numbers for a weapon. Every level-up is authored data, not code.
     /// </summary>
@@ -107,9 +119,18 @@ namespace KingsRescue.Data
         [Tooltip("ForwardShot: when true, extra projectiles fan in an arc. When false, every shot travels straight forward.")]
         public bool fanProjectiles = true;
 
+        [Tooltip("AimedShot: who each projectile is thrown at.")]
+        public WeaponAimStyle aimStyle = WeaponAimStyle.Nearest;
+
+        [Tooltip("Projectile curves toward a living enemy after it leaves the hand.")]
+        public bool projectileHoming;
+
         [Header("Ownership")]
         [Tooltip("Signature weapon for one playable character. Other heroes cannot pick it up or be offered it.")]
         public bool isUniqueWeapon;
+
+        [Tooltip("Stays out of the level-up pool until an achievement unlocks it.")]
+        public bool requiresUnlock;
 
         [Header("Character Animators")]
         [Tooltip("Signature weapon: swings fire Attack-stage triggers on the player's body and effect animators.")]

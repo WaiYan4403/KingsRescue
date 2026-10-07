@@ -21,6 +21,15 @@ MonoBehaviour:
   effectPrefab: {fileID: 4995287234733603234, guid: c47448577f6ac46b9b937f997abe1fb3, type: 3}
   usesGlobalProjectileCount: 0
   comboDelay: 0.12
+  fanProjectiles: 1
+  isUniqueWeapon: 0
+  requiresUnlock: 1
+  usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 010000000200000003000000
   levels:
   - upgradeText: 
     damage: 6
@@ -30,6 +39,7 @@ MonoBehaviour:
     area: 2.3
     projectileSpeed: 12
     lifetime: 0.25
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14
@@ -43,6 +53,7 @@ MonoBehaviour:
     area: 2.3
     projectileSpeed: 12
     lifetime: 0.25
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14
@@ -56,6 +67,7 @@ MonoBehaviour:
     area: 3
     projectileSpeed: 12
     lifetime: 0.25
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14
@@ -69,6 +81,7 @@ MonoBehaviour:
     area: 3
     projectileSpeed: 12
     lifetime: 0.25
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14
@@ -82,6 +95,7 @@ MonoBehaviour:
     area: 3.8
     projectileSpeed: 12
     lifetime: 0.25
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14

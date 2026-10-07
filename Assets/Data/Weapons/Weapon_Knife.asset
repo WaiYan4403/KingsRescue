@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Weapon_Knife
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
   displayName: Knife
-  description: Throws knives at the nearest enemy. Extra Amount becomes a rapid volley.
+  description: Throws along the way you walk.
   icon: {fileID: 0}
   fireMode: 4
   projectilePrefab: {fileID: 9086646655045113726, guid: e416e22ec231fcc4b91cad77a1497327, type: 3}
@@ -22,7 +22,10 @@ MonoBehaviour:
   usesGlobalProjectileCount: 1
   comboDelay: 0.07
   fanProjectiles: 0
+  aimStyle: 1
+  projectileHoming: 0
   isUniqueWeapon: 0
+  requiresUnlock: 0
   usesCharacterAnimators: 0
   attackTriggers:
   - Attack1

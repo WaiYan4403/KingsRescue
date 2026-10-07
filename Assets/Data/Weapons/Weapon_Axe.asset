@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Weapon_Axe
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
   displayName: Axe
-  description: High damage, high Area. Flies at the nearest foe and keeps going.
+  description: A heavy axe thrown at the nearest foe.
   icon: {fileID: 0}
   fireMode: 4
   projectilePrefab: {fileID: 9086646655045113726, guid: 4ba5cf8d98d4f3d4dbc602f01bf38a21, type: 3}
@@ -22,7 +22,10 @@ MonoBehaviour:
   usesGlobalProjectileCount: 1
   comboDelay: 0.12
   fanProjectiles: 1
+  aimStyle: 0
+  projectileHoming: 0
   isUniqueWeapon: 0
+  requiresUnlock: 0
   usesCharacterAnimators: 0
   attackTriggers:
   - Attack1
