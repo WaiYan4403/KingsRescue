@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
+  m_Name: Weapon_KingAxe
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
+  displayName: King's Axe
+  description: A massive melee cleave. Slow, brutal, and unique to the Skeleton King.
+  icon: {fileID: 0}
+  fireMode: 0
+  projectilePrefab: {fileID: 0}
+  orbitPrefab: {fileID: 0}
+  effectPrefab: {fileID: 5696536929901219621, guid: b54900758f36a82428642f7c194b9ee1, type: 3}
+  usesGlobalProjectileCount: 0
+  comboDelay: 0.28
+  fanProjectiles: 0
+  isUniqueWeapon: 1
+  usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 010000000200000003000000
+  levels:
+  - upgradeText: 
+    damage: 42
+    cooldown: 2.6
+    count: 1
+    pierce: 0
+    area: 2.45
+    projectileSpeed: 0
+    lifetime: 0.28
+    maxDistance: 0
+    knockback: 3.2
+    arcDegrees: 190
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Heavier swing
+    damage: 52
+    cooldown: 2.5
+    count: 1
+    pierce: 0
+    area: 2.65
+    projectileSpeed: 0
+    lifetime: 0.28
+    maxDistance: 0
+    knockback: 3.4
+    arcDegrees: 200
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Wider cleave
+    damage: 52
+    cooldown: 2.4
+    count: 1
+    pierce: 0
+    area: 2.95
+    projectileSpeed: 0
+    lifetime: 0.28
+    maxDistance: 0
+    knockback: 3.6
+    arcDegrees: 210
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Crushing blow
+    damage: 64
+    cooldown: 2.3
+    count: 1
+    pierce: 0
+    area: 3.2
+    projectileSpeed: 0
+    lifetime: 0.28
+    maxDistance: 0
+    knockback: 3.8
+    arcDegrees: 220
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Executioner
+    damage: 78
+    cooldown: 2.15
+    count: 1
+    pierce: 0
+    area: 3.45
+    projectileSpeed: 0
+    lifetime: 0.28
+    maxDistance: 0
+    knockback: 4.2
+    arcDegrees: 230
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7

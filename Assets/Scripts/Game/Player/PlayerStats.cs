@@ -70,6 +70,11 @@ namespace KingsRescue.Player
             }
 
             persistentApplied = true;
+            if (character.startingStats != null && character.startingStats.Length > 0)
+            {
+                AddModifiers(character.startingStats);
+            }
+
             AddModifiers(MetaUpgradeCatalog.BuildModifiers(character));
         }
 

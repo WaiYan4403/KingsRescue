@@ -32,6 +32,10 @@ namespace KingsRescue.Player
         [Tooltip("How hard contact shoves the hero left or right around a prop.")]
         [SerializeField, Range(0f, 2f)] private float asideBias = 1.1f;
 
+        [Header("Flight")]
+        [SerializeField] private float flyBobAmplitude = 0.14f;
+        [SerializeField] private float flyBobHz = 1.6f;
+
         [Header("Visuals")]
         [SerializeField] private Animator bodyAnimator;
         [SerializeField] private Animator legAnimator;
@@ -47,6 +51,8 @@ namespace KingsRescue.Player
         private Vector2 inputAxis;
         private int speedParameterHash;
         private bool hasSpeedParameter;
+        private Vector3 spriteRestLocal;
+        private bool spriteRestCached;
         private readonly List<Collider2D> overlappingObstacles = new List<Collider2D>(8);
 
         public Vector2 Velocity => velocity;
@@ -88,6 +94,7 @@ namespace KingsRescue.Player
             {
                 inputAxis = Vector2.zero;
                 velocity = Vector2.zero;
+                UpdateFlightBob(false);
                 return;
             }
 
@@ -153,6 +160,8 @@ namespace KingsRescue.Player
             {
                 spriteRenderer.flipX = velocity.x < 0f;
             }
+
+            UpdateFlightBob(IgnoresObstacles());
         }
 
         private bool CanFlipSprite()
@@ -160,8 +169,42 @@ namespace KingsRescue.Player
             return loadout != null && loadout.Character != null && loadout.Character.canFlipSprite;
         }
 
+        private bool IgnoresObstacles()
+        {
+            return loadout != null && loadout.Character != null && loadout.Character.ignoresObstacles;
+        }
+
+        private void UpdateFlightBob(bool flying)
+        {
+            if (spriteRenderer == null)
+            {
+                return;
+            }
+
+            Transform visual = spriteRenderer.transform;
+            if (!spriteRestCached)
+            {
+                spriteRestLocal = visual.localPosition;
+                spriteRestCached = true;
+            }
+
+            if (!flying)
+            {
+                visual.localPosition = spriteRestLocal;
+                return;
+            }
+
+            float bob = Mathf.Sin(Time.time * flyBobHz * Mathf.PI * 2f) * flyBobAmplitude;
+            visual.localPosition = spriteRestLocal + new Vector3(0f, bob, 0f);
+        }
+
         private Vector2 ResolveObstacles(Vector2 position)
         {
+            if (IgnoresObstacles())
+            {
+                return position;
+            }
+
             List<BlockingObstacle> blockers = BlockingObstacle.Active;
             if (blockers.Count == 0)
             {

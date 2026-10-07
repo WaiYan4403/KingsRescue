@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using KingsRescue.Combat;
+using KingsRescue.Data;
+using KingsRescue.Meta;
 
 namespace KingsRescue.Player
 {
@@ -21,10 +23,14 @@ namespace KingsRescue.Player
         [SerializeField] private string healthParameter = "Health";
         [SerializeField] private string dieStateName = "Lancer_Die";
         [SerializeField, Range(0f, 1f)] private float invulnerableAlpha = 0.45f;
+        [SerializeField, Range(0.1f, 1f)] private float reviveHealthFraction = 0.5f;
+        [SerializeField] private float reviveInvulnerability = 2.5f;
 
         private PlayerStats stats;
+        private WeaponLoadout loadout;
         private float invulnerableUntil;
         private float regenCarry;
+        private int extraLives;
 
         public float Current { get; private set; }
 
@@ -46,6 +52,7 @@ namespace KingsRescue.Player
         private void Awake()
         {
             stats = GetComponent<PlayerStats>();
+            loadout = GetComponent<WeaponLoadout>();
 
             if (flashTarget == null)
             {
@@ -67,6 +74,8 @@ namespace KingsRescue.Player
         {
             Max = stats.MaxHp;
             Current = Max;
+            CharacterDefinition character = loadout != null ? loadout.Character : Meta.RunSession.SelectedCharacter;
+            extraLives = character != null ? Mathf.Max(0, character.extraLives) : 0;
             HealthChanged?.Invoke(Current, Max);
         }
 
@@ -98,12 +107,36 @@ namespace KingsRescue.Player
 
             if (Current <= 0f)
             {
-                // Switch Music
-                GameMusicController.Instance.SetGameOverMusic();
+                if (TryRevive())
+                {
+                    return;
+                }
+
+                if (GameMusicController.Instance != null)
+                {
+                    GameMusicController.Instance.SetGameOverMusic();
+                }
+
                 RestoreVisual();
                 PlayDeathAnimation();
                 Died?.Invoke();
             }
+        }
+
+        private bool TryRevive()
+        {
+            if (extraLives <= 0)
+            {
+                return false;
+            }
+
+            extraLives--;
+            Current = Mathf.Max(1f, Max * Mathf.Clamp01(reviveHealthFraction));
+            invulnerableUntil = Time.time + Mathf.Max(invulnerabilityDuration, reviveInvulnerability);
+            RestoreVisual();
+            HealthChanged?.Invoke(Current, Max);
+            SyncAnimatorHealth();
+            return true;
         }
 
         public void Heal(float amount)

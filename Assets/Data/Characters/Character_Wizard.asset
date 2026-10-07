@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad1ee79a2daaea439512de2911edd41, type: 3}
+  m_Name: Character_Wizard
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.CharacterDefinition
+  id: wizard
+  displayName: Wizard
+  description: A fragile flying caster. Rocks and trees cannot block him. The Grimoire
+    throws fireballs at nearby enemies; each weapon level adds another fireball.
+  portrait: {fileID: -8522042403500378055, guid: 80093fd8ebed85b4284f79562c40719e, type: 3}
+  playerPrefab: {fileID: 1306224722766589929, guid: ec41c3ef18267144e809f81caf02985b, type: 3}
+  canFlipSprite: 1
+  ignoresObstacles: 1
+  uniqueWeapon: {fileID: 11400000, guid: 62d61d1005c939243ad744c123bd31ba, type: 2}
+  startingStats:
+  - stat: 0
+    mode: 0
+    value: -40
+  - stat: 2
+    mode: 1
+    value: 0.1
+  - stat: 3
+    mode: 1
+    value: 0.2
+  extraLives: 0

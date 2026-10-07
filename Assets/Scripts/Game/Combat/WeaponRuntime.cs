@@ -332,14 +332,39 @@ namespace KingsRescue.Combat
             int count = ResolveCount();
             Vector2 origin = transform.position;
 
-            if (count <= 1 || definition.fanProjectiles || randomTargets)
+            if (randomTargets)
+            {
+                Targeting.CollectLiving(origin, TargetSearchRange, strikeTargets);
+                for (int i = 0; i < count; i++)
+                {
+                    Vector2 direction;
+                    if (strikeTargets.Count > 0)
+                    {
+                        int pick = Random.Range(0, strikeTargets.Count);
+                        Vector2 toTarget = (Vector2)strikeTargets[pick].transform.position - origin;
+                        direction = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : ResolveFacing(origin);
+                        lastFacing = direction;
+                        if (strikeTargets.Count > 1)
+                        {
+                            strikeTargets.RemoveAt(pick);
+                        }
+                    }
+                    else
+                    {
+                        direction = ResolveFacing(origin);
+                    }
+
+                    SpawnDirectedShot(origin, direction, i, count);
+                }
+
+                return;
+            }
+
+            if (count <= 1 || definition.fanProjectiles)
             {
                 for (int i = 0; i < count; i++)
                 {
-                    Vector2 direction = randomTargets
-                        ? ResolveRandomDirection(origin)
-                        : ResolveFacing(origin);
-                    SpawnDirectedShot(origin, direction, i, count);
+                    SpawnDirectedShot(origin, ResolveFacing(origin), i, count);
                 }
 
                 return;
@@ -412,25 +437,6 @@ namespace KingsRescue.Combat
 
             float range = data.maxDistance > 0.01f ? data.maxDistance : 6.5f;
             projectile.Launch(direction, speed, damage, pierce, ResolveDuration(), area, data.knockback, gameObject, range);
-        }
-
-        private Vector2 ResolveRandomDirection(Vector2 origin)
-        {
-            Targeting.CollectLiving(origin, TargetSearchRange, strikeTargets);
-            if (strikeTargets.Count == 0)
-            {
-                return ResolveFacing(origin);
-            }
-
-            Enemy enemy = strikeTargets[Random.Range(0, strikeTargets.Count)];
-            Vector2 toTarget = (Vector2)enemy.transform.position - origin;
-            if (toTarget.sqrMagnitude > 0.0001f)
-            {
-                lastFacing = toTarget.normalized;
-                return lastFacing;
-            }
-
-            return ResolveFacing(origin);
         }
 
         private void FireRandomStrikes()
