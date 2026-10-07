@@ -68,6 +68,12 @@ namespace KingsRescue.Player
             {
                 character = next;
             }
+
+            PlayerHealth health = GetComponent<PlayerHealth>();
+            if (health != null)
+            {
+                health.ApplyCharacter(character);
+            }
         }
 
         private void Start()

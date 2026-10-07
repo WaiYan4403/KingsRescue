@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using KingsRescue.Combat;
+using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.Meta;
 
@@ -31,6 +32,8 @@ namespace KingsRescue.Player
         private float invulnerableUntil;
         private float regenCarry;
         private int extraLives;
+        private bool extraLivesBound;
+        private bool reviveUsed;
 
         public float Current { get; private set; }
 
@@ -74,9 +77,19 @@ namespace KingsRescue.Player
         {
             Max = stats.MaxHp;
             Current = Max;
-            CharacterDefinition character = loadout != null ? loadout.Character : Meta.RunSession.SelectedCharacter;
-            extraLives = character != null ? Mathf.Max(0, character.extraLives) : 0;
+            ApplyCharacter(ResolveCharacter());
             HealthChanged?.Invoke(Current, Max);
+        }
+
+        public void ApplyCharacter(CharacterDefinition character)
+        {
+            if (character == null || reviveUsed)
+            {
+                return;
+            }
+
+            extraLives = Mathf.Max(0, character.extraLives);
+            extraLivesBound = true;
         }
 
         private void Update()
@@ -98,6 +111,11 @@ namespace KingsRescue.Player
             }
 
             float mitigated = Mathf.Max(1f, info.Amount - stats.Armor);
+            if (mitigated >= Current && TryRevive())
+            {
+                return;
+            }
+
             Current = Mathf.Max(0f, Current - mitigated);
             invulnerableUntil = Time.time + invulnerabilityDuration;
 
@@ -107,11 +125,6 @@ namespace KingsRescue.Player
 
             if (Current <= 0f)
             {
-                if (TryRevive())
-                {
-                    return;
-                }
-
                 if (GameMusicController.Instance != null)
                 {
                     GameMusicController.Instance.SetGameOverMusic();
@@ -125,18 +138,41 @@ namespace KingsRescue.Player
 
         private bool TryRevive()
         {
+            if (!extraLivesBound)
+            {
+                ApplyCharacter(ResolveCharacter());
+            }
+
             if (extraLives <= 0)
             {
                 return false;
             }
 
             extraLives--;
+            reviveUsed = true;
             Current = Mathf.Max(1f, Max * Mathf.Clamp01(reviveHealthFraction));
             invulnerableUntil = Time.time + Mathf.Max(invulnerabilityDuration, reviveInvulnerability);
             RestoreVisual();
             HealthChanged?.Invoke(Current, Max);
+            Damaged?.Invoke();
             SyncAnimatorHealth();
             return true;
+        }
+
+        private CharacterDefinition ResolveCharacter()
+        {
+            if (loadout != null && loadout.Character != null)
+            {
+                return loadout.Character;
+            }
+
+            if (RunSession.SelectedCharacter != null)
+            {
+                return RunSession.SelectedCharacter;
+            }
+
+            GameManager game = GameManager.Instance;
+            return game != null ? game.SelectedCharacter : null;
         }
 
         public void Heal(float amount)

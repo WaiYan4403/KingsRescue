@@ -227,6 +227,11 @@ namespace KingsRescue.Core
             {
                 loadout.BindCharacter(selectedCharacter);
             }
+
+            if (playerHealth != null)
+            {
+                playerHealth.ApplyCharacter(selectedCharacter);
+            }
         }
 
         private static bool IsInstanceOf(GameObject instance, GameObject prefab)
