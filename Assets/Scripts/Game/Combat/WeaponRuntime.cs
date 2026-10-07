@@ -16,6 +16,8 @@ namespace KingsRescue.Combat
     public class WeaponRuntime : MonoBehaviour
     {
         private const float TargetSearchRange = 14f;
+        private const float DefaultShotRange = 6.5f;
+        private const float UnlimitedShotLifetime = 12f;
 
         private readonly List<OrbitBlade> blades = new List<OrbitBlade>(8);
         private readonly List<Enemy> strikeTargets = new List<Enemy>(16);
@@ -54,6 +56,23 @@ namespace KingsRescue.Combat
             }
 
             level++;
+            activeOrbitCount = -1;
+        }
+
+        public void SetLevel(int weaponLevel)
+        {
+            if (definition == null)
+            {
+                return;
+            }
+
+            int next = Mathf.Clamp(weaponLevel, 1, definition.MaxLevel);
+            if (next == level)
+            {
+                return;
+            }
+
+            level = next;
             activeOrbitCount = -1;
         }
 
@@ -124,6 +143,28 @@ namespace KingsRescue.Combat
         {
             int bonus = definition.usesGlobalProjectileCount ? stats.BonusProjectiles : 0;
             return Mathf.Max(1, Data.count + bonus);
+        }
+
+        /// <summary>0 means unlimited travel; otherwise a hard world-unit cap.</summary>
+        private float ResolveShotRange()
+        {
+            float authored = Data.maxDistance;
+            if (authored < 0f)
+            {
+                return 0f;
+            }
+
+            return authored > 0.01f ? authored : DefaultShotRange;
+        }
+
+        private float ResolveShotLifetime(float range)
+        {
+            if (range <= 0f)
+            {
+                return UnlimitedShotLifetime;
+            }
+
+            return ResolveDuration();
         }
 
         // --- Firing ----------------------------------------------------------
@@ -314,6 +355,7 @@ namespace KingsRescue.Combat
             }
 
             Vector2 direction = Rotate(baseDirection, offset);
+            PlayCharacterAttack(shotIndex, shotCount);
             Projectile projectile = pool.Spawn(definition.projectilePrefab, origin, Quaternion.identity)
                 .GetComponent<Projectile>();
 
@@ -323,8 +365,8 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            float range = data.maxDistance > 0.01f ? data.maxDistance : 6.5f;
-            projectile.Launch(direction, speed, damage, pierce, ResolveDuration(), area, data.knockback, gameObject, range);
+            float range = ResolveShotRange();
+            projectile.Launch(direction, speed, damage, pierce, ResolveShotLifetime(range), area, data.knockback, gameObject, range);
         }
 
         private void FireDirectedShot(bool randomTargets)
@@ -435,8 +477,8 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            float range = data.maxDistance > 0.01f ? data.maxDistance : 6.5f;
-            projectile.Launch(direction, speed, damage, pierce, ResolveDuration(), area, data.knockback, gameObject, range);
+            float range = ResolveShotRange();
+            projectile.Launch(direction, speed, damage, pierce, ResolveShotLifetime(range), area, data.knockback, gameObject, range);
         }
 
         private void FireRandomStrikes()

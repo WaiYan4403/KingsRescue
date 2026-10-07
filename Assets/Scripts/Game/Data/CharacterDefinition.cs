@@ -29,6 +29,13 @@ namespace KingsRescue.Data
         [Tooltip("Granted at run start. Other characters cannot pick this weapon up.")]
         public WeaponDefinition uniqueWeapon;
 
+        [Header("Power-Up")]
+        [Tooltip("Used while a rare arcade power-up is active. Leave empty if this hero has no powered form.")]
+        public WeaponDefinition powerUpWeapon;
+
+        [Tooltip("Seconds the powered form lasts before Duration is applied.")]
+        public float powerUpDuration = 8f;
+
         [Header("Starting Stats")]
         [Tooltip("Applied on top of the player prefab's bases before meta upgrades.")]
         public StatModifier[] startingStats = System.Array.Empty<StatModifier>();

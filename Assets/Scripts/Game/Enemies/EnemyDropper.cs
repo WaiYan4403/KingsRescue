@@ -56,6 +56,8 @@ namespace KingsRescue.Enemies
             {
                 SpawnPickup(healthPrefab, origin);
             }
+
+            PowerUpCatalog.TryDrop(origin, false);
         }
 
         private Pickup SpawnPickup(GameObject prefab, Vector2 origin)

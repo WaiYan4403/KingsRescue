@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4457876508632528820}
   - component: {fileID: 1821572945072813839}
   - component: {fileID: 8856426189125932596}
+  - component: {fileID: 1843733993433664008}
   m_Layer: 0
   m_Name: Player_SkeletonKing
   m_TagString: Untagged
@@ -107,6 +108,8 @@ MonoBehaviour:
   obstacleSkin: 0.04
   resolveIterations: 3
   asideBias: 1.1
+  flyBobAmplitude: 0.14
+  flyBobHz: 1.6
   bodyAnimator: {fileID: 0}
   legAnimator: {fileID: 0}
   effectAnimator: {fileID: 0}
@@ -197,6 +200,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0209bb88bc92ae34b86f631d5d662d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PlayerStatus
+--- !u!114 &1843733993433664008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306224722766589929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0279fe9394c9a00418a41895822c2018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PowerUpController
 --- !u!1 &3468642812728596342
 GameObject:
   m_ObjectHideFlags: 0

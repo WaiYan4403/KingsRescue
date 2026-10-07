@@ -116,6 +116,7 @@ namespace KingsRescue.World
 
             if (isChest)
             {
+                PowerUpCatalog.TryDrop(origin, true);
                 TryDropRareItem(pool, origin, luck);
             }
         }

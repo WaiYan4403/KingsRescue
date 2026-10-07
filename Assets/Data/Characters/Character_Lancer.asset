@@ -18,4 +18,9 @@ MonoBehaviour:
   portrait: {fileID: 0}
   playerPrefab: {fileID: 1306224722766589929, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
   canFlipSprite: 0
+  ignoresObstacles: 0
   uniqueWeapon: {fileID: 11400000, guid: 601d542d4b3604ad2b77d5b4e0fa3a9b, type: 2}
+  powerUpWeapon: {fileID: 11400000, guid: 88d054fdd4d0731408e61267b493c8b1, type: 2}
+  powerUpDuration: 8
+  startingStats: []
+  extraLives: 0
