@@ -5,7 +5,7 @@ namespace KingsRescue.Data
 {
     public enum SpawnPattern
     {
-        /// <summary>Single enemy dropped in above the top edge at a random x.</summary>
+        /// <summary>Trickle spawn: mix of the top edge and the left/right sides.</summary>
         TopRandom = 0,
 
         /// <summary>Evenly spaced line across the top edge.</summary>

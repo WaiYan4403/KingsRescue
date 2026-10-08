@@ -568,6 +568,8 @@ MonoBehaviour:
     count: 24
   - prefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
     count: 18
+  - prefab: {fileID: 244735591878693721, guid: 7324e7e1529e52d4fb05e018c3ddc150, type: 3}
+    count: 10
 --- !u!114 &39098414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5198,7 +5200,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: -453.00003}
+  m_AnchoredPosition: {x: -12, y: -453}
   m_SizeDelta: {x: 0, y: -921}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1255154147

@@ -162,6 +162,7 @@ namespace KingsRescue.Enemies
             GameManager.Instance?.RegisterKill();
             AchievementProgress.RecordKill(definition);
             dropper?.DropRewards();
+            slimeKing?.SpawnDeathSplit();
 
             if (definition != null && definition.isBoss)
             {

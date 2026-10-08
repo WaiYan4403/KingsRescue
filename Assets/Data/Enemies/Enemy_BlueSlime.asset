@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_BlueSlime
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Blue Slime
+  prefab: {fileID: 244735591878693721, guid: 7324e7e1529e52d4fb05e018c3ddc150, type: 3}
+  isBoss: 0
+  bossMinion: 0
+  canFlipSprite: 1
+  maxHealth: 15
+  contactDamage: 10
+  contactInterval: 0.55
+  contactRadius: 0.32
+  dealsContactDamage: 1
+  moveStyle: 0
+  moveSpeed: 2.6
+  scrollInfluence: 0.45
+  turnResponsiveness: 7
+  followChance: 1
+  giveUpWhenPassedChance: 0.25
+  separationRadius: 0.9
+  separationStrength: 3.25
+  preferredDistance: 4.5
+  attackStyle: 0
+  projectilePrefab: {fileID: 0}
+  meteorDefinition: {fileID: 0}
+  attackInterval: 1.8
+  attackRange: 8
+  attackDamage: 8
+  projectileSpeed: 7
+  projectileLifetime: 3.5
+  projectileRadius: 0.28
+  projectileHoming: 0
+  projectileMaxDistance: 6.5
+  slowFactor: 0.45
+  slowDuration: 2.2
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
+  xpValue: 2
+  coinDropChance: 0.08
+  healthDropChance: 0.04
+  healthGrowthPerMinute: 0.35
+  damageGrowthPerMinute: 0.12

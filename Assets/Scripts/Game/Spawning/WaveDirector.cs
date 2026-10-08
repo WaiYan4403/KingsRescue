@@ -238,10 +238,8 @@ namespace KingsRescue.Spawning
 
                 case SpawnPattern.Sides:
                 {
-                    bool left = index % 2 == 0;
-                    float x = left ? bounds.LeftDespawnX + 0.5f : bounds.RightDespawnX - 0.5f;
-                    float y = Random.Range(world.center.y, world.yMax);
-                    return new Vector2(x, y);
+                    bool left = total <= 1 ? Random.value < 0.5f : index % 2 == 0;
+                    return EdgeSpawnPoint(bounds, left);
                 }
 
                 case SpawnPattern.SurroundPlayer:
@@ -277,8 +275,35 @@ namespace KingsRescue.Spawning
                 }
 
                 default:
-                    return bounds.RandomTopSpawnPoint(horizontalInset);
+                {
+                    // Mix top with left/right so packs are not deleted in the
+                    // projectile gauntlet above the screen before they appear.
+                    float roll = Random.value;
+                    if (roll < 0.32f)
+                    {
+                        return bounds.RandomTopSpawnPoint(horizontalInset);
+                    }
+
+                    return EdgeSpawnPoint(bounds, roll < 0.66f);
+                }
             }
+        }
+
+        private Vector2 EdgeSpawnPoint(ArenaBounds bounds, bool left)
+        {
+            Rect world = bounds.WorldRect;
+            Rect screen = bounds.ScreenRect;
+            float x = left
+                ? Mathf.Max(world.xMin, screen.xMin) + 0.45f
+                : Mathf.Min(world.xMax, screen.xMax) - 0.45f;
+            float yMin = Mathf.Max(world.yMin + 1.6f, screen.yMin + 1.6f);
+            float yMax = Mathf.Min(world.yMax - 1.2f, screen.yMax - 1.2f);
+            if (yMax <= yMin)
+            {
+                yMax = yMin + 0.5f;
+            }
+
+            return new Vector2(x, Random.Range(yMin, yMax));
         }
 
         private void Spawn(EnemyDefinition definition, Vector2 position, float runMinutes, SpawnPattern pattern)

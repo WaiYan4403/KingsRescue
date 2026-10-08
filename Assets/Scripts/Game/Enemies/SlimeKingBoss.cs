@@ -65,6 +65,8 @@ namespace KingsRescue.Enemies
         [SerializeField] private float volleySpread = 18f;
         [SerializeField] private float volleyWindup = 0.35f;
         [SerializeField] private int volleyBursts = 3;
+        [Tooltip("Balls per burst. First 4, then 5 in the gaps, then 4 again.")]
+        [SerializeField] private int[] volleyPattern = { 4, 5, 4 };
         [SerializeField] private float volleyCooldown = 0.7f;
         [SerializeField] private float volleyRecover = 0.4f;
         [SerializeField] private float volleyDamage = 10f;
@@ -72,6 +74,11 @@ namespace KingsRescue.Enemies
         [SerializeField] private float volleyLifetime = 3.2f;
         [SerializeField] private float volleyRadius = 0.32f;
         [SerializeField] private float volleyRange = 8f;
+
+        [Header("Death Split")]
+        [SerializeField] private EnemyDefinition splitSlime;
+        [SerializeField] private int splitCount = 6;
+        [SerializeField] private float splitRadius = 1.1f;
 
         private EnemyMovement movement;
         private ContactDamage contact;
@@ -97,6 +104,8 @@ namespace KingsRescue.Enemies
         private float introFromY;
         private float introToY;
         private float introStarted;
+        private float runMinutes;
+        private bool splitSpawned;
         private static readonly int AttackHash = Animator.StringToHash("Attack1");
         private const float DownAngle = -180f;
 
@@ -120,6 +129,7 @@ namespace KingsRescue.Enemies
             nextSpecial = Special.Jump;
             volleysFired = 0;
             perched = false;
+            splitSpawned = false;
             HideMarker();
             SetLaserVisible(false);
             SetAttackPose(false);
@@ -149,6 +159,7 @@ namespace KingsRescue.Enemies
             }
 
             definition = def;
+            this.runMinutes = runMinutes;
             float scaled = def.ScaledAttackDamage(runMinutes);
             slamDamage = scaled;
             laserDamage = Mathf.Max(6f, scaled * 0.55f);
@@ -337,10 +348,10 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            int bursts = volleyBursts > 0 ? volleyBursts : 3;
+            int bursts = BurstCount();
             if (volleysFired < bursts)
             {
-                ThrowWaterFan();
+                ThrowWaterFan(BallsForBurst(volleysFired));
                 volleysFired++;
                 if (volleysFired < bursts)
                 {
@@ -356,7 +367,32 @@ namespace KingsRescue.Enemies
             BeginIdle();
         }
 
-        private void ThrowWaterFan()
+        private int BurstCount()
+        {
+            if (volleyPattern != null && volleyPattern.Length > 0)
+            {
+                return volleyPattern.Length;
+            }
+
+            return volleyBursts > 0 ? volleyBursts : 3;
+        }
+
+        private int BallsForBurst(int index)
+        {
+            if (volleyPattern != null && index >= 0 && index < volleyPattern.Length && volleyPattern[index] > 0)
+            {
+                return volleyPattern[index];
+            }
+
+            if (index == 1)
+            {
+                return 5;
+            }
+
+            return 4;
+        }
+
+        private void ThrowWaterFan(int count)
         {
             GameObject prefab = waterBallPrefab != null
                 ? waterBallPrefab
@@ -373,7 +409,7 @@ namespace KingsRescue.Enemies
             }
 
             Vector2 origin = laserPivot != null ? (Vector2)laserPivot.position : (Vector2)transform.position;
-            int count = volleyCount > 0 ? volleyCount : 3;
+            count = count > 0 ? count : (volleyCount > 0 ? volleyCount : 4);
             float spread = volleySpread > 0.1f ? volleySpread : 40f;
             float speed = volleySpeed > 0.1f ? volleySpeed : 7.5f;
             float life = volleyLifetime > 0.1f ? volleyLifetime : 3.2f;
@@ -408,6 +444,56 @@ namespace KingsRescue.Enemies
                     false,
                     gameObject,
                     range);
+            }
+        }
+
+        public void SpawnDeathSplit()
+        {
+            if (splitSpawned)
+            {
+                return;
+            }
+
+            splitSpawned = true;
+            if (splitSlime == null || splitSlime.prefab == null)
+            {
+                return;
+            }
+
+            PoolManager pool = PoolManager.Instance;
+            if (pool == null)
+            {
+                return;
+            }
+
+            int count = splitCount > 0 ? splitCount : 6;
+            float radius = splitRadius > 0.1f ? splitRadius : 1.1f;
+            Vector2 origin = transform.position;
+            ArenaBounds bounds = ArenaBounds.Instance;
+
+            for (int i = 0; i < count; i++)
+            {
+                float angle = i / (float)count * Mathf.PI * 2f + 0.25f;
+                Vector2 spawn = origin + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+                if (bounds != null)
+                {
+                    spawn = bounds.ClampToPlayArea(spawn);
+                }
+
+                GameObject instance = pool.Spawn(splitSlime.prefab, spawn, Quaternion.identity);
+                if (instance == null)
+                {
+                    continue;
+                }
+
+                Enemy child = instance.GetComponent<Enemy>();
+                if (child == null)
+                {
+                    continue;
+                }
+
+                child.Configure(splitSlime, runMinutes);
+                child.SetSpawnHeading(spawn, SpawnPattern.SurroundPlayer);
             }
         }
 

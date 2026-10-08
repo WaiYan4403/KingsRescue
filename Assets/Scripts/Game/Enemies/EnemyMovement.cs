@@ -103,27 +103,42 @@ namespace KingsRescue.Enemies
 
         public void SetSpawnHeading(Vector2 spawnPosition, SpawnPattern pattern)
         {
-            if (moveStyle != EnemyMoveStyle.Straight)
-            {
-                return;
-            }
-
             ArenaBounds bounds = ArenaBounds.Instance;
             Vector2 center = bounds != null ? bounds.WorldRect.center : Vector2.zero;
+            bool fromLeft = spawnPosition.x < center.x;
+            bool fromSide = pattern == SpawnPattern.Sides || pattern == SpawnPattern.CrossScreen;
+            if (bounds != null)
+            {
+                Rect world = bounds.WorldRect;
+                fromSide |= spawnPosition.x <= world.xMin + 0.85f || spawnPosition.x >= world.xMax - 0.85f;
+                fromLeft = spawnPosition.x < world.center.x;
+            }
+
+            if (moveStyle != EnemyMoveStyle.Straight)
+            {
+                if (fromSide)
+                {
+                    cruiseVelocity = new Vector2(fromLeft ? 1f : -1f, 0f) * (moveSpeed * jitterFactor);
+                }
+
+                return;
+            }
 
             switch (pattern)
             {
                 case SpawnPattern.CrossScreen:
-                    lockedHeading = new Vector2(spawnPosition.x < center.x ? 1f : -1f, -0.28f).normalized;
+                    lockedHeading = new Vector2(fromLeft ? 1f : -1f, -0.28f).normalized;
                     break;
                 case SpawnPattern.DiagonalDive:
-                    lockedHeading = new Vector2(spawnPosition.x < center.x ? 0.7f : -0.7f, -1f).normalized;
+                    lockedHeading = new Vector2(fromLeft ? 0.7f : -0.7f, -1f).normalized;
                     break;
                 case SpawnPattern.Sides:
-                    lockedHeading = new Vector2(spawnPosition.x < center.x ? 1f : -1f, -0.15f).normalized;
+                    lockedHeading = new Vector2(fromLeft ? 1f : -1f, -0.15f).normalized;
                     break;
                 default:
-                    lockedHeading = Vector2.down;
+                    lockedHeading = fromSide
+                        ? new Vector2(fromLeft ? 1f : -1f, -0.2f).normalized
+                        : Vector2.down;
                     break;
             }
         }
@@ -151,6 +166,10 @@ namespace KingsRescue.Enemies
             {
                 desired = BuildDesiredCruise(position);
             }
+            else
+            {
+                desired = EnterFromOffscreen(position);
+            }
 
             cruiseVelocity = Vector2.Lerp(cruiseVelocity, desired, 1f - Mathf.Exp(-responsiveness * dt));
 
@@ -163,6 +182,34 @@ namespace KingsRescue.Enemies
             {
                 spriteRenderer.flipX = cruiseVelocity.x < 0f;
             }
+        }
+
+        private Vector2 EnterFromOffscreen(Vector2 position)
+        {
+            float speed = moveSpeed * jitterFactor;
+            Vector2 target = PlayerController.Position;
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds != null)
+            {
+                Rect play = bounds.PlayRect;
+                if (position.x < play.xMin + 0.15f)
+                {
+                    return new Vector2(speed, Mathf.Clamp(target.y - position.y, -1f, 1f) * speed * 0.25f);
+                }
+
+                if (position.x > play.xMax - 0.15f)
+                {
+                    return new Vector2(-speed, Mathf.Clamp(target.y - position.y, -1f, 1f) * speed * 0.25f);
+                }
+            }
+
+            Vector2 toTarget = target - position;
+            if (toTarget.sqrMagnitude < 0.0001f)
+            {
+                return Vector2.down * speed;
+            }
+
+            return toTarget.normalized * speed;
         }
 
         private Vector2 BuildDesiredCruise(Vector2 position)
