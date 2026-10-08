@@ -86,6 +86,16 @@ namespace KingsRescue.Data
         [Tooltip("KeepDistance only. Preferred gap from the player.")]
         public float preferredDistance = 4.5f;
 
+        [Header("Flock")]
+        [Tooltip("Trickle spawns drop a tight group that shares one heading instead of a single enemy.")]
+        public bool spawnAsFlock;
+
+        [Tooltip("Smallest flock size when spawnAsFlock is on.")]
+        public int flockMin = 8;
+
+        [Tooltip("Largest flock size when spawnAsFlock is on.")]
+        public int flockMax = 12;
+
         [Header("Ranged / Special")]
         public EnemyAttackStyle attackStyle = EnemyAttackStyle.Contact;
 

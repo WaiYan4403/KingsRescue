@@ -118,6 +118,11 @@ namespace KingsRescue.Enemies
             movement?.SetSpawnHeading(spawnPosition, pattern);
         }
 
+        public void SetLockedHeading(Vector2 heading)
+        {
+            movement?.SetLockedHeading(heading);
+        }
+
         /// <summary>
         /// Recycles every enemy that is not the boss (or a tagged boss add) without
         /// granting kills, XP, or coins. Used when the arena takes over the road.

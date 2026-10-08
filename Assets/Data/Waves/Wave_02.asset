@@ -15,20 +15,26 @@ MonoBehaviour:
   label: 'Intro: Bats'
   startTime: 35
   duration: 35
-  spawnInterval: 1.25
+  spawnInterval: 1.35
   spawnsPerTick: 1
   pattern: 0
   enemies:
   - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
     weight: 8
+  - enemy: {fileID: 11400000, guid: 7e309ae67654bd14581eac427c9a073c, type: 2}
+    weight: 8
   - enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
-    weight: 10
+    weight: 4
   bursts:
-  - atTime: 8
+  - atTime: 7
     enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
-    count: 8
-    pattern: 4
-  - atTime: 22
+    count: 11
+    pattern: 6
+  - atTime: 16
     enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
-    count: 10
-    pattern: 5
+    count: 12
+    pattern: 7
+  - atTime: 26
+    enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+    count: 13
+    pattern: 6

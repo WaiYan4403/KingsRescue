@@ -93,6 +93,7 @@ namespace KingsRescue.Enemies
             else if (moveStyle == EnemyMoveStyle.Straight)
             {
                 tracksPlayer = false;
+                jitterFactor = 1f;
             }
             else if (moveStyle == EnemyMoveStyle.KeepDistance)
             {
@@ -101,12 +102,20 @@ namespace KingsRescue.Enemies
             }
         }
 
+        public void SetLockedHeading(Vector2 heading)
+        {
+            lockedHeading = heading.sqrMagnitude > 0.0001f ? heading.normalized : Vector2.down;
+            cruiseVelocity = lockedHeading * (moveSpeed * jitterFactor);
+        }
+
         public void SetSpawnHeading(Vector2 spawnPosition, SpawnPattern pattern)
         {
             ArenaBounds bounds = ArenaBounds.Instance;
             Vector2 center = bounds != null ? bounds.WorldRect.center : Vector2.zero;
             bool fromLeft = spawnPosition.x < center.x;
-            bool fromSide = pattern == SpawnPattern.Sides || pattern == SpawnPattern.CrossScreen;
+            bool fromSide = pattern == SpawnPattern.Sides
+                || pattern == SpawnPattern.CrossScreen
+                || pattern == SpawnPattern.FlockDiagonal;
             if (bounds != null)
             {
                 Rect world = bounds.WorldRect;
@@ -127,10 +136,14 @@ namespace KingsRescue.Enemies
             switch (pattern)
             {
                 case SpawnPattern.CrossScreen:
-                    lockedHeading = new Vector2(fromLeft ? 1f : -1f, -0.28f).normalized;
+                case SpawnPattern.FlockDiagonal:
+                    lockedHeading = new Vector2(fromLeft ? 0.85f : -0.85f, -1f).normalized;
                     break;
                 case SpawnPattern.DiagonalDive:
                     lockedHeading = new Vector2(fromLeft ? 0.7f : -0.7f, -1f).normalized;
+                    break;
+                case SpawnPattern.FlockDown:
+                    lockedHeading = Vector2.down;
                     break;
                 case SpawnPattern.Sides:
                     lockedHeading = new Vector2(fromLeft ? 1f : -1f, -0.15f).normalized;
@@ -141,6 +154,8 @@ namespace KingsRescue.Enemies
                         : Vector2.down;
                     break;
             }
+
+            cruiseVelocity = lockedHeading * (moveSpeed * jitterFactor);
         }
 
         private void RollFollowRole()

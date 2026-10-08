@@ -25,6 +25,8 @@ MonoBehaviour:
     weight: 4
   - enemy: {fileID: 11400000, guid: af6a0952e0fd7334cb17af75c19b57ee, type: 2}
     weight: 11
+  - enemy: {fileID: 11400000, guid: 7e309ae67654bd14581eac427c9a073c, type: 2}
+    weight: 4
   bursts:
   - atTime: 10
     enemy: {fileID: 11400000, guid: af6a0952e0fd7334cb17af75c19b57ee, type: 2}
@@ -33,4 +35,8 @@ MonoBehaviour:
   - atTime: 24
     enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
     count: 12
-    pattern: 4
+    pattern: 7
+  - atTime: 32
+    enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+    count: 11
+    pattern: 6

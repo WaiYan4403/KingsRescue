@@ -21,7 +21,13 @@ namespace KingsRescue.Data
         CrossScreen = 4,
 
         /// <summary>Top corners diving diagonally through the field.</summary>
-        DiagonalDive = 5
+        DiagonalDive = 5,
+
+        /// <summary>Tight cluster at a random top X, flying straight down.</summary>
+        FlockDown = 6,
+
+        /// <summary>Tight cluster on the left or right, diving diagonally to the far side.</summary>
+        FlockDiagonal = 7
     }
 
     /// <summary>

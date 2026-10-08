@@ -15,21 +15,25 @@ MonoBehaviour:
   displayName: Bat
   prefab: {fileID: 3371409198316295035, guid: c2ed9645d39677640b4fbaedd8919f77, type: 3}
   isBoss: 0
+  bossMinion: 0
   canFlipSprite: 1
-  maxHealth: 3
-  contactDamage: 4
+  maxHealth: 6
+  contactDamage: 6
   contactInterval: 0.45
   contactRadius: 0.28
   dealsContactDamage: 1
   moveStyle: 1
-  moveSpeed: 4.6
+  moveSpeed: 15
   scrollInfluence: 0.15
   turnResponsiveness: 12
   followChance: 0
   giveUpWhenPassedChance: 0
-  separationRadius: 0.45
-  separationStrength: 2
+  separationRadius: 1
+  separationStrength: 0.5
   preferredDistance: 4.5
+  spawnAsFlock: 1
+  flockMin: 15
+  flockMax: 30
   attackStyle: 0
   projectilePrefab: {fileID: 0}
   meteorDefinition: {fileID: 0}
