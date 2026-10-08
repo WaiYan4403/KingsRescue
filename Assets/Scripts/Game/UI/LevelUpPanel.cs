@@ -18,6 +18,7 @@ namespace KingsRescue.UI
     {
         [SerializeField] private GameObject root;
         [SerializeField] private UpgradeCardView[] cards;
+        [SerializeField] private GameObject notEnoughLuck;
         [SerializeField] private TMP_Text levelLabel;
         [SerializeField] private Animator animator;
 
@@ -129,11 +130,28 @@ namespace KingsRescue.UI
                 levelLabel.text = $"Level {level}";
             }
 
+            bool fourthUnlocked = service.FourthCardUnlocked;
+            if (notEnoughLuck != null)
+            {
+                notEnoughLuck.SetActive(!fourthUnlocked);
+            }
+
             for (int i = 0; i < cards.Length; i++)
             {
-                UpgradeDefinition choice = i < choices.Count ? choices[i] : null;
+                if (cards[i] == null)
+                {
+                    continue;
+                }
+
+                bool show = i < choices.Count && (i < 3 || fourthUnlocked);
+                if (!show)
+                {
+                    cards[i].gameObject.SetActive(false);
+                    continue;
+                }
+
                 cards[i].EnsureClickable();
-                cards[i].Bind(choice, service.Loadout, OnCardChosen);
+                cards[i].Bind(choices[i], service.Loadout, OnCardChosen);
             }
 
             SetJoystickRaycasts(false);
@@ -153,7 +171,10 @@ namespace KingsRescue.UI
             // Lock the row so a double tap cannot spend two level-ups on one card.
             for (int i = 0; i < cards.Length; i++)
             {
-                cards[i].SetInteractable(false);
+                if (cards[i] != null)
+                {
+                    cards[i].SetInteractable(false);
+                }
             }
 
             UpgradeService.Instance?.Apply(upgrade);

@@ -45,6 +45,8 @@ namespace KingsRescue.Meta
             new MetaUpgradeOffer(StatType.Luck, ModifierMode.Percent, 0.08f, 10, 40),
             new MetaUpgradeOffer(StatType.Duration, ModifierMode.Percent, 0.08f, 8, 35),
             new MetaUpgradeOffer(StatType.ProjectileCount, ModifierMode.Flat, 1f, 5, 50),
+            new MetaUpgradeOffer(StatType.ProjectileSpeed, ModifierMode.Percent, 0.08f, 8, 30),
+            new MetaUpgradeOffer(StatType.Pierce, ModifierMode.Flat, 1f, 5, 45),
             new MetaUpgradeOffer(StatType.MagnetRadius, ModifierMode.Percent, 0.15f, 8, 30),
             new MetaUpgradeOffer(StatType.XpGain, ModifierMode.Percent, 0.08f, 10, 35),
             new MetaUpgradeOffer(StatType.CoinGain, ModifierMode.Percent, 0.10f, 10, 35)

@@ -44,3 +44,17 @@ Achievement,Blessed Cache,,Smash 15 chests to unlock Holy Water.,Smash 15 chests
 Achievement,Rush Collector,,Pick up 3 rare power-ups.,Collect 3 power-ups,,,,75 coins
 Achievement,Slime Regicide,,Defeat the Slime King.,Kill Slime King x1,,,,150 coins
 Achievement,Coin Purse,,Bank 300 coins across all runs.,Earn 300 coins lifetime,,,,40 coins
+Passive,Gauntlet,,Damage +15% per level. 5 levels.,In-run item,,,,
+Passive,Hourglass,,Cooldown +12% per level. 5 levels.,In-run item,,,,
+Passive,Boots,,Move Speed +12% per level. 5 levels.,In-run item,,,,
+Passive,Lodestone,,Magnet +35% per level. 3 levels.,In-run item,,,,
+Passive,Tome,,Growth +15% per level. 3 levels.,In-run item,,,,
+Passive,Plate,,Max HP +30 and Armor +1 per level. 4 levels.,In-run item,,,,
+Passive,War Banner,,Area +10% per level. 5 levels.,In-run item,,,,
+Passive,Saint's Flask,,Recovery +0.4 HP/s per level. 5 levels.,In-run item,,,,
+Passive,Silver Clover,,Luck +12% per level. Helps unlock the 4th level-up card. 5 levels.,In-run item,,,,
+Passive,Binding Candle,,Duration +12% per level. 5 levels.,In-run item,,,,
+Passive,Quiver,,Amount +1 per level. 3 levels.,In-run item,,,,
+Passive,Coin Mask,,Greed +12% per level. 5 levels.,In-run item,,,,
+Passive,Bracer,,Projectile Speed +12% per level. 5 levels.,In-run item,,,,
+Passive,Whetstone,,Pierce +1 per level. 5 levels.,In-run item,,,,

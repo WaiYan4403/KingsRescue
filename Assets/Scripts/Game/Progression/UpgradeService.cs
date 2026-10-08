@@ -7,8 +7,9 @@ using KingsRescue.Player;
 namespace KingsRescue.Progression
 {
     /// <summary>
-    /// Picks the four cards shown on a level-up. Draws without replacement from the
-    /// weighted pool, filtered by what the hero can still take.
+    /// Picks the cards shown on a level-up. Three cards by default; a fourth when
+    /// Luck is high enough. Draws without replacement from the weighted pool,
+    /// filtered by what the hero can still take.
     /// </summary>
     public class UpgradeService : SingletonBehaviour<UpgradeService>
     {
@@ -19,6 +20,9 @@ namespace KingsRescue.Progression
 
         [SerializeField] private int choiceCount = 4;
 
+        [Tooltip("Luck at or above this reveals a fourth level-up card.")]
+        [SerializeField] private float fourthCardLuck = 1.2f;
+
         [Header("Scene References")]
         [SerializeField] private WeaponLoadout loadout;
         [SerializeField] private PlayerStats stats;
@@ -26,6 +30,19 @@ namespace KingsRescue.Progression
         private readonly List<UpgradeDefinition> candidates = new List<UpgradeDefinition>(32);
 
         public int ChoiceCount => choiceCount;
+
+        public bool FourthCardUnlocked
+        {
+            get
+            {
+                float need = fourthCardLuck > 0.01f ? fourthCardLuck : 1.2f;
+                return stats != null && stats.Luck >= need;
+            }
+        }
+
+        public int ActiveChoiceCount => FourthCardUnlocked
+            ? Mathf.Max(1, choiceCount)
+            : Mathf.Min(3, Mathf.Max(1, choiceCount));
 
         public WeaponLoadout Loadout => loadout;
 
@@ -65,7 +82,8 @@ namespace KingsRescue.Progression
                 }
             }
 
-            while (results.Count < choiceCount && candidates.Count > 0)
+            int want = ActiveChoiceCount;
+            while (results.Count < want && candidates.Count > 0)
             {
                 UpgradeDefinition picked = DrawWeighted();
                 if (picked == null)
@@ -78,7 +96,7 @@ namespace KingsRescue.Progression
             }
 
             // The hero can run out of legal upgrades late in a run; never show an empty screen.
-            while (results.Count < choiceCount && fallback != null)
+            while (results.Count < want && fallback != null)
             {
                 results.Add(fallback);
             }
