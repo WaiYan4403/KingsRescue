@@ -64,6 +64,7 @@ namespace KingsRescue.Core
         {
             elapsed = 0f;
             Distance = 0f;
+            scrolling = true;
             CurrentSpeed = baseSpeed;
         }
     }

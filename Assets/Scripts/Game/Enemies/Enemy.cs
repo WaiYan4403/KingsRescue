@@ -38,6 +38,9 @@ namespace KingsRescue.Enemies
 
         public bool IsAlive => !dying && health != null && health.IsAlive;
 
+        public bool BelongsToBossFight =>
+            definition != null && (definition.isBoss || definition.bossMinion);
+
         private void Awake()
         {
             health = GetComponent<Health>();
@@ -115,6 +118,37 @@ namespace KingsRescue.Enemies
             movement?.SetSpawnHeading(spawnPosition, pattern);
         }
 
+        /// <summary>
+        /// Recycles every enemy that is not the boss (or a tagged boss add) without
+        /// granting kills, XP, or coins. Used when the arena takes over the road.
+        /// </summary>
+        public static void DespawnNonEncounter()
+        {
+            for (int i = Active.Count - 1; i >= 0; i--)
+            {
+                Enemy enemy = Active[i];
+                if (enemy == null || enemy.BelongsToBossFight)
+                {
+                    continue;
+                }
+
+                enemy.RecycleQuiet();
+            }
+        }
+
+        private void RecycleQuiet()
+        {
+            dying = true;
+            if (PoolManager.Instance != null)
+            {
+                PoolManager.Instance.Despawn(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
         private void OnDied(Health source, DamageInfo info)
         {
             if (dying)
@@ -128,6 +162,11 @@ namespace KingsRescue.Enemies
             GameManager.Instance?.RegisterKill();
             AchievementProgress.RecordKill(definition);
             dropper?.DropRewards();
+
+            if (definition != null && definition.isBoss)
+            {
+                GameManager.Instance?.EndBossFight();
+            }
 
             if (PoolManager.Instance != null)
             {

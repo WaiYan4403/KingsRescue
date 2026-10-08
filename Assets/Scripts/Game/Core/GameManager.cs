@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using KingsRescue.Data;
+using KingsRescue.Enemies;
 using KingsRescue.Meta;
 using KingsRescue.Player;
 using KingsRescue.Progression;
@@ -52,6 +53,12 @@ namespace KingsRescue.Core
         public int Coins { get; private set; }
 
         public bool IsPlaying => State == GameState.Playing && (playerHealth == null || playerHealth.IsAlive);
+
+        /// <summary>
+        /// True while a boss encounter owns the field. The road stops, regular waves
+        /// pause, and leftover trash is cleared until the boss dies.
+        /// </summary>
+        public bool BossFightActive { get; private set; }
 
         /// <summary>
         /// Level-up cards are only legal while the hero is alive. Death and game-over
@@ -104,7 +111,7 @@ namespace KingsRescue.Core
 
         private void Update()
         {
-            if (State == GameState.Playing)
+            if (State == GameState.Playing && !BossFightActive)
             {
                 RunTime += Time.deltaTime;
             }
@@ -116,12 +123,44 @@ namespace KingsRescue.Core
             Kills = 0;
             Coins = 0;
             pendingLevelUps = 0;
+            BossFightActive = false;
 
             ScrollDirector.Instance?.ResetRun();
             SetState(GameState.Playing);
 
             KillsChanged?.Invoke(Kills);
             CoinsChanged?.Invoke(Coins);
+        }
+
+        /// <summary>Stops the road and regular spawns for a unique boss arena.</summary>
+        public void BeginBossFight()
+        {
+            if (BossFightActive || State == GameState.GameOver)
+            {
+                return;
+            }
+
+            BossFightActive = true;
+            ScrollDirector.Instance?.SetScrolling(false);
+            Enemy.DespawnNonEncounter();
+            HostileProjectile.DespawnAll();
+        }
+
+        /// <summary>Hands the road back to the run after the boss is gone.</summary>
+        public void EndBossFight()
+        {
+            if (!BossFightActive)
+            {
+                return;
+            }
+
+            BossFightActive = false;
+
+            bool heroAlive = playerHealth == null || playerHealth.IsAlive;
+            if (State != GameState.GameOver && heroAlive)
+            {
+                ScrollDirector.Instance?.SetScrolling(true);
+            }
         }
 
         public void RegisterKill(int amount = 1)

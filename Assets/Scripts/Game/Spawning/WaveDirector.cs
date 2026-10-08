@@ -85,12 +85,19 @@ namespace KingsRescue.Spawning
             }
 
             spawnedThisFrame = 0;
-            FlushPending();
 
             float runTime = game.RunTime;
             float runMinutes = runTime / 60f;
 
             TrySpawnFirstBoss(runTime, runMinutes);
+
+            if (game.BossFightActive)
+            {
+                pending.Clear();
+                return;
+            }
+
+            FlushPending();
 
             for (int i = 0; i < states.Count; i++)
             {
@@ -172,6 +179,7 @@ namespace KingsRescue.Spawning
             Vector2 position = new Vector2(bounds.WorldRect.center.x, bounds.TopSpawnY);
             SpawnImmediate(firstBoss, position, runMinutes, SpawnPattern.TopRandom);
             firstBossSpawned = true;
+            GameManager.Instance?.BeginBossFight();
         }
 
         private bool AllAuthoredWavesFinished(float runTime)
@@ -275,6 +283,17 @@ namespace KingsRescue.Spawning
 
         private void Spawn(EnemyDefinition definition, Vector2 position, float runMinutes, SpawnPattern pattern)
         {
+            if (definition == null)
+            {
+                return;
+            }
+
+            GameManager game = GameManager.Instance;
+            if (game != null && game.BossFightActive && !definition.isBoss && !definition.bossMinion)
+            {
+                return;
+            }
+
             if (definition.prefab == null)
             {
                 Debug.LogError($"EnemyDefinition '{definition.name}' has no prefab assigned.", definition);

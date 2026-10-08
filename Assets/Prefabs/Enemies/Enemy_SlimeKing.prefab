@@ -146,8 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acdfe7f0ef5542e69bab694cd4e7f55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.Health
-  maxHealth: 10
-  hitRadius: 1.15
+  maxHealth: 100
+  hitRadius: 2
 --- !u!114 &1783464162516560514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,8 +190,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4278bd1af9fc84a7fa2ebbc20a6b580d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.ContactDamage
-  radius: 0.5
-  damage: 8
+  radius: 2
+  damage: 20
   interval: 0.6
   playerRadius: 0.35
 --- !u!114 &5918325816167338675
@@ -285,13 +285,23 @@ MonoBehaviour:
   jumpLockLead: 0.4
   laserWindup: 0.4
   laserDuration: 3.1
-  slamRadius: 1.5
-  slamDamage: 18
-  laserLength: 7.5
-  laserWidth: 0.55
-  laserRotateSpeed: 52
-  laserDamage: 9
+  slamRadius: 3
+  slamDamage: 30
+  laserLength: 15
+  laserWidth: 2
+  laserRotateSpeed: 60
+  laserDamage: 15
   laserTick: 0.28
+  waterBallPrefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
+  volleyCount: 4
+  volleySpread: 18
+  volleyWindup: 0.35
+  volleyRecover: 0.4
+  volleyDamage: 20
+  volleySpeed: 7.5
+  volleyLifetime: 3.2
+  volleyRadius: 0.5
+  volleyRange: 15
 --- !u!1 &2043948441375406709
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,6 +33,20 @@ namespace KingsRescue.Enemies
         {
         }
 
+        public static void DespawnAll()
+        {
+            HostileProjectile[] shots = FindObjectsByType<HostileProjectile>(
+                FindObjectsInactive.Exclude,
+                FindObjectsSortMode.None);
+            for (int i = 0; i < shots.Length; i++)
+            {
+                if (shots[i] != null)
+                {
+                    shots[i].Recycle();
+                }
+            }
+        }
+
         public void Launch(Vector2 direction, float speed, float damageAmount, float lifetime, float radius, float slow, float slowTime, bool homes, GameObject owner, float maxDistance = 0f)
         {
             Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.down;

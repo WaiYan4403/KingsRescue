@@ -31,7 +31,7 @@ Monster,Boom Slime,,,Wave intro,Chase / Contact,6,6,Explodes on death (14 burst 
 Monster,Ghost,,,Wave intro,Charge / Contact,5,6,Fast late mix
 Monster,Orc,,,Late mix,Chase / Contact,14,9,Fat HP heavy hits
 Monster,Skelly,,,Late mix,Chase / Contact,20,14,Skeleton; 500 kills unlock Skeleton King
-Boss,Slime King,,,Appears at about 2:00,Charge / Contact,360,12,"Vanish slam onto the player; rotating water beam. Music changes for the fight."
+Boss,Slime King,,,Appears at about 2:00,Charge / Contact,1200,12,"Three water balls in an archer-style fan; vanish slam; rotating water beam. Music changes for the fight."
 Achievement,First Blood,,Cut down any enemy on the road.,Kill 1 enemy,,,,25 coins
 Achievement,Road Warrior,,Defeat 100 enemies in total.,Kill 100 enemies,,,,50 coins
 Achievement,Cinder Adept,,Defeat 50 enemies to unlock Fire Wand.,Kill 50 enemies,,,,Fire Wand

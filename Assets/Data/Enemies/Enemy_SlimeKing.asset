@@ -15,8 +15,9 @@ MonoBehaviour:
   displayName: Slime King
   prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
   isBoss: 1
+  bossMinion: 0
   canFlipSprite: 0
-  maxHealth: 360
+  maxHealth: 3000
   contactDamage: 12
   contactInterval: 0.55
   contactRadius: 0.95
@@ -31,16 +32,16 @@ MonoBehaviour:
   separationStrength: 4
   preferredDistance: 4.5
   attackStyle: 0
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
   meteorDefinition: {fileID: 0}
   attackInterval: 1.8
   attackRange: 8
   attackDamage: 18
-  projectileSpeed: 7
-  projectileLifetime: 3.5
-  projectileRadius: 0.28
+  projectileSpeed: 7.5
+  projectileLifetime: 3.2
+  projectileRadius: 0.34
   projectileHoming: 0
-  projectileMaxDistance: 6.5
+  projectileMaxDistance: 8
   slowFactor: 0.45
   slowDuration: 2.2
   meteorWarning: 1.1

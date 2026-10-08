@@ -7,7 +7,8 @@ using KingsRescue.Player;
 namespace KingsRescue.Enemies
 {
     /// <summary>
-    /// First boss. Alternates a vanish-slam onto the hero and a rotating water beam.
+    /// First boss. Common attack is a three-ball water fan like the Archer.
+    /// Specials are a vanish-slam and a rotating water beam.
     /// </summary>
     public class SlimeKingBoss : MonoBehaviour, IPoolable
     {
@@ -17,6 +18,13 @@ namespace KingsRescue.Enemies
             Idle,
             JumpAir,
             LaserWindup,
+            Laser,
+            Volley
+        }
+
+        private enum Special
+        {
+            Jump,
             Laser
         }
 
@@ -46,20 +54,37 @@ namespace KingsRescue.Enemies
         [SerializeField] private float laserDamage = 9f;
         [SerializeField] private float laserTick = 0.28f;
 
+        [Header("Water Volley")]
+        [SerializeField] private GameObject waterBallPrefab;
+        [SerializeField] private int volleyCount = 3;
+        [SerializeField] private float volleySpread = 18f;
+        [SerializeField] private float volleyWindup = 0.35f;
+        [SerializeField] private float volleyRecover = 0.4f;
+        [SerializeField] private float volleyDamage = 10f;
+        [SerializeField] private float volleySpeed = 7.5f;
+        [SerializeField] private float volleyLifetime = 3.2f;
+        [SerializeField] private float volleyRadius = 0.32f;
+        [SerializeField] private float volleyRange = 8f;
+
         private EnemyMovement movement;
         private ContactDamage contact;
         private Health health;
+        private Animator animator;
+        private EnemyDefinition definition;
         private Phase phase;
         private float phaseEnds;
         private Vector2 slamPoint;
         private bool slamLocked;
-        private bool nextIsJump = true;
+        private bool nextIsVolley = true;
+        private Special nextSpecial = Special.Jump;
+        private bool volleyThrown;
         private float nextLaserTick;
         private float rotateSign = 1f;
         private bool musicOn;
         private float introFromY;
         private float introToY;
         private float introStarted;
+        private static readonly int AttackHash = Animator.StringToHash("Attack1");
 
         private void Awake()
         {
@@ -71,19 +96,24 @@ namespace KingsRescue.Enemies
             movement = GetComponent<EnemyMovement>();
             contact = GetComponent<ContactDamage>();
             health = GetComponent<Health>();
+            animator = GetComponent<Animator>();
         }
 
         public void OnSpawned()
         {
             musicOn = false;
-            nextIsJump = true;
+            nextIsVolley = true;
+            nextSpecial = Special.Jump;
+            volleyThrown = false;
             HideMarker();
             SetLaserVisible(false);
+            SetAttackPose(false);
         }
 
         public void OnDespawned()
         {
             RestoreGameplayMusic();
+            GameManager.Instance?.EndBossFight();
             if (health != null)
             {
                 health.Untargetable = false;
@@ -91,6 +121,7 @@ namespace KingsRescue.Enemies
 
             HideMarker();
             SetLaserVisible(false);
+            SetAttackPose(false);
         }
 
         public void Configure(EnemyDefinition def, float runMinutes)
@@ -102,8 +133,35 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            slamDamage = def.ScaledAttackDamage(runMinutes);
-            laserDamage = Mathf.Max(6f, def.ScaledAttackDamage(runMinutes) * 0.55f);
+            definition = def;
+            float scaled = def.ScaledAttackDamage(runMinutes);
+            slamDamage = scaled;
+            laserDamage = Mathf.Max(6f, scaled * 0.55f);
+            volleyDamage = Mathf.Max(7f, scaled * 0.65f);
+            if (def.projectileSpeed > 0.1f)
+            {
+                volleySpeed = def.projectileSpeed;
+            }
+
+            if (def.projectileLifetime > 0.1f)
+            {
+                volleyLifetime = def.projectileLifetime;
+            }
+
+            if (def.projectileRadius > 0.05f)
+            {
+                volleyRadius = def.projectileRadius;
+            }
+
+            if (def.projectileMaxDistance > 0.1f)
+            {
+                volleyRange = def.projectileMaxDistance;
+            }
+
+            if (waterBallPrefab == null)
+            {
+                waterBallPrefab = def.projectilePrefab;
+            }
 
             if (health != null)
             {
@@ -120,6 +178,7 @@ namespace KingsRescue.Enemies
             SetLaserVisible(false);
             BeginIntro();
             PlayBossMusic();
+            GameManager.Instance?.BeginBossFight();
         }
 
         private void Update()
@@ -139,16 +198,7 @@ namespace KingsRescue.Enemies
                     ClampToPlay();
                     if (Time.time >= phaseEnds)
                     {
-                        if (nextIsJump)
-                        {
-                            BeginJump();
-                        }
-                        else
-                        {
-                            BeginLaserWindup();
-                        }
-
-                        nextIsJump = !nextIsJump;
+                        ChooseNextAttack();
                     }
 
                     break;
@@ -166,6 +216,9 @@ namespace KingsRescue.Enemies
                     break;
                 case Phase.Laser:
                     TickLaser();
+                    break;
+                case Phase.Volley:
+                    TickVolley();
                     break;
             }
         }
@@ -220,6 +273,125 @@ namespace KingsRescue.Enemies
 
             HideMarker();
             SetLaserVisible(false);
+            SetAttackPose(false);
+        }
+
+        private void ChooseNextAttack()
+        {
+            if (nextIsVolley)
+            {
+                BeginVolley();
+            }
+            else if (nextSpecial == Special.Jump)
+            {
+                BeginJump();
+                nextSpecial = Special.Laser;
+            }
+            else
+            {
+                BeginLaserWindup();
+                nextSpecial = Special.Jump;
+            }
+
+            nextIsVolley = !nextIsVolley;
+        }
+
+        private void BeginVolley()
+        {
+            phase = Phase.Volley;
+            volleyThrown = false;
+            phaseEnds = Time.time + (volleyWindup > 0.05f ? volleyWindup : 0.35f);
+            SetMove(false);
+            SetContact(true);
+            SetVisible(true);
+            SetLaserVisible(false);
+            SetAttackPose(true);
+        }
+
+        private void TickVolley()
+        {
+            ClampToPlay();
+            if (!volleyThrown && Time.time >= phaseEnds)
+            {
+                ThrowWaterFan();
+                volleyThrown = true;
+                phaseEnds = Time.time + (volleyRecover > 0.05f ? volleyRecover : 0.4f);
+                return;
+            }
+
+            if (volleyThrown && Time.time >= phaseEnds)
+            {
+                SetAttackPose(false);
+                BeginIdle();
+            }
+        }
+
+        private void ThrowWaterFan()
+        {
+            GameObject prefab = waterBallPrefab != null
+                ? waterBallPrefab
+                : definition != null ? definition.projectilePrefab : null;
+            if (prefab == null)
+            {
+                return;
+            }
+
+            PoolManager pool = PoolManager.Instance;
+            if (pool == null)
+            {
+                return;
+            }
+
+            Vector2 origin = transform.position;
+            Vector2 toPlayer = CurrentPlayerPoint() - origin;
+            if (toPlayer.sqrMagnitude < 0.0001f)
+            {
+                toPlayer = Vector2.down;
+            }
+
+            int count = volleyCount > 0 ? volleyCount : 3;
+            float spread = volleySpread > 0.1f ? volleySpread : 18f;
+            float speed = volleySpeed > 0.1f ? volleySpeed : 7.5f;
+            float life = volleyLifetime > 0.1f ? volleyLifetime : 3.2f;
+            float radius = volleyRadius > 0.05f ? volleyRadius : 0.32f;
+            float range = volleyRange > 0.1f ? volleyRange : 8f;
+            float baseAngle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg;
+
+            for (int i = 0; i < count; i++)
+            {
+                float t = count <= 1 ? 0.5f : i / (float)(count - 1);
+                float offset = Mathf.Lerp(-spread * 0.5f, spread * 0.5f, t);
+                float angle = (baseAngle + offset) * Mathf.Deg2Rad;
+                Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+                HostileProjectile shot = pool.Spawn(prefab, origin, Quaternion.identity)
+                    ?.GetComponent<HostileProjectile>();
+                if (shot == null)
+                {
+                    Debug.LogError("Slime King water ball prefab is missing HostileProjectile.", prefab);
+                    return;
+                }
+
+                shot.Launch(
+                    direction,
+                    speed,
+                    volleyDamage,
+                    life,
+                    radius,
+                    1f,
+                    0f,
+                    false,
+                    gameObject,
+                    range);
+            }
+        }
+
+        private void SetAttackPose(bool attacking)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(AttackHash, attacking);
+            }
         }
 
         private void BeginJump()
