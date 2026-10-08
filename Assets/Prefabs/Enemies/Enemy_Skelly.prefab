@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5737741594478514764}
   - component: {fileID: 7623074706874594998}
   - component: {fileID: 2116222282787672219}
+  - component: {fileID: -8617848768113234428}
   m_Layer: 0
   m_Name: Enemy_Skelly
   m_TagString: Untagged
@@ -142,6 +143,7 @@ MonoBehaviour:
   chaseSlack: 1
   speedJitter: 0.12
   passedMargin: 0.35
+  chaseUpSpeedFactor: 0.5
 --- !u!114 &799069422361106090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,3 +227,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-8617848768113234428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7657488641991038239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials

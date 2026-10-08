@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 5656764622331797516}
   - component: {fileID: 666080593490010661}
   - component: {fileID: 460490812037920820}
+  - component: {fileID: -3154377011510424388}
   m_Layer: 0
   m_Name: Enemy_Exploder
   m_TagString: Untagged
@@ -240,3 +241,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemyDeathBurst
   playerRadius: 0.35
+--- !u!114 &-3154377011510424388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8309821208071821943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials

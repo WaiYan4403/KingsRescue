@@ -14,7 +14,46 @@ namespace KingsRescue.Data
         KeepDistance = 2,
 
         /// <summary>Always chase, including up-screen. Used by wolves.</summary>
-        Charge = 3
+        Charge = 3,
+
+        /// <summary>Circle the player, then periodically dive in.</summary>
+        Orbit = 4
+    }
+
+    [System.Flags]
+    public enum EnemyTrait
+    {
+        None = 0,
+        Lunge = 1 << 0,
+        LineCharge = 1 << 1,
+        Poison = 1 << 2,
+        FireTrail = 1 << 3,
+        IceSlow = 1 << 4,
+        Stealth = 1 << 5,
+        Summon = 1 << 6,
+        HealAllies = 1 << 7,
+        BuffAllies = 1 << 8,
+        Teleport = 1 << 9,
+        Lifesteal = 1 << 10,
+        FrontBlock = 1 << 11,
+        DropHazard = 1 << 12,
+        Mimic = 1 << 13
+    }
+
+    [System.Flags]
+    public enum BossKit
+    {
+        None = 0,
+        Slam = 1 << 0,
+        Volley = 1 << 1,
+        Summon = 1 << 2,
+        Charge = 1 << 3,
+        Teleport = 1 << 4,
+        Howl = 1 << 5,
+        Breath = 1 << 6,
+        Vanish = 1 << 7,
+        Zones = 1 << 8,
+        Enrage = 1 << 9
     }
 
     public enum EnemyAttackStyle
@@ -42,9 +81,18 @@ namespace KingsRescue.Data
         [Tooltip("Allowed to stay on the field during a boss fight (adds, meteors the boss summons). Regular waves will not spawn these.")]
         public bool bossMinion;
 
+        [Tooltip("Denser, named elite. Used by waves and the HUD kill feed.")]
+        public bool isElite;
+
         [Header("Visuals")]
         [Tooltip("Mirror the sprite when moving left. Turn off for art that is drawn facing a fixed direction.")]
         public bool canFlipSprite = true;
+
+        [Tooltip("Tint applied on spawn so variants can share a prefab.")]
+        public Color bodyTint = Color.white;
+
+        [Tooltip("Multiplier on the prefab's authored scale. 0 uses 1.")]
+        public float bodyScale = 1f;
 
         [Header("Combat")]
         public float maxHealth = 10f;
@@ -131,6 +179,28 @@ namespace KingsRescue.Data
 
         [Tooltip("Impact blast radius.")]
         public float meteorRadius = 1.15f;
+
+        [Header("Traits / Specials")]
+        public EnemyTrait traits;
+
+        [Tooltip("Ally to spawn for summoners and bosses.")]
+        public EnemyDefinition summonAlly;
+
+        [Tooltip("Extra summon table. Empty uses summonAlly only.")]
+        public EnemyDefinition[] summonAllies;
+
+        public int summonCount = 2;
+
+        [Tooltip("Seconds between lunges, heals, teleports, hazards, and other specials.")]
+        public float specialInterval = 3.6f;
+
+        [Tooltip("Reach for slams, heals, howls, and dropped zones.")]
+        public float specialRadius = 1.3f;
+
+        [Tooltip("Boss attack set. Ignored on regular enemies.")]
+        public BossKit bossKit;
+
+        public GameObject hazardPrefab;
 
         [Header("Death Burst")]
         [Tooltip("0 disables. Exploders pop for this much damage in a small radius.")]

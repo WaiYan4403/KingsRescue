@@ -125,15 +125,37 @@ namespace KingsRescue.Player
 
             if (Current <= 0f)
             {
-                if (GameMusicController.Instance != null)
-                {
-                    GameMusicController.Instance.SetGameOverMusic();
-                }
-
-                RestoreVisual();
-                PlayDeathAnimation();
-                Died?.Invoke();
+                DieFromDamage();
             }
+        }
+
+        /// <summary>Poison / standing in a zone. Does not grant i-frames.</summary>
+        public void ApplyDot(float amount)
+        {
+            if (!IsAlive || amount <= 0f)
+            {
+                return;
+            }
+
+            Current = Mathf.Max(0f, Current - amount);
+            HealthChanged?.Invoke(Current, Max);
+            SyncAnimatorHealth();
+            if (Current <= 0f)
+            {
+                DieFromDamage();
+            }
+        }
+
+        private void DieFromDamage()
+        {
+            if (GameMusicController.Instance != null)
+            {
+                GameMusicController.Instance.SetGameOverMusic();
+            }
+
+            RestoreVisual();
+            PlayDeathAnimation();
+            Died?.Invoke();
         }
 
         private bool TryRevive()

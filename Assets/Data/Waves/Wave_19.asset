@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_19
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: Warband
+  startTime: 975
+  duration: 50
+  spawnInterval: 0.85
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: 13e897c5aeb10e04c8fa47bb67672201, type: 2}
+    weight: 6
+  - enemy: {fileID: 11400000, guid: 9f33b883ea08a2a4fa44c177473faa8e, type: 2}
+    weight: 4
+  - enemy: {fileID: 11400000, guid: 3364a2f6ea47f4a68a3371c9db273c92, type: 2}
+    weight: 6
+  - enemy: {fileID: 11400000, guid: 0388d996a7d23e44287d586336993ceb, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 06c89008a6b7eb649af188a321d7482e, type: 2}
+    weight: 3
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: 13e897c5aeb10e04c8fa47bb67672201, type: 2}
+    count: 3
+    pattern: 0

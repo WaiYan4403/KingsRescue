@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_Hobgoblin
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Hobgoblin
+  prefab: {fileID: 244735591878693721, guid: 968a19308789644018e6435fc7803c17, type: 3}
+  isBoss: 0
+  bossMinion: 0
+  isElite: 0
+  canFlipSprite: 1
+  bodyTint: {r: 0.85, g: 0.45, b: 0.2, a: 1}
+  bodyScale: 1.25
+  maxHealth: 16
+  contactDamage: 9
+  contactInterval: 0.6
+  contactRadius: 0.48
+  dealsContactDamage: 1
+  moveStyle: 0
+  moveSpeed: 1.85
+  scrollInfluence: 0.6
+  turnResponsiveness: 6
+  followChance: 1
+  giveUpWhenPassedChance: 0.3
+  separationRadius: 1.3
+  separationStrength: 3.5
+  preferredDistance: 4.5
+  spawnAsFlock: 0
+  flockMin: 8
+  flockMax: 12
+  attackStyle: 0
+  projectilePrefab: {fileID: 0}
+  meteorDefinition: {fileID: 0}
+  attackInterval: 1.8
+  attackRange: 8
+  attackDamage: 8
+  projectileSpeed: 7
+  projectileLifetime: 3.5
+  projectileRadius: 0.28
+  projectileHoming: 0
+  projectileMaxDistance: 6.5
+  slowFactor: 0.45
+  slowDuration: 2.2
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  traits: 0
+  summonAlly: {fileID: 0}
+  summonAllies: []
+  summonCount: 2
+  specialInterval: 3.6
+  specialRadius: 1.3
+  bossKit: 0
+  hazardPrefab: {fileID: 0}
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
+  xpValue: 4
+  coinDropChance: 0.04
+  healthDropChance: 0.015
+  healthGrowthPerMinute: 0.35
+  damageGrowthPerMinute: 0.12

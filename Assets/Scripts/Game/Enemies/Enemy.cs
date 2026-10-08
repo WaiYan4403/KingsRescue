@@ -27,7 +27,12 @@ namespace KingsRescue.Enemies
         private MeteorStrike meteor;
         private EnemyDeathBurst deathBurst;
         private SlimeKingBoss slimeKing;
+        private EncounterBoss encounterBoss;
+        private EnemySpecials specials;
+        private HitFlash hitFlash;
+        private SpriteRenderer body;
         private OffscreenDespawner despawner;
+        private Vector3 baseScale = Vector3.one;
         private bool dying;
 
         public EnemyDefinition Definition => definition;
@@ -51,7 +56,12 @@ namespace KingsRescue.Enemies
             meteor = GetComponent<MeteorStrike>();
             deathBurst = GetComponent<EnemyDeathBurst>();
             slimeKing = GetComponent<SlimeKingBoss>();
+            encounterBoss = GetComponent<EncounterBoss>();
+            specials = GetComponent<EnemySpecials>();
+            hitFlash = GetComponent<HitFlash>();
+            body = GetComponent<SpriteRenderer>();
             despawner = GetComponent<OffscreenDespawner>();
+            baseScale = transform.localScale;
         }
 
         private void OnEnable()
@@ -111,6 +121,53 @@ namespace KingsRescue.Enemies
             }
 
             slimeKing?.Configure(def, runMinutes);
+            encounterBoss?.Configure(def, runMinutes);
+            ApplyVisual(def);
+            specials?.Configure(def, runMinutes);
+        }
+
+        public static Enemy SpawnConfigured(EnemyDefinition def, Vector2 position, float runMinutes)
+        {
+            if (def == null || def.prefab == null)
+            {
+                return null;
+            }
+
+            PoolManager pool = PoolManager.Instance;
+            if (pool == null)
+            {
+                return null;
+            }
+
+            GameObject instance = pool.Spawn(def.prefab, position, Quaternion.identity);
+            if (instance == null)
+            {
+                return null;
+            }
+
+            Enemy enemy = instance.GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                return null;
+            }
+
+            enemy.Configure(def, runMinutes);
+            return enemy;
+        }
+
+        private void ApplyVisual(EnemyDefinition def)
+        {
+            float scale = def.bodyScale > 0.05f ? def.bodyScale : 1f;
+            transform.localScale = new Vector3(baseScale.x * scale, baseScale.y * scale, baseScale.z);
+
+            Color tint = def.bodyTint.a > 0.05f ? def.bodyTint : Color.white;
+            if (body != null)
+            {
+                body.color = tint;
+            }
+
+            hitFlash?.SetBaseColor(tint);
+            specials?.ApplyVisual(tint);
         }
 
         public void SetSpawnHeading(Vector2 spawnPosition, SpawnPattern pattern)

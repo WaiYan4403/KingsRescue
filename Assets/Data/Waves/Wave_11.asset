@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_11
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: Vermin
+  startTime: 375
+  duration: 45
+  spawnInterval: 0.85
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: 877e8d1dc40dfb445a13bd6ff56670e8, type: 2}
+    weight: 10
+  - enemy: {fileID: 11400000, guid: 8f962fabd633d264895e2f4d9f272fd9, type: 2}
+    weight: 6
+  - enemy: {fileID: 11400000, guid: 078f85ddc6e99954db1053fed33c58fc, type: 2}
+    weight: 6
+  - enemy: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+    weight: 4
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: 877e8d1dc40dfb445a13bd6ff56670e8, type: 2}
+    count: 12
+    pattern: 6

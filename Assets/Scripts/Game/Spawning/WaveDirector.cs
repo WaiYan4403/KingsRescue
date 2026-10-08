@@ -45,10 +45,20 @@ namespace KingsRescue.Spawning
         [Tooltip("Seconds into the run when Slime King walks in.")]
         [SerializeField] private float firstBossTime = 120f;
 
+        [SerializeField] private BossAppointment[] bosses = System.Array.Empty<BossAppointment>();
+
         private readonly List<WaveState> states = new List<WaveState>();
         private readonly List<PendingSpawn> pending = new List<PendingSpawn>(32);
         private int spawnedThisFrame;
         private bool firstBossSpawned;
+        private int nextBossIndex;
+
+        [System.Serializable]
+        private struct BossAppointment
+        {
+            public EnemyDefinition boss;
+            public float atTime;
+        }
 
         public int AliveCount => Enemy.Active.Count;
 
@@ -91,7 +101,7 @@ namespace KingsRescue.Spawning
             float runTime = game.RunTime;
             float runMinutes = runTime / 60f;
 
-            TrySpawnFirstBoss(runTime, runMinutes);
+            TrySpawnScheduledBoss(runTime, runMinutes);
 
             if (game.BossFightActive)
             {
@@ -175,11 +185,40 @@ namespace KingsRescue.Spawning
             }
         }
 
-        private void TrySpawnFirstBoss(float runTime, float runMinutes)
+        private void TrySpawnScheduledBoss(float runTime, float runMinutes)
         {
-            if (firstBossSpawned || firstBoss == null || firstBoss.prefab == null || runTime < firstBossTime)
+            GameManager game = GameManager.Instance;
+            if (game != null && game.BossFightActive)
             {
                 return;
+            }
+
+            EnemyDefinition boss;
+            if (bosses != null && bosses.Length > 0)
+            {
+                if (nextBossIndex >= bosses.Length)
+                {
+                    return;
+                }
+
+                BossAppointment next = bosses[nextBossIndex];
+                if (next.boss == null || next.boss.prefab == null || runTime < next.atTime)
+                {
+                    return;
+                }
+
+                boss = next.boss;
+                nextBossIndex++;
+            }
+            else
+            {
+                if (firstBossSpawned || firstBoss == null || firstBoss.prefab == null || runTime < firstBossTime)
+                {
+                    return;
+                }
+
+                boss = firstBoss;
+                firstBossSpawned = true;
             }
 
             ArenaBounds bounds = ArenaBounds.Instance;
@@ -189,9 +228,8 @@ namespace KingsRescue.Spawning
             }
 
             Vector2 position = new Vector2(bounds.WorldRect.center.x, bounds.TopSpawnY);
-            SpawnImmediate(firstBoss, position, runMinutes, SpawnPattern.TopRandom);
-            firstBossSpawned = true;
-            GameManager.Instance?.BeginBossFight();
+            SpawnImmediate(boss, position, runMinutes, SpawnPattern.TopRandom);
+            game?.BeginBossFight();
         }
 
         private bool AllAuthoredWavesFinished(float runTime)

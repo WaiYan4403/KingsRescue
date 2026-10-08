@@ -41,6 +41,11 @@ namespace KingsRescue.Enemies
         private Vector2 lockedHeading = Vector2.down;
         private EnemyMoveStyle moveStyle = EnemyMoveStyle.Chase;
         private bool canFlipSprite;
+        private float hasteUntil;
+        private float hasteMult = 1f;
+        private float dashUntil;
+        private Vector2 dashVelocity;
+        private bool halted;
 
         private void Awake()
         {
@@ -50,11 +55,17 @@ namespace KingsRescue.Enemies
             }
         }
 
+        public bool FacingLeft => spriteRenderer != null && spriteRenderer.flipX;
+
         public void OnSpawned()
         {
             cruiseVelocity = Vector2.zero;
             lockedHeading = Vector2.down;
             jitterFactor = 1f + Random.Range(-speedJitter, speedJitter);
+            hasteUntil = 0f;
+            hasteMult = 1f;
+            dashUntil = 0f;
+            halted = false;
             RollFollowRole();
         }
 
@@ -95,11 +106,45 @@ namespace KingsRescue.Enemies
                 tracksPlayer = false;
                 jitterFactor = 1f;
             }
-            else if (moveStyle == EnemyMoveStyle.KeepDistance)
+            else if (moveStyle == EnemyMoveStyle.KeepDistance || moveStyle == EnemyMoveStyle.Orbit)
             {
                 tracksPlayer = true;
                 givesUpWhenPassed = false;
             }
+        }
+
+        public void ApplyHaste(float multiplier, float duration)
+        {
+            hasteMult = Mathf.Max(1f, multiplier);
+            hasteUntil = Time.time + Mathf.Max(0.1f, duration);
+        }
+
+        public void SetHalted(bool value)
+        {
+            halted = value;
+        }
+
+        public void SetMimicSleeping(bool sleeping)
+        {
+            if (sleeping)
+            {
+                tracksPlayer = false;
+                halted = true;
+            }
+        }
+
+        public void WakeMimic()
+        {
+            halted = false;
+            tracksPlayer = true;
+            givesUpWhenPassed = false;
+        }
+
+        public void Dash(Vector2 velocity, float duration)
+        {
+            dashVelocity = velocity;
+            dashUntil = Time.time + Mathf.Max(0.05f, duration);
+            halted = false;
         }
 
         public void SetLockedHeading(Vector2 heading)
@@ -172,18 +217,31 @@ namespace KingsRescue.Enemies
             ArenaBounds bounds = ArenaBounds.Instance;
             bool onScreen = bounds == null || bounds.IsOnScreen(position, chaseSlack);
 
-            Vector2 desired = Vector2.zero;
-            if (moveStyle == EnemyMoveStyle.Straight)
+            if (halted && Time.time >= dashUntil)
             {
-                desired = lockedHeading * (moveSpeed * jitterFactor);
+                Vector2 holdScroll = Vector2.down * (ScrollDirector.Speed * scrollInfluence);
+                transform.position = position + holdScroll * dt;
+                return;
+            }
+
+            float speedScale = Time.time < hasteUntil ? hasteMult : 1f;
+            Vector2 desired = Vector2.zero;
+            if (Time.time < dashUntil)
+            {
+                desired = dashVelocity;
+                cruiseVelocity = dashVelocity;
+            }
+            else if (moveStyle == EnemyMoveStyle.Straight)
+            {
+                desired = lockedHeading * (moveSpeed * jitterFactor * speedScale);
             }
             else if (onScreen)
             {
-                desired = BuildDesiredCruise(position);
+                desired = BuildDesiredCruise(position) * speedScale;
             }
             else
             {
-                desired = EnterFromOffscreen(position);
+                desired = EnterFromOffscreen(position) * speedScale;
             }
 
             cruiseVelocity = Vector2.Lerp(cruiseVelocity, desired, 1f - Mathf.Exp(-responsiveness * dt));
@@ -243,6 +301,11 @@ namespace KingsRescue.Enemies
                 return KeepDistanceCruise(position, player.position, speed);
             }
 
+            if (moveStyle == EnemyMoveStyle.Orbit)
+            {
+                return OrbitCruise(position, player.position, speed);
+            }
+
             if (!tracksPlayer)
             {
                 return cruise;
@@ -281,6 +344,27 @@ namespace KingsRescue.Enemies
             float error = distance - preferredDistance;
             Vector2 tangent = new Vector2(-radial.y, radial.x);
             Vector2 steer = radial * Mathf.Clamp(error, -1.5f, 1.5f) + tangent * 0.45f;
+            if (steer.sqrMagnitude < 0.0001f)
+            {
+                return Vector2.zero;
+            }
+
+            return steer.normalized * speed;
+        }
+
+        private Vector2 OrbitCruise(Vector2 position, Vector2 player, float speed)
+        {
+            Vector2 toPlayer = player - position;
+            float distance = toPlayer.magnitude;
+            if (distance < 0.001f)
+            {
+                return Vector2.down * speed;
+            }
+
+            Vector2 radial = toPlayer / distance;
+            Vector2 tangent = new Vector2(-radial.y, radial.x);
+            float error = distance - preferredDistance;
+            Vector2 steer = tangent * 1.1f - radial * Mathf.Clamp(error, -1.2f, 1.2f);
             if (steer.sqrMagnitude < 0.0001f)
             {
                 return Vector2.zero;

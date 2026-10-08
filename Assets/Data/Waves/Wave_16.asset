@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_16
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: Knights
+  startTime: 615
+  duration: 50
+  spawnInterval: 0.9
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: 4f9de70f10a9f2648ba4397b36fa54ce, type: 2}
+    weight: 6
+  - enemy: {fileID: 11400000, guid: 8fc367ea1ddea36478cf6c63fb56c824, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 45e403ce165030c429c06e0f24c533bf, type: 2}
+    weight: 4
+  - enemy: {fileID: 11400000, guid: 28cf1e3f19c2984419d3241dd29c24d1, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 0388d996a7d23e44287d586336993ceb, type: 2}
+    weight: 5
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: 45e403ce165030c429c06e0f24c533bf, type: 2}
+    count: 4
+    pattern: 0

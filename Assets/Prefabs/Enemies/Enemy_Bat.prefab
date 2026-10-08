@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 1472835086523026725}
   - component: {fileID: 3467397947849538487}
   - component: {fileID: 1180032344789627110}
+  - component: {fileID: 4573905507089181888}
   m_Layer: 0
   m_Name: Enemy_Bat
   m_TagString: Untagged
@@ -226,3 +227,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4573905507089181888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3371409198316295035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials

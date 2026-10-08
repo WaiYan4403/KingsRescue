@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_20
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: Plague
+  startTime: 1095
+  duration: 50
+  spawnInterval: 0.8
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: bfd66ebd851491a48a97dc8963a8f83a, type: 2}
+    weight: 8
+  - enemy: {fileID: 11400000, guid: 996dd3529023faa4a839bacf4debe122, type: 2}
+    weight: 6
+  - enemy: {fileID: 11400000, guid: 787aac760a2e6374c9651db3925210a0, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 51910eca388cda94284163764c58f921, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 877e8d1dc40dfb445a13bd6ff56670e8, type: 2}
+    weight: 5
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: bfd66ebd851491a48a97dc8963a8f83a, type: 2}
+    count: 8
+    pattern: 6

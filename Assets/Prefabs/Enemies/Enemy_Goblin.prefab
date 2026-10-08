@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5109769772488578186}
   - component: {fileID: 2130342570436560908}
   - component: {fileID: 3341479050779100669}
+  - component: {fileID: 178208963252371957}
   m_Layer: 0
   m_Name: Enemy_Goblin
   m_TagString: Untagged
@@ -142,6 +143,7 @@ MonoBehaviour:
   chaseSlack: 1
   speedJitter: 0.12
   passedMargin: 0.35
+  chaseUpSpeedFactor: 0.5
 --- !u!114 &4033775165777055513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,3 +227,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &178208963252371957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244735591878693721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials

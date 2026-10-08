@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using KingsRescue.Combat;
 using KingsRescue.Core;
@@ -20,6 +21,8 @@ namespace KingsRescue.Enemies
         [SerializeField] private float playerRadius = 0.35f;
 
         private float nextHitTime;
+
+        public event Action HitPlayer;
 
         public void OnSpawned()
         {
@@ -76,6 +79,7 @@ namespace KingsRescue.Enemies
             Vector2 direction = delta.sqrMagnitude > 0.0001f ? delta.normalized : Vector2.up;
             health.TakeDamage(new DamageInfo(damage, player.transform.position, direction, 0f, gameObject));
             nextHitTime = Time.time + interval;
+            HitPlayer?.Invoke();
         }
 
         private void OnDrawGizmosSelected()

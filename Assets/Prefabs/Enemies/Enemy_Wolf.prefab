@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 8953949050530671418}
   - component: {fileID: 589904640524559919}
   - component: {fileID: 5725193039799451667}
+  - component: {fileID: 1067925593691494997}
   m_Layer: 0
   m_Name: Enemy_Wolf
   m_TagString: Untagged
@@ -226,3 +227,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1067925593691494997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4720918016224897111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials

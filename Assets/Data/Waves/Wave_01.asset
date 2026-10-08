@@ -21,4 +21,6 @@ MonoBehaviour:
   enemies:
   - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
     weight: 10
+  - enemy: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+    weight: 5
   bursts: []

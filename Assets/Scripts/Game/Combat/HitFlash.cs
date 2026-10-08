@@ -51,6 +51,15 @@ namespace KingsRescue.Combat
             Restore();
         }
 
+        public void SetBaseColor(Color color)
+        {
+            originalColor = color;
+            if (routine == null && target != null)
+            {
+                target.color = color;
+            }
+        }
+
         public void OnSpawned()
         {
             Restore();

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_17
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: Wildwood
+  startTime: 735
+  duration: 50
+  spawnInterval: 0.9
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: d90eb2e0d3398e8448b90038fc81c935, type: 2}
+    weight: 6
+  - enemy: {fileID: 11400000, guid: f851575b3120e21448792d3632def650, type: 2}
+    weight: 4
+  - enemy: {fileID: 11400000, guid: c45acf3d499fd114898e13bca725bb67, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 787f2c0fe79da7247901eab0c6845cb3, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 6f971f1def1b4ef4dba03d2d5c411964, type: 2}
+    weight: 3
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: f851575b3120e21448792d3632def650, type: 2}
+    count: 2
+    pattern: 0

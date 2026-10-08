@@ -20,27 +20,41 @@ MonoBehaviour:
   pattern: 0
   enemies:
   - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
-    weight: 10
+    weight: 8
   - enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
-    weight: 5
+    weight: 4
   - enemy: {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
-    weight: 7
-  - enemy: {fileID: 11400000, guid: 6a9c470dde3195249a363888da2d3e1e, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
     weight: 4
-  - enemy: {fileID: 11400000, guid: 3364a2f6ea47f4a68a3371c9db273c92, type: 2}
+  - enemy: {fileID: 11400000, guid: 4f9de70f10a9f2648ba4397b36fa54ce, type: 2}
     weight: 4
-  - enemy: {fileID: 11400000, guid: 5a51234f69da0bf4093fd1330267856c, type: 2}
+  - enemy: {fileID: 11400000, guid: 877e8d1dc40dfb445a13bd6ff56670e8, type: 2}
     weight: 5
-  - enemy: {fileID: 11400000, guid: 7388b129eeedb234696e658c98938525, type: 2}
-    weight: 5
-  - enemy: {fileID: 11400000, guid: 2e2cec80d33ea2545a403595083dda63, type: 2}
-    weight: 5
-  - enemy: {fileID: 11400000, guid: d448ec731ce1cd74d91f7aaa34a91106, type: 2}
+  - enemy: {fileID: 11400000, guid: 996dd3529023faa4a839bacf4debe122, type: 2}
+    weight: 4
+  - enemy: {fileID: 11400000, guid: 7a46845844d0e9748be9be4886ed4600, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 65b46454bf7480b4995b21d31c37f846, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 792018338bd42014989eb2829b820823, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: a4310835d8489534b909e174fb57a385, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 13e897c5aeb10e04c8fa47bb67672201, type: 2}
+    weight: 2
+  - enemy: {fileID: 11400000, guid: bfd66ebd851491a48a97dc8963a8f83a, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 0388d996a7d23e44287d586336993ceb, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 266ae57f8b250784a915d55dc7e68925, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 5a4e7a1dca3456642984e0a8b79d270c, type: 2}
+    weight: 3
+  - enemy: {fileID: 11400000, guid: 5a986b5ed7f34fd4d84dfe1faf47018d, type: 2}
     weight: 3
   - enemy: {fileID: 11400000, guid: af6a0952e0fd7334cb17af75c19b57ee, type: 2}
     weight: 3
-  - enemy: {fileID: 11400000, guid: f6ef13195f67b412d90bb6eb4e0697be, type: 2}
+  - enemy: {fileID: 11400000, guid: 3364a2f6ea47f4a68a3371c9db273c92, type: 2}
     weight: 3
-  - enemy: {fileID: 11400000, guid: 7e309ae67654bd14581eac427c9a073c, type: 2}
-    weight: 6
   bursts: []

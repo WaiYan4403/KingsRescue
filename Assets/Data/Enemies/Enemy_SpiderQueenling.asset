@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_SpiderQueenling
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Spider Queenling
+  prefab: {fileID: 4860159253479769756, guid: 2fbf6070f9e7cdf4cbd24e8214400639, type: 3}
+  isBoss: 0
+  bossMinion: 0
+  isElite: 1
+  canFlipSprite: 1
+  bodyTint: {r: 0.45, g: 0.1, b: 0.15, a: 1}
+  bodyScale: 1.3
+  maxHealth: 20
+  contactDamage: 7
+  contactInterval: 0.7
+  contactRadius: 0.5
+  dealsContactDamage: 1
+  moveStyle: 2
+  moveSpeed: 1.9
+  scrollInfluence: 0.35
+  turnResponsiveness: 7
+  followChance: 1
+  giveUpWhenPassedChance: 0.3
+  separationRadius: 1.1
+  separationStrength: 2.5
+  preferredDistance: 4.2
+  spawnAsFlock: 0
+  flockMin: 8
+  flockMax: 12
+  attackStyle: 2
+  projectilePrefab: {fileID: 7342546010400522602, guid: 986222dfc11d3c44ebfb6215259f5530, type: 3}
+  meteorDefinition: {fileID: 0}
+  attackInterval: 2.4
+  attackRange: 6
+  attackDamage: 3
+  projectileSpeed: 6.5
+  projectileLifetime: 2.8
+  projectileRadius: 0.34
+  projectileHoming: 0
+  projectileMaxDistance: 6.5
+  slowFactor: 0.42
+  slowDuration: 2.4
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  traits: 64
+  summonAlly: {fileID: 11400000, guid: 7388b129eeedb234696e658c98938525, type: 2}
+  summonAllies: []
+  summonCount: 3
+  specialInterval: 6
+  specialRadius: 2.4
+  bossKit: 0
+  hazardPrefab: {fileID: 0}
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
+  xpValue: 12
+  coinDropChance: 0.06
+  healthDropChance: 0.015
+  healthGrowthPerMinute: 0.35
+  damageGrowthPerMinute: 0.12

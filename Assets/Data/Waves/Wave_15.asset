@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_15
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: Occult
+  startTime: 555
+  duration: 45
+  spawnInterval: 0.95
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: 8933abf04f52f0e408d7adea9191e2a6, type: 2}
+    weight: 7
+  - enemy: {fileID: 11400000, guid: 792018338bd42014989eb2829b820823, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 2c3d254834c8ec042811619a575c605f, type: 2}
+    weight: 4
+  - enemy: {fileID: 11400000, guid: 5a986b5ed7f34fd4d84dfe1faf47018d, type: 2}
+    weight: 6
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: 792018338bd42014989eb2829b820823, type: 2}
+    count: 3
+    pattern: 7

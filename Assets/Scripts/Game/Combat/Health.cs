@@ -30,6 +30,11 @@ namespace KingsRescue.Combat
         /// <summary>When true, weapons skip this body (jump / vanish windows).</summary>
         public bool Untargetable { get; set; }
 
+        /// <summary>Shield goblins: most of a hit from the facing side is ignored.</summary>
+        public bool BlocksFrontal { get; set; }
+
+        public bool FacingLeft { get; set; }
+
         /// <summary>Raised whenever damage lands and the target survives it.</summary>
         public event Action<Health, DamageInfo> Damaged;
 
@@ -55,6 +60,7 @@ namespace KingsRescue.Combat
         {
             Current = maxHealth;
             Untargetable = false;
+            BlocksFrontal = false;
         }
 
         public void OnDespawned()
@@ -75,7 +81,13 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            Current = Mathf.Max(0f, Current - info.Amount);
+            float amount = info.Amount;
+            if (BlocksFrontal && IsFrontal(info.Direction))
+            {
+                amount *= 0.22f;
+            }
+
+            Current = Mathf.Max(0f, Current - amount);
 
             if (Current > 0f)
             {
@@ -94,6 +106,17 @@ namespace KingsRescue.Combat
             }
 
             Current = Mathf.Min(maxHealth, Current + amount);
+        }
+
+        private bool IsFrontal(Vector2 incoming)
+        {
+            if (Mathf.Abs(incoming.x) < 0.12f)
+            {
+                return false;
+            }
+
+            bool fromLeft = incoming.x > 0f;
+            return FacingLeft ? fromLeft : !fromLeft;
         }
     }
 }

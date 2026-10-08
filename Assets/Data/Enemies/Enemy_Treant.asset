@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_Treant
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Treant
+  prefab: {fileID: 244735591878693721, guid: 968a19308789644018e6435fc7803c17, type: 3}
+  isBoss: 0
+  bossMinion: 0
+  isElite: 1
+  canFlipSprite: 1
+  bodyTint: {r: 0.25, g: 0.5, b: 0.2, a: 1}
+  bodyScale: 1.5
+  maxHealth: 28
+  contactDamage: 6
+  contactInterval: 0.8
+  contactRadius: 0.65
+  dealsContactDamage: 1
+  moveStyle: 2
+  moveSpeed: 1.1
+  scrollInfluence: 0.5
+  turnResponsiveness: 5.5
+  followChance: 1
+  giveUpWhenPassedChance: 0.3
+  separationRadius: 1.4
+  separationStrength: 2.8
+  preferredDistance: 4.6
+  spawnAsFlock: 0
+  flockMin: 8
+  flockMax: 12
+  attackStyle: 2
+  projectilePrefab: {fileID: 7342546010400522602, guid: 986222dfc11d3c44ebfb6215259f5530, type: 3}
+  meteorDefinition: {fileID: 0}
+  attackInterval: 2.8
+  attackRange: 7.5
+  attackDamage: 5
+  projectileSpeed: 5.5
+  projectileLifetime: 3.2
+  projectileRadius: 0.22
+  projectileHoming: 0
+  projectileMaxDistance: 7
+  slowFactor: 0.45
+  slowDuration: 2.2
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  traits: 0
+  summonAlly: {fileID: 0}
+  summonAllies: []
+  summonCount: 2
+  specialInterval: 3.6
+  specialRadius: 1.3
+  bossKit: 0
+  hazardPrefab: {fileID: 0}
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
+  xpValue: 10
+  coinDropChance: 0.07
+  healthDropChance: 0.02
+  healthGrowthPerMinute: 0.35
+  damageGrowthPerMinute: 0.12

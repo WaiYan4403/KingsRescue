@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4830e03ca197d46a1ad0e78025dde382, type: 3}
+  m_Name: Wave_18
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WaveDefinition
+  label: Sky terror
+  startTime: 855
+  duration: 50
+  spawnInterval: 0.85
+  spawnsPerTick: 2
+  pattern: 0
+  enemies:
+  - enemy: {fileID: 11400000, guid: a4310835d8489534b909e174fb57a385, type: 2}
+    weight: 7
+  - enemy: {fileID: 11400000, guid: c2e52d29ace4b954c8308e0e5c1470c9, type: 2}
+    weight: 4
+  - enemy: {fileID: 11400000, guid: 40c79a77adadaf24ebd9ffe46b9328d8, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: 8f962fabd633d264895e2f4d9f272fd9, type: 2}
+    weight: 5
+  - enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+    weight: 4
+  bursts:
+  - atTime: 12
+    enemy: {fileID: 11400000, guid: a4310835d8489534b909e174fb57a385, type: 2}
+    count: 4
+    pattern: 7
