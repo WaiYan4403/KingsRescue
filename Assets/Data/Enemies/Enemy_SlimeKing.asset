@@ -17,7 +17,7 @@ MonoBehaviour:
   isBoss: 1
   bossMinion: 0
   canFlipSprite: 0
-  maxHealth: 3000
+  maxHealth: 2000
   contactDamage: 12
   contactInterval: 0.55
   contactRadius: 0.95
@@ -35,20 +35,20 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
   meteorDefinition: {fileID: 0}
   attackInterval: 1.8
-  attackRange: 8
+  attackRange: 15
   attackDamage: 18
   projectileSpeed: 7.5
   projectileLifetime: 3.2
   projectileRadius: 0.34
   projectileHoming: 0
-  projectileMaxDistance: 8
-  slowFactor: 0.45
+  projectileMaxDistance: 20
+  slowFactor: 0.5
   slowDuration: 2.2
   meteorWarning: 1.1
   meteorRadius: 1.15
   deathBurstDamage: 0
   deathBurstRadius: 1.4
-  xpValue: 25
+  xpValue: 50
   coinDropChance: 1
   healthDropChance: 0.4
   healthGrowthPerMinute: 0.12

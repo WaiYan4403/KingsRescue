@@ -7,8 +7,9 @@ using KingsRescue.Player;
 namespace KingsRescue.Enemies
 {
     /// <summary>
-    /// First boss. Common attack is a three-ball water fan like the Archer.
-    /// Specials are a vanish-slam and a rotating water beam.
+    /// First boss. Water balls and the laser are used from the top of the road:
+    /// a repeating forward volley, then a beam that starts on center and commits left or right.
+    /// The vanish-slam is the close-range special.
     /// </summary>
     public class SlimeKingBoss : MonoBehaviour, IPoolable
     {
@@ -42,6 +43,9 @@ namespace KingsRescue.Enemies
         [SerializeField] private float jumpLockLead = 0.4f;
         [SerializeField] private float laserWindup = 0.4f;
         [SerializeField] private float laserDuration = 3.1f;
+        [SerializeField] private float perchMoveTime = 0.45f;
+        [Tooltip("How far below the top of the play area the king stands for volley and laser.")]
+        [SerializeField] private float perchTopPadding = 1.8f;
 
         [Header("Slam")]
         [SerializeField] private float slamRadius = 1.5f;
@@ -51,6 +55,7 @@ namespace KingsRescue.Enemies
         [SerializeField] private float laserLength = 7.5f;
         [SerializeField] private float laserWidth = 0.55f;
         [SerializeField] private float laserRotateSpeed = 52f;
+        [SerializeField] private float laserSweepArc = 140f;
         [SerializeField] private float laserDamage = 9f;
         [SerializeField] private float laserTick = 0.28f;
 
@@ -59,6 +64,8 @@ namespace KingsRescue.Enemies
         [SerializeField] private int volleyCount = 3;
         [SerializeField] private float volleySpread = 18f;
         [SerializeField] private float volleyWindup = 0.35f;
+        [SerializeField] private int volleyBursts = 3;
+        [SerializeField] private float volleyCooldown = 0.7f;
         [SerializeField] private float volleyRecover = 0.4f;
         [SerializeField] private float volleyDamage = 10f;
         [SerializeField] private float volleySpeed = 7.5f;
@@ -77,14 +84,21 @@ namespace KingsRescue.Enemies
         private bool slamLocked;
         private bool nextIsVolley = true;
         private Special nextSpecial = Special.Jump;
-        private bool volleyThrown;
+        private int volleysFired;
+        private bool perched;
         private float nextLaserTick;
-        private float rotateSign = 1f;
+        private float laserFromAngle;
+        private float laserToAngle;
+        private float laserSweepStarted;
+        private Vector2 perchFrom;
+        private Vector2 perchTo;
+        private float perchStarted;
         private bool musicOn;
         private float introFromY;
         private float introToY;
         private float introStarted;
         private static readonly int AttackHash = Animator.StringToHash("Attack1");
+        private const float DownAngle = -180f;
 
         private void Awake()
         {
@@ -104,7 +118,8 @@ namespace KingsRescue.Enemies
             musicOn = false;
             nextIsVolley = true;
             nextSpecial = Special.Jump;
-            volleyThrown = false;
+            volleysFired = 0;
+            perched = false;
             HideMarker();
             SetLaserVisible(false);
             SetAttackPose(false);
@@ -206,13 +221,7 @@ namespace KingsRescue.Enemies
                     TickJump();
                     break;
                 case Phase.LaserWindup:
-                    ClampToPlay();
-                    PulseLaser(0.35f);
-                    if (Time.time >= phaseEnds)
-                    {
-                        BeginLaser();
-                    }
-
+                    TickLaserWindup();
                     break;
                 case Phase.Laser:
                     TickLaser();
@@ -225,7 +234,7 @@ namespace KingsRescue.Enemies
 
         private void LateUpdate()
         {
-            if (phase == Phase.JumpAir)
+            if (phase == Phase.JumpAir || phase == Phase.Volley || phase == Phase.LaserWindup || phase == Phase.Laser)
             {
                 return;
             }
@@ -299,8 +308,9 @@ namespace KingsRescue.Enemies
         private void BeginVolley()
         {
             phase = Phase.Volley;
-            volleyThrown = false;
-            phaseEnds = Time.time + (volleyWindup > 0.05f ? volleyWindup : 0.35f);
+            volleysFired = 0;
+            perched = false;
+            StartPerchMove();
             SetMove(false);
             SetContact(true);
             SetVisible(true);
@@ -310,20 +320,40 @@ namespace KingsRescue.Enemies
 
         private void TickVolley()
         {
-            ClampToPlay();
-            if (!volleyThrown && Time.time >= phaseEnds)
+            if (!perched)
+            {
+                if (!TickPerchMove())
+                {
+                    return;
+                }
+
+                perched = true;
+                phaseEnds = Time.time + (volleyWindup > 0.05f ? volleyWindup : 0.35f);
+                return;
+            }
+
+            if (Time.time < phaseEnds)
+            {
+                return;
+            }
+
+            int bursts = volleyBursts > 0 ? volleyBursts : 3;
+            if (volleysFired < bursts)
             {
                 ThrowWaterFan();
-                volleyThrown = true;
+                volleysFired++;
+                if (volleysFired < bursts)
+                {
+                    phaseEnds = Time.time + (volleyCooldown > 0.05f ? volleyCooldown : 0.7f);
+                    return;
+                }
+
                 phaseEnds = Time.time + (volleyRecover > 0.05f ? volleyRecover : 0.4f);
                 return;
             }
 
-            if (volleyThrown && Time.time >= phaseEnds)
-            {
-                SetAttackPose(false);
-                BeginIdle();
-            }
+            SetAttackPose(false);
+            BeginIdle();
         }
 
         private void ThrowWaterFan()
@@ -342,26 +372,21 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            Vector2 origin = transform.position;
-            Vector2 toPlayer = CurrentPlayerPoint() - origin;
-            if (toPlayer.sqrMagnitude < 0.0001f)
-            {
-                toPlayer = Vector2.down;
-            }
-
+            Vector2 origin = laserPivot != null ? (Vector2)laserPivot.position : (Vector2)transform.position;
             int count = volleyCount > 0 ? volleyCount : 3;
-            float spread = volleySpread > 0.1f ? volleySpread : 18f;
+            float spread = volleySpread > 0.1f ? volleySpread : 40f;
             float speed = volleySpeed > 0.1f ? volleySpeed : 7.5f;
             float life = volleyLifetime > 0.1f ? volleyLifetime : 3.2f;
             float radius = volleyRadius > 0.05f ? volleyRadius : 0.32f;
-            float range = volleyRange > 0.1f ? volleyRange : 8f;
-            float baseAngle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg;
+            float range = volleyRange > 0.1f ? volleyRange : 12f;
+            // Straight down the road, then fanned left/right like the Archer volley.
+            const float forwardAngle = -90f;
 
             for (int i = 0; i < count; i++)
             {
                 float t = count <= 1 ? 0.5f : i / (float)(count - 1);
                 float offset = Mathf.Lerp(-spread * 0.5f, spread * 0.5f, t);
-                float angle = (baseAngle + offset) * Mathf.Deg2Rad;
+                float angle = (forwardAngle + offset) * Mathf.Deg2Rad;
                 Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
                 HostileProjectile shot = pool.Spawn(prefab, origin, Quaternion.identity)
@@ -466,38 +491,85 @@ namespace KingsRescue.Enemies
         private void BeginLaserWindup()
         {
             phase = Phase.LaserWindup;
-            phaseEnds = Time.time + laserWindup;
+            perched = false;
+            StartPerchMove();
             SetMove(false);
             SetContact(true);
-            AimLaserAtPlayer();
-            rotateSign = Random.value < 0.5f ? -1f : 1f;
-            LayoutLaser();
-            SetLaserVisible(true);
-            PulseLaser(0.35f);
+            SetVisible(true);
+            SetAttackPose(true);
+            SetLaserVisible(false);
         }
 
         private void BeginLaser()
         {
             phase = Phase.Laser;
-            phaseEnds = Time.time + laserDuration;
+            laserSweepStarted = Time.time;
+            phaseEnds = Time.time + (laserDuration > 0.2f ? laserDuration : 3.1f);
             nextLaserTick = 0f;
+            ChooseLaserDirection();
+            ApplyLaserAngle(laserFromAngle);
             PulseLaser(0.92f);
+        }
+
+        private void TickLaserWindup()
+        {
+            if (!perched)
+            {
+                if (!TickPerchMove())
+                {
+                    return;
+                }
+
+                perched = true;
+                laserFromAngle = DownAngle;
+                laserToAngle = DownAngle;
+                LayoutLaser();
+                SetLaserVisible(true);
+                ApplyLaserAngle(DownAngle);
+                PulseLaser(0.35f);
+                phaseEnds = Time.time + (laserWindup > 0.05f ? laserWindup : 0.65f);
+                return;
+            }
+
+            ApplyLaserAngle(DownAngle);
+            PulseLaser(0.35f);
+            if (Time.time >= phaseEnds)
+            {
+                BeginLaser();
+            }
         }
 
         private void TickLaser()
         {
-            if (laserPivot != null)
-            {
-                laserPivot.Rotate(0f, 0f, rotateSign * laserRotateSpeed * Time.deltaTime);
-            }
-
+            float duration = laserDuration > 0.2f ? laserDuration : 3.1f;
+            float t = Mathf.Clamp01((Time.time - laserSweepStarted) / duration);
+            ApplyLaserAngle(Mathf.Lerp(laserFromAngle, laserToAngle, t));
             PulseLaser(0.75f + 0.2f * Mathf.Abs(Mathf.Sin(Time.time * 14f)));
             TryLaserHit();
 
-            if (Time.time >= phaseEnds)
+            if (t >= 1f)
             {
                 SetLaserVisible(false);
+                SetAttackPose(false);
                 BeginIdle();
+            }
+        }
+
+        private void ChooseLaserDirection()
+        {
+            // Pivot.up is the beam. -180 is straight down the center of the road.
+            // Commit to only one side so the other half of the field stays safe.
+            float arc = laserSweepArc > 1f ? laserSweepArc : 70f;
+            bool goRight = Random.value < 0.5f;
+            laserFromAngle = DownAngle;
+            laserToAngle = DownAngle + (goRight ? arc : -arc);
+        }
+
+        private void ApplyLaserAngle(float zDegrees)
+        {
+            if (laserPivot != null)
+            {
+                laserPivot.rotation = Quaternion.Euler(0f, 0f, zDegrees);
             }
         }
 
@@ -515,8 +587,8 @@ namespace KingsRescue.Enemies
             }
 
             Vector2 origin = transform.position;
-            Vector2 beamDir = laserPivot != null ? (Vector2)laserPivot.up : Vector2.up;
-            Vector2 end = origin + beamDir * laserLength;
+            Vector2 beamDir = laserPivot != null ? (Vector2)laserPivot.up : Vector2.down;
+            Vector2 end = origin + beamDir * ResolvedLaserLength();
             Vector2 closest = ClosestOnSegment(origin, end, player.transform.position);
             float reach = (laserWidth * 0.5f) + playerRadius;
             Vector2 delta = (Vector2)player.transform.position - closest;
@@ -530,26 +602,6 @@ namespace KingsRescue.Enemies
             nextLaserTick = Time.time + laserTick;
         }
 
-        private void AimLaserAtPlayer()
-        {
-            if (laserPivot == null)
-            {
-                return;
-            }
-
-            Transform player = PlayerController.PlayerTransform;
-            Vector2 dir = player != null
-                ? (Vector2)player.position - (Vector2)transform.position
-                : Vector2.down;
-            if (dir.sqrMagnitude < 0.0001f)
-            {
-                dir = Vector2.down;
-            }
-
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
-            laserPivot.rotation = Quaternion.Euler(0f, 0f, angle);
-        }
-
         private void LayoutLaser()
         {
             if (laserBeam == null)
@@ -557,15 +609,59 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            float length = ResolvedLaserLength();
             float native = laserBeam.sprite != null ? Mathf.Max(0.01f, laserBeam.sprite.bounds.size.y) : 1f;
             float nativeX = laserBeam.sprite != null ? Mathf.Max(0.01f, laserBeam.sprite.bounds.size.x) : 1f;
             Vector2 parent = LossyAbs();
-            laserBeam.transform.localPosition = new Vector3(0f, (laserLength * 0.5f) / parent.y, 0f);
+            laserBeam.transform.localPosition = new Vector3(0f, (length * 0.5f) / parent.y, 0f);
             laserBeam.transform.localRotation = Quaternion.identity;
             laserBeam.transform.localScale = new Vector3(
                 (laserWidth / nativeX) / parent.x,
-                (laserLength / native) / parent.y,
+                (length / native) / parent.y,
                 1f);
+        }
+
+        private float ResolvedLaserLength()
+        {
+            float authored = laserLength > 0.1f ? laserLength : 12f;
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds == null)
+            {
+                return authored;
+            }
+
+            float toBottom = transform.position.y - bounds.WorldRect.yMin + 1f;
+            return Mathf.Max(authored, toBottom);
+        }
+
+        private void StartPerchMove()
+        {
+            perchFrom = transform.position;
+            perchTo = TopCenterPerch();
+            perchStarted = Time.time;
+        }
+
+        private bool TickPerchMove()
+        {
+            float duration = perchMoveTime > 0.05f ? perchMoveTime : 0.45f;
+            float t = Mathf.Clamp01((Time.time - perchStarted) / duration);
+            float s = t * t * (3f - 2f * t);
+            transform.position = Vector2.Lerp(perchFrom, perchTo, s);
+            return t >= 1f;
+        }
+
+        private Vector2 TopCenterPerch()
+        {
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds == null)
+            {
+                return transform.position;
+            }
+
+            Rect play = bounds.PlayRect;
+            float pad = perchTopPadding > 0.01f ? perchTopPadding : 1.8f;
+            float y = Mathf.Max(play.center.y, play.yMax - pad);
+            return new Vector2(play.center.x, y);
         }
 
         private void ShowMarker(Vector2 world)

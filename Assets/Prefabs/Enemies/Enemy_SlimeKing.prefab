@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1145741119987404742}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.38, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -283,19 +283,24 @@ MonoBehaviour:
   idleMax: 2.4
   jumpAirTime: 1.45
   jumpLockLead: 0.4
-  laserWindup: 0.4
+  laserWindup: 0.65
   laserDuration: 3.1
+  perchMoveTime: 0.45
+  perchTopPadding: 3.5
   slamRadius: 3
   slamDamage: 30
   laserLength: 15
   laserWidth: 2
   laserRotateSpeed: 60
+  laserSweepArc: 70
   laserDamage: 15
   laserTick: 0.28
   waterBallPrefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
   volleyCount: 4
-  volleySpread: 18
+  volleySpread: 40
   volleyWindup: 0.35
+  volleyBursts: 3
+  volleyCooldown: 0.7
   volleyRecover: 0.4
   volleyDamage: 20
   volleySpeed: 7.5

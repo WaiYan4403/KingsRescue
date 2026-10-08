@@ -174,7 +174,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 17.5625
+  orthographic size: 18.59375
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -363,20 +363,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6cdaf8318951d4733a45146322aa261b, type: 2}
   - {fileID: 11400000, guid: eef310bc658514fd1a80294dcccb385d, type: 2}
   - {fileID: 11400000, guid: c3d8f1a06b254e7a9e4c2d8f1b6a30e5, type: 2}
-  - {fileID: 11400000, guid: 048c521d80e232a4b9c10f92bd77399e, type: 2}
-  - {fileID: 11400000, guid: f7c7d6112db99784f91173d1b6031315, type: 2}
-  - {fileID: 11400000, guid: a90b9edd48990cd458ff624bb3ba5afd, type: 2}
-  - {fileID: 11400000, guid: 6363d39a0fb0901409ffcd793d412b2e, type: 2}
   - {fileID: 11400000, guid: 25fb39314b94f304aa0fc6cd19f1329e, type: 2}
   - {fileID: 11400000, guid: 99c184b3ea2e9844f925f2ec26b0968b, type: 2}
-  - {fileID: 11400000, guid: 3d45601713b14ec48b2f0711893b85da, type: 2}
-  - {fileID: 11400000, guid: 64d023e3b67accf4d89aebd3568adcd8, type: 2}
   - {fileID: 11400000, guid: 58b17ad20f1f829439d6e75a98ddd26f, type: 2}
   - {fileID: 11400000, guid: 242ea4bf25ba3b046b161abfb895ec3d, type: 2}
-  - {fileID: 11400000, guid: 646ff7e5595983e4589762f96f6212fe, type: 2}
-  - {fileID: 11400000, guid: 196e8cbb1ffa58347901174d87addead, type: 2}
-  - {fileID: 11400000, guid: 2de9e509921b546418fd0bcb7f0073d7, type: 2}
-  - {fileID: 11400000, guid: 34b482f5c5ec8b44fb9abc562322619a, type: 2}
   - {fileID: 11400000, guid: 0aeb6a7e0f631b6449ad5bcc2509a4a6, type: 2}
   - {fileID: 11400000, guid: e53440f3347a6c448832f29946b8b4a3, type: 2}
   - {fileID: 11400000, guid: 07b80af56f168094aaaa28e84292b666, type: 2}
@@ -614,8 +604,8 @@ MonoBehaviour:
   paddingRight: 2
   paddingTop: 2
   paddingBottom: 2
-  spawnMargin: 2.5
-  despawnMargin: 3
+  spawnMargin: 1
+  despawnMargin: 1
 --- !u!4 &39098416
 Transform:
   m_ObjectHideFlags: 0
@@ -654,7 +644,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39098406}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83200261a3abf2c4c844366b7e5a1f38, type: 3}
   m_Name: 
@@ -5208,7 +5198,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: -453}
+  m_AnchoredPosition: {x: -12, y: -453.00003}
   m_SizeDelta: {x: 0, y: -921}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1255154147
@@ -8984,6 +8974,7 @@ SceneRoots:
   - {fileID: 34958649}
   - {fileID: 505908654}
   - {fileID: 2011210031}
+  - {fileID: 421656903}
   - {fileID: 1395708459}
   - {fileID: 39098416}
   - {fileID: 2147313343}
@@ -8992,4 +8983,3 @@ SceneRoots:
   - {fileID: 1898964096}
   - {fileID: 98947157}
   - {fileID: 1424051021}
-  - {fileID: 421656903}
