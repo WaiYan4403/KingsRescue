@@ -48,6 +48,23 @@ namespace KingsRescue.Enemies
             health = GetComponent<Health>();
         }
 
+        public string StatusLine
+        {
+            get
+            {
+                string rage = enraged ? " (enraged)" : "";
+                switch (phase)
+                {
+                    case Phase.Intro:
+                        return "entering" + rage;
+                    case Phase.Idle:
+                        return "waiting" + rage;
+                    default:
+                        return AttackName(attackPick) + rage;
+                }
+            }
+        }
+
         public void OnSpawned()
         {
             enraged = false;
@@ -223,6 +240,22 @@ namespace KingsRescue.Enemies
             }
 
             HideMarker();
+        }
+
+        private static string AttackName(int pick)
+        {
+            switch (pick)
+            {
+                case 0: return "slam";
+                case 1: return "volley";
+                case 2: return "summoning";
+                case 3: return "charging";
+                case 4: return "teleport";
+                case 5: return "howl";
+                case 6: return "breath";
+                case 7: return "vanishing";
+                default: return "dropping zones";
+            }
         }
 
         private int PickAttack()

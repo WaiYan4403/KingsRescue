@@ -117,6 +117,57 @@ namespace KingsRescue.Meta
             return true;
         }
 
+        /// <summary>Coins this hero has spent on meta upgrades.</summary>
+        public static int SpentOnCharacter(CharacterDefinition character)
+        {
+            if (character == null)
+            {
+                return 0;
+            }
+
+            int total = 0;
+            for (int i = 0; i < MetaUpgradeCatalog.Offers.Length; i++)
+            {
+                MetaUpgradeOffer offer = MetaUpgradeCatalog.Offers[i];
+                total += offer.SpentForLevel(GetLevel(character, offer.stat));
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Clears this hero's upgrade levels and refunds every coin spent on them.
+        /// Other characters are left alone.
+        /// </summary>
+        public static int ResetCharacter(CharacterDefinition character)
+        {
+            if (character == null)
+            {
+                return 0;
+            }
+
+            EnsureLoaded();
+            int refund = SpentOnCharacter(character);
+            CharacterSave save = Find(character, false);
+            if (save != null && save.levels != null)
+            {
+                for (int i = 0; i < save.levels.Length; i++)
+                {
+                    save.levels[i] = 0;
+                }
+            }
+
+            if (refund <= 0)
+            {
+                Persist();
+                return 0;
+            }
+
+            data.coins = Mathf.Max(0, data.coins + refund);
+            Persist();
+            return refund;
+        }
+
         private static CharacterSave Find(CharacterDefinition character, bool create)
         {
             EnsureLoaded();

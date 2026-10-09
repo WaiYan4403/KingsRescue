@@ -46,6 +46,46 @@ namespace KingsRescue.Enemies
         public bool BelongsToBossFight =>
             definition != null && (definition.isBoss || definition.bossMinion);
 
+        public string DisplayName =>
+            definition != null && !string.IsNullOrEmpty(definition.displayName)
+                ? definition.displayName
+                : "Enemy";
+
+        public bool IsBoss => definition != null && definition.isBoss;
+
+        /// <summary>Short live description for the field log: chasing, shooting, slamming, etc.</summary>
+        public string DescribeActivity()
+        {
+            if (slimeKing != null && slimeKing.enabled)
+            {
+                return slimeKing.StatusLine;
+            }
+
+            if (encounterBoss != null && encounterBoss.enabled)
+            {
+                return encounterBoss.StatusLine;
+            }
+
+            if (meteor != null && meteor.enabled)
+            {
+                return "meteor strike";
+            }
+
+            string special = specials != null && specials.enabled ? specials.StatusLine : null;
+            if (!string.IsNullOrEmpty(special))
+            {
+                return special;
+            }
+
+            string shot = attacker != null && attacker.enabled ? attacker.StatusLine : null;
+            if (!string.IsNullOrEmpty(shot))
+            {
+                return shot;
+            }
+
+            return movement != null ? movement.StatusLine : "idle";
+        }
+
         private void Awake()
         {
             health = GetComponent<Health>();

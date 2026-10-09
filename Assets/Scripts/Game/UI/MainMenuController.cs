@@ -30,6 +30,8 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text upgradeTitle;
         [SerializeField] private TMP_Text bankLabel;
         [SerializeField] private UpgradeRowView[] upgradeRows;
+        [SerializeField] private Button resetUpgradesButton;
+        [SerializeField] private TMP_Text resetUpgradesLabel;
 
         [Header("Settings")]
         [SerializeField] private Slider volumeSlider;
@@ -60,6 +62,11 @@ namespace KingsRescue.UI
                 volumeSlider.SetValueWithoutNotify(GameSettings.Volume);
             }
 
+            if (resetUpgradesButton != null)
+            {
+                resetUpgradesButton.onClick.AddListener(ResetSelectedUpgrades);
+            }
+
             AchievementProgress.EnsureLoaded();
 
             if (characterButtons != null)
@@ -84,6 +91,14 @@ namespace KingsRescue.UI
         void Start()
         {
             ShowHome();
+        }
+
+        private void OnDestroy()
+        {
+            if (resetUpgradesButton != null)
+            {
+                resetUpgradesButton.onClick.RemoveListener(ResetSelectedUpgrades);
+            }
         }
 
         public void ShowHome()
@@ -188,18 +203,40 @@ namespace KingsRescue.UI
                 bankLabel.text = $"Bank: {MetaProgress.Coins}";
             }
 
-            if (upgradeRows == null)
+            if (upgradeRows != null)
+            {
+                for (int i = 0; i < upgradeRows.Length; i++)
+                {
+                    if (upgradeRows[i] != null)
+                    {
+                        upgradeRows[i].Refresh(selected);
+                    }
+                }
+            }
+
+            int refund = MetaProgress.SpentOnCharacter(selected);
+            if (resetUpgradesButton != null)
+            {
+                resetUpgradesButton.interactable = selected != null && refund > 0;
+            }
+
+            if (resetUpgradesLabel != null)
+            {
+                resetUpgradesLabel.text = refund > 0
+                    ? $"RESET  (refund {refund} coins)"
+                    : "RESET UPGRADES";
+            }
+        }
+
+        public void ResetSelectedUpgrades()
+        {
+            if (selected == null)
             {
                 return;
             }
 
-            for (int i = 0; i < upgradeRows.Length; i++)
-            {
-                if (upgradeRows[i] != null)
-                {
-                    upgradeRows[i].Refresh(selected);
-                }
-            }
+            MetaProgress.ResetCharacter(selected);
+            RefreshUpgrades();
         }
 
         private void SelectDefault()

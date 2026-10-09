@@ -57,6 +57,41 @@ namespace KingsRescue.Enemies
 
         public bool FacingLeft => spriteRenderer != null && spriteRenderer.flipX;
 
+        public string StatusLine
+        {
+            get
+            {
+                if (halted)
+                {
+                    return "waiting";
+                }
+
+                if (Time.time < dashUntil)
+                {
+                    return moveStyle == EnemyMoveStyle.Straight ? "diving" : "lunging";
+                }
+
+                if (Time.time < hasteUntil)
+                {
+                    return "buffed chase";
+                }
+
+                switch (moveStyle)
+                {
+                    case EnemyMoveStyle.Straight:
+                        return "flying through";
+                    case EnemyMoveStyle.KeepDistance:
+                        return "holding range";
+                    case EnemyMoveStyle.Orbit:
+                        return "circling";
+                    case EnemyMoveStyle.Charge:
+                        return "hunting";
+                    default:
+                        return tracksPlayer ? "chasing" : "drifting down";
+                }
+            }
+        }
+
         public void OnSpawned()
         {
             cruiseVelocity = Vector2.zero;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using KingsRescue.Data;
 
 namespace KingsRescue.Meta
@@ -23,6 +24,13 @@ namespace KingsRescue.Meta
         public int CostForNext(int currentLevel)
         {
             return baseCost * (currentLevel + 1);
+        }
+
+        /// <summary>Coins paid to reach this level from zero.</summary>
+        public int SpentForLevel(int level)
+        {
+            int n = Mathf.Max(0, level);
+            return baseCost * n * (n + 1) / 2;
         }
 
         public StatModifier ModifierForLevels(int levels)

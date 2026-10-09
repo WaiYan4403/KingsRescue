@@ -23,6 +23,8 @@ namespace KingsRescue.Enemies
         private ContactDamage contact;
         private Health health;
         private HitFlash flash;
+        private string lastAction;
+        private float lastActionUntil;
 
         private void Awake()
         {
@@ -63,6 +65,25 @@ namespace KingsRescue.Enemies
         {
             stealthed = false;
             stealthUntil = 0f;
+            lastAction = null;
+        }
+
+        public string StatusLine
+        {
+            get
+            {
+                if (stealthed)
+                {
+                    return "cloaked";
+                }
+
+                if (!string.IsNullOrEmpty(lastAction) && Time.time < lastActionUntil)
+                {
+                    return lastAction;
+                }
+
+                return null;
+            }
         }
 
         public void OnDespawned()
@@ -160,31 +181,38 @@ namespace KingsRescue.Enemies
             if (Has(EnemyTrait.Lunge) || Has(EnemyTrait.LineCharge))
             {
                 TryLunge(toPlayer);
+                Note(Has(EnemyTrait.LineCharge) ? "line charge" : "lunge");
             }
 
             if (Has(EnemyTrait.Teleport))
             {
                 TryTeleport(player.position);
+                Note("teleport");
             }
 
             if (Has(EnemyTrait.Summon))
             {
                 SpawnAllies(origin);
+                Note("summoning");
             }
 
             if (Has(EnemyTrait.HealAllies))
             {
                 HealNearby();
+                Note("healing allies");
             }
 
             if (Has(EnemyTrait.BuffAllies))
             {
                 HasteNearby();
+                Note("buffing allies");
             }
 
             if (Has(EnemyTrait.DropHazard) || Has(EnemyTrait.FireTrail))
             {
-                DropZone(origin, Has(EnemyTrait.FireTrail));
+                bool fire = Has(EnemyTrait.FireTrail);
+                DropZone(origin, fire);
+                Note(fire ? "leaving fire" : "dropping poison");
             }
 
             if (Has(EnemyTrait.Stealth) && !stealthed)
@@ -403,6 +431,12 @@ namespace KingsRescue.Enemies
             {
                 ExitStealth();
             }
+        }
+
+        private void Note(string action)
+        {
+            lastAction = action;
+            lastActionUntil = Time.time + 1.1f;
         }
 
         private bool Has(EnemyTrait trait)

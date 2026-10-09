@@ -122,6 +122,30 @@ namespace KingsRescue.Enemies
             animator = GetComponent<Animator>();
         }
 
+        public string StatusLine
+        {
+            get
+            {
+                switch (phase)
+                {
+                    case Phase.Intro:
+                        return "entering";
+                    case Phase.Idle:
+                        return "waiting";
+                    case Phase.JumpAir:
+                        return slamLocked ? "vanish slam" : "jumping";
+                    case Phase.LaserWindup:
+                        return "laser windup";
+                    case Phase.Laser:
+                        return "laser sweep";
+                    case Phase.Volley:
+                        return perched ? "water volley" : "moving to perch";
+                    default:
+                        return "idle";
+                }
+            }
+        }
+
         public void OnSpawned()
         {
             musicOn = false;

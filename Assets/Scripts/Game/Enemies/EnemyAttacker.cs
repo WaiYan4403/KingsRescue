@@ -15,6 +15,7 @@ namespace KingsRescue.Enemies
         private float damage;
         private float runMinutes;
         private float nextShot;
+        private float lastShotAt;
 
         public void OnSpawned()
         {
@@ -33,6 +34,34 @@ namespace KingsRescue.Enemies
             damage = def != null ? def.ScaledAttackDamage(minutes) : 0f;
             nextShot = Time.time + (def != null ? Mathf.Max(0.2f, def.attackInterval * 0.4f) : 0.5f);
             enabled = def != null && IsCaster(def);
+        }
+
+        public string StatusLine
+        {
+            get
+            {
+                if (definition == null)
+                {
+                    return null;
+                }
+
+                if (Time.time < lastShotAt + 0.4f)
+                {
+                    if (definition.attackStyle == EnemyAttackStyle.Meteor)
+                    {
+                        return "casting meteor";
+                    }
+
+                    if (definition.attackStyle == EnemyAttackStyle.Web)
+                    {
+                        return "shooting webs";
+                    }
+
+                    return definition.projectileHoming ? "shooting homing bolts" : "shooting";
+                }
+
+                return null;
+            }
         }
 
         private static bool IsCaster(EnemyDefinition def)
@@ -90,6 +119,7 @@ namespace KingsRescue.Enemies
 
             if (cast)
             {
+                lastShotAt = Time.time;
                 nextShot = Time.time + Mathf.Max(0.25f, definition.attackInterval);
             }
         }
