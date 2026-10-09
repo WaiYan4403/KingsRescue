@@ -1,0 +1,287 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca31f3bbb9880043a27c515d147e677, type: 3}
+  m_Name: SpawnTimeline
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.SpawnTimeline
+  unlockInterval: 60
+  baseSpawnInterval: 1.2
+  minSpawnInterval: 0.38
+  intervalDecayPerMinute: 0.055
+  baseSpawnsPerTick: 1
+  extraSpawnEveryMinutes: 5
+  maxSpawnsPerTick: 4
+  pattern: 0
+  eliteIntervalScale: 1.75
+  flockSessionDuration: 11
+  flockSessionCooldown: 24
+  flockSessionSpawnInterval: 2.5
+  roster:
+  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
+    unlockAt: 0
+    weight: 10
+    introCount: 8
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+    unlockAt: 60
+    weight: 8
+    introCount: 1
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+    unlockAt: 120
+    weight: 10
+    introCount: 8
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
+    unlockAt: 180
+    weight: 8
+    introCount: 6
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 5a51234f69da0bf4093fd1330267856c, type: 2}
+    unlockAt: 240
+    weight: 7
+    introCount: 5
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 4f9de70f10a9f2648ba4397b36fa54ce, type: 2}
+    unlockAt: 300
+    weight: 7
+    introCount: 5
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 7388b129eeedb234696e658c98938525, type: 2}
+    unlockAt: 360
+    weight: 7
+    introCount: 6
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 2e2cec80d33ea2545a403595083dda63, type: 2}
+    unlockAt: 420
+    weight: 6
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 877e8d1dc40dfb445a13bd6ff56670e8, type: 2}
+    unlockAt: 480
+    weight: 8
+    introCount: 1
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 7e309ae67654bd14581eac427c9a073c, type: 2}
+    unlockAt: 540
+    weight: 6
+    introCount: 5
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: f6ef13195f67b412d90bb6eb4e0697be, type: 2}
+    unlockAt: 600
+    weight: 8
+    introCount: 7
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 7a46845844d0e9748be9be4886ed4600, type: 2}
+    unlockAt: 660
+    weight: 6
+    introCount: 5
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: af6a0952e0fd7334cb17af75c19b57ee, type: 2}
+    unlockAt: 720
+    weight: 6
+    introCount: 5
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 0388d996a7d23e44287d586336993ceb, type: 2}
+    unlockAt: 780
+    weight: 6
+    introCount: 5
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 996dd3529023faa4a839bacf4debe122, type: 2}
+    unlockAt: 840
+    weight: 6
+    introCount: 5
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 8f962fabd633d264895e2f4d9f272fd9, type: 2}
+    unlockAt: 900
+    weight: 6
+    introCount: 1
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 787f2c0fe79da7247901eab0c6845cb3, type: 2}
+    unlockAt: 960
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 787aac760a2e6374c9651db3925210a0, type: 2}
+    unlockAt: 1020
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 5a4e7a1dca3456642984e0a8b79d270c, type: 2}
+    unlockAt: 1080
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 65b46454bf7480b4995b21d31c37f846, type: 2}
+    unlockAt: 1140
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 13e897c5aeb10e04c8fa47bb67672201, type: 2}
+    unlockAt: 1200
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 8933abf04f52f0e408d7adea9191e2a6, type: 2}
+    unlockAt: 1260
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 40c79a77adadaf24ebd9ffe46b9328d8, type: 2}
+    unlockAt: 1320
+    weight: 5
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: ffa6c1435934f2c41aacdbf81d1e2493, type: 2}
+    unlockAt: 1380
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 8fc367ea1ddea36478cf6c63fb56c824, type: 2}
+    unlockAt: 1440
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: a4310835d8489534b909e174fb57a385, type: 2}
+    unlockAt: 1500
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 9f33b883ea08a2a4fa44c177473faa8e, type: 2}
+    unlockAt: 1560
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 792018338bd42014989eb2829b820823, type: 2}
+    unlockAt: 1620
+    weight: 5
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 3dff023a419dd6540b2c4ecc1b3ccf0f, type: 2}
+    unlockAt: 1680
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 2c3d254834c8ec042811619a575c605f, type: 2}
+    unlockAt: 1740
+    weight: 5
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: c2e52d29ace4b954c8308e0e5c1470c9, type: 2}
+    unlockAt: 1800
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 5a986b5ed7f34fd4d84dfe1faf47018d, type: 2}
+    unlockAt: 1860
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 266ae57f8b250784a915d55dc7e68925, type: 2}
+    unlockAt: 1920
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: ce669b285cf39c045bed4b12634a6dbd, type: 2}
+    unlockAt: 1980
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: e47db915693987144bd38a2172255cbd, type: 2}
+    unlockAt: 2040
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: cf6843238b8e7824292372af854da2c3, type: 2}
+    unlockAt: 2100
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: d90eb2e0d3398e8448b90038fc81c935, type: 2}
+    unlockAt: 2160
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 0c8b9e13e73b17246be19167046caea4, type: 2}
+    unlockAt: 2220
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 51910eca388cda94284163764c58f921, type: 2}
+    unlockAt: 2280
+    weight: 3
+    introCount: 2
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: c45acf3d499fd114898e13bca725bb67, type: 2}
+    unlockAt: 2340
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 42e37be5114d1d74ba877f03e894a33a, type: 2}
+    unlockAt: 2400
+    weight: 5
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 078f85ddc6e99954db1053fed33c58fc, type: 2}
+    unlockAt: 2460
+    weight: 6
+    introCount: 1
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 06c89008a6b7eb649af188a321d7482e, type: 2}
+    unlockAt: 2520
+    weight: 3
+    introCount: 2
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 45e403ce165030c429c06e0f24c533bf, type: 2}
+    unlockAt: 2580
+    weight: 3
+    introCount: 2
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 6f971f1def1b4ef4dba03d2d5c411964, type: 2}
+    unlockAt: 2640
+    weight: 4
+    introCount: 2
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: bfd66ebd851491a48a97dc8963a8f83a, type: 2}
+    unlockAt: 2700
+    weight: 4
+    introCount: 3
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 28cf1e3f19c2984419d3241dd29c24d1, type: 2}
+    unlockAt: 2760
+    weight: 3
+    introCount: 2
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 6b0f574a27fe9dc4aa7c21a08963d7a7, type: 2}
+    unlockAt: 2820
+    weight: 3
+    introCount: 2
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: f851575b3120e21448792d3632def650, type: 2}
+    unlockAt: 2880
+    weight: 3
+    introCount: 2
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 6a9c470dde3195249a363888da2d3e1e, type: 2}
+    unlockAt: 2940
+    weight: 5
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 3364a2f6ea47f4a68a3371c9db273c92, type: 2}
+    unlockAt: 3000
+    weight: 4
+    introCount: 4
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: d448ec731ce1cd74d91f7aaa34a91106, type: 2}
+    unlockAt: 3060
+    weight: 5
+    introCount: 4
+    introPattern: 0

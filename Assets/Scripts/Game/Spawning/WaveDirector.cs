@@ -8,9 +8,9 @@ using KingsRescue.Player;
 namespace KingsRescue.Spawning
 {
     /// <summary>
-    /// Walks the authored wave list against the run clock and feeds enemies in from
-    /// off screen. Every spawn goes through the pool and carries the current
-    /// difficulty ramp.
+    /// Feeds enemies in from off screen. Prefers a SpawnTimeline (new type every
+    /// minute, previous types stay in the mix). Falls back to authored wave windows.
+    /// Boss appointments still overlay the trickle.
     /// </summary>
     public class WaveDirector : MonoBehaviour
     {
@@ -24,6 +24,10 @@ namespace KingsRescue.Spawning
         }
 
         [SerializeField] private List<WaveDefinition> waves = new List<WaveDefinition>();
+
+        [Header("Minute Cadence")]
+        [Tooltip("Vampire Survivors-style roster: a new type every minute. When set, authored waves are ignored.")]
+        [SerializeField] private SpawnTimeline timeline;
 
         [Header("Budget")]
         [Tooltip("Hard cap on simultaneous enemies. Protects WebGL frame time.")]
@@ -43,7 +47,7 @@ namespace KingsRescue.Spawning
         [SerializeField] private EnemyDefinition firstBoss;
 
         [Tooltip("Seconds into the run when Slime King walks in.")]
-        [SerializeField] private float firstBossTime = 120f;
+        [SerializeField] private float firstBossTime = 300f;
 
         [SerializeField] private BossAppointment[] bosses = System.Array.Empty<BossAppointment>();
 
@@ -52,6 +56,14 @@ namespace KingsRescue.Spawning
         private int spawnedThisFrame;
         private bool firstBossSpawned;
         private int nextBossIndex;
+        private int unlockedCount;
+        private float[] nextTypeSpawnTime;
+        private float[] flockSessionEndTime;
+        private float[] flockResumeTime;
+
+        public static string LastUnlockAnnouncement { get; private set; }
+
+        public static float LastUnlockAnnounceUntil { get; private set; }
 
         [System.Serializable]
         private struct BossAppointment
@@ -74,6 +86,15 @@ namespace KingsRescue.Spawning
 
         private void Awake()
         {
+            LastUnlockAnnouncement = null;
+            LastUnlockAnnounceUntil = 0f;
+
+            if (UsingTimeline)
+            {
+                EnsureTimelineArrays();
+                return;
+            }
+
             for (int i = 0; i < waves.Count; i++)
             {
                 if (waves[i] != null)
@@ -87,6 +108,8 @@ namespace KingsRescue.Spawning
                 states.Add(new WaveState { definition = endlessWave });
             }
         }
+
+        private bool UsingTimeline => timeline != null && timeline.HasRoster;
 
         private void Update()
         {
@@ -111,9 +134,151 @@ namespace KingsRescue.Spawning
 
             FlushPending();
 
+            if (UsingTimeline)
+            {
+                TickTimeline(runTime, runMinutes);
+                return;
+            }
+
             for (int i = 0; i < states.Count; i++)
             {
                 TickWave(states[i], runTime, runMinutes);
+            }
+        }
+
+        private void EnsureTimelineArrays()
+        {
+            int count = timeline.roster.Length;
+            if (nextTypeSpawnTime == null || nextTypeSpawnTime.Length != count)
+            {
+                nextTypeSpawnTime = new float[count];
+            }
+
+            if (flockSessionEndTime == null || flockSessionEndTime.Length != count)
+            {
+                flockSessionEndTime = new float[count];
+            }
+
+            if (flockResumeTime == null || flockResumeTime.Length != count)
+            {
+                flockResumeTime = new float[count];
+            }
+        }
+
+        private void TickTimeline(float runTime, float runMinutes)
+        {
+            EnsureTimelineArrays();
+            UnlockDueTypes(runTime, runMinutes);
+
+            for (int i = 0; i < unlockedCount; i++)
+            {
+                SpawnTimeline.Entry entry = timeline.roster[i];
+                EnemyDefinition enemy = entry.enemy;
+                if (enemy == null || enemy.isBoss || enemy.bossMinion)
+                {
+                    continue;
+                }
+
+                if (enemy.spawnAsFlock)
+                {
+                    TickFlockSession(i, runTime, runMinutes, entry);
+                    continue;
+                }
+
+                if (runTime < nextTypeSpawnTime[i])
+                {
+                    continue;
+                }
+
+                nextTypeSpawnTime[i] = runTime + timeline.IntervalFor(entry);
+                SpawnTimelineEnemy(enemy, runMinutes);
+            }
+        }
+
+        private void TickFlockSession(int index, float runTime, float runMinutes, SpawnTimeline.Entry entry)
+        {
+            if (runTime < flockSessionEndTime[index])
+            {
+                if (runTime < nextTypeSpawnTime[index])
+                {
+                    return;
+                }
+
+                nextTypeSpawnTime[index] = runTime + timeline.FlockInSessionInterval;
+                SpawnTimelineEnemy(entry.enemy, runMinutes);
+                return;
+            }
+
+            if (flockSessionEndTime[index] > 0f && runTime < flockResumeTime[index])
+            {
+                return;
+            }
+
+            BeginFlockSession(index, runTime, runMinutes, entry.enemy);
+        }
+
+        private void BeginFlockSession(int index, float runTime, float runMinutes, EnemyDefinition enemy)
+        {
+            float duration = timeline.FlockSessionDuration * UnityEngine.Random.Range(0.85f, 1.15f);
+            float cooldown = timeline.FlockSessionCooldown * UnityEngine.Random.Range(0.9f, 1.2f);
+            flockSessionEndTime[index] = runTime + duration;
+            flockResumeTime[index] = flockSessionEndTime[index] + cooldown;
+            nextTypeSpawnTime[index] = runTime + timeline.FlockInSessionInterval;
+            string name = string.IsNullOrEmpty(enemy.displayName) ? enemy.name : enemy.displayName;
+            Debug.Log($"[Spawn] {name} flyover for {duration:0.0}s, then {cooldown:0.0}s quiet.", enemy);
+            SpawnTimelineEnemy(enemy, runMinutes);
+        }
+
+        private void SpawnTimelineEnemy(EnemyDefinition enemy, float runMinutes)
+        {
+            if (enemy.spawnAsFlock)
+            {
+                SpawnPattern flockPattern = UnityEngine.Random.value < 0.5f
+                    ? SpawnPattern.FlockDown
+                    : SpawnPattern.FlockDiagonal;
+                SpawnGroup(enemy, RollFlockSize(enemy), flockPattern, runMinutes);
+                return;
+            }
+
+            SpawnGroup(enemy, 1, timeline.pattern, runMinutes);
+        }
+
+        private void UnlockDueTypes(float runTime, float runMinutes)
+        {
+            while (unlockedCount < timeline.roster.Length
+                   && runTime >= timeline.UnlockTime(unlockedCount))
+            {
+                SpawnTimeline.Entry entry = timeline.roster[unlockedCount];
+                unlockedCount++;
+
+                EnemyDefinition enemy = entry.enemy;
+                if (enemy == null || enemy.isBoss || enemy.bossMinion)
+                {
+                    continue;
+                }
+
+                string name = string.IsNullOrEmpty(enemy.displayName) ? enemy.name : enemy.displayName;
+                LastUnlockAnnouncement = name;
+                LastUnlockAnnounceUntil = Time.unscaledTime + 6f;
+                Debug.Log($"[Spawn] New enemy type: {name} (minute {Mathf.FloorToInt(runMinutes)})", enemy);
+
+                int unlockedIndex = unlockedCount - 1;
+                if (enemy.spawnAsFlock)
+                {
+                    BeginFlockSession(unlockedIndex, runTime, runMinutes, enemy);
+                    continue;
+                }
+
+                if (nextTypeSpawnTime != null && unlockedIndex < nextTypeSpawnTime.Length)
+                {
+                    nextTypeSpawnTime[unlockedIndex] = runTime + timeline.IntervalFor(entry);
+                }
+
+                int intro = Mathf.Max(0, entry.introCount);
+                if (intro > 0)
+                {
+                    SpawnGroup(enemy, intro, entry.introPattern, runMinutes);
+                }
             }
         }
 

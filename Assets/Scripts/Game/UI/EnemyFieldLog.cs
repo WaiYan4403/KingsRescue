@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using KingsRescue.Core;
 using KingsRescue.Enemies;
+using KingsRescue.Spawning;
 
 namespace KingsRescue.UI
 {
@@ -105,6 +106,12 @@ namespace KingsRescue.UI
             if (game != null && game.BossFightActive)
             {
                 builder.AppendLine("BOSS FIGHT");
+            }
+
+            if (!string.IsNullOrEmpty(WaveDirector.LastUnlockAnnouncement)
+                && Time.unscaledTime < WaveDirector.LastUnlockAnnounceUntil)
+            {
+                builder.Append("NEW: ").AppendLine(WaveDirector.LastUnlockAnnouncement);
             }
 
             if (rows.Count == 0)

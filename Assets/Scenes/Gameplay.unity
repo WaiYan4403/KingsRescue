@@ -341,33 +341,34 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dbb9ebdaf587c414799097384c36acfb, type: 2}
   - {fileID: 11400000, guid: 386f3b3f7b00e414eab9e0077eaaaa7d, type: 2}
   - {fileID: 11400000, guid: 804637a4282ab60488b8938fc3382110, type: 2}
+  timeline: {fileID: 11400000, guid: 82fd38f1c85573a45a5cdc867af802b3, type: 2}
   maxAliveEnemies: 120
   maxSpawnsPerFrame: 4
   horizontalInset: 0.6
   endlessWave: {fileID: 11400000, guid: e642deaac3ce449c69a6bfe707eac6be, type: 2}
   firstBoss: {fileID: 11400000, guid: 43352040dfd5b22419f0892f3dceb510, type: 2}
-  firstBossTime: 120
+  firstBossTime: 300
   bosses:
   - boss: {fileID: 11400000, guid: 43352040dfd5b22419f0892f3dceb510, type: 2}
-    atTime: 120
+    atTime: 300
   - boss: {fileID: 11400000, guid: a5bcd0ef8fcc9354ba7bd6c9fa7f263e, type: 2}
-    atTime: 240
-  - boss: {fileID: 11400000, guid: e1bdae44038fa524480f32c8059e7b66, type: 2}
-    atTime: 360
-  - boss: {fileID: 11400000, guid: 7f409b2b79f842544862e9d7c71e3d7f, type: 2}
-    atTime: 480
-  - boss: {fileID: 11400000, guid: 6932b4687938d9f43be9119016207e93, type: 2}
     atTime: 600
-  - boss: {fileID: 11400000, guid: b3c40e68c3a41ae4590cc02121f84ab9, type: 2}
-    atTime: 720
-  - boss: {fileID: 11400000, guid: e9c6208970fe8ec42bcb4d8438cae7c1, type: 2}
-    atTime: 840
-  - boss: {fileID: 11400000, guid: 05bd7e993714fe847a291276d9d242d8, type: 2}
-    atTime: 960
-  - boss: {fileID: 11400000, guid: bbbc68971c541f4418de730a28106862, type: 2}
-    atTime: 1080
-  - boss: {fileID: 11400000, guid: 45f1800a461e20949aa490c8328ed7e2, type: 2}
+  - boss: {fileID: 11400000, guid: e1bdae44038fa524480f32c8059e7b66, type: 2}
+    atTime: 900
+  - boss: {fileID: 11400000, guid: 7f409b2b79f842544862e9d7c71e3d7f, type: 2}
     atTime: 1200
+  - boss: {fileID: 11400000, guid: 6932b4687938d9f43be9119016207e93, type: 2}
+    atTime: 1500
+  - boss: {fileID: 11400000, guid: b3c40e68c3a41ae4590cc02121f84ab9, type: 2}
+    atTime: 1800
+  - boss: {fileID: 11400000, guid: e9c6208970fe8ec42bcb4d8438cae7c1, type: 2}
+    atTime: 2100
+  - boss: {fileID: 11400000, guid: 05bd7e993714fe847a291276d9d242d8, type: 2}
+    atTime: 2400
+  - boss: {fileID: 11400000, guid: bbbc68971c541f4418de730a28106862, type: 2}
+    atTime: 2700
+  - boss: {fileID: 11400000, guid: 45f1800a461e20949aa490c8328ed7e2, type: 2}
+    atTime: 3000
 --- !u!114 &39098409
 MonoBehaviour:
   m_ObjectHideFlags: 0
