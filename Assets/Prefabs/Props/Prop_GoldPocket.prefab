@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.Health
   maxHealth: 3
   hitRadius: 0.4
+  stepwiseHits: 0
 --- !u!114 &4507389632305713667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,12 +124,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84760063af9464a3d9829260969589d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.World.DestructibleProp
-  coinPrefab: {fileID: 3030451831506880611, guid: 197737e374f7e4313bda08d4b6d95acc, type: 3}
+  use: 1
+  body: {fileID: 1349496293731026362}
+  intactSprite: {fileID: 0}
+  crackedSprite: {fileID: 0}
+  openedSprite: {fileID: 0}
+  coinPrefab: {fileID: 0}
   minCoins: 2
   maxCoins: 10
   coinValue: 2
   healthPrefab: {fileID: 5825566481984973083, guid: fdd50c17fb5ba4e36844d6d9a97408b5, type: 3}
   healthDropChance: 0.08
+  isChest: 0
+  rareDropChance: 0.2
+  minPocketCoins: 10
+  maxPocketCoins: 100
+  collectRadius: 0.7
   breakEffectPrefab: {fileID: 0}
   popSpeed: 3.2
 --- !u!114 &4725449655813261358

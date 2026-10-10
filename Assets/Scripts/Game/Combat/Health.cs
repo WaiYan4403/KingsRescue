@@ -15,6 +15,9 @@ namespace KingsRescue.Combat
         [Tooltip("Body radius used by weapon sweeps. Bigger targets should be easier to clip.")]
         [SerializeField] private float hitRadius = 0.35f;
 
+        [Tooltip("Each hit removes 1 HP regardless of weapon damage. Used by pots and chests so they crack before they open.")]
+        [SerializeField] private bool stepwiseHits;
+
         public float Max => maxHealth;
 
         public float HitRadius => hitRadius;
@@ -81,21 +84,19 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            float amount = info.Amount;
+            float amount = stepwiseHits ? 1f : info.Amount;
             if (BlocksFrontal && IsFrontal(info.Direction))
             {
                 amount *= 0.22f;
             }
 
             Current = Mathf.Max(0f, Current - amount);
+            Damaged?.Invoke(this, info);
 
-            if (Current > 0f)
+            if (Current <= 0f)
             {
-                Damaged?.Invoke(this, info);
-                return;
+                Died?.Invoke(this, info);
             }
-
-            Died?.Invoke(this, info);
         }
 
         public void Heal(float amount)

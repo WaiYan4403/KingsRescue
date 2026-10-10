@@ -1,21 +1,35 @@
 using UnityEngine;
 using KingsRescue.Combat;
 using KingsRescue.Core;
-using KingsRescue.Data;
 using KingsRescue.Meta;
 using KingsRescue.Pickups;
 using KingsRescue.Player;
-using KingsRescue.Progression;
+using KingsRescue.UI;
 
 namespace KingsRescue.World
 {
     /// <summary>
-    /// Pots, barrels and chests. Coins only come from scenery, which is what makes
-    /// detouring toward a chest worth the risk of walking into a mob.
+    /// Pots crack then dump loot. Chests crack then open the ChestPanel overlay.
+    /// Gold pockets are collected whole. Opened scenery stays until it scrolls off.
     /// </summary>
     [RequireComponent(typeof(Health))]
     public class DestructibleProp : MonoBehaviour, IPoolable
     {
+        public enum UseMode
+        {
+            Smash = 0,
+            Collect = 1
+        }
+
+        [Header("Use")]
+        [SerializeField] private UseMode use = UseMode.Smash;
+
+        [Header("Sprites")]
+        [SerializeField] private SpriteRenderer body;
+        [SerializeField] private Sprite intactSprite;
+        [SerializeField] private Sprite crackedSprite;
+        [SerializeField] private Sprite openedSprite;
+
         [Header("Loot")]
         [SerializeField] private GameObject coinPrefab;
         [SerializeField] private int minCoins = 1;
@@ -30,62 +44,159 @@ namespace KingsRescue.World
         [SerializeField] private bool isChest;
         [SerializeField, Range(0f, 1f)] private float rareDropChance = 0.2f;
 
+        [Header("Gold pocket")]
+        [SerializeField] private int minPocketCoins = 10;
+        [SerializeField] private int maxPocketCoins = 100;
+        [SerializeField] private float collectRadius = 0.7f;
+
         [Header("Feedback")]
         [SerializeField] private GameObject breakEffectPrefab;
         [SerializeField] private float popSpeed = 3.2f;
 
         private Health health;
-        private bool broken;
+        private HitFlash flash;
+        private bool opened;
+        private bool collected;
 
         private void Awake()
         {
             health = GetComponent<Health>();
+            flash = GetComponent<HitFlash>();
+            if (body == null)
+            {
+                body = GetComponent<SpriteRenderer>();
+            }
         }
 
         private void OnEnable()
         {
-            health.Died += OnDied;
+            health.Damaged += OnDamaged;
+            health.Died += OnBroken;
+            if (use == UseMode.Collect)
+            {
+                health.Untargetable = true;
+            }
         }
 
         private void OnDisable()
         {
-            health.Died -= OnDied;
+            health.Damaged -= OnDamaged;
+            health.Died -= OnBroken;
         }
 
         public void OnSpawned()
         {
-            broken = false;
+            opened = false;
+            collected = false;
+            ApplySprite(intactSprite != null ? intactSprite : body != null ? body.sprite : null);
+
+            if (use == UseMode.Collect)
+            {
+                health.Untargetable = true;
+            }
         }
 
         public void OnDespawned()
         {
-            broken = true;
+            opened = true;
+            collected = true;
         }
 
-        private void OnDied(Health source, DamageInfo info)
+        private void Update()
         {
-            if (broken)
+            if (use != UseMode.Collect || collected)
             {
                 return;
             }
 
-            broken = true;
-            DropLoot();
+            health.Untargetable = true;
 
-            PoolManager pool = PoolManager.Instance;
-
-            if (breakEffectPrefab != null && pool != null)
+            PlayerController hero = PlayerController.Instance;
+            if (hero == null || hero.Health == null || !hero.Health.IsAlive)
             {
-                pool.Spawn(breakEffectPrefab, transform.position, Quaternion.identity);
+                return;
             }
 
-            if (pool != null)
+            float reach = collectRadius;
+            PlayerStats stats = hero.GetComponent<PlayerStats>();
+            if (stats != null)
             {
-                pool.Despawn(gameObject);
+                reach = Mathf.Max(reach, stats.MagnetRadius);
+            }
+
+            if (((Vector2)transform.position - (Vector2)hero.transform.position).sqrMagnitude <= reach * reach)
+            {
+                CollectPocket(hero);
+            }
+        }
+
+        private void OnDamaged(Health source, DamageInfo info)
+        {
+            if (use != UseMode.Smash || opened)
+            {
+                return;
+            }
+
+            flash?.Flash();
+            if (health.Current > 0f)
+            {
+                ApplySprite(crackedSprite != null ? crackedSprite : intactSprite);
+            }
+        }
+
+        private void OnBroken(Health source, DamageInfo info)
+        {
+            if (use != UseMode.Smash || opened)
+            {
+                return;
+            }
+
+            opened = true;
+            health.Untargetable = true;
+            flash?.Flash();
+            ApplySprite(openedSprite != null ? openedSprite : crackedSprite);
+
+            if (isChest)
+            {
+                AchievementProgress.RecordChest();
+                if (ChestPanel.Instance != null)
+                {
+                    ChestPanel.Instance.Open(minCoins, maxCoins, coinValue);
+                    return;
+                }
+            }
+
+            DropLoot();
+        }
+
+        private void CollectPocket(PlayerController hero)
+        {
+            if (collected)
+            {
+                return;
+            }
+
+            collected = true;
+            int amount = Random.Range(Mathf.Max(1, minPocketCoins), Mathf.Max(minPocketCoins, maxPocketCoins) + 1);
+            PlayerStats stats = hero.GetComponent<PlayerStats>();
+            float multiplier = stats != null ? stats.CoinGain : 1f;
+            GameManager.Instance?.AddCoins(Mathf.Max(1, Mathf.RoundToInt(amount * multiplier)));
+
+            if (PoolManager.Instance != null)
+            {
+                PoolManager.Instance.Despawn(gameObject);
             }
             else
             {
                 Destroy(gameObject);
+            }
+        }
+
+        private void ApplySprite(Sprite sprite)
+        {
+            if (body != null && sprite != null)
+            {
+                body.sprite = sprite;
             }
         }
 
@@ -99,6 +210,11 @@ namespace KingsRescue.World
 
             Vector2 origin = transform.position;
             float luck = ResolveLuck();
+
+            if (breakEffectPrefab != null)
+            {
+                pool.Spawn(breakEffectPrefab, origin, Quaternion.identity);
+            }
 
             if (coinPrefab != null)
             {
@@ -114,38 +230,6 @@ namespace KingsRescue.World
             {
                 SpawnPickup(pool, healthPrefab, origin);
             }
-
-            if (isChest)
-            {
-                AchievementProgress.RecordChest();
-                PowerUpCatalog.TryDrop(origin, true);
-                TryDropRareItem(pool, origin, luck);
-            }
-        }
-
-        private void TryDropRareItem(PoolManager pool, Vector2 origin, float luck)
-        {
-            float chance = Mathf.Clamp01(rareDropChance * luck);
-            if (Random.value >= chance)
-            {
-                return;
-            }
-
-            UpgradeService upgrades = UpgradeService.Instance;
-            if (upgrades != null && upgrades.TryGrantRandomItem(out UpgradeDefinition granted))
-            {
-                Debug.Log($"Lucky chest unlocked {granted.Title(upgrades.Loadout)}.", this);
-                return;
-            }
-
-            if (coinPrefab == null)
-            {
-                return;
-            }
-
-            int bonus = Mathf.Max(3, coinValue * 5);
-            CoinPickup coin = SpawnPickup(pool, coinPrefab, origin) as CoinPickup;
-            coin?.SetValue(bonus);
         }
 
         private static float ResolveLuck()

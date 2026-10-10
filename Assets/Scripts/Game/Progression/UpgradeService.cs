@@ -113,12 +113,12 @@ namespace KingsRescue.Progression
         }
 
         /// <summary>
-        /// Grants one random legal weapon or passive. Used by lucky chest drops.
+        /// Picks one random legal weapon or passive without applying it.
         /// Returns false when the loadout has nothing left to unlock.
         /// </summary>
-        public bool TryGrantRandomItem(out UpgradeDefinition granted)
+        public bool TryPickRandomItem(out UpgradeDefinition picked)
         {
-            granted = null;
+            picked = null;
             if (loadout == null || stats == null)
             {
                 return false;
@@ -139,14 +139,22 @@ namespace KingsRescue.Progression
                 }
             }
 
-            UpgradeDefinition picked = DrawWeighted();
-            if (picked == null)
+            picked = DrawWeighted();
+            return picked != null;
+        }
+
+        /// <summary>
+        /// Grants one random legal weapon or passive. Used by lucky chest drops.
+        /// Returns false when the loadout has nothing left to unlock.
+        /// </summary>
+        public bool TryGrantRandomItem(out UpgradeDefinition granted)
+        {
+            if (!TryPickRandomItem(out granted))
             {
                 return false;
             }
 
-            picked.Apply(loadout, stats);
-            granted = picked;
+            granted.Apply(loadout, stats);
             return true;
         }
 

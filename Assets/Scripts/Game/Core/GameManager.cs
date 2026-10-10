@@ -15,6 +15,7 @@ namespace KingsRescue.Core
         Boot,
         Playing,
         LevelUp,
+        Chest,
         GameOver
     }
 
@@ -213,6 +214,35 @@ namespace KingsRescue.Core
             }
 
             return false;
+        }
+
+        /// <summary>Freezes the run for the chest reveal overlay.</summary>
+        public void PushChestPause()
+        {
+            if (State == GameState.GameOver || State == GameState.Boot)
+            {
+                return;
+            }
+
+            if (playerHealth != null && !playerHealth.IsAlive)
+            {
+                return;
+            }
+
+            if (State == GameState.Playing)
+            {
+                SetState(GameState.Chest);
+            }
+        }
+
+        public void PopChestPause()
+        {
+            if (State != GameState.Chest)
+            {
+                return;
+            }
+
+            SetState(GameState.Playing);
         }
 
         public void TriggerGameOver()

@@ -120,6 +120,8 @@ MonoBehaviour:
     weight: 30
   - prefab: {fileID: 6089294405615521361, guid: 290db79a1de2fa6429a2bc903a3c10bc, type: 3}
     weight: 30
+  - prefab: {fileID: 6089294405615521361, guid: 306ba1df3c6cee54a87c51c7a5b3ec9d, type: 3}
+    weight: 50
   breakableCount: {x: 1, y: 2}
   decorations:
   - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
