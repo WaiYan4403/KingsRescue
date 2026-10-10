@@ -288,12 +288,12 @@ MonoBehaviour:
   perchMoveTime: 0.45
   perchTopPadding: 3.5
   slamRadius: 3
-  slamDamage: 30
+  slamDamage: 15
   laserLength: 15
   laserWidth: 2
   laserRotateSpeed: 60
   laserSweepArc: 70
-  laserDamage: 15
+  laserDamage: 10
   laserTick: 0.28
   waterBallPrefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
   volleyCount: 4
@@ -303,12 +303,12 @@ MonoBehaviour:
   volleyPattern: 040000000500000004000000
   volleyCooldown: 0.7
   volleyRecover: 0.4
-  volleyDamage: 20
+  volleyDamage: 10
   volleySpeed: 7.5
   volleyLifetime: 3.2
   volleyRadius: 0.5
   volleyRange: 15
-  splitSlime: {fileID: 11400000, guid: 0708d0bec44065e4dbf4cfb5e593b679, type: 2}
+  splitSlime: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
   splitCount: 20
   splitRadius: 3
 --- !u!1 &2043948441375406709

@@ -25,6 +25,7 @@ MonoBehaviour:
   contactInterval: 0.6
   contactRadius: 0.75
   dealsContactDamage: 1
+  knockbackResistance: 0.85
   moveStyle: 0
   moveSpeed: 1.2
   scrollInfluence: 0.85

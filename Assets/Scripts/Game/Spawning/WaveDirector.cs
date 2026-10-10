@@ -47,7 +47,10 @@ namespace KingsRescue.Spawning
         [SerializeField] private EnemyDefinition firstBoss;
 
         [Tooltip("Seconds into the run when Slime King walks in.")]
-        [SerializeField] private float firstBossTime = 300f;
+        [SerializeField] private float firstBossTime = 120f;
+
+        [Tooltip("Stop regular spawns this many seconds before a boss appointment.")]
+        [SerializeField] private float bossHushLead = 5f;
 
         [SerializeField] private BossAppointment[] bosses = System.Array.Empty<BossAppointment>();
 
@@ -126,7 +129,7 @@ namespace KingsRescue.Spawning
 
             TrySpawnScheduledBoss(runTime, runMinutes);
 
-            if (game.BossFightActive)
+            if (game.BossFightActive || RegularSpawnsHushed(runTime))
             {
                 pending.Clear();
                 return;
@@ -348,6 +351,38 @@ namespace KingsRescue.Spawning
 
                 SpawnGroup(enemy, 1, def.pattern, runMinutes, i, count);
             }
+        }
+
+        private bool RegularSpawnsHushed(float runTime)
+        {
+            float nextBoss = PeekNextBossTime();
+            if (float.IsPositiveInfinity(nextBoss))
+            {
+                return false;
+            }
+
+            float lead = bossHushLead > 0.01f ? bossHushLead : 5f;
+            return runTime >= nextBoss - lead;
+        }
+
+        private float PeekNextBossTime()
+        {
+            if (bosses != null && bosses.Length > 0)
+            {
+                if (nextBossIndex >= bosses.Length)
+                {
+                    return float.PositiveInfinity;
+                }
+
+                return bosses[nextBossIndex].atTime;
+            }
+
+            if (firstBossSpawned || firstBoss == null)
+            {
+                return float.PositiveInfinity;
+            }
+
+            return firstBossTime;
         }
 
         private void TrySpawnScheduledBoss(float runTime, float runMinutes)

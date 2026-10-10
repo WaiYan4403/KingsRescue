@@ -72,6 +72,7 @@ namespace KingsRescue.Data
         [Tooltip("World units a projectile may travel. 0 uses the default cap. Negative means unlimited (flies until off-screen).")]
         public float maxDistance = 6.5f;
 
+        [Tooltip("World units to shove a living enemy along the hit. 0 does nothing.")]
         public float knockback = 0f;
 
         [Tooltip("MeleeSwing only. Width of the wedge in degrees. 360 hits all around.")]

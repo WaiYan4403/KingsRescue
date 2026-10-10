@@ -107,6 +107,9 @@ namespace KingsRescue.Data
         [Tooltip("When false, walking into the body does nothing. Meteors wait for impact instead.")]
         public bool dealsContactDamage = true;
 
+        [Tooltip("0 = full shove. 1 = immovable. Bosses default to immune if this is left at 0.")]
+        [Range(0f, 1f)] public float knockbackResistance;
+
         [Header("Movement")]
         public EnemyMoveStyle moveStyle = EnemyMoveStyle.Chase;
 
@@ -215,29 +218,56 @@ namespace KingsRescue.Data
 
         [Header("Scaling")]
         [Tooltip("Fraction of base health added per minute of run time.")]
-        public float healthGrowthPerMinute = 0.35f;
+        public float healthGrowthPerMinute = 0.55f;
 
         [Tooltip("Fraction of base contact damage added per minute of run time.")]
-        public float damageGrowthPerMinute = 0.12f;
+        public float damageGrowthPerMinute = 0.22f;
+
+        private const float ExtraHealthPerMinute = 0.22f;
+        private const float ExtraDamagePerMinute = 0.10f;
+        private const float HealthAccelPerMinuteSquared = 0.03f;
+        private const float DamageAccelPerMinuteSquared = 0.018f;
 
         public float ScaledHealth(float runMinutes)
         {
-            return maxHealth * (1f + healthGrowthPerMinute * runMinutes);
+            return maxHealth * DifficultyMultiplier(runMinutes, healthGrowthPerMinute, ExtraHealthPerMinute, HealthAccelPerMinuteSquared);
         }
 
         public float ScaledContactDamage(float runMinutes)
         {
-            return contactDamage * (1f + damageGrowthPerMinute * runMinutes);
+            return contactDamage * DifficultyMultiplier(runMinutes, damageGrowthPerMinute, ExtraDamagePerMinute, DamageAccelPerMinuteSquared);
         }
 
         public float ScaledAttackDamage(float runMinutes)
         {
-            return attackDamage * (1f + damageGrowthPerMinute * runMinutes);
+            return attackDamage * DifficultyMultiplier(runMinutes, damageGrowthPerMinute, ExtraDamagePerMinute, DamageAccelPerMinuteSquared);
         }
 
         public float ScaledDeathBurstDamage(float runMinutes)
         {
-            return deathBurstDamage * (1f + damageGrowthPerMinute * runMinutes);
+            return deathBurstDamage * DifficultyMultiplier(runMinutes, damageGrowthPerMinute, ExtraDamagePerMinute, DamageAccelPerMinuteSquared);
+        }
+
+        /// <summary>Multiplier on incoming knockback. 0 means this body does not move.</summary>
+        public float KnockbackTaken
+        {
+            get
+            {
+                float resist = knockbackResistance;
+                if (isBoss && resist <= 0f)
+                {
+                    resist = 1f;
+                }
+
+                return 1f - Mathf.Clamp01(resist);
+            }
+        }
+
+        private static float DifficultyMultiplier(float runMinutes, float linear, float extraLinear, float accel)
+        {
+            float t = Mathf.Max(0f, runMinutes);
+            float growth = Mathf.Max(0f, linear) + Mathf.Max(0f, extraLinear);
+            return 1f + growth * t + Mathf.Max(0f, accel) * t * t;
         }
     }
 }

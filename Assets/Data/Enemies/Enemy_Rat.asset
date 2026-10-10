@@ -25,6 +25,7 @@ MonoBehaviour:
   contactInterval: 0.6
   contactRadius: 0.22
   dealsContactDamage: 1
+  knockbackResistance: 0
   moveStyle: 3
   moveSpeed: 4.4
   scrollInfluence: 0.2
@@ -34,9 +35,9 @@ MonoBehaviour:
   separationRadius: 1.3
   separationStrength: 3.5
   preferredDistance: 4.5
-  spawnAsFlock: 1
-  flockMin: 8
-  flockMax: 14
+  spawnAsFlock: 0
+  flockMin: 4
+  flockMax: 8
   attackStyle: 0
   projectilePrefab: {fileID: 0}
   meteorDefinition: {fileID: 0}

@@ -21,12 +21,13 @@ MonoBehaviour:
   bodyTint: {r: 0.2, g: 0.18, b: 0.28, a: 1}
   bodyScale: 1.05
   maxHealth: 2000
-  contactDamage: 24
+  contactDamage: 15
   contactInterval: 0.6
   contactRadius: 0.85
   dealsContactDamage: 1
+  knockbackResistance: 1
   moveStyle: 3
-  moveSpeed: 3.2
+  moveSpeed: 1.7
   scrollInfluence: 0.15
   turnResponsiveness: 6
   followChance: 1

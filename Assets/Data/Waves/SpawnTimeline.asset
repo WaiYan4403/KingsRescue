@@ -25,14 +25,24 @@ MonoBehaviour:
   flockSessionCooldown: 24
   flockSessionSpawnInterval: 2.5
   roster:
-  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
-    unlockAt: 0
+  - enemy: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+    unlockAt: 5
     weight: 10
     introCount: 8
     introPattern: 0
-  - enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+  - enemy: {fileID: 11400000, guid: be1ca4bec745da341bcb4e5109f38763, type: 2}
+    unlockAt: 30
+    weight: 10
+    introCount: 8
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 877e8d1dc40dfb445a13bd6ff56670e8, type: 2}
     unlockAt: 60
     weight: 8
+    introCount: 1
+    introPattern: 0
+  - enemy: {fileID: 11400000, guid: 2b9f7f2c735068346af58aa85a65f09a, type: 2}
+    unlockAt: 60
+    weight: 4
     introCount: 1
     introPattern: 0
   - enemy: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
@@ -46,26 +56,26 @@ MonoBehaviour:
     introCount: 6
     introPattern: 0
   - enemy: {fileID: 11400000, guid: 5a51234f69da0bf4093fd1330267856c, type: 2}
-    unlockAt: 240
+    unlockAt: 200
     weight: 7
     introCount: 5
     introPattern: 0
   - enemy: {fileID: 11400000, guid: 4f9de70f10a9f2648ba4397b36fa54ce, type: 2}
-    unlockAt: 300
+    unlockAt: 240
     weight: 7
     introCount: 5
     introPattern: 0
   - enemy: {fileID: 11400000, guid: 7388b129eeedb234696e658c98938525, type: 2}
-    unlockAt: 360
+    unlockAt: 300
     weight: 7
     introCount: 6
     introPattern: 0
   - enemy: {fileID: 11400000, guid: 2e2cec80d33ea2545a403595083dda63, type: 2}
-    unlockAt: 420
+    unlockAt: 360
     weight: 6
     introCount: 4
     introPattern: 0
-  - enemy: {fileID: 11400000, guid: 877e8d1dc40dfb445a13bd6ff56670e8, type: 2}
+  - enemy: {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
     unlockAt: 480
     weight: 8
     introCount: 1

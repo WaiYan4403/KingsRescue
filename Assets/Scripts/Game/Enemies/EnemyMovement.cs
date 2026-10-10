@@ -45,7 +45,12 @@ namespace KingsRescue.Enemies
         private float hasteMult = 1f;
         private float dashUntil;
         private Vector2 dashVelocity;
+        private Vector2 knockbackVelocity;
+        private float knockbackUntil;
         private bool halted;
+
+        private const float KnockbackDuration = 0.16f;
+        private const float KnockbackPop = 0.28f;
 
         private void Awake()
         {
@@ -100,6 +105,8 @@ namespace KingsRescue.Enemies
             hasteUntil = 0f;
             hasteMult = 1f;
             dashUntil = 0f;
+            knockbackVelocity = Vector2.zero;
+            knockbackUntil = 0f;
             halted = false;
             RollFollowRole();
         }
@@ -180,6 +187,25 @@ namespace KingsRescue.Enemies
             dashVelocity = velocity;
             dashUntil = Time.time + Mathf.Max(0.05f, duration);
             halted = false;
+        }
+
+        /// <summary>
+        /// Shoves this enemy along the hit for a short beat. <paramref name="force"/>
+        /// is authored world units (WeaponLevel.knockback).
+        /// </summary>
+        public void ApplyKnockback(Vector2 direction, float force)
+        {
+            if (force <= 0.01f)
+            {
+                return;
+            }
+
+            Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
+            float duration = KnockbackDuration;
+            knockbackVelocity = dir * (force / duration);
+            knockbackUntil = Time.time + duration;
+            halted = false;
+            transform.position += (Vector3)(dir * force * KnockbackPop);
         }
 
         public void SetLockedHeading(Vector2 heading)
@@ -281,8 +307,16 @@ namespace KingsRescue.Enemies
 
             cruiseVelocity = Vector2.Lerp(cruiseVelocity, desired, 1f - Mathf.Exp(-responsiveness * dt));
 
+            Vector2 knock = Vector2.zero;
+            if (Time.time < knockbackUntil)
+            {
+                float remain = Mathf.Clamp01((knockbackUntil - Time.time) / KnockbackDuration);
+                knock = knockbackVelocity * remain;
+                cruiseVelocity = Vector2.Lerp(cruiseVelocity, knock, 0.65f);
+            }
+
             Vector2 scroll = Vector2.down * (ScrollDirector.Speed * scrollInfluence);
-            Vector2 total = cruiseVelocity + scroll + ComputeSeparation(position);
+            Vector2 total = cruiseVelocity + scroll + ComputeSeparation(position) + knock;
 
             transform.position = position + total * dt;
 

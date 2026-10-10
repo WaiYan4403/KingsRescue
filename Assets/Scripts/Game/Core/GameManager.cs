@@ -132,7 +132,7 @@ namespace KingsRescue.Core
             CoinsChanged?.Invoke(Coins);
         }
 
-        /// <summary>Stops the road and regular spawns for a unique boss arena.</summary>
+        /// <summary>Stops the road. Regulars already on the field stay; new trash is hushed by WaveDirector.</summary>
         public void BeginBossFight()
         {
             if (BossFightActive || State == GameState.GameOver)
@@ -142,8 +142,6 @@ namespace KingsRescue.Core
 
             BossFightActive = true;
             ScrollDirector.Instance?.SetScrolling(false);
-            Enemy.DespawnNonEncounter();
-            HostileProjectile.DespawnAll();
         }
 
         /// <summary>Hands the road back to the run after the boss is gone.</summary>

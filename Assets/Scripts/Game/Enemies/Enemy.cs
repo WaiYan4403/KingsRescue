@@ -108,12 +108,14 @@ namespace KingsRescue.Enemies
         {
             Active.Add(this);
             health.Died += OnDied;
+            health.Damaged += OnDamaged;
         }
 
         private void OnDisable()
         {
             Active.Remove(this);
             health.Died -= OnDied;
+            health.Damaged -= OnDamaged;
         }
 
         public void OnSpawned()
@@ -249,6 +251,23 @@ namespace KingsRescue.Enemies
             {
                 Destroy(gameObject);
             }
+        }
+
+        private void OnDamaged(Health source, DamageInfo info)
+        {
+            if (movement == null || info.Knockback <= 0.01f)
+            {
+                return;
+            }
+
+            float taken = definition != null ? definition.KnockbackTaken : 1f;
+            float force = info.Knockback * taken;
+            if (force <= 0.01f)
+            {
+                return;
+            }
+
+            movement.ApplyKnockback(info.Direction, force);
         }
 
         private void OnDied(Health source, DamageInfo info)
