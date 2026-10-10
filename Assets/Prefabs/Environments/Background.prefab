@@ -117,7 +117,7 @@ MonoBehaviour:
   - prefab: {fileID: 6089294405615521361, guid: e5422f81fb3144e5cb342e7dfea75afc, type: 3}
     weight: 70
   - prefab: {fileID: 6635167547720944185, guid: 70bcc78f4b2bf4d9db3beff254e561f7, type: 3}
-    weight: 30
+    weight: 8
   - prefab: {fileID: 6089294405615521361, guid: 290db79a1de2fa6429a2bc903a3c10bc, type: 3}
     weight: 30
   - prefab: {fileID: 6089294405615521361, guid: 306ba1df3c6cee54a87c51c7a5b3ec9d, type: 3}
@@ -196,7 +196,7 @@ MonoBehaviour:
     weight: 10
   - prefab: {fileID: 889982214784732533, guid: 3104ab7cea58de84c8a43c765fbd4ea1, type: 3}
     weight: 10
-  decorationCount: {x: 2, y: 4}
+  decorationCount: {x: 6, y: 12}
   blockers:
   - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
     weight: 20
@@ -219,10 +219,10 @@ MonoBehaviour:
   - prefab: {fileID: 889982214784732533, guid: 349ab37b9de63da45a22f8e83f16a14a, type: 3}
     weight: 15
   blockerCount: {x: 1, y: 2}
-  horizontalRange: 2.8
+  horizontalRange: 3
   verticalPadding: 1.2
   placementAttempts: 4
-  minHorizontalSeparation: 1.2
+  minHorizontalSeparation: 2
 --- !u!1 &4100005
 GameObject:
   m_ObjectHideFlags: 0

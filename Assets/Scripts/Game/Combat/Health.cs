@@ -77,6 +77,20 @@ namespace KingsRescue.Combat
             Current = maxHealth;
         }
 
+        /// <summary>
+        /// Pots and boxes never exceed 2 HP. Each landed hit knocks off 1 so a
+        /// strong weapon cannot skip the crack sprite, and a weak tick cannot
+        /// stall the smash for a dozen hits.
+        /// </summary>
+        public void ConfigureSmashProp(float newMax)
+        {
+            maxHealth = Mathf.Clamp(newMax, 1f, 2f);
+            stepwiseHits = true;
+            Current = maxHealth;
+            Untargetable = false;
+            BlocksFrontal = false;
+        }
+
         public void TakeDamage(in DamageInfo info)
         {
             if (!IsAlive || Untargetable || info.Amount <= 0f)
@@ -85,7 +99,7 @@ namespace KingsRescue.Combat
             }
 
             float amount = stepwiseHits ? 1f : info.Amount;
-            if (BlocksFrontal && IsFrontal(info.Direction))
+            if (!stepwiseHits && BlocksFrontal && IsFrontal(info.Direction))
             {
                 amount *= 0.22f;
             }

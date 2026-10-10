@@ -94,6 +94,10 @@ namespace KingsRescue.World
             {
                 health.Untargetable = true;
             }
+            else
+            {
+                health.ConfigureSmashProp(2f);
+            }
         }
 
         public void OnDespawned()
