@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 4460760701475635381}
   - component: {fileID: 1348653748630193198}
   - component: {fileID: 4457876508632528820}
-  - component: {fileID: 1821572945072813839}
   - component: {fileID: 8082542046323870718}
   - component: {fileID: 3370180711323300488}
+  - component: {fileID: 113603531293512896}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -110,9 +110,9 @@ MonoBehaviour:
   asideBias: 1.1
   flyBobAmplitude: 0.14
   flyBobHz: 1.6
-  bodyAnimator: {fileID: 0}
-  legAnimator: {fileID: 0}
-  effectAnimator: {fileID: 0}
+  bodyAnimator: {fileID: 5334515133101506272}
+  legAnimator: {fileID: 1780402207803365730}
+  effectAnimator: {fileID: 826650283698333564}
   spriteRenderer: {fileID: 0}
   speedParameter: MoveSpeed
 --- !u!114 &4460760701475635381
@@ -129,11 +129,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PlayerHealth
   invulnerabilityDuration: 0.5
   flashTarget: {fileID: 0}
-  bodyAnimator: {fileID: 0}
-  legAnimator: {fileID: 0}
+  bodyAnimator: {fileID: 5334515133101506272}
+  legAnimator: {fileID: 1780402207803365730}
   healthParameter: Health
   dieStateName: Lancer_Die
-  invulnerableAlpha: 0.45
+  hurtFlashColor: {r: 1, g: 0.15, b: 0.12, a: 1}
   reviveHealthFraction: 0.5
   reviveInvulnerability: 2.5
 --- !u!114 &1348653748630193198
@@ -166,28 +166,6 @@ MonoBehaviour:
   weaponRoot: {fileID: 0}
   maxWeapons: 4
   maxPassives: 4
---- !u!95 &1821572945072813839
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1306224722766589929}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e01038a5233554a499dd4bb583a196c2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &8082542046323870718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,6 +190,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0279fe9394c9a00418a41895822c2018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PowerUpController
+--- !u!70 &113603531293512896
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306224722766589929}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.0020261514, y: -0.91297424}
+  m_Size: {x: 0.26640883, y: 0.20123914}
+  m_Direction: 1
 --- !u!1 &3468642812728596342
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,6 +237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1491605881118887091}
   - component: {fileID: 5201774009589324401}
+  - component: {fileID: 826650283698333564}
   m_Layer: 0
   m_Name: Effect
   m_TagString: Untagged
@@ -303,6 +319,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!95 &826650283698333564
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3468642812728596342}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c82a293e8e861f74fae21c37559486cb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6558581607509746126
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,6 +351,7 @@ GameObject:
   m_Component:
   - component: {fileID: 693457951673517264}
   - component: {fileID: 4741047305990018433}
+  - component: {fileID: 5334515133101506272}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -384,16 +423,38 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1719176181862259361, guid: e9e5c0598542b144e919b1324bf040a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1.5}
+  m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &5334515133101506272
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6558581607509746126}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 18fb19ead1948e840a05574273703db9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8947497848250072928
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3609096672883387995}
   - component: {fileID: 8711611143315047214}
+  - component: {fileID: 1780402207803365730}
   m_Layer: 0
   m_Name: Leg
   m_TagString: Untagged
@@ -475,7 +537,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 9
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 6674961579397827535, guid: 04a00da7cf9ee5d45ab6f9fcce197086, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -483,5 +545,27 @@ SpriteRenderer:
   m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &1780402207803365730
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8947497848250072928}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b1de5b85fcfe67440a2fff4af4c00e90, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

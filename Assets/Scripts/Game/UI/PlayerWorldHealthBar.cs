@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using KingsRescue.Core;
 using KingsRescue.Player;
 
 namespace KingsRescue.UI
@@ -20,7 +21,11 @@ namespace KingsRescue.UI
         private RectTransform canvasRect;
         private Canvas canvas;
         private Camera uiCamera;
+        private Camera worldCamera;
         private Transform follow;
+        private GameObject overlayRoot;
+        private CanvasGroup visibility;
+        private Vector2 lastLocal;
 
         private void Awake()
         {
@@ -34,6 +39,7 @@ namespace KingsRescue.UI
             }
 
             ResolveFollow();
+            DetachFromHudCanvas();
         }
 
         private void Start()
@@ -53,17 +59,34 @@ namespace KingsRescue.UI
             {
                 health.HealthChanged -= OnHealthChanged;
             }
+
+            if (overlayRoot != null)
+            {
+                GameObject root = overlayRoot;
+                overlayRoot = null;
+                Destroy(root);
+            }
         }
 
         private void LateUpdate()
         {
-            if (follow == null || rect == null || canvasRect == null)
+            bool covered = CoveredByMenu();
+            if (visibility != null && visibility.alpha != (covered ? 0f : 1f))
+            {
+                visibility.alpha = covered ? 0f : 1f;
+            }
+
+            if (covered || follow == null || rect == null || canvasRect == null)
             {
                 return;
             }
 
             Vector3 world = FollowPoint();
-            Camera worldCamera = uiCamera != null ? uiCamera : Camera.main;
+            if (worldCamera == null)
+            {
+                worldCamera = uiCamera != null ? uiCamera : Camera.main;
+            }
+
             Vector2 screen = RectTransformUtility.WorldToScreenPoint(worldCamera, world);
 
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screen, uiCamera, out Vector2 local))
@@ -75,7 +98,86 @@ namespace KingsRescue.UI
             Vector2 canvasHalf = canvasRect.rect.size * 0.5f;
             local.x = Mathf.Clamp(local.x, -canvasHalf.x + half.x + screenPadding.x, canvasHalf.x - half.x - screenPadding.x);
             local.y = Mathf.Clamp(local.y, -canvasHalf.y + half.y + screenPadding.y, canvasHalf.y - half.y - screenPadding.y);
+            if ((local - lastLocal).sqrMagnitude < 0.25f)
+            {
+                return;
+            }
+
+            lastLocal = local;
             rect.anchoredPosition = local;
+        }
+
+        /// <summary>
+        /// The bar follows the hero every frame. On the HUD canvas that rebuilds every label too.
+        /// </summary>
+        private void DetachFromHudCanvas()
+        {
+            visibility = GetComponent<CanvasGroup>();
+            if (visibility == null)
+            {
+                visibility = gameObject.AddComponent<CanvasGroup>();
+            }
+
+            visibility.interactable = false;
+            visibility.blocksRaycasts = false;
+
+            if (canvas == null)
+            {
+                return;
+            }
+
+            int shared = canvas.GetComponentsInChildren<UnityEngine.UI.Graphic>(true).Length;
+            int own = GetComponentsInChildren<UnityEngine.UI.Graphic>(true).Length;
+            if (shared <= own)
+            {
+                return;
+            }
+
+            GameObject host = new GameObject("WorldHealthCanvas");
+            RectTransform hostRect = host.AddComponent<RectTransform>();
+            hostRect.anchorMin = Vector2.zero;
+            hostRect.anchorMax = Vector2.one;
+            hostRect.offsetMin = Vector2.zero;
+            hostRect.offsetMax = Vector2.zero;
+
+            Canvas hud = canvas;
+            Canvas overlay = host.AddComponent<Canvas>();
+            overlay.renderMode = hud.renderMode;
+            overlay.worldCamera = hud.worldCamera;
+            overlay.planeDistance = hud.planeDistance;
+            overlay.sortingLayerID = hud.sortingLayerID;
+            overlay.sortingOrder = hud.sortingOrder - 1;
+
+            CanvasScaler source = canvas.GetComponent<CanvasScaler>();
+            CanvasScaler scaler = host.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1080f, 1920f);
+            if (source != null)
+            {
+                scaler.uiScaleMode = source.uiScaleMode;
+                scaler.referenceResolution = source.referenceResolution;
+                scaler.screenMatchMode = source.screenMatchMode;
+                scaler.matchWidthOrHeight = source.matchWidthOrHeight;
+            }
+
+            transform.SetParent(host.transform, false);
+            overlayRoot = host;
+            canvas = overlay;
+            canvasRect = hostRect;
+            uiCamera = overlay.renderMode == RenderMode.ScreenSpaceOverlay ? null : overlay.worldCamera;
+            worldCamera = uiCamera != null ? uiCamera : Camera.main;
+        }
+
+        private static bool CoveredByMenu()
+        {
+            GameManager game = GameManager.Instance;
+            if (game == null)
+            {
+                return false;
+            }
+
+            GameState state = game.State;
+            return state == GameState.LevelUp || state == GameState.Chest || state == GameState.GameOver;
         }
 
         private Vector3 FollowPoint()

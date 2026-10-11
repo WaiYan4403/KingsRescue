@@ -82,6 +82,55 @@ namespace KingsRescue.Combat
             }
         }
 
+        /// <summary>Living targets touched by a circle swept from <paramref name="from"/> to <paramref name="to"/>.</summary>
+        public static void OverlapSegment(Vector2 from, Vector2 to, float radius, List<Health> results)
+        {
+            results.Clear();
+            Vector2 delta = to - from;
+            float distSq = delta.sqrMagnitude;
+            List<Health> targets = HitRegistry.Targets;
+
+            for (int i = 0; i < targets.Count; i++)
+            {
+                Health target = targets[i];
+                if (target == null || !target.IsAlive || target.Untargetable)
+                {
+                    continue;
+                }
+
+                Vector2 closest = from;
+                if (distSq > 0.0001f)
+                {
+                    float t = Mathf.Clamp01(Vector2.Dot(target.Position - from, delta) / distSq);
+                    closest = from + delta * t;
+                }
+
+                if (target.Overlaps(closest, radius))
+                {
+                    results.Add(target);
+                }
+            }
+        }
+
+        /// <summary>Damages everything a forward lance crosses. Returns how many targets were hit.</summary>
+        public static int DamageSegment(Vector2 from, Vector2 to, float radius, float damage, float knockback, GameObject source)
+        {
+            OverlapSegment(from, to, radius, Scratch);
+
+            Vector2 direction = to - from;
+            direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
+
+            for (int i = 0; i < Scratch.Count; i++)
+            {
+                Health target = Scratch[i];
+                target.TakeDamage(new DamageInfo(damage, target.Position, direction, knockback, source));
+            }
+
+            int count = Scratch.Count;
+            Scratch.Clear();
+            return count;
+        }
+
         /// <summary>Damages everything in a circle. Returns how many targets were hit.</summary>
         public static int DamageCircle(Vector2 center, float radius, float damage, float knockback, GameObject source)
         {

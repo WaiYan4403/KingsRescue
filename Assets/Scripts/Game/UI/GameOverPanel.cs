@@ -26,6 +26,10 @@ namespace KingsRescue.UI
 
         [SerializeField] private Animator animator;
 
+        [SerializeField] private float showDelay = 1f;
+
+        private Coroutine openRoutine;
+
         private void Awake()
         {
             if (root == null)
@@ -73,6 +77,12 @@ namespace KingsRescue.UI
             {
                 menuButton.onClick.RemoveListener(OnMenu);
             }
+
+            if (openRoutine != null && GameManager.Instance != null)
+            {
+                GameManager.Instance.StopCoroutine(openRoutine);
+                openRoutine = null;
+            }
         }
 
         private void OnStateChanged(GameState state)
@@ -82,6 +92,32 @@ namespace KingsRescue.UI
                 return;
             }
 
+            GameManager game = GameManager.Instance;
+            if (game == null || showDelay <= 0f)
+            {
+                Show();
+                return;
+            }
+
+            // The panel object is inactive, and timeScale is 0, so the wait has to
+            // run on the manager in real time.
+            if (openRoutine != null)
+            {
+                game.StopCoroutine(openRoutine);
+            }
+
+            openRoutine = game.StartCoroutine(ShowAfterDelay());
+        }
+
+        private IEnumerator ShowAfterDelay()
+        {
+            yield return new WaitForSecondsRealtime(showDelay);
+            openRoutine = null;
+            Show();
+        }
+
+        private void Show()
+        {
             Populate();
             root.transform.SetAsLastSibling();
             root.SetActive(true);

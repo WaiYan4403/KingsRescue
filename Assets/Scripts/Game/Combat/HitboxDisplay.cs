@@ -40,6 +40,34 @@ namespace KingsRescue.Combat
             }
         }
 
+        /// <summary>Forward lance hit, drawn from <paramref name="origin"/> along <paramref name="direction"/>.</summary>
+        public static void FlashCapsule(Vector2 origin, Vector2 direction, float length, float thickness, float lifetime = 0f)
+        {
+            HitboxDisplay display = Instance;
+            if (!CanShow(display))
+            {
+                return;
+            }
+
+            Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
+            float reach = Mathf.Max(0.2f, length);
+            HitboxMarker marker = SpawnWorld(display, origin + dir * (reach * 0.5f));
+            if (marker == null)
+            {
+                return;
+            }
+
+            marker.SetPersistent(false);
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+            marker.SetCapsule(reach, thickness, angle);
+
+            AutoDespawn despawn = marker.GetComponent<AutoDespawn>();
+            if (despawn != null)
+            {
+                despawn.SetLifetime(lifetime > 0f ? lifetime : display.flashLifetime);
+            }
+        }
+
         /// <summary>Circle that rides a projectile for as long as it lives.</summary>
         public static void Follow(Transform parent, float radius)
         {

@@ -234,6 +234,22 @@ namespace KingsRescue.Combat
         {
             WeaponLevel data = Data;
             Vector2 center = transform.position;
+            PlayCharacterAttack(swingIndex, swingCount);
+
+            float radius = ResolveArea();
+            float duration = ResolveDuration();
+            if (IsFinishingStrike(swingIndex))
+            {
+                // The last stage thrusts the lance straight up the screen. The slash
+                // circle sits under that sprite, so the strike gets its own forward box.
+                Vector2 forward = Vector2.up;
+                float length = radius;
+                float thickness = Mathf.Max(0.85f, radius * 0.4f);
+                Targeting.DamageSegment(center, center + forward * length, thickness * 0.5f, ResolveDamage(), data.knockback, gameObject);
+                HitboxDisplay.FlashCapsule(center, forward, length, thickness, duration);
+                return;
+            }
+
             Vector2 facing = ResolveFacing(center);
 
             // Alternate the wedge slightly left and right so a combo reads as a flurry.
@@ -243,17 +259,31 @@ namespace KingsRescue.Combat
                 facing = Rotate(facing, tilt);
             }
 
-            PlayCharacterAttack(swingIndex, swingCount);
-
-            float radius = ResolveArea();
             Targeting.DamageArc(center, facing, radius, data.arcDegrees, ResolveDamage(), data.knockback, gameObject);
-            float duration = ResolveDuration();
             HitboxDisplay.Flash(center, radius, duration);
 
             if (!definition.usesCharacterAnimators)
             {
                 SpawnEffect(center, facing, radius, duration);
             }
+        }
+
+        private bool IsFinishingStrike(int swingIndex)
+        {
+            if (definition == null || !definition.usesCharacterAnimators || definition.attackTriggers == null)
+            {
+                return false;
+            }
+
+            int stages = definition.attackTriggers.Length;
+            int unlocked = definition.GetUnlockedAttackStages(level);
+            if (stages < 2 || unlocked < stages)
+            {
+                return false;
+            }
+
+            int stage = Mathf.Clamp(swingIndex + 1, 1, unlocked);
+            return stage >= unlocked;
         }
 
         private int ResolveMeleeSwings()
