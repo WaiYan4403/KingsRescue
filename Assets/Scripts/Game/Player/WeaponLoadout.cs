@@ -22,11 +22,13 @@ namespace KingsRescue.Player
         [Tooltip("Parent for the weapon child objects. Defaults to this transform.")]
         [SerializeField] private Transform weaponRoot;
 
-        [SerializeField] private int maxWeapons = 6;
-        [SerializeField] private int maxPassives = 6;
+        [SerializeField] private int maxWeapons = 4;
+        [SerializeField] private int maxPassives = 4;
 
         private readonly Dictionary<WeaponDefinition, WeaponRuntime> weapons = new Dictionary<WeaponDefinition, WeaponRuntime>();
         private readonly Dictionary<PassiveDefinition, int> passiveLevels = new Dictionary<PassiveDefinition, int>();
+        private readonly List<WeaponDefinition> weaponOrder = new List<WeaponDefinition>(4);
+        private readonly List<PassiveDefinition> passiveOrder = new List<PassiveDefinition>(4);
 
         private PlayerStats stats;
         private PlayerController controller;
@@ -149,7 +151,20 @@ namespace KingsRescue.Player
             runtime.Initialize(weapon, stats, controller);
 
             weapons.Add(weapon, runtime);
+            weaponOrder.Add(weapon);
             Changed?.Invoke();
+        }
+
+        public void CollectWeapons(List<WeaponRuntime> results)
+        {
+            results.Clear();
+            for (int i = 0; i < weaponOrder.Count; i++)
+            {
+                if (weapons.TryGetValue(weaponOrder[i], out WeaponRuntime runtime) && runtime != null)
+                {
+                    results.Add(runtime);
+                }
+            }
         }
 
         // --- Passives --------------------------------------------------------
@@ -192,11 +207,31 @@ namespace KingsRescue.Player
             }
 
             int next = current + 1;
+            if (current == 0)
+            {
+                passiveOrder.Add(passive);
+            }
+
             passiveLevels[passive] = next;
 
             // Only the new level's modifiers are applied; earlier levels are already in.
             stats.AddModifiers(passive.GetLevel(next).modifiers);
             Changed?.Invoke();
+        }
+
+        public void CollectPassives(List<PassiveDefinition> results, List<int> levels)
+        {
+            results.Clear();
+            levels.Clear();
+            for (int i = 0; i < passiveOrder.Count; i++)
+            {
+                PassiveDefinition passive = passiveOrder[i];
+                if (passive != null && passiveLevels.TryGetValue(passive, out int level))
+                {
+                    results.Add(passive);
+                    levels.Add(level);
+                }
+            }
         }
     }
 }

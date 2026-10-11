@@ -196,6 +196,22 @@ MonoBehaviour:
     weight: 10
   - prefab: {fileID: 889982214784732533, guid: 3104ab7cea58de84c8a43c765fbd4ea1, type: 3}
     weight: 10
+  - prefab: {fileID: 889982214784732533, guid: a0a2529e4ed3fd14bac836b769ba24ba, type: 3}
+    weight: 10
+  - prefab: {fileID: 889982214784732533, guid: 89adfb1d4a0158745901fa7588d593d2, type: 3}
+    weight: 10
+  - prefab: {fileID: 889982214784732533, guid: 1af585e02841cbf4fad14cdb1c3e2164, type: 3}
+    weight: 10
+  - prefab: {fileID: 889982214784732533, guid: 44c38a98cbedc1441a3fcf406fb5e701, type: 3}
+    weight: 10
+  - prefab: {fileID: 889982214784732533, guid: d1ac4f322bf9fb643960ef80c1eb39d5, type: 3}
+    weight: 10
+  - prefab: {fileID: 889982214784732533, guid: 756288836c48c7f4285569827c928234, type: 3}
+    weight: 10
+  - prefab: {fileID: 889982214784732533, guid: bbaa2bb6ea2958840ae0aea9441fd4c0, type: 3}
+    weight: 10
+  - prefab: {fileID: 889982214784732533, guid: a78fab13a2b132144b4c28032bbad0d0, type: 3}
+    weight: 10
   decorationCount: {x: 6, y: 12}
   blockers:
   - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
@@ -217,6 +233,22 @@ MonoBehaviour:
   - prefab: {fileID: 889982214784732533, guid: 6a4ad3f1e2e80d54dae6cc1ddda33173, type: 3}
     weight: 15
   - prefab: {fileID: 889982214784732533, guid: 349ab37b9de63da45a22f8e83f16a14a, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: a0a2529e4ed3fd14bac836b769ba24ba, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: 89adfb1d4a0158745901fa7588d593d2, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: 1af585e02841cbf4fad14cdb1c3e2164, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: 44c38a98cbedc1441a3fcf406fb5e701, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: d1ac4f322bf9fb643960ef80c1eb39d5, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: 756288836c48c7f4285569827c928234, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: bbaa2bb6ea2958840ae0aea9441fd4c0, type: 3}
+    weight: 15
+  - prefab: {fileID: 889982214784732533, guid: a78fab13a2b132144b4c28032bbad0d0, type: 3}
     weight: 15
   blockerCount: {x: 1, y: 2}
   horizontalRange: 3

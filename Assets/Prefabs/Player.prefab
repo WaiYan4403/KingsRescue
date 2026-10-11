@@ -164,8 +164,8 @@ MonoBehaviour:
   character: {fileID: 11400000, guid: 1f8e2c4a6b704d3e9a12c8d5e7f0b3a1, type: 2}
   startingWeapon: {fileID: 11400000, guid: 601d542d4b3604ad2b77d5b4e0fa3a9b, type: 2}
   weaponRoot: {fileID: 0}
-  maxWeapons: 6
-  maxPassives: 6
+  maxWeapons: 4
+  maxPassives: 4
 --- !u!95 &1821572945072813839
 Animator:
   serializedVersion: 7
