@@ -28,6 +28,7 @@ namespace KingsRescue.Combat
         private int level = 1;
         private float nextFireTime;
         private float orbitAngle;
+        private float orbitUntil;
         private int activeOrbitCount = -1;
         private Coroutine comboRoutine;
         private Vector2 lastFacing = Vector2.up;
@@ -591,14 +592,36 @@ namespace KingsRescue.Combat
 
         private void UpdateOrbit()
         {
-            WeaponLevel data = Data;
-            int count = ResolveCount();
-
-            if (count != activeOrbitCount)
+            if (blades.Count > 0)
             {
-                RebuildBlades(count);
+                int count = ResolveCount();
+                if (count != activeOrbitCount)
+                {
+                    RebuildBlades(count);
+                }
+
+                TickOrbitMotion();
+                if (Time.time >= orbitUntil)
+                {
+                    ClearBlades();
+                    nextFireTime = Time.time + ResolveCooldown();
+                }
+
+                return;
             }
 
+            if (Time.time < nextFireTime)
+            {
+                return;
+            }
+
+            RebuildBlades(ResolveCount());
+            orbitUntil = Time.time + Mathf.Max(0.2f, ResolveDuration());
+        }
+
+        private void TickOrbitMotion()
+        {
+            WeaponLevel data = Data;
             if (blades.Count == 0)
             {
                 return;
@@ -607,7 +630,6 @@ namespace KingsRescue.Combat
             float radius = ResolveArea();
             float damage = ResolveDamage();
             orbitAngle += data.orbitSpeed * 360f * Time.deltaTime;
-
             Vector2 center = transform.position;
 
             for (int i = 0; i < blades.Count; i++)

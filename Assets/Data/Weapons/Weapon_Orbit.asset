@@ -21,15 +21,27 @@ MonoBehaviour:
   effectPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
   comboDelay: 0.12
+  fanProjectiles: 1
+  aimStyle: 0
+  projectileHoming: 0
+  isUniqueWeapon: 0
+  requiresUnlock: 0
+  usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  attackStageUnlockLevels: 010000000200000003000000
   levels:
   - upgradeText: 
     damage: 8
-    cooldown: 1
+    cooldown: 5
     count: 1
     pierce: 0
     area: 1.9
     projectileSpeed: 12
-    lifetime: 1
+    lifetime: 5
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
@@ -37,12 +49,13 @@ MonoBehaviour:
     orbitSpeed: 0.7
   - upgradeText: +1 blade
     damage: 8
-    cooldown: 1
+    cooldown: 5
     count: 2
     pierce: 0
     area: 1.9
     projectileSpeed: 12
-    lifetime: 1
+    lifetime: 5.5
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
@@ -50,12 +63,13 @@ MonoBehaviour:
     orbitSpeed: 0.7
   - upgradeText: Faster orbit
     damage: 12
-    cooldown: 1
-    count: 2
+    cooldown: 2.8
+    count: 5
     pierce: 0
     area: 1.9
     projectileSpeed: 12
-    lifetime: 1
+    lifetime: 5.5
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
@@ -63,12 +77,13 @@ MonoBehaviour:
     orbitSpeed: 0.95
   - upgradeText: +1 blade, more reach
     damage: 12
-    cooldown: 1
-    count: 3
+    cooldown: 2.6
+    count: 5
     pierce: 0
     area: 2.4
     projectileSpeed: 12
-    lifetime: 1
+    lifetime: 6
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
@@ -76,12 +91,13 @@ MonoBehaviour:
     orbitSpeed: 0.95
   - upgradeText: Four blades
     damage: 18
-    cooldown: 1
-    count: 4
+    cooldown: 2.4
+    count: 5
     pierce: 0
     area: 2.4
     projectileSpeed: 12
-    lifetime: 1
+    lifetime: 7
+    maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14

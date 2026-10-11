@@ -36,7 +36,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.05, y: 0.82, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,8 +90,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8522042403500378055, guid: 80093fd8ebed85b4284f79562c40719e, type: 3}
-  m_Color: {r: 0.5, g: 0.32, b: 0.18, a: 1}
+  m_Sprite: {fileID: -458185587419916677, guid: 51f0e3f89d9b5e4458d3fca91b6f3b63, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -114,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.Health
   maxHealth: 10
   hitRadius: 0.4
+  stepwiseHits: 0
 --- !u!114 &4840904926524577684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +144,7 @@ MonoBehaviour:
   chaseSlack: 1
   speedJitter: 0.12
   passedMargin: 0.35
-  chaseUpSpeedFactor: 0.5
+  chaseUpSpeedFactor: 1
 --- !u!114 &3164531224000449983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +216,7 @@ Animator:
   m_GameObject: {fileID: 4720918016224897111}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bad28eae4b88f9d46b90850ea84ceef1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 029e57a32ba16f54a9698faaa845ea4c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

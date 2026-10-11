@@ -66,7 +66,7 @@ namespace KingsRescue.Data
 
         public float projectileSpeed = 12f;
 
-        [Tooltip("Projectile lifetime, or the on-screen life of a swing effect.")]
+        [Tooltip("How long a projectile, swing effect, or orbit cycle stays on screen. Duration upgrades stretch this.")]
         public float lifetime = 1.6f;
 
         [Tooltip("World units a projectile may travel. 0 uses the default cap. Negative means unlimited (flies until off-screen).")]

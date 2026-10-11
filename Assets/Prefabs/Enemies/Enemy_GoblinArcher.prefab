@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 4773195522138313428}
   - component: {fileID: 3994489595107252572}
   - component: {fileID: 5363148762157792311}
+  - component: {fileID: 8261467944193904234}
   m_Layer: 0
   m_Name: Enemy_GoblinArcher
   m_TagString: Untagged
@@ -91,8 +92,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8522042403500378055, guid: 80093fd8ebed85b4284f79562c40719e, type: 3}
-  m_Color: {r: 1, g: 0.72, b: 0.28, a: 1}
+  m_Sprite: {fileID: 1599324115949547608, guid: c3d3a5f44e5df5a4fab642ac9f271048, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -115,6 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.Health
   maxHealth: 10
   hitRadius: 0.4
+  stepwiseHits: 0
 --- !u!114 &2693682298542117013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +218,7 @@ Animator:
   m_GameObject: {fileID: 9032014044579634548}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bad28eae4b88f9d46b90850ea84ceef1, type: 2}
+  m_Controller: {fileID: 9100000, guid: fd40918fc84249c44bb27067a3c9f692, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -252,3 +254,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials
+--- !u!114 &8261467944193904234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9032014044579634548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9564f6a86f3cb144d9746172037e4bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemyAttackAnimator

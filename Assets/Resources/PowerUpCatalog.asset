@@ -15,4 +15,5 @@ MonoBehaviour:
   pickupPrefab: {fileID: 5825566481984973083, guid: f4915576817bd1947b191132f34a03b5, type: 3}
   enemyDropChance: 0.012
   chestDropChance: 0.28
+  propDropChance: 0.03
   popSpeed: 2.6

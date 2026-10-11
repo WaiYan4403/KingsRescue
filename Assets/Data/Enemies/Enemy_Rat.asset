@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Enemy_Rat
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Rat
-  prefab: {fileID: 244735591878693721, guid: 968a19308789644018e6435fc7803c17, type: 3}
+  prefab: {fileID: 3371409198316295035, guid: 2b9075339b53ec345bfabbdb9af55cb8, type: 3}
   isBoss: 0
   bossMinion: 0
   isElite: 0
   canFlipSprite: 1
-  bodyTint: {r: 0.55, g: 0.4, b: 0.3, a: 1}
-  bodyScale: 0.55
+  bodyTint: {r: 1, g: 1, b: 1, a: 1}
+  bodyScale: 1
   maxHealth: 3
   contactDamage: 4
   contactInterval: 0.6

@@ -18,8 +18,8 @@ MonoBehaviour:
   bossMinion: 0
   isElite: 0
   canFlipSprite: 1
-  bodyTint: {r: 0.85, g: 0.45, b: 0.2, a: 1}
-  bodyScale: 1.25
+  bodyTint: {r: 1, g: 1, b: 1, a: 1}
+  bodyScale: 1
   maxHealth: 16
   contactDamage: 9
   contactInterval: 0.6

@@ -37,7 +37,10 @@ namespace KingsRescue.World
         [SerializeField] private int coinValue = 1;
 
         [SerializeField] private GameObject healthPrefab;
-        [SerializeField, Range(0f, 1f)] private float healthDropChance = 0.08f;
+        [SerializeField, Range(0f, 1f)] private float healthDropChance = 0.18f;
+
+        [Tooltip("Rolled only when a health pickup does not drop. Keep this lower than health.")]
+        [SerializeField, Range(0f, 1f)] private float powerUpDropChance = 0.03f;
 
         [Header("Chest")]
         [Tooltip("Chests can unlock a random weapon or passive. Luck raises that chance.")]
@@ -233,6 +236,12 @@ namespace KingsRescue.World
             if (healthPrefab != null && Random.value < Mathf.Clamp01(healthDropChance * luck))
             {
                 SpawnPickup(pool, healthPrefab, origin);
+                return;
+            }
+
+            if (Random.value < Mathf.Clamp01(powerUpDropChance * luck))
+            {
+                PowerUpCatalog.Spawn(origin);
             }
         }
 

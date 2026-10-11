@@ -17,6 +17,9 @@ namespace KingsRescue.Pickups
 
         [Range(0f, 1f)] public float chestDropChance = 0.28f;
 
+        [Tooltip("Smashable pots and boxes. Keep this below their health drop chance.")]
+        [Range(0f, 1f)] public float propDropChance = 0.03f;
+
         [SerializeField] private float popSpeed = 2.6f;
 
         private static PowerUpCatalog cached;
@@ -52,6 +55,17 @@ namespace KingsRescue.Pickups
 
             float chance = fromChest ? catalog.chestDropChance : catalog.enemyDropChance;
             if (Random.value >= Mathf.Clamp01(chance * luck))
+            {
+                return;
+            }
+
+            Spawn(origin);
+        }
+
+        public static void Spawn(Vector2 origin)
+        {
+            PowerUpCatalog catalog = Load();
+            if (catalog == null || catalog.pickupPrefab == null || PoolManager.Instance == null)
             {
                 return;
             }

@@ -134,7 +134,8 @@ MonoBehaviour:
   maxCoins: 5
   coinValue: 1
   healthPrefab: {fileID: 5825566481984973083, guid: fdd50c17fb5ba4e36844d6d9a97408b5, type: 3}
-  healthDropChance: 0.08
+  healthDropChance: 0.18
+  powerUpDropChance: 0.03
   isChest: 0
   rareDropChance: 0.2
   minPocketCoins: 10

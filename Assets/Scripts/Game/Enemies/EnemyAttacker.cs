@@ -12,10 +12,16 @@ namespace KingsRescue.Enemies
     public class EnemyAttacker : MonoBehaviour, IPoolable
     {
         private EnemyDefinition definition;
+        private EnemyAttackAnimator attackAnimator;
         private float damage;
         private float runMinutes;
         private float nextShot;
         private float lastShotAt;
+
+        private void Awake()
+        {
+            attackAnimator = GetComponent<EnemyAttackAnimator>();
+        }
 
         public void OnSpawned()
         {
@@ -121,6 +127,7 @@ namespace KingsRescue.Enemies
             {
                 lastShotAt = Time.time;
                 nextShot = Time.time + Mathf.Max(0.25f, definition.attackInterval);
+                attackAnimator?.PlayAttack();
             }
         }
 
