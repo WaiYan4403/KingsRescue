@@ -197,7 +197,7 @@ namespace KingsRescue.World
                 Vector3 local = PlaceLocal(trackSeparation, ref lastX);
                 Vector3 world = obstaclesRoot.TransformPoint(local);
                 GameObject instance = SpawnChild(prefab, world, obstaclesRoot);
-                if (instance == null)
+                if (instance == null || instance.GetComponent<KingsRescue.Pickups.Pickup>() != null)
                 {
                     continue;
                 }
@@ -290,17 +290,22 @@ namespace KingsRescue.World
 
         internal static GameObject SpawnChild(GameObject prefab, Vector3 worldPosition, Transform parent)
         {
+            bool loosePickup = prefab.GetComponent<KingsRescue.Pickups.Pickup>() != null;
             PoolManager pool = PoolManager.Instance;
             GameObject instance = pool != null
-                ? pool.Spawn(prefab, worldPosition, Quaternion.identity, parent)
-                : Instantiate(prefab, worldPosition, Quaternion.identity, parent);
+                ? pool.Spawn(prefab, worldPosition, Quaternion.identity, loosePickup ? null : parent)
+                : Instantiate(prefab, worldPosition, Quaternion.identity, loosePickup ? null : parent);
 
             if (instance == null)
             {
                 return null;
             }
 
-            SetIndependentMotion(instance, false);
+            if (!loosePickup)
+            {
+                SetIndependentMotion(instance, false);
+            }
+
             return instance;
         }
 

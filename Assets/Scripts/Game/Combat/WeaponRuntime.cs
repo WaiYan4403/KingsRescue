@@ -284,9 +284,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            int stage = swingCount <= 1
-                ? unlocked
-                : Mathf.Clamp(swingIndex + 1, 1, unlocked);
+            int stage = Mathf.Clamp(swingIndex + 1, 1, unlocked);
             owner.PlayAttackStage(definition.GetAttackTrigger(stage), definition.attackTriggers);
         }
 

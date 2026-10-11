@@ -127,6 +127,7 @@ namespace KingsRescue.Spawning
             float runTime = game.RunTime;
             float runMinutes = runTime / 60f;
 
+            TryCueBossMusic(runTime);
             TrySpawnScheduledBoss(runTime, runMinutes);
 
             if (game.BossFightActive || RegularSpawnsHushed(runTime))
@@ -350,6 +351,35 @@ namespace KingsRescue.Spawning
                 }
 
                 SpawnGroup(enemy, 1, def.pattern, runMinutes, i, count);
+            }
+        }
+
+        private int bossMusicCueIndex = -1;
+
+        private void TryCueBossMusic(float runTime)
+        {
+            float nextBoss = PeekNextBossTime();
+            if (float.IsPositiveInfinity(nextBoss))
+            {
+                return;
+            }
+
+            float lead = bossHushLead > 0.01f ? bossHushLead : 5f;
+            if (runTime < nextBoss - lead)
+            {
+                return;
+            }
+
+            int cueIndex = bosses != null && bosses.Length > 0 ? nextBossIndex : 0;
+            if (bossMusicCueIndex == cueIndex)
+            {
+                return;
+            }
+
+            bossMusicCueIndex = cueIndex;
+            if (GameMusicController.Instance != null)
+            {
+                GameMusicController.Instance.SetBossMusic();
             }
         }
 

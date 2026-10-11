@@ -20,7 +20,7 @@ MonoBehaviour:
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
-  comboDelay: 0.12
+  comboDelay: 0.3
   fanProjectiles: 0
   aimStyle: 0
   projectileHoming: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
     count: 1
     pierce: 0
     area: 1
-    projectileSpeed: 18
+    projectileSpeed: 10
     lifetime: 1.8
     maxDistance: 5.5
     knockback: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
     count: 1
     pierce: 0
     area: 1
-    projectileSpeed: 18
+    projectileSpeed: 10
     lifetime: 1.8
     maxDistance: 5.5
     knockback: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
     count: 1
     pierce: 1
     area: 1
-    projectileSpeed: 18
+    projectileSpeed: 10
     lifetime: 1.8
     maxDistance: 6
     knockback: 0
@@ -81,7 +81,7 @@ MonoBehaviour:
     count: 1
     pierce: 1
     area: 1
-    projectileSpeed: 20
+    projectileSpeed: 10
     lifetime: 1.8
     maxDistance: 6.5
     knockback: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
     count: 2
     pierce: 2
     area: 1
-    projectileSpeed: 20
+    projectileSpeed: 10
     lifetime: 1.8
     maxDistance: 6.5
     knockback: 0

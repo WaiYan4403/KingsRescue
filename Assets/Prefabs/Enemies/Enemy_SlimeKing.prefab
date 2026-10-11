@@ -148,6 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.Health
   maxHealth: 100
   hitRadius: 2
+  stepwiseHits: 0
 --- !u!114 &1783464162516560514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.ContactDamage
   radius: 2
-  damage: 20
+  damage: 10
   interval: 0.6
   playerRadius: 0.35
 --- !u!114 &5918325816167338675
@@ -288,7 +289,7 @@ MonoBehaviour:
   perchMoveTime: 0.45
   perchTopPadding: 3.5
   slamRadius: 3
-  slamDamage: 15
+  slamDamage: 10
   laserLength: 15
   laserWidth: 2
   laserRotateSpeed: 60
@@ -309,7 +310,7 @@ MonoBehaviour:
   volleyRadius: 0.5
   volleyRange: 15
   splitSlime: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
-  splitCount: 20
+  splitCount: 10
   splitRadius: 3
 --- !u!1 &2043948441375406709
 GameObject:

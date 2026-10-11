@@ -31,7 +31,7 @@ MonoBehaviour:
   - Attack1
   - Attack2
   - Attack3
-  attackStageUnlockLevels: 03000000010000000300000005000000
+  attackStageUnlockLevels: 010000000300000005000000
   levels:
   - upgradeText: 
     damage: 12

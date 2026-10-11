@@ -182,15 +182,12 @@ namespace KingsRescue.Data
             int unlocked = 0;
             for (int i = 0; i < attackTriggers.Length; i++)
             {
-                if (string.IsNullOrEmpty(attackTriggers[i]))
+                if (string.IsNullOrEmpty(attackTriggers[i]) || weaponLevel < GetAttackStageUnlockLevel(i))
                 {
-                    continue;
+                    break;
                 }
 
-                if (weaponLevel >= GetAttackStageUnlockLevel(i))
-                {
-                    unlocked++;
-                }
+                unlocked++;
             }
 
             return unlocked;
