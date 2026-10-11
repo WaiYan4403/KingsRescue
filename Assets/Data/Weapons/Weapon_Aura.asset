@@ -32,11 +32,11 @@ MonoBehaviour:
   attackStageUnlockLevels: 010000000200000003000000
   levels:
   - upgradeText: 
-    damage: 6
-    cooldown: 1.2
+    damage: 4
+    cooldown: 1.6
     count: 1
     pierce: 0
-    area: 2.3
+    area: 1.6
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -46,11 +46,11 @@ MonoBehaviour:
     rehitInterval: 0.45
     orbitSpeed: 0.7
   - upgradeText: More damage
-    damage: 9
-    cooldown: 1.2
+    damage: 6
+    cooldown: 1.5
     count: 1
     pierce: 0
-    area: 2.3
+    area: 1.75
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -60,11 +60,11 @@ MonoBehaviour:
     rehitInterval: 0.45
     orbitSpeed: 0.7
   - upgradeText: Larger aura
-    damage: 9
-    cooldown: 1.2
+    damage: 7
+    cooldown: 1.4
     count: 1
     pierce: 0
-    area: 3
+    area: 2.05
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -74,11 +74,11 @@ MonoBehaviour:
     rehitInterval: 0.45
     orbitSpeed: 0.7
   - upgradeText: Faster pulse
-    damage: 14
-    cooldown: 0.9
+    damage: 9
+    cooldown: 1.25
     count: 1
     pierce: 0
-    area: 3
+    area: 2.25
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -88,11 +88,11 @@ MonoBehaviour:
     rehitInterval: 0.45
     orbitSpeed: 0.7
   - upgradeText: Huge aura
-    damage: 20
-    cooldown: 0.9
+    damage: 12
+    cooldown: 1.15
     count: 1
     pierce: 0
-    area: 3.8
+    area: 2.55
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5

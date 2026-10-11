@@ -9,7 +9,7 @@ using KingsRescue.UI;
 namespace KingsRescue.World
 {
     /// <summary>
-    /// Pots crack then dump loot. Chests crack then open the ChestPanel overlay.
+    /// Pots and boxes crack, then dump loot. Chests open when the player walks up to them.
     /// Gold pockets are collected whole. Opened scenery stays until it scrolls off.
     /// </summary>
     [RequireComponent(typeof(Health))]
@@ -18,7 +18,8 @@ namespace KingsRescue.World
         public enum UseMode
         {
             Smash = 0,
-            Collect = 1
+            Collect = 1,
+            Interact = 2
         }
 
         [Header("Use")]
@@ -43,8 +44,9 @@ namespace KingsRescue.World
         [SerializeField, Range(0f, 1f)] private float powerUpDropChance = 0.03f;
 
         [Header("Chest")]
-        [Tooltip("Chests can unlock a random weapon or passive. Luck raises that chance.")]
+        [Tooltip("Chests open when the player walks up to them. Weapons do not damage them.")]
         [SerializeField] private bool isChest;
+        [SerializeField] private float interactRadius = 1.15f;
         [SerializeField, Range(0f, 1f)] private float rareDropChance = 0.2f;
 
         [Header("Gold pocket")]
@@ -75,7 +77,7 @@ namespace KingsRescue.World
         {
             health.Damaged += OnDamaged;
             health.Died += OnBroken;
-            if (use == UseMode.Collect)
+            if (IgnoresWeapons)
             {
                 health.Untargetable = true;
             }
@@ -93,7 +95,7 @@ namespace KingsRescue.World
             collected = false;
             ApplySprite(intactSprite != null ? intactSprite : body != null ? body.sprite : null);
 
-            if (use == UseMode.Collect)
+            if (IgnoresWeapons)
             {
                 health.Untargetable = true;
             }
@@ -110,8 +112,16 @@ namespace KingsRescue.World
             collected = true;
         }
 
+        private bool IgnoresWeapons => isChest || use == UseMode.Interact || use == UseMode.Collect;
+
         private void Update()
         {
+            if (isChest || use == UseMode.Interact)
+            {
+                TryOpenChest();
+                return;
+            }
+
             if (use != UseMode.Collect || collected)
             {
                 return;
@@ -138,9 +148,60 @@ namespace KingsRescue.World
             }
         }
 
+        private void TryOpenChest()
+        {
+            if (opened)
+            {
+                return;
+            }
+
+            health.Untargetable = true;
+
+            PlayerController hero = PlayerController.Instance;
+            if (hero == null || hero.Health == null || !hero.Health.IsAlive)
+            {
+                return;
+            }
+
+            GameManager game = GameManager.Instance;
+            if (game != null && (game.State == GameState.GameOver || game.State == GameState.Boot))
+            {
+                return;
+            }
+
+            Vector2 heroPosition = hero.transform.position;
+            Vector2 nearest = body != null && body.sprite != null
+                ? (Vector2)body.bounds.ClosestPoint(heroPosition)
+                : (Vector2)transform.position;
+            float reach = Mathf.Max(0.45f, interactRadius);
+            if ((heroPosition - nearest).sqrMagnitude > reach * reach)
+            {
+                return;
+            }
+
+            opened = true;
+            health.Untargetable = true;
+            ApplySprite(openedSprite != null ? openedSprite : intactSprite);
+
+            if (!isChest)
+            {
+                DropLoot();
+                return;
+            }
+
+            AchievementProgress.RecordChest();
+            if (ChestPanel.Instance != null)
+            {
+                ChestPanel.Instance.Open(minCoins, maxCoins, coinValue);
+                return;
+            }
+
+            DropLoot();
+        }
+
         private void OnDamaged(Health source, DamageInfo info)
         {
-            if (use != UseMode.Smash || opened)
+            if (use != UseMode.Smash || isChest || opened)
             {
                 return;
             }
@@ -154,7 +215,7 @@ namespace KingsRescue.World
 
         private void OnBroken(Health source, DamageInfo info)
         {
-            if (use != UseMode.Smash || opened)
+            if (use != UseMode.Smash || isChest || opened)
             {
                 return;
             }
@@ -163,17 +224,6 @@ namespace KingsRescue.World
             health.Untargetable = true;
             flash?.Flash();
             ApplySprite(openedSprite != null ? openedSprite : crackedSprite);
-
-            if (isChest)
-            {
-                AchievementProgress.RecordChest();
-                if (ChestPanel.Instance != null)
-                {
-                    ChestPanel.Instance.Open(minCoins, maxCoins, coinValue);
-                    return;
-                }
-            }
-
             DropLoot();
         }
 

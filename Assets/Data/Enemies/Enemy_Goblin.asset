@@ -20,18 +20,18 @@ MonoBehaviour:
   canFlipSprite: 1
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1
-  maxHealth: 8
-  contactDamage: 6
-  contactInterval: 0.6
-  contactRadius: 0.4
+  maxHealth: 14
+  contactDamage: 10
+  contactInterval: 0.5
+  contactRadius: 0.45
   dealsContactDamage: 1
-  knockbackResistance: 0
+  knockbackResistance: 0.28
   moveStyle: 0
-  moveSpeed: 2
+  moveSpeed: 2.75
   scrollInfluence: 0.5
   turnResponsiveness: 6
   followChance: 1
-  giveUpWhenPassedChance: 0.35
+  giveUpWhenPassedChance: 0.12
   separationRadius: 1.3
   separationStrength: 3.5
   preferredDistance: 4.5
@@ -66,5 +66,5 @@ MonoBehaviour:
   xpValue: 1
   coinDropChance: 0.04
   healthDropChance: 0.015
-  healthGrowthPerMinute: 0.35
-  damageGrowthPerMinute: 0.12
+  healthGrowthPerMinute: 0.45
+  damageGrowthPerMinute: 0.2

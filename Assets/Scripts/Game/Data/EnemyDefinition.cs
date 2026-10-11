@@ -223,10 +223,10 @@ namespace KingsRescue.Data
         [Tooltip("Fraction of base contact damage added per minute of run time.")]
         public float damageGrowthPerMinute = 0.22f;
 
-        private const float ExtraHealthPerMinute = 0.22f;
-        private const float ExtraDamagePerMinute = 0.10f;
-        private const float HealthAccelPerMinuteSquared = 0.03f;
-        private const float DamageAccelPerMinuteSquared = 0.018f;
+        private const float ExtraHealthPerMinute = 0.34f;
+        private const float ExtraDamagePerMinute = 0.16f;
+        private const float HealthAccelPerMinuteSquared = 0.05f;
+        private const float DamageAccelPerMinuteSquared = 0.03f;
 
         public float ScaledHealth(float runMinutes)
         {

@@ -34,72 +34,72 @@ MonoBehaviour:
   attackStageUnlockLevels: 010000000200000003000000
   levels:
   - upgradeText: 
-    damage: 8
-    cooldown: 5
+    damage: 7
+    cooldown: 3.2
     count: 1
     pierce: 0
-    area: 1.9
+    area: 1.45
     projectileSpeed: 12
-    lifetime: 5
+    lifetime: 2.4
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
-    rehitInterval: 0.45
+    rehitInterval: 0.7
     orbitSpeed: 0.7
   - upgradeText: +1 blade
     damage: 8
-    cooldown: 5
+    cooldown: 3
     count: 2
     pierce: 0
-    area: 1.9
+    area: 1.5
     projectileSpeed: 12
-    lifetime: 5.5
+    lifetime: 2.6
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
-    rehitInterval: 0.45
-    orbitSpeed: 0.7
+    rehitInterval: 0.68
+    orbitSpeed: 0.75
   - upgradeText: Faster orbit
-    damage: 12
+    damage: 9
     cooldown: 2.8
-    count: 5
+    count: 3
+    pierce: 0
+    area: 1.6
+    projectileSpeed: 12
+    lifetime: 2.8
+    maxDistance: 6.5
+    knockback: 0
+    arcDegrees: 150
+    spreadDegrees: 14
+    rehitInterval: 0.65
+    orbitSpeed: 0.9
+  - upgradeText: +1 blade, more reach
+    damage: 11
+    cooldown: 2.6
+    count: 4
+    pierce: 0
+    area: 1.75
+    projectileSpeed: 12
+    lifetime: 3
+    maxDistance: 6.5
+    knockback: 0
+    arcDegrees: 150
+    spreadDegrees: 14
+    rehitInterval: 0.62
+    orbitSpeed: 0.95
+  - upgradeText: Heavier blades
+    damage: 13
+    cooldown: 2.4
+    count: 4
     pierce: 0
     area: 1.9
     projectileSpeed: 12
-    lifetime: 5.5
+    lifetime: 3.2
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
     spreadDegrees: 14
-    rehitInterval: 0.45
-    orbitSpeed: 0.95
-  - upgradeText: +1 blade, more reach
-    damage: 12
-    cooldown: 2.6
-    count: 5
-    pierce: 0
-    area: 2.4
-    projectileSpeed: 12
-    lifetime: 6
-    maxDistance: 6.5
-    knockback: 0
-    arcDegrees: 150
-    spreadDegrees: 14
-    rehitInterval: 0.45
-    orbitSpeed: 0.95
-  - upgradeText: Four blades
-    damage: 18
-    cooldown: 2.4
-    count: 5
-    pierce: 0
-    area: 2.4
-    projectileSpeed: 12
-    lifetime: 7
-    maxDistance: 6.5
-    knockback: 0
-    arcDegrees: 150
-    spreadDegrees: 14
-    rehitInterval: 0.4
-    orbitSpeed: 1.1
+    rehitInterval: 0.6
+    orbitSpeed: 1.05

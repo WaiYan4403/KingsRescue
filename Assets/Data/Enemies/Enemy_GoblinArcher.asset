@@ -39,7 +39,7 @@ MonoBehaviour:
   flockMin: 8
   flockMax: 12
   attackStyle: 1
-  projectilePrefab: {fileID: 5997573724359075854, guid: 19ffc42841843a24d824c398f93b07f9, type: 3}
+  projectilePrefab: {fileID: 5997573724359075854, guid: 47eac5ed561ba6f4faee5ae56f588c56, type: 3}
   meteorDefinition: {fileID: 0}
   attackInterval: 1.7
   attackRange: 6.5

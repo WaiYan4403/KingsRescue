@@ -104,8 +104,7 @@ namespace KingsRescue.UI
         }
 
         /// <summary>
-        /// Opens the overlay for a smashed chest. Extra arguments are the coin purse
-        /// that used to spill onto the ground.
+        /// Opens the overlay after the player walks up to a chest. Extra arguments are the coin purse.
         /// </summary>
         public void Open(int minCoins, int maxCoins, int coinValue)
         {
