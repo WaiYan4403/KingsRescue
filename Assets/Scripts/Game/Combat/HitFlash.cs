@@ -5,17 +5,16 @@ using KingsRescue.Core;
 namespace KingsRescue.Combat
 {
     /// <summary>
-    /// Tints a sprite white for a moment when it is hit. Cheap, readable feedback
-    /// that matters a lot when dozens of enemies overlap.
+    /// Paints every sprite on this body white for a moment when it is hit.
     /// </summary>
     public class HitFlash : MonoBehaviour, IPoolable
     {
         [SerializeField] private SpriteRenderer target;
         [SerializeField] private Color flashColor = Color.white;
-        [SerializeField] private float duration = 0.07f;
+        [SerializeField] private float duration = 0.12f;
 
         private Health health;
-        private Color originalColor;
+        private SpriteRenderer[] renderers;
         private Coroutine routine;
 
         private void Awake()
@@ -25,12 +24,14 @@ namespace KingsRescue.Combat
                 target = GetComponentInChildren<SpriteRenderer>();
             }
 
-            if (target != null)
+            renderers = GetComponentsInChildren<SpriteRenderer>(true);
+            health = GetComponent<Health>();
+            if (health == null)
             {
-                originalColor = target.color;
+                health = GetComponentInParent<Health>();
             }
 
-            health = GetComponentInParent<Health>();
+            Prepare();
         }
 
         private void OnEnable()
@@ -53,8 +54,7 @@ namespace KingsRescue.Combat
 
         public void SetBaseColor(Color color)
         {
-            originalColor = color;
-            if (routine == null && target != null)
+            if (target != null)
             {
                 target.color = color;
             }
@@ -72,7 +72,7 @@ namespace KingsRescue.Combat
 
         public void Flash()
         {
-            if (target == null || !isActiveAndEnabled)
+            if (!isActiveAndEnabled || renderers == null || renderers.Length == 0)
             {
                 return;
             }
@@ -92,10 +92,49 @@ namespace KingsRescue.Combat
 
         private IEnumerator FlashRoutine()
         {
-            target.color = flashColor;
-            yield return new WaitForSeconds(duration);
-            target.color = originalColor;
+            Paint(1f);
+            yield return new WaitForSeconds(Mathf.Max(0.12f, duration));
+            Paint(0f);
             routine = null;
+        }
+
+        private void Prepare()
+        {
+            if (renderers == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                SpriteFlash.Prepare(renderers[i]);
+            }
+        }
+
+        private void Paint(float amount)
+        {
+            if (renderers == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                SpriteRenderer renderer = renderers[i];
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                if (amount <= 0f)
+                {
+                    SpriteFlash.Clear(renderer);
+                }
+                else
+                {
+                    SpriteFlash.Apply(renderer, flashColor, amount);
+                }
+            }
         }
 
         private void Restore()
@@ -106,10 +145,7 @@ namespace KingsRescue.Combat
                 routine = null;
             }
 
-            if (target != null)
-            {
-                target.color = originalColor;
-            }
+            Paint(0f);
         }
     }
 }

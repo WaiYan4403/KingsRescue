@@ -23,12 +23,14 @@ namespace KingsRescue.Player
         [SerializeField] private Animator legAnimator;
         [SerializeField] private string healthParameter = "Health";
         [SerializeField] private string dieStateName = "Lancer_Die";
-        [SerializeField, Range(0f, 1f)] private float invulnerableAlpha = 0.45f;
+        [SerializeField] private Color hurtFlashColor = new Color(1f, 0.15f, 0.12f, 1f);
         [SerializeField, Range(0.1f, 1f)] private float reviveHealthFraction = 0.5f;
         [SerializeField] private float reviveInvulnerability = 2.5f;
 
         private PlayerStats stats;
         private WeaponLoadout loadout;
+        private SpriteRenderer[] hurtRenderers;
+        private bool hurtFlashOn;
         private float invulnerableUntil;
         private float regenCarry;
         private int extraLives;
@@ -57,10 +59,7 @@ namespace KingsRescue.Player
             stats = GetComponent<PlayerStats>();
             loadout = GetComponent<WeaponLoadout>();
 
-            if (flashTarget == null)
-            {
-                flashTarget = GetComponentInChildren<SpriteRenderer>();
-            }
+            CacheHurtRenderers();
         }
 
         private void OnEnable()
@@ -241,18 +240,13 @@ namespace KingsRescue.Player
 
         private void UpdateInvulnerabilityVisual()
         {
-            if (flashTarget == null)
-            {
-                return;
-            }
-
             if (IsInvulnerable)
             {
-                // 12 Hz blink reads clearly at 360x640 without being seizure-inducing.
-                bool visible = Mathf.Repeat(Time.time * 12f, 2f) < 1f;
-                SetAlpha(visible ? 1f : invulnerableAlpha);
+                // Same cadence as the old alpha blink: red on the "dim" half of each cycle.
+                bool hurt = Mathf.Repeat(Time.time * 12f, 2f) >= 1f;
+                SetHurtFlash(hurt);
             }
-            else
+            else if (hurtFlashOn)
             {
                 RestoreVisual();
             }
@@ -288,23 +282,71 @@ namespace KingsRescue.Player
             }
         }
 
-        private void RestoreVisual()
+        private void CacheHurtRenderers()
         {
-            SetAlpha(1f);
+            SpriteRenderer[] all = GetComponentsInChildren<SpriteRenderer>(true);
+            int count = 0;
+            for (int i = 0; i < all.Length; i++)
+            {
+                if (all[i] != null && all[i].gameObject.name != "Effect")
+                {
+                    count++;
+                }
+            }
+
+            if (count == 0)
+            {
+                hurtRenderers = flashTarget != null ? new[] { flashTarget } : all;
+            }
+            else
+            {
+                hurtRenderers = new SpriteRenderer[count];
+                int write = 0;
+                for (int i = 0; i < all.Length; i++)
+                {
+                    if (all[i] != null && all[i].gameObject.name != "Effect")
+                    {
+                        hurtRenderers[write++] = all[i];
+                    }
+                }
+            }
+
+            for (int i = 0; i < hurtRenderers.Length; i++)
+            {
+                SpriteFlash.Prepare(hurtRenderers[i]);
+            }
         }
 
-        private void SetAlpha(float alpha)
+        private void RestoreVisual()
         {
-            if (flashTarget == null)
+            SetHurtFlash(false);
+        }
+
+        private void SetHurtFlash(bool on)
+        {
+            hurtFlashOn = on;
+            if (hurtRenderers == null)
             {
                 return;
             }
 
-            Color c = flashTarget.color;
-            if (!Mathf.Approximately(c.a, alpha))
+            Color color = hurtFlashColor;
+            for (int i = 0; i < hurtRenderers.Length; i++)
             {
-                c.a = alpha;
-                flashTarget.color = c;
+                SpriteRenderer renderer = hurtRenderers[i];
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                if (on)
+                {
+                    SpriteFlash.Apply(renderer, color, 1f);
+                }
+                else
+                {
+                    SpriteFlash.Clear(renderer);
+                }
             }
         }
     }
