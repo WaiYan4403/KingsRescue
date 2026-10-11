@@ -75,8 +75,7 @@ namespace KingsRescue.Combat
                     continue;
                 }
 
-                float reach = radius + target.HitRadius;
-                if ((target.Position - center).sqrMagnitude <= reach * reach)
+                if (target.Overlaps(center, radius))
                 {
                     results.Add(target);
                 }
@@ -123,7 +122,7 @@ namespace KingsRescue.Combat
                 Vector2 toTarget = position - center;
                 Vector2 direction = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : forward;
 
-                if (!fullCircle && Vector2.Dot(forward, direction) < halfArcCos)
+                if (!fullCircle && !InSwing(center, forward, halfArcCos, target, direction))
                 {
                     continue;
                 }
@@ -134,6 +133,38 @@ namespace KingsRescue.Combat
 
             Scratch.Clear();
             return hits;
+        }
+
+        /// <summary>
+        /// Enemies use the facing wedge. A prop also counts when the swing covers its sprite,
+        /// or when the hero is already standing on that sprite.
+        /// </summary>
+        private static bool InSwing(Vector2 center, Vector2 forward, float halfArcCos, Health target, Vector2 pivotDirection)
+        {
+            if (Vector2.Dot(forward, pivotDirection) >= halfArcCos)
+            {
+                return true;
+            }
+
+            if (!target.Scenery)
+            {
+                return false;
+            }
+
+            Vector2 closest = target.ClosestPoint(center);
+            if ((closest - center).sqrMagnitude <= 0.0001f)
+            {
+                return true;
+            }
+
+            Vector2 toBody = target.BodyCenter - center;
+            if (toBody.sqrMagnitude > 0.0001f && Vector2.Dot(forward, toBody.normalized) >= halfArcCos)
+            {
+                return true;
+            }
+
+            Vector2 toClosest = closest - center;
+            return toClosest.sqrMagnitude > 0.0001f && Vector2.Dot(forward, toClosest.normalized) >= halfArcCos;
         }
     }
 }

@@ -74,8 +74,9 @@ namespace KingsRescue.Combat
                 SteerTowardNearest(dt);
             }
 
+            Vector2 previous = transform.position;
             float step = velocity.magnitude * dt;
-            Vector2 position = (Vector2)transform.position + velocity * dt;
+            Vector2 position = previous + velocity * dt;
             transform.position = position;
             traveled += step;
 
@@ -92,7 +93,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            CheckHits(position);
+            SweepHits(previous, position);
         }
 
         private void SteerTowardNearest(float dt)
@@ -128,12 +129,29 @@ namespace KingsRescue.Combat
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
+        private void SweepHits(Vector2 from, Vector2 to)
+        {
+            float distance = Vector2.Distance(from, to);
+            int samples = Mathf.Max(1, Mathf.CeilToInt(distance / 0.3f));
+            for (int s = 1; s <= samples; s++)
+            {
+                if (!isActiveAndEnabled)
+                {
+                    return;
+                }
+
+                CheckHits(Vector2.Lerp(from, to, s / (float)samples));
+            }
+        }
+
         private void CheckHits(Vector2 position)
         {
             // Snapshot first: a lethal hit unregisters the target and would otherwise
             // mutate the registry while we walk it.
             Targeting.Overlap(position, hitRadius * radiusScale, overlapped);
+            SortClosest(position);
 
+            bool blocked = false;
             for (int i = 0; i < overlapped.Count; i++)
             {
                 Health target = overlapped[i];
@@ -142,17 +160,60 @@ namespace KingsRescue.Combat
                     continue;
                 }
 
+                // Props never spend pierce. A shot that touches a pot still cracks it
+                // when a nearer enemy is what stops the projectile.
+                bool scenery = target.Scenery;
+                if (blocked && !scenery)
+                {
+                    continue;
+                }
+
                 alreadyHit.Add(target);
                 Vector2 direction = velocity.sqrMagnitude > 0.0001f ? velocity.normalized : Vector2.up;
                 target.TakeDamage(new DamageInfo(damage, target.Position, direction, knockback, source));
 
-                if (pierceRemaining <= 0)
+                if (scenery)
                 {
-                    Recycle(true);
-                    return;
+                    continue;
                 }
 
-                pierceRemaining--;
+                if (pierceRemaining <= 0)
+                {
+                    blocked = true;
+                }
+                else
+                {
+                    pierceRemaining--;
+                }
+            }
+
+            if (blocked)
+            {
+                Recycle(true);
+            }
+        }
+
+        private void SortClosest(Vector2 position)
+        {
+            for (int i = 1; i < overlapped.Count; i++)
+            {
+                Health key = overlapped[i];
+                float keyDist = key == null ? float.MaxValue : (key.Position - position).sqrMagnitude;
+                int j = i - 1;
+                while (j >= 0)
+                {
+                    Health other = overlapped[j];
+                    float otherDist = other == null ? float.MaxValue : (other.Position - position).sqrMagnitude;
+                    if (otherDist <= keyDist)
+                    {
+                        break;
+                    }
+
+                    overlapped[j + 1] = other;
+                    j--;
+                }
+
+                overlapped[j + 1] = key;
             }
         }
 

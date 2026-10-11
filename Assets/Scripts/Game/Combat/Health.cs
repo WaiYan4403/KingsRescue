@@ -24,6 +24,11 @@ namespace KingsRescue.Combat
 
         public Vector2 Position => transform.position;
 
+        /// <summary>Pots, boxes and chests. Their picture is the hit target, and they do not spend projectile pierce.</summary>
+        public bool Scenery { get; private set; }
+
+        private SpriteRenderer visibleBody;
+
         public float Current { get; private set; }
 
         public float Normalised => maxHealth > 0f ? Mathf.Clamp01(Current / maxHealth) : 0f;
@@ -89,6 +94,76 @@ namespace KingsRescue.Combat
             Current = maxHealth;
             Untargetable = false;
             BlocksFrontal = false;
+        }
+
+        /// <summary>
+        /// Breakables are drawn above their pivot. Weapons connect when they touch the sprite,
+        /// and the round hitbox grows to cover that sprite.
+        /// </summary>
+        public void UseVisibleBody(SpriteRenderer renderer)
+        {
+            Scenery = true;
+            visibleBody = renderer;
+            if (renderer == null || renderer.sprite == null)
+            {
+                return;
+            }
+
+            Bounds local = renderer.sprite.bounds;
+            Vector3 scale = renderer.transform.lossyScale;
+            float sx = Mathf.Abs(scale.x);
+            float sy = Mathf.Abs(scale.y);
+            Vector2 center = new Vector2(local.center.x * sx, local.center.y * sy);
+            Vector2 ext = new Vector2(local.extents.x * sx, local.extents.y * sy);
+            float farthest = 0f;
+            farthest = Mathf.Max(farthest, (center + new Vector2(ext.x, ext.y)).magnitude);
+            farthest = Mathf.Max(farthest, (center + new Vector2(-ext.x, ext.y)).magnitude);
+            farthest = Mathf.Max(farthest, (center + new Vector2(ext.x, -ext.y)).magnitude);
+            farthest = Mathf.Max(farthest, (center - new Vector2(ext.x, ext.y)).magnitude);
+            hitRadius = Mathf.Max(hitRadius, farthest);
+        }
+
+        public Vector2 BodyCenter
+        {
+            get
+            {
+                if (visibleBody != null && visibleBody.sprite != null)
+                {
+                    return visibleBody.bounds.center;
+                }
+
+                return transform.position;
+            }
+        }
+
+        public Vector2 ClosestPoint(Vector2 center)
+        {
+            if (visibleBody != null && visibleBody.sprite != null)
+            {
+                Bounds bounds = visibleBody.bounds;
+                return new Vector2(
+                    Mathf.Clamp(center.x, bounds.min.x, bounds.max.x),
+                    Mathf.Clamp(center.y, bounds.min.y, bounds.max.y));
+            }
+
+            return transform.position;
+        }
+
+        public bool Overlaps(Vector2 center, float radius)
+        {
+            float reach = radius + hitRadius;
+            if (((Vector2)transform.position - center).sqrMagnitude <= reach * reach)
+            {
+                return true;
+            }
+
+            if (visibleBody == null || visibleBody.sprite == null || !visibleBody.enabled)
+            {
+                return false;
+            }
+
+            Vector2 nearest = ClosestPoint(center);
+            return (nearest - center).sqrMagnitude <= radius * radius;
         }
 
         public void TakeDamage(in DamageInfo info)

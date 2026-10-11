@@ -100,6 +100,7 @@ namespace KingsRescue.World
             else
             {
                 health.ConfigureSmashProp(2f);
+                health.UseVisibleBody(body);
             }
         }
 
