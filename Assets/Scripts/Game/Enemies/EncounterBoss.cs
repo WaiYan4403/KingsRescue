@@ -324,7 +324,7 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;
@@ -440,7 +440,7 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;

@@ -505,7 +505,6 @@ GameObject:
   - component: {fileID: 39098415}
   - component: {fileID: 39098414}
   - component: {fileID: 39098418}
-  - component: {fileID: 39098413}
   - component: {fileID: 39098412}
   - component: {fileID: 39098411}
   - component: {fileID: 39098410}
@@ -677,167 +676,6 @@ MonoBehaviour:
   musicController: {fileID: 0}
   menuSceneName: MainMenu
   gameOverDelay: 1.15
---- !u!114 &39098413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 39098406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc5f9cadcfa2b48908dd0117f8b49dcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Core.PoolManager
-  prewarm:
-  - prefab: {fileID: 4419999792255042887, guid: f49aa3ac6e0b446699823d901f7f98c2, type: 3}
-    count: 80
-  - prefab: {fileID: 244735591878693721, guid: 968a19308789644018e6435fc7803c17, type: 3}
-    count: 120
-  - prefab: {fileID: 7657488641991038239, guid: 67ef1452bf5d44907b2b0588c453103e, type: 3}
-    count: 80
-  - prefab: {fileID: 4100001, guid: b8e3c1a04f6d4a2e9c7d5a1b3e8f0246, type: 3}
-    count: 4
-  - prefab: {fileID: 1240737026968152897, guid: ff2677924ac394171ab5e084c40e0ac9, type: 3}
-    count: 60
-  - prefab: {fileID: 3030451831506880611, guid: 197737e374f7e4313bda08d4b6d95acc, type: 3}
-    count: 40
-  - prefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
-    count: 60
-  - prefab: {fileID: 6089294405615521361, guid: e5422f81fb3144e5cb342e7dfea75afc, type: 3}
-    count: 20
-  - prefab: {fileID: 6635167547720944185, guid: 70bcc78f4b2bf4d9db3beff254e561f7, type: 3}
-    count: 12
-  - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
-    count: 16
-  - prefab: {fileID: 6760036356788390888, guid: f7f2b2e57bd7ed64988f0cb111eeb054, type: 3}
-    count: 28
-  - prefab: {fileID: 6089294405615521361, guid: 290db79a1de2fa6429a2bc903a3c10bc, type: 3}
-    count: 16
-  - prefab: {fileID: 889982214784732533, guid: f43e8ba4e8885204ba17e2a7924ce0f3, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 22a64ed1edcccb74abd5e7c452374d86, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: bd4ed4e655990924c81b506b78d091f7, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 0c3d286e5a945744bb8c85ce1e5c1e05, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 79950a9b5a830764b92e680bb929b4dc, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 93becbed4efe44f40ae45d261d149242, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 1d5c24a0e6186544b815306927a4d2ff, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: cc3a0edf25af3a24e82e366d4107a7f7, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 73a59d3220d900548b71ee88ac7fc8b2, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 5f7374ad507a2c24da31637500c1c359, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: e38eabe86190a5248a896d582e5155ff, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 5d3d60b2341b80c42954699f9cfee6fb, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 1051e178f1c30da408045716304cd885, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 1c0e7f8bf44307945a92d532e8576b2a, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 12529e163786bbd4681bf6f3d7f98077, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 8ac8fcda0dbbcb049b668711ecd4444d, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: b75c6ea725d7d514dadeafcbc78f28d0, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 9000bf516e429f04d968a235bfe2bc6a, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 3ffe5afb6ea5a5a43b4dd85c39b8c118, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 50eaa42bfec8ee34ea095ba3afbf3959, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 2e0e6a43a0b57be44b71e259a616399c, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: a750f29f56be0424c81ca540484a9c94, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: a6ebbf9fe190d7b449233e48d9d6aa85, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 1e67f74736a159d4da8a02c35c0aa7a4, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 3104ab7cea58de84c8a43c765fbd4ea1, type: 3}
-    count: 10
-  - prefab: {fileID: 3581756722814175934, guid: be90cd083ea06ef4aa3feab2a58b989a, type: 3}
-    count: 10
-  - prefab: {fileID: 3581756722814175934, guid: 8a160641c134d5b4eb64dd4ff8d72f65, type: 3}
-    count: 10
-  - prefab: {fileID: 3581756722814175934, guid: 5f33fe4a94797494888fc08fc59ce6b9, type: 3}
-    count: 10
-  - prefab: {fileID: 3581756722814175934, guid: 65a76200d1b6306469793a804d63dd96, type: 3}
-    count: 10
-  - prefab: {fileID: 3581756722814175934, guid: 713b893e809d40946bd8098ec8e6bfab, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: b84926e40b61843b49e79fecb4988cf7, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 5607fa0aaf77f2843b0b29a6c71bc501, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 6a4ad3f1e2e80d54dae6cc1ddda33173, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 349ab37b9de63da45a22f8e83f16a14a, type: 3}
-    count: 10
-  - prefab: {fileID: 3371409198316295035, guid: c2ed9645d39677640b4fbaedd8919f77, type: 3}
-    count: 80
-  - prefab: {fileID: 1987047377786636553, guid: 7bae3f6495c95fd489dde2f8bcdf55f9, type: 3}
-    count: 24
-  - prefab: {fileID: 9032014044579634548, guid: a562de65538dba34882648035626a33d, type: 3}
-    count: 24
-  - prefab: {fileID: 6029562587574041385, guid: ccedb2706cf9c3f439ffd89cdbf1d7d0, type: 3}
-    count: 20
-  - prefab: {fileID: 4720918016224897111, guid: 17e970a88c7d01544b07358b31544e1b, type: 3}
-    count: 40
-  - prefab: {fileID: 4860159253479769756, guid: 2fbf6070f9e7cdf4cbd24e8214400639, type: 3}
-    count: 24
-  - prefab: {fileID: 1032086161236406950, guid: 138fd2def73bccb4ca18889028d7ae7f, type: 3}
-    count: 20
-  - prefab: {fileID: 8309821208071821943, guid: 0317a6f0e122aad43b5c21ebe0414393, type: 3}
-    count: 24
-  - prefab: {fileID: 651282674222005876, guid: d9856c9a519d72d41a09a532a0d5f3b4, type: 3}
-    count: 24
-  - prefab: {fileID: 5997573724359075854, guid: 19ffc42841843a24d824c398f93b07f9, type: 3}
-    count: 40
-  - prefab: {fileID: 2716974212261402497, guid: 1cacf50710736f046bcd87fc1479f198, type: 3}
-    count: 30
-  - prefab: {fileID: 7342546010400522602, guid: 986222dfc11d3c44ebfb6215259f5530, type: 3}
-    count: 24
-  - prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
-    count: 1
-  - prefab: {fileID: 5825566481984973083, guid: f4915576817bd1947b191132f34a03b5, type: 3}
-    count: 8
-  - prefab: {fileID: 9086646655045113726, guid: 2c98cef76dc86364dab2c8d4405f144b, type: 3}
-    count: 24
-  - prefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
-    count: 18
-  - prefab: {fileID: 244735591878693721, guid: 7324e7e1529e52d4fb05e018c3ddc150, type: 3}
-    count: 10
-  - prefab: {fileID: 7342546010400522602, guid: 63e14551ecfb33d4f905827337015234, type: 3}
-    count: 16
-  - prefab: {fileID: 244735591878693721, guid: dcb245a7fd6a0f94fbffedce91684a8d, type: 3}
-    count: 2
-  - prefab: {fileID: 6089294405615521361, guid: 306ba1df3c6cee54a87c51c7a5b3ec9d, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: a0a2529e4ed3fd14bac836b769ba24ba, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 89adfb1d4a0158745901fa7588d593d2, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 1af585e02841cbf4fad14cdb1c3e2164, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 44c38a98cbedc1441a3fcf406fb5e701, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: d1ac4f322bf9fb643960ef80c1eb39d5, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: 756288836c48c7f4285569827c928234, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: bbaa2bb6ea2958840ae0aea9441fd4c0, type: 3}
-    count: 10
-  - prefab: {fileID: 889982214784732533, guid: a78fab13a2b132144b4c28032bbad0d0, type: 3}
-    count: 10
 --- !u!114 &39098414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -914,12 +752,285 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39098406}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83200261a3abf2c4c844366b7e5a1f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
-  pools: []
+  pools:
+  - tag: Enemy_Orc
+    prefab: {fileID: 4419999792255042887, guid: f49aa3ac6e0b446699823d901f7f98c2, type: 3}
+    size: 140
+  - tag: Enemy_Goblin
+    prefab: {fileID: 244735591878693721, guid: 968a19308789644018e6435fc7803c17, type: 3}
+    size: 140
+  - tag: Enemy_Skelly
+    prefab: {fileID: 7657488641991038239, guid: 67ef1452bf5d44907b2b0588c453103e, type: 3}
+    size: 140
+  - tag: Background
+    prefab: {fileID: 4100001, guid: b8e3c1a04f6d4a2e9c7d5a1b3e8f0246, type: 3}
+    size: 4
+  - tag: Pickup_XpGem
+    prefab: {fileID: 1240737026968152897, guid: ff2677924ac394171ab5e084c40e0ac9, type: 3}
+    size: 160
+  - tag: Pickup_Coin
+    prefab: {fileID: 3030451831506880611, guid: 197737e374f7e4313bda08d4b6d95acc, type: 3}
+    size: 80
+  - tag: Projectile_Arrow
+    prefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
+    size: 60
+  - tag: Prop_Pot
+    prefab: {fileID: 6089294405615521361, guid: e5422f81fb3144e5cb342e7dfea75afc, type: 3}
+    size: 20
+  - tag: Prop_Chest
+    prefab: {fileID: 6635167547720944185, guid: 70bcc78f4b2bf4d9db3beff254e561f7, type: 3}
+    size: 12
+  - tag: Prop_Rock
+    prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
+    size: 42
+  - tag: Tree
+    prefab: {fileID: 6760036356788390888, guid: f7f2b2e57bd7ed64988f0cb111eeb054, type: 3}
+    size: 64
+  - tag: Prop_GoldPocket
+    prefab: {fileID: 6089294405615521361, guid: 290db79a1de2fa6429a2bc903a3c10bc, type: 3}
+    size: 16
+  - tag: Prop_Grass
+    prefab: {fileID: 889982214784732533, guid: f43e8ba4e8885204ba17e2a7924ce0f3, type: 3}
+    size: 42
+  - tag: Prop_Grass 1
+    prefab: {fileID: 889982214784732533, guid: 22a64ed1edcccb74abd5e7c452374d86, type: 3}
+    size: 42
+  - tag: Prop_Grass 2
+    prefab: {fileID: 889982214784732533, guid: bd4ed4e655990924c81b506b78d091f7, type: 3}
+    size: 42
+  - tag: Prop_Grass 3
+    prefab: {fileID: 889982214784732533, guid: 0c3d286e5a945744bb8c85ce1e5c1e05, type: 3}
+    size: 42
+  - tag: Prop_Grass 4
+    prefab: {fileID: 889982214784732533, guid: 79950a9b5a830764b92e680bb929b4dc, type: 3}
+    size: 42
+  - tag: Prop_Grass 5
+    prefab: {fileID: 889982214784732533, guid: 93becbed4efe44f40ae45d261d149242, type: 3}
+    size: 42
+  - tag: Prop_Grass 6
+    prefab: {fileID: 889982214784732533, guid: 1d5c24a0e6186544b815306927a4d2ff, type: 3}
+    size: 42
+  - tag: Prop_Grass 7
+    prefab: {fileID: 889982214784732533, guid: cc3a0edf25af3a24e82e366d4107a7f7, type: 3}
+    size: 42
+  - tag: Prop_Grass 8
+    prefab: {fileID: 889982214784732533, guid: 73a59d3220d900548b71ee88ac7fc8b2, type: 3}
+    size: 42
+  - tag: Prop_Grass 9
+    prefab: {fileID: 889982214784732533, guid: 5f7374ad507a2c24da31637500c1c359, type: 3}
+    size: 42
+  - tag: Prop_Grass 10
+    prefab: {fileID: 889982214784732533, guid: e38eabe86190a5248a896d582e5155ff, type: 3}
+    size: 42
+  - tag: Prop_Grass 11
+    prefab: {fileID: 889982214784732533, guid: 5d3d60b2341b80c42954699f9cfee6fb, type: 3}
+    size: 42
+  - tag: Prop_Grass 12
+    prefab: {fileID: 889982214784732533, guid: 1051e178f1c30da408045716304cd885, type: 3}
+    size: 42
+  - tag: Prop_Grass 13
+    prefab: {fileID: 889982214784732533, guid: 1c0e7f8bf44307945a92d532e8576b2a, type: 3}
+    size: 42
+  - tag: Prop_Grass 14
+    prefab: {fileID: 889982214784732533, guid: 12529e163786bbd4681bf6f3d7f98077, type: 3}
+    size: 42
+  - tag: Prop_Grass 15
+    prefab: {fileID: 889982214784732533, guid: 8ac8fcda0dbbcb049b668711ecd4444d, type: 3}
+    size: 42
+  - tag: Prop_Grass 16
+    prefab: {fileID: 889982214784732533, guid: b75c6ea725d7d514dadeafcbc78f28d0, type: 3}
+    size: 42
+  - tag: Prop_Grass 17
+    prefab: {fileID: 889982214784732533, guid: 9000bf516e429f04d968a235bfe2bc6a, type: 3}
+    size: 42
+  - tag: Prop_Grass 18
+    prefab: {fileID: 889982214784732533, guid: 3ffe5afb6ea5a5a43b4dd85c39b8c118, type: 3}
+    size: 42
+  - tag: Prop_Grass 19
+    prefab: {fileID: 889982214784732533, guid: 50eaa42bfec8ee34ea095ba3afbf3959, type: 3}
+    size: 42
+  - tag: Prop_Grass 20
+    prefab: {fileID: 889982214784732533, guid: 2e0e6a43a0b57be44b71e259a616399c, type: 3}
+    size: 42
+  - tag: Prop_Grass 21
+    prefab: {fileID: 889982214784732533, guid: a750f29f56be0424c81ca540484a9c94, type: 3}
+    size: 42
+  - tag: Prop_Grass 22
+    prefab: {fileID: 889982214784732533, guid: a6ebbf9fe190d7b449233e48d9d6aa85, type: 3}
+    size: 42
+  - tag: Prop_Grass 23
+    prefab: {fileID: 889982214784732533, guid: 1e67f74736a159d4da8a02c35c0aa7a4, type: 3}
+    size: 42
+  - tag: Prop_Grass 24
+    prefab: {fileID: 889982214784732533, guid: 3104ab7cea58de84c8a43c765fbd4ea1, type: 3}
+    size: 42
+  - tag: Prop_Rock 1
+    prefab: {fileID: 3581756722814175934, guid: be90cd083ea06ef4aa3feab2a58b989a, type: 3}
+    size: 42
+  - tag: Prop_Rock 2
+    prefab: {fileID: 3581756722814175934, guid: 8a160641c134d5b4eb64dd4ff8d72f65, type: 3}
+    size: 42
+  - tag: Prop_Rock 3
+    prefab: {fileID: 3581756722814175934, guid: 5f33fe4a94797494888fc08fc59ce6b9, type: 3}
+    size: 42
+  - tag: Prop_Rock 4
+    prefab: {fileID: 3581756722814175934, guid: 65a76200d1b6306469793a804d63dd96, type: 3}
+    size: 42
+  - tag: Prop_Rock 5
+    prefab: {fileID: 3581756722814175934, guid: 713b893e809d40946bd8098ec8e6bfab, type: 3}
+    size: 42
+  - tag: Prop_Tree
+    prefab: {fileID: 889982214784732533, guid: b84926e40b61843b49e79fecb4988cf7, type: 3}
+    size: 10
+  - tag: Prop_Tree 1
+    prefab: {fileID: 889982214784732533, guid: 5607fa0aaf77f2843b0b29a6c71bc501, type: 3}
+    size: 10
+  - tag: Prop_Tree 2
+    prefab: {fileID: 889982214784732533, guid: 6a4ad3f1e2e80d54dae6cc1ddda33173, type: 3}
+    size: 10
+  - tag: Prop_Tree 3
+    prefab: {fileID: 889982214784732533, guid: 349ab37b9de63da45a22f8e83f16a14a, type: 3}
+    size: 10
+  - tag: Enemy_Bat
+    prefab: {fileID: 3371409198316295035, guid: c2ed9645d39677640b4fbaedd8919f77, type: 3}
+    size: 140
+  - tag: Enemy_GoblinKnight
+    prefab: {fileID: 1987047377786636553, guid: 7bae3f6495c95fd489dde2f8bcdf55f9, type: 3}
+    size: 140
+  - tag: Enemy_GoblinArcher
+    prefab: {fileID: 9032014044579634548, guid: a562de65538dba34882648035626a33d, type: 3}
+    size: 140
+  - tag: Enemy_GoblinMage
+    prefab: {fileID: 6029562587574041385, guid: ccedb2706cf9c3f439ffd89cdbf1d7d0, type: 3}
+    size: 140
+  - tag: Enemy_Wolf
+    prefab: {fileID: 4720918016224897111, guid: 17e970a88c7d01544b07358b31544e1b, type: 3}
+    size: 140
+  - tag: Enemy_Spider
+    prefab: {fileID: 4860159253479769756, guid: 2fbf6070f9e7cdf4cbd24e8214400639, type: 3}
+    size: 140
+  - tag: Enemy_Meteor
+    prefab: {fileID: 1032086161236406950, guid: 138fd2def73bccb4ca18889028d7ae7f, type: 3}
+    size: 24
+  - tag: Enemy_Exploder
+    prefab: {fileID: 8309821208071821943, guid: 0317a6f0e122aad43b5c21ebe0414393, type: 3}
+    size: 140
+  - tag: Enemy_Ghost
+    prefab: {fileID: 651282674222005876, guid: d9856c9a519d72d41a09a532a0d5f3b4, type: 3}
+    size: 140
+  - tag: Hostile_Arrow
+    prefab: {fileID: 5997573724359075854, guid: 19ffc42841843a24d824c398f93b07f9, type: 3}
+    size: 40
+  - tag: Hostile_MagicBolt
+    prefab: {fileID: 2716974212261402497, guid: 1cacf50710736f046bcd87fc1479f198, type: 3}
+    size: 30
+  - tag: Hostile_Web
+    prefab: {fileID: 7342546010400522602, guid: 986222dfc11d3c44ebfb6215259f5530, type: 3}
+    size: 24
+  - tag: Enemy_SlimeKing
+    prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
+    size: 2
+  - tag: Pickup_PowerUp
+    prefab: {fileID: 5825566481984973083, guid: f4915576817bd1947b191132f34a03b5, type: 3}
+    size: 16
+  - tag: Projectile_Lance
+    prefab: {fileID: 9086646655045113726, guid: 2c98cef76dc86364dab2c8d4405f144b, type: 3}
+    size: 24
+  - tag: Hostile_WaterBall
+    prefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
+    size: 18
+  - tag: Enemy_BlueSlime
+    prefab: {fileID: 244735591878693721, guid: 7324e7e1529e52d4fb05e018c3ddc150, type: 3}
+    size: 140
+  - tag: FX_GroundHazard
+    prefab: {fileID: 7342546010400522602, guid: 63e14551ecfb33d4f905827337015234, type: 3}
+    size: 16
+  - tag: Enemy_BossBody
+    prefab: {fileID: 244735591878693721, guid: dcb245a7fd6a0f94fbffedce91684a8d, type: 3}
+    size: 2
+  - tag: Prop_Box
+    prefab: {fileID: 6089294405615521361, guid: 306ba1df3c6cee54a87c51c7a5b3ec9d, type: 3}
+    size: 10
+  - tag: Prop_Trunk
+    prefab: {fileID: 889982214784732533, guid: a0a2529e4ed3fd14bac836b769ba24ba, type: 3}
+    size: 42
+  - tag: Prop_Trunk 1
+    prefab: {fileID: 889982214784732533, guid: 89adfb1d4a0158745901fa7588d593d2, type: 3}
+    size: 42
+  - tag: Prop_Trunk 2
+    prefab: {fileID: 889982214784732533, guid: 1af585e02841cbf4fad14cdb1c3e2164, type: 3}
+    size: 42
+  - tag: Prop_Trunk 3
+    prefab: {fileID: 889982214784732533, guid: 44c38a98cbedc1441a3fcf406fb5e701, type: 3}
+    size: 42
+  - tag: Prop_Trunk 4
+    prefab: {fileID: 889982214784732533, guid: d1ac4f322bf9fb643960ef80c1eb39d5, type: 3}
+    size: 42
+  - tag: Prop_Trunk 5
+    prefab: {fileID: 889982214784732533, guid: 756288836c48c7f4285569827c928234, type: 3}
+    size: 42
+  - tag: Prop_Trunk 6
+    prefab: {fileID: 889982214784732533, guid: bbaa2bb6ea2958840ae0aea9441fd4c0, type: 3}
+    size: 42
+  - tag: Prop_Trunk 7
+    prefab: {fileID: 889982214784732533, guid: a78fab13a2b132144b4c28032bbad0d0, type: 3}
+    size: 42
+  - tag: Enemy_GoblinSpear
+    prefab: {fileID: 244735591878693721, guid: 79bd3a1fbc557a94ab6a2485cd810420, type: 3}
+    size: 140
+  - tag: Enemy_Rat
+    prefab: {fileID: 3371409198316295035, guid: 2b9075339b53ec345bfabbdb9af55cb8, type: 3}
+    size: 140
+  - tag: Enemy_RedSlime
+    prefab: {fileID: 244735591878693721, guid: a721c595706c724479f459e2a568cddd, type: 3}
+    size: 140
+  - tag: Globin_Arrow_Red
+    prefab: {fileID: 5997573724359075854, guid: 47eac5ed561ba6f4faee5ae56f588c56, type: 3}
+    size: 40
+  - tag: FX_AuraPulse
+    prefab: {fileID: 4995287234733603234, guid: c47448577f6ac46b9b937f997abe1fb3, type: 3}
+    size: 8
+  - tag: OrbitBlade_Sword
+    prefab: {fileID: 286101483933260600, guid: ee312bfa8dfb5463d80be7bd63f67ca9, type: 3}
+    size: 12
+  - tag: FX_Hitbox
+    prefab: {fileID: 8813681461099522196, guid: 612fa08fd99e6bf4fb3ccc982e18a9be, type: 3}
+    size: 24
+  - tag: Pickup_Health
+    prefab: {fileID: 5825566481984973083, guid: fdd50c17fb5ba4e36844d6d9a97408b5, type: 3}
+    size: 40
+  - tag: Projectile_Axe
+    prefab: {fileID: 9086646655045113726, guid: 4ba5cf8d98d4f3d4dbc602f01bf38a21, type: 3}
+    size: 24
+  - tag: Projectile_Fireball
+    prefab: {fileID: 9086646655045113726, guid: c4ffb9b78e93eaf4781905217c0afb8a, type: 3}
+    size: 24
+  - tag: Projectile_KingAxe
+    prefab: {fileID: 9086646655045113726, guid: 88660e7d020c04d43b530e40e7ede185, type: 3}
+    size: 24
+  - tag: Projectile_Knife
+    prefab: {fileID: 9086646655045113726, guid: e416e22ec231fcc4b91cad77a1497327, type: 3}
+    size: 24
+  - tag: Projectile_Wand
+    prefab: {fileID: 9086646655045113726, guid: 50758332c0033a4489b47cec37b7fe2e, type: 3}
+    size: 24
+  - tag: FX_HolyWater
+    prefab: {fileID: 4995287234733603234, guid: caa24402007cfa54d8b67c472a377b20, type: 3}
+    size: 24
+  - tag: FX_KingAxeSwing
+    prefab: {fileID: 5696536929901219621, guid: b54900758f36a82428642f7c194b9ee1, type: 3}
+    size: 24
+  - tag: FX_Lightning
+    prefab: {fileID: 4995287234733603234, guid: 07674b0d8ff601643bfd6e4d3a1c994c, type: 3}
+    size: 24
+  - tag: FX_SwordSwing
+    prefab: {fileID: 2008132676507572747, guid: 05670906181c14763a94f5cd7898f5fe, type: 3}
+    size: 24
 --- !u!114 &39098419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,7 +1038,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39098406}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 737672b003e08014ca677099fa9a081e, type: 3}
   m_Name: 
@@ -2614,6 +2725,7 @@ MonoBehaviour:
   restartButton: {fileID: 1873708285}
   menuButton: {fileID: 824029327}
   animator: {fileID: 445219708}
+  showDelay: 1
 --- !u!114 &445219706
 MonoBehaviour:
   m_ObjectHideFlags: 0

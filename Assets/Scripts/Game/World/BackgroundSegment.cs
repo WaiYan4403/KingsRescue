@@ -291,7 +291,7 @@ namespace KingsRescue.World
         internal static GameObject SpawnChild(GameObject prefab, Vector3 worldPosition, Transform parent)
         {
             bool loosePickup = prefab.GetComponent<KingsRescue.Pickups.Pickup>() != null;
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             GameObject instance = pool != null
                 ? pool.Spawn(prefab, worldPosition, Quaternion.identity, loosePickup ? null : parent)
                 : Instantiate(prefab, worldPosition, Quaternion.identity, loosePickup ? null : parent);
@@ -318,10 +318,10 @@ namespace KingsRescue.World
 
             SetIndependentMotion(instance, true);
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool != null)
             {
-                pool.Despawn(instance);
+                pool.Return(instance);
             }
             else
             {

@@ -364,7 +364,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;
@@ -520,7 +520,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;
@@ -685,7 +685,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;
@@ -710,7 +710,7 @@ namespace KingsRescue.Combat
 
         private void ClearBlades()
         {
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
 
             for (int i = 0; i < blades.Count; i++)
             {
@@ -721,7 +721,7 @@ namespace KingsRescue.Combat
 
                 if (pool != null)
                 {
-                    pool.Despawn(blades[i].gameObject);
+                    pool.Return(blades[i].gameObject);
                 }
                 else
                 {
@@ -763,13 +763,13 @@ namespace KingsRescue.Combat
 
         private void SpawnEffect(Vector2 center, Vector2 facing, float radius, float lifetime)
         {
-            if (definition.effectPrefab == null || PoolManager.Instance == null)
+            if (definition.effectPrefab == null || ObjectPoolManager.Instance == null)
             {
                 return;
             }
 
             float angle = Mathf.Atan2(facing.y, facing.x) * Mathf.Rad2Deg - 90f;
-            GameObject effect = PoolManager.Instance.Spawn(definition.effectPrefab, center, Quaternion.Euler(0f, 0f, angle));
+            GameObject effect = ObjectPoolManager.Instance.Spawn(definition.effectPrefab, center, Quaternion.Euler(0f, 0f, angle));
 
             if (effect == null)
             {
@@ -782,6 +782,10 @@ namespace KingsRescue.Combat
             if (despawn != null)
             {
                 despawn.SetLifetime(Mathf.Max(0.05f, lifetime));
+            }
+            else
+            {
+                ObjectPoolManager.Instance.ReturnDelayed(effect, Mathf.Max(0.05f, lifetime));
             }
         }
 

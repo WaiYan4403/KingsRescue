@@ -46,7 +46,7 @@ MonoBehaviour:
     introCount: 1
     introPattern: 0
   - enemy: {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
-    unlockAt: 120
+    unlockAt: 140
     weight: 2
     introCount: 6
     introPattern: 0

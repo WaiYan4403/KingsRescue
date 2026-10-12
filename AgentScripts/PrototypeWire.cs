@@ -93,9 +93,9 @@ public static class PrototypeWire
         decorations.GetArrayElementAtIndex(1).FindPropertyRelative("weight").floatValue = 40f;
         soProps.ApplyModifiedPropertiesWithoutUndo();
 
-        var poolMgr = systems.GetComponent<PoolManager>();
+        var poolMgr = systems.GetComponent<ObjectPoolManager>();
         var soPool = new SerializedObject(poolMgr);
-        var prewarm = soPool.FindProperty("prewarm");
+        var prewarm = soPool.FindProperty("pools");
         prewarm.arraySize = 8;
         SetPrewarm(prewarm, 0, "Assets/Prefabs/Enemies/Enemy_Orc.prefab", 80);
         SetPrewarm(prewarm, 1, "Assets/Prefabs/Enemies/Enemy_Goblin.prefab", 80);
@@ -132,8 +132,9 @@ public static class PrototypeWire
     static void SetPrewarm(SerializedProperty list, int index, string path, int count)
     {
         var el = list.GetArrayElementAtIndex(index);
+        el.FindPropertyRelative("tag").stringValue = System.IO.Path.GetFileNameWithoutExtension(path);
         el.FindPropertyRelative("prefab").objectReferenceValue = Load<GameObject>(path);
-        el.FindPropertyRelative("count").intValue = count;
+        el.FindPropertyRelative("size").intValue = count;
     }
 
     static void SetObj(Object obj, string field, Object value)

@@ -760,8 +760,8 @@ public static class PrototypeSetup
         Set(scroll, "speedGainPerMinute", 0.9f);
         Set(scroll, "maxSpeed", 7f);
 
-        var pool = systems.AddComponent<PoolManager>();
-        var prewarm = So(pool).FindProperty("prewarm");
+        var pool = systems.AddComponent<ObjectPoolManager>();
+        var prewarm = So(pool).FindProperty("pools");
         prewarm.arraySize = 8;
         Prewarm(prewarm, 0, enemies.Orc, 80);
         Prewarm(prewarm, 1, enemies.Goblin, 80);
@@ -835,8 +835,9 @@ public static class PrototypeSetup
     static void Prewarm(SerializedProperty list, int index, GameObject prefab, int count)
     {
         var el = list.GetArrayElementAtIndex(index);
+        el.FindPropertyRelative("tag").stringValue = prefab != null ? prefab.name : "Pool";
         el.FindPropertyRelative("prefab").objectReferenceValue = prefab;
-        el.FindPropertyRelative("count").intValue = count;
+        el.FindPropertyRelative("size").intValue = count;
     }
 
     static void SetPropEntry(SerializedProperty list, int index, GameObject prefab, float weight)

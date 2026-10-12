@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Enemies;
@@ -12,6 +13,16 @@ namespace KingsRescue.Combat
     public static class Targeting
     {
         private static readonly List<Health> Scratch = new List<Health>(64);
+
+        private const float Cell = 3f;
+        private const float InvCell = 1f / Cell;
+
+        private static readonly Dictionary<int, int> cellHead = new Dictionary<int, int>(256);
+        private static int[] cellNext = new int[1024];
+        private static Health[] cellBody = new Health[1024];
+        private static int cellUsed;
+        private static int gridFrame = -1;
+        private static int queryStamp = 1;
 
         /// <summary>Closest living enemy within range, or null. Ignores props.</summary>
         public static Enemy FindNearest(Vector2 from, float maxRange = float.PositiveInfinity)
@@ -65,19 +76,18 @@ namespace KingsRescue.Combat
         public static void Overlap(Vector2 center, float radius, List<Health> results)
         {
             results.Clear();
+            EnsureGrid();
+            int token = NextStamp();
+            int x0 = Mathf.FloorToInt((center.x - radius) * InvCell);
+            int x1 = Mathf.FloorToInt((center.x + radius) * InvCell);
+            int y0 = Mathf.FloorToInt((center.y - radius) * InvCell);
+            int y1 = Mathf.FloorToInt((center.y + radius) * InvCell);
 
-            List<Health> targets = HitRegistry.Targets;
-            for (int i = 0; i < targets.Count; i++)
+            for (int y = y0; y <= y1; y++)
             {
-                Health target = targets[i];
-                if (target == null || !target.IsAlive || target.Untargetable)
+                for (int x = x0; x <= x1; x++)
                 {
-                    continue;
-                }
-
-                if (target.Overlaps(center, radius))
-                {
-                    results.Add(target);
+                    CollectCell(CellKey(x, y), token, center, radius, results);
                 }
             }
         }
@@ -86,10 +96,73 @@ namespace KingsRescue.Combat
         public static void OverlapSegment(Vector2 from, Vector2 to, float radius, List<Health> results)
         {
             results.Clear();
+            EnsureGrid();
+            int token = NextStamp();
             Vector2 delta = to - from;
             float distSq = delta.sqrMagnitude;
-            List<Health> targets = HitRegistry.Targets;
+            float minX = Mathf.Min(from.x, to.x) - radius;
+            float maxX = Mathf.Max(from.x, to.x) + radius;
+            float minY = Mathf.Min(from.y, to.y) - radius;
+            float maxY = Mathf.Max(from.y, to.y) + radius;
+            int x0 = Mathf.FloorToInt(minX * InvCell);
+            int x1 = Mathf.FloorToInt(maxX * InvCell);
+            int y0 = Mathf.FloorToInt(minY * InvCell);
+            int y1 = Mathf.FloorToInt(maxY * InvCell);
 
+            for (int y = y0; y <= y1; y++)
+            {
+                for (int x = x0; x <= x1; x++)
+                {
+                    if (!cellHead.TryGetValue(CellKey(x, y), out int slot))
+                    {
+                        continue;
+                    }
+
+                    while (slot >= 0)
+                    {
+                        Health target = cellBody[slot];
+                        slot = cellNext[slot];
+                        if (target.BroadphaseStamp == token)
+                        {
+                            continue;
+                        }
+
+                        target.BroadphaseStamp = token;
+                        if (!target.IsAlive || target.Untargetable)
+                        {
+                            continue;
+                        }
+
+                        Vector2 closest = from;
+                        if (distSq > 0.0001f)
+                        {
+                            float t = Mathf.Clamp01(Vector2.Dot(target.Position - from, delta) / distSq);
+                            closest = from + delta * t;
+                        }
+
+                        if (target.Overlaps(closest, radius))
+                        {
+                            results.Add(target);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void EnsureGrid()
+        {
+            // Once per frame. Rebuilding after every kill made a crowded clear stall,
+            // and a body that dies mid-frame is skipped by the alive check.
+            if (gridFrame == Time.frameCount)
+            {
+                return;
+            }
+
+            gridFrame = Time.frameCount;
+            cellHead.Clear();
+            cellUsed = 0;
+
+            List<Health> targets = HitRegistry.Targets;
             for (int i = 0; i < targets.Count; i++)
             {
                 Health target = targets[i];
@@ -98,18 +171,83 @@ namespace KingsRescue.Combat
                     continue;
                 }
 
-                Vector2 closest = from;
-                if (distSq > 0.0001f)
+                Vector2 pos = target.Position;
+                float body = target.HitRadius;
+                int x0 = Mathf.FloorToInt((pos.x - body) * InvCell);
+                int x1 = Mathf.FloorToInt((pos.x + body) * InvCell);
+                int y0 = Mathf.FloorToInt((pos.y - body) * InvCell);
+                int y1 = Mathf.FloorToInt((pos.y + body) * InvCell);
+                for (int y = y0; y <= y1; y++)
                 {
-                    float t = Mathf.Clamp01(Vector2.Dot(target.Position - from, delta) / distSq);
-                    closest = from + delta * t;
+                    for (int x = x0; x <= x1; x++)
+                    {
+                        AddToCell(CellKey(x, y), target);
+                    }
+                }
+            }
+        }
+
+        private static void AddToCell(int key, Health target)
+        {
+            if (cellUsed >= cellBody.Length)
+            {
+                int size = cellBody.Length * 2;
+                Array.Resize(ref cellNext, size);
+                Array.Resize(ref cellBody, size);
+            }
+
+            int slot = cellUsed++;
+            cellBody[slot] = target;
+            cellNext[slot] = cellHead.TryGetValue(key, out int head) ? head : -1;
+            cellHead[key] = slot;
+        }
+
+        private static void CollectCell(int key, int token, Vector2 center, float radius, List<Health> results)
+        {
+            if (!cellHead.TryGetValue(key, out int slot))
+            {
+                return;
+            }
+
+            while (slot >= 0)
+            {
+                Health target = cellBody[slot];
+                slot = cellNext[slot];
+                if (target.BroadphaseStamp == token)
+                {
+                    continue;
                 }
 
-                if (target.Overlaps(closest, radius))
+                target.BroadphaseStamp = token;
+                if (target.IsAlive && !target.Untargetable && target.Overlaps(center, radius))
                 {
                     results.Add(target);
                 }
             }
+        }
+
+        private static int CellKey(int x, int y)
+        {
+            return ((x + 1024) << 16) | ((y + 1024) & 0xFFFF);
+        }
+
+        private static int NextStamp()
+        {
+            queryStamp++;
+            if (queryStamp == int.MaxValue)
+            {
+                queryStamp = 1;
+                List<Health> targets = HitRegistry.Targets;
+                for (int i = 0; i < targets.Count; i++)
+                {
+                    if (targets[i] != null)
+                    {
+                        targets[i].BroadphaseStamp = 0;
+                    }
+                }
+            }
+
+            return queryStamp;
         }
 
         /// <summary>Damages everything a forward lance crosses. Returns how many targets were hit.</summary>

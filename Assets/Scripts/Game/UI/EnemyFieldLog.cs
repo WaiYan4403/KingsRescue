@@ -144,16 +144,16 @@ namespace KingsRescue.UI
             }
 
             string report = builder.ToString();
+            string fingerprint = BuildFingerprint();
+            if (fingerprint == lastFingerprint)
+            {
+                return;
+            }
+
+            lastFingerprint = fingerprint;
             if (label != null)
             {
                 label.text = report;
-            }
-
-            string fingerprint = BuildFingerprint();
-            if (fingerprint != lastFingerprint)
-            {
-                lastFingerprint = fingerprint;
-                Debug.Log("[Field] " + report.Replace("\n", " | "));
             }
         }
 
@@ -167,6 +167,7 @@ namespace KingsRescue.UI
                 if (row.boss)
                 {
                     builder.Append('/').Append(row.action);
+                    builder.Append('/').Append(Mathf.CeilToInt(row.hp * 100f));
                 }
 
                 builder.Append(';');

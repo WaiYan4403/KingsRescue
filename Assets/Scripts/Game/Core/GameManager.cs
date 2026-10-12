@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using KingsRescue.Combat;
 using KingsRescue.Data;
 using KingsRescue.Enemies;
 using KingsRescue.Meta;
@@ -112,6 +113,9 @@ namespace KingsRescue.Core
 
         private void Update()
         {
+            HitFlash.Tick();
+            EnemyDropper.TickPending();
+
             if (State == GameState.Playing && !BossFightActive)
             {
                 RunTime += Time.deltaTime;

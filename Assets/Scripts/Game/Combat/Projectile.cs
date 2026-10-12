@@ -131,25 +131,13 @@ namespace KingsRescue.Combat
 
         private void SweepHits(Vector2 from, Vector2 to)
         {
-            float distance = Vector2.Distance(from, to);
-            int samples = Mathf.Max(1, Mathf.CeilToInt(distance / 0.3f));
-            for (int s = 1; s <= samples; s++)
+            if (!isActiveAndEnabled)
             {
-                if (!isActiveAndEnabled)
-                {
-                    return;
-                }
-
-                CheckHits(Vector2.Lerp(from, to, s / (float)samples));
+                return;
             }
-        }
 
-        private void CheckHits(Vector2 position)
-        {
-            // Snapshot first: a lethal hit unregisters the target and would otherwise
-            // mutate the registry while we walk it.
-            Targeting.Overlap(position, hitRadius * radiusScale, overlapped);
-            SortClosest(position);
+            Targeting.OverlapSegment(from, to, hitRadius * radiusScale, overlapped);
+            SortAlong(from, to);
 
             bool blocked = false;
             for (int i = 0; i < overlapped.Count; i++)
@@ -193,23 +181,23 @@ namespace KingsRescue.Combat
             }
         }
 
-        private void SortClosest(Vector2 position)
+        private void SortAlong(Vector2 from, Vector2 to)
         {
+            Vector2 delta = to - from;
+            float distSq = delta.sqrMagnitude;
             for (int i = 1; i < overlapped.Count; i++)
             {
                 Health key = overlapped[i];
-                float keyDist = key == null ? float.MaxValue : (key.Position - position).sqrMagnitude;
+                float keyT = Along(key, from, delta, distSq);
                 int j = i - 1;
                 while (j >= 0)
                 {
-                    Health other = overlapped[j];
-                    float otherDist = other == null ? float.MaxValue : (other.Position - position).sqrMagnitude;
-                    if (otherDist <= keyDist)
+                    if (Along(overlapped[j], from, delta, distSq) <= keyT)
                     {
                         break;
                     }
 
-                    overlapped[j + 1] = other;
+                    overlapped[j + 1] = overlapped[j];
                     j--;
                 }
 
@@ -217,16 +205,35 @@ namespace KingsRescue.Combat
             }
         }
 
-        private void Recycle(bool spawnImpact)
+        private static float Along(Health target, Vector2 from, Vector2 delta, float distSq)
         {
-            if (spawnImpact && impactEffectPrefab != null && PoolManager.Instance != null)
+            if (target == null)
             {
-                PoolManager.Instance.Spawn(impactEffectPrefab, transform.position, Quaternion.identity);
+                return float.MaxValue;
             }
 
-            if (PoolManager.Instance != null)
+            if (distSq < 0.0001f)
             {
-                PoolManager.Instance.Despawn(gameObject);
+                return (target.Position - from).sqrMagnitude;
+            }
+
+            return Vector2.Dot(target.Position - from, delta) / distSq;
+        }
+
+        private void Recycle(bool spawnImpact)
+        {
+            if (spawnImpact && impactEffectPrefab != null && ObjectPoolManager.Instance != null)
+            {
+                GameObject impact = ObjectPoolManager.Instance.Spawn(impactEffectPrefab, transform.position, Quaternion.identity);
+                if (impact != null && impact.GetComponent<AutoDespawn>() == null)
+                {
+                    ObjectPoolManager.Instance.ReturnDelayed(impact, 0.6f);
+                }
+            }
+
+            if (ObjectPoolManager.Instance != null)
+            {
+                ObjectPoolManager.Instance.Return(gameObject);
             }
             else
             {

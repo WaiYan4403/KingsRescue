@@ -108,7 +108,7 @@ namespace KingsRescue.Combat
 
         private static HitboxMarker SpawnWorld(HitboxDisplay display, Vector2 center)
         {
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool != null)
             {
                 return pool.Spawn(display.markerPrefab, center, Quaternion.identity);

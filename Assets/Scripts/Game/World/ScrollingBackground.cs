@@ -80,7 +80,7 @@ namespace KingsRescue.World
 
         private BackgroundSegment SpawnSegment(Vector3 position)
         {
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool != null)
             {
                 return pool.Spawn(segmentPrefab, position, Quaternion.identity, root);

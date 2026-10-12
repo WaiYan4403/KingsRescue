@@ -43,6 +43,9 @@ namespace KingsRescue.Combat
 
         public bool FacingLeft { get; set; }
 
+        /// <summary>Stamps a broadphase query so a body that covers several cells is tested once.</summary>
+        internal int BroadphaseStamp;
+
         /// <summary>Raised whenever damage lands and the target survives it.</summary>
         public event Action<Health, DamageInfo> Damaged;
 

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using KingsRescue.Core;
 
 /// <summary>
 /// Prefab-keyed pool used by environments, props, enemies, pickups and VFX.
+/// Every entry in <see cref="pools"/> is created in Awake, before gameplay starts.
+/// Spawn only reactivates those copies. It never instantiates during play.
 /// Tag-based SpawnFromPool remains for older callers.
 /// </summary>
 [DefaultExecutionOrder(-200)]
@@ -25,6 +26,8 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
 
     private readonly Dictionary<GameObject, Stack<GameObject>> prefabPools = new Dictionary<GameObject, Stack<GameObject>>();
     private readonly Dictionary<GameObject, Transform> prefabRoots = new Dictionary<GameObject, Transform>();
+    private readonly HashSet<GameObject> exhausted = new HashSet<GameObject>();
+    private bool building;
 
     protected override void Awake()
     {
@@ -39,6 +42,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
             return;
         }
 
+        building = true;
         for (int i = 0; i < pools.Count; i++)
         {
             Pool pool = pools[i];
@@ -51,11 +55,13 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
             taggedActive[pool.tag] = new HashSet<GameObject>();
             Prewarm(pool.prefab, pool.size);
         }
+
+        building = false;
     }
 
     public void Prewarm(GameObject prefab, int count)
     {
-        if (prefab == null || count <= 0)
+        if (!building || prefab == null || count <= 0)
         {
             return;
         }
@@ -78,7 +84,17 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         }
 
         Stack<GameObject> pool = GetPrefabPool(prefab);
-        GameObject instance = pool.Count > 0 ? pool.Pop() : CreateInstance(prefab);
+        if (pool.Count == 0)
+        {
+            if (exhausted.Add(prefab))
+            {
+                Debug.LogWarning($"[ObjectPoolManager] Pool for '{prefab.name}' is empty. Increase its size. Nothing was created during play.");
+            }
+
+            return null;
+        }
+
+        GameObject instance = pool.Pop();
 
         Transform t = instance.transform;
         t.SetParent(parent != null ? parent : prefabRoots[prefab], false);
@@ -120,7 +136,6 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
             return;
         }
 
-        DOTween.Kill(instance.transform);
         pooled.NotifyDespawned();
         instance.SetActive(false);
         instance.transform.SetParent(prefabRoots[pooled.SourcePrefab], false);
@@ -181,7 +196,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
             return;
         }
 
-        Prewarm(pool.prefab, additionalSize);
+        Debug.LogWarning($"[ObjectPoolManager] Pool '{tag}' is fixed at startup. Raise its size on ObjectPoolManager instead of expanding during play.");
     }
 
     public int GetActiveObjectCount(string tag)
@@ -224,12 +239,13 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         }
 
         pooled.Bind(prefab);
+        instance.SetActive(false);
         return instance;
     }
 
     private System.Collections.IEnumerator ReturnRoutine(GameObject instance, float delay)
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSecondsRealtime(delay);
         Return(instance);
     }
 }

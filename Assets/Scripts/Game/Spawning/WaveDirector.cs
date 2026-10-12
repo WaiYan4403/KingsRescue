@@ -228,8 +228,6 @@ namespace KingsRescue.Spawning
             flockSessionEndTime[index] = runTime + duration;
             flockResumeTime[index] = flockSessionEndTime[index] + cooldown;
             nextTypeSpawnTime[index] = runTime + timeline.FlockInSessionInterval;
-            string name = string.IsNullOrEmpty(enemy.displayName) ? enemy.name : enemy.displayName;
-            Debug.Log($"[Spawn] {name} flyover for {duration:0.0}s, then {cooldown:0.0}s quiet.", enemy);
             SpawnTimelineEnemy(enemy, runMinutes);
         }
 
@@ -264,7 +262,6 @@ namespace KingsRescue.Spawning
                 string name = string.IsNullOrEmpty(enemy.displayName) ? enemy.name : enemy.displayName;
                 LastUnlockAnnouncement = name;
                 LastUnlockAnnounceUntil = Time.unscaledTime + 6f;
-                Debug.Log($"[Spawn] New enemy type: {name} (minute {Mathf.FloorToInt(runMinutes)})", enemy);
 
                 int unlockedIndex = unlockedCount - 1;
                 if (enemy.spawnAsFlock)
@@ -687,7 +684,7 @@ namespace KingsRescue.Spawning
                 return;
             }
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;
@@ -738,7 +735,7 @@ namespace KingsRescue.Spawning
 
         private void SpawnImmediate(EnemyDefinition definition, Vector2 position, float runMinutes, SpawnPattern pattern, Vector2 heading = default, bool hasHeading = false)
         {
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;
@@ -756,6 +753,7 @@ namespace KingsRescue.Spawning
             if (enemy == null)
             {
                 Debug.LogError($"Enemy prefab '{definition.prefab.name}' is missing an Enemy component.", definition.prefab);
+                pool.Return(instance);
                 return;
             }
 

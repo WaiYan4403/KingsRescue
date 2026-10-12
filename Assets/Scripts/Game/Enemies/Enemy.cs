@@ -31,6 +31,7 @@ namespace KingsRescue.Enemies
         private EnemySpecials specials;
         private HitFlash hitFlash;
         private SpriteRenderer body;
+        private Animator animator;
         private OffscreenDespawner despawner;
         private Vector3 baseScale = Vector3.one;
         private bool dying;
@@ -100,8 +101,16 @@ namespace KingsRescue.Enemies
             specials = GetComponent<EnemySpecials>();
             hitFlash = GetComponent<HitFlash>();
             body = GetComponent<SpriteRenderer>();
+            animator = GetComponent<Animator>();
             despawner = GetComponent<OffscreenDespawner>();
             baseScale = transform.localScale;
+
+            if (animator != null)
+            {
+                // Pooling disables the body. Without this, every reuse rebuilds the animator.
+                animator.keepAnimatorStateOnDisable = true;
+                animator.cullingMode = AnimatorCullingMode.CullCompletely;
+            }
         }
 
         private void OnEnable()
@@ -121,6 +130,7 @@ namespace KingsRescue.Enemies
         public void OnSpawned()
         {
             dying = false;
+            OffsetWalkCycle();
         }
 
         public void OnDespawned()
@@ -162,6 +172,13 @@ namespace KingsRescue.Enemies
                 despawner.enabled = !def.isBoss;
             }
 
+            if (animator != null)
+            {
+                animator.cullingMode = def.isBoss
+                    ? AnimatorCullingMode.AlwaysAnimate
+                    : AnimatorCullingMode.CullCompletely;
+            }
+
             slimeKing?.Configure(def, runMinutes);
             encounterBoss?.Configure(def, runMinutes);
             ApplyVisual(def);
@@ -175,7 +192,7 @@ namespace KingsRescue.Enemies
                 return null;
             }
 
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return null;
@@ -195,6 +212,21 @@ namespace KingsRescue.Enemies
 
             enemy.Configure(def, runMinutes);
             return enemy;
+        }
+
+        /// <summary>
+        /// Walk cycles that start together swap sprites on the same frames and hitch.
+        /// A random phase spreads those swaps out.
+        /// </summary>
+        private void OffsetWalkCycle()
+        {
+            if (animator == null || animator.runtimeAnimatorController == null || !animator.isActiveAndEnabled)
+            {
+                return;
+            }
+
+            AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+            animator.Play(state.fullPathHash, 0, Random.value);
         }
 
         private void ApplyVisual(EnemyDefinition def)
@@ -243,9 +275,9 @@ namespace KingsRescue.Enemies
         private void RecycleQuiet()
         {
             dying = true;
-            if (PoolManager.Instance != null)
+            if (ObjectPoolManager.Instance != null)
             {
-                PoolManager.Instance.Despawn(gameObject);
+                ObjectPoolManager.Instance.Return(gameObject);
             }
             else
             {
@@ -290,9 +322,9 @@ namespace KingsRescue.Enemies
                 GameManager.Instance?.EndBossFight();
             }
 
-            if (PoolManager.Instance != null)
+            if (ObjectPoolManager.Instance != null)
             {
-                PoolManager.Instance.Despawn(gameObject);
+                ObjectPoolManager.Instance.Return(gameObject);
             }
             else
             {

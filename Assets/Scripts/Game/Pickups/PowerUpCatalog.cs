@@ -37,7 +37,7 @@ namespace KingsRescue.Pickups
         public static void TryDrop(Vector2 origin, bool fromChest)
         {
             PowerUpCatalog catalog = Load();
-            if (catalog == null || catalog.pickupPrefab == null || PoolManager.Instance == null)
+            if (catalog == null || catalog.pickupPrefab == null || ObjectPoolManager.Instance == null)
             {
                 return;
             }
@@ -65,12 +65,12 @@ namespace KingsRescue.Pickups
         public static void Spawn(Vector2 origin)
         {
             PowerUpCatalog catalog = Load();
-            if (catalog == null || catalog.pickupPrefab == null || PoolManager.Instance == null)
+            if (catalog == null || catalog.pickupPrefab == null || ObjectPoolManager.Instance == null)
             {
                 return;
             }
 
-            GameObject instance = PoolManager.Instance.Spawn(catalog.pickupPrefab, origin, Quaternion.identity);
+            GameObject instance = ObjectPoolManager.Instance.Spawn(catalog.pickupPrefab, origin, Quaternion.identity);
             if (instance == null)
             {
                 return;

@@ -48,12 +48,23 @@ namespace KingsRescue.Enemies
         private Vector2 knockbackVelocity;
         private float knockbackUntil;
         private bool halted;
+        private Enemy self;
 
         private const float KnockbackDuration = 0.16f;
         private const float KnockbackPop = 0.28f;
+        private const float SeparationCell = 2.5f;
+        private const float InvSeparationCell = 1f / SeparationCell;
+
+        private static int separationFrame = -1;
+        private static readonly Dictionary<int, int> separationHead = new Dictionary<int, int>(128);
+        private static int[] separationNext = new int[320];
+        private static Enemy[] separationEnemy = new Enemy[320];
+        private static Vector2[] separationPos = new Vector2[320];
+        private static int separationCount;
 
         private void Awake()
         {
+            self = GetComponent<Enemy>();
             if (spriteRenderer == null)
             {
                 spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -449,35 +460,52 @@ namespace KingsRescue.Enemies
                 return Vector2.zero;
             }
 
+            RebuildSeparation();
+
             float radiusSq = separationRadius * separationRadius;
             Vector2 steer = Vector2.zero;
-            List<Enemy> active = Enemy.Active;
+            int span = Mathf.Max(1, Mathf.CeilToInt(separationRadius * InvSeparationCell));
+            int cx = Mathf.FloorToInt(position.x * InvSeparationCell);
+            int cy = Mathf.FloorToInt(position.y * InvSeparationCell);
 
-            for (int i = 0; i < active.Count; i++)
+            for (int oy = -span; oy <= span; oy++)
             {
-                Enemy other = active[i];
-                if (other == null || !other.IsAlive || other.transform == transform)
+                for (int ox = -span; ox <= span; ox++)
                 {
-                    continue;
-                }
+                    if (!separationHead.TryGetValue(SeparationKey(cx + ox, cy + oy), out int slot))
+                    {
+                        continue;
+                    }
 
-                Vector2 delta = position - other.Position;
-                float distSq = delta.sqrMagnitude;
-                if (distSq > radiusSq)
-                {
-                    continue;
-                }
+                    while (slot >= 0)
+                    {
+                        Enemy other = separationEnemy[slot];
+                        Vector2 otherPos = separationPos[slot];
+                        slot = separationNext[slot];
+                        if (other == null || other == self || !other.IsAlive)
+                        {
+                            continue;
+                        }
 
-                if (distSq < 0.000001f)
-                {
-                    float sign = other.GetInstanceID() > GetInstanceID() ? 1f : -1f;
-                    steer += new Vector2(sign, sign * 0.35f);
-                    continue;
-                }
+                        Vector2 delta = position - otherPos;
+                        float distSq = delta.sqrMagnitude;
+                        if (distSq > radiusSq)
+                        {
+                            continue;
+                        }
 
-                float dist = Mathf.Sqrt(distSq);
-                float weight = 1f - (dist / separationRadius);
-                steer += (delta / dist) * weight;
+                        if (distSq < 0.000001f)
+                        {
+                            float sign = other.GetInstanceID() > GetInstanceID() ? 1f : -1f;
+                            steer += new Vector2(sign, sign * 0.35f);
+                            continue;
+                        }
+
+                        float dist = Mathf.Sqrt(distSq);
+                        float weight = 1f - (dist / separationRadius);
+                        steer += (delta / dist) * weight;
+                    }
+                }
             }
 
             if (steer.sqrMagnitude < 0.0001f)
@@ -486,6 +514,51 @@ namespace KingsRescue.Enemies
             }
 
             return Vector2.ClampMagnitude(steer * separationStrength, separationStrength * 1.75f);
+        }
+
+        private static void RebuildSeparation()
+        {
+            if (separationFrame == Time.frameCount)
+            {
+                return;
+            }
+
+            separationFrame = Time.frameCount;
+            separationHead.Clear();
+            separationCount = 0;
+
+            List<Enemy> active = Enemy.Active;
+            for (int i = 0; i < active.Count; i++)
+            {
+                Enemy enemy = active[i];
+                if (enemy == null || !enemy.IsAlive)
+                {
+                    continue;
+                }
+
+                if (separationCount >= separationEnemy.Length)
+                {
+                    int size = separationEnemy.Length * 2;
+                    System.Array.Resize(ref separationNext, size);
+                    System.Array.Resize(ref separationEnemy, size);
+                    System.Array.Resize(ref separationPos, size);
+                }
+
+                Vector2 pos = enemy.Position;
+                int slot = separationCount++;
+                separationEnemy[slot] = enemy;
+                separationPos[slot] = pos;
+                int key = SeparationKey(
+                    Mathf.FloorToInt(pos.x * InvSeparationCell),
+                    Mathf.FloorToInt(pos.y * InvSeparationCell));
+                separationNext[slot] = separationHead.TryGetValue(key, out int head) ? head : -1;
+                separationHead[key] = slot;
+            }
+        }
+
+        private static int SeparationKey(int x, int y)
+        {
+            return ((x + 1024) << 16) | ((y + 1024) & 0xFFFF);
         }
     }
 }

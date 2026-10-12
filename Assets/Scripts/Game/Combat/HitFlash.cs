@@ -1,5 +1,5 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 using KingsRescue.Core;
 
 namespace KingsRescue.Combat
@@ -15,7 +15,10 @@ namespace KingsRescue.Combat
 
         private Health health;
         private SpriteRenderer[] renderers;
-        private Coroutine routine;
+        private float flashUntil;
+        private bool listed;
+
+        private static readonly List<HitFlash> flashing = new List<HitFlash>(64);
 
         private void Awake()
         {
@@ -49,7 +52,27 @@ namespace KingsRescue.Combat
                 health.Damaged -= OnDamaged;
             }
 
+            listed = false;
             Restore();
+        }
+
+        public static void Tick()
+        {
+            float now = Time.time;
+            for (int i = flashing.Count - 1; i >= 0; i--)
+            {
+                HitFlash flash = flashing[i];
+                if (flash == null || !flash.listed || now >= flash.flashUntil)
+                {
+                    if (flash != null && flash.listed)
+                    {
+                        flash.listed = false;
+                        flash.Paint(0f);
+                    }
+
+                    flashing.RemoveAt(i);
+                }
+            }
         }
 
         public void SetBaseColor(Color color)
@@ -77,25 +100,18 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            if (routine != null)
+            flashUntil = Time.time + Mathf.Max(0.12f, duration);
+            if (!listed)
             {
-                StopCoroutine(routine);
+                listed = true;
+                flashing.Add(this);
+                Paint(1f);
             }
-
-            routine = StartCoroutine(FlashRoutine());
         }
 
         private void OnDamaged(Health source, DamageInfo info)
         {
             Flash();
-        }
-
-        private IEnumerator FlashRoutine()
-        {
-            Paint(1f);
-            yield return new WaitForSeconds(Mathf.Max(0.12f, duration));
-            Paint(0f);
-            routine = null;
         }
 
         private void Prepare()
@@ -139,12 +155,7 @@ namespace KingsRescue.Combat
 
         private void Restore()
         {
-            if (routine != null)
-            {
-                StopCoroutine(routine);
-                routine = null;
-            }
-
+            listed = false;
             Paint(0f);
         }
     }

@@ -23,6 +23,43 @@ namespace KingsRescue.Enemies
 
         private EnemyDefinition definition;
 
+        private struct PendingDrop
+        {
+            public GameObject prefab;
+            public Vector2 position;
+            public Vector2 pop;
+            public int gemValue;
+        }
+
+        private static readonly List<PendingDrop> pendingDrops = new List<PendingDrop>(64);
+        private static int pendingHead;
+
+        /// <summary>Spawns a few queued gems per frame so a crowded kill does not activate them all at once.</summary>
+        public static void TickPending()
+        {
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
+            if (pool == null)
+            {
+                pendingDrops.Clear();
+                pendingHead = 0;
+                return;
+            }
+
+            int budget = 3;
+            while (budget > 0 && pendingHead < pendingDrops.Count)
+            {
+                SpawnNow(pool, pendingDrops[pendingHead]);
+                pendingHead++;
+                budget--;
+            }
+
+            if (pendingHead > 24)
+            {
+                pendingDrops.RemoveRange(0, pendingHead);
+                pendingHead = 0;
+            }
+        }
+
         public void Configure(EnemyDefinition def)
         {
             definition = def;
@@ -30,7 +67,7 @@ namespace KingsRescue.Enemies
 
         public void DropRewards()
         {
-            if (definition == null || PoolManager.Instance == null)
+            if (definition == null || ObjectPoolManager.Instance == null)
             {
                 return;
             }
@@ -42,41 +79,60 @@ namespace KingsRescue.Enemies
                 XpGem.Split(definition.xpValue, gemValues);
                 for (int i = 0; i < gemValues.Count; i++)
                 {
-                    XpGem gem = SpawnPickup(xpGemPrefab, origin) as XpGem;
-                    gem?.SetValue(gemValues[i]);
+                    Enqueue(xpGemPrefab, origin, gemValues[i]);
                 }
             }
 
             if (coinPrefab != null && Random.value < definition.coinDropChance)
             {
-                SpawnPickup(coinPrefab, origin);
+                Enqueue(coinPrefab, origin, 0);
             }
 
             if (healthPrefab != null && Random.value < definition.healthDropChance)
             {
-                SpawnPickup(healthPrefab, origin);
+                Enqueue(healthPrefab, origin, 0);
             }
 
             PowerUpCatalog.TryDrop(origin, false);
         }
 
-        private Pickup SpawnPickup(GameObject prefab, Vector2 origin)
+        private void Enqueue(GameObject prefab, Vector2 origin, int gemValue)
         {
-            GameObject instance = PoolManager.Instance.Spawn(prefab, origin, Quaternion.identity);
+            if (prefab == null)
+            {
+                return;
+            }
+
+            pendingDrops.Add(new PendingDrop
+            {
+                prefab = prefab,
+                position = origin,
+                pop = Random.insideUnitCircle.normalized * popSpeed,
+                gemValue = gemValue
+            });
+        }
+
+        private static void SpawnNow(ObjectPoolManager pool, PendingDrop drop)
+        {
+            GameObject instance = pool.Spawn(drop.prefab, drop.position, Quaternion.identity);
             if (instance == null)
             {
-                return null;
+                return;
             }
 
             Pickup pickup = instance.GetComponent<Pickup>();
             if (pickup == null)
             {
-                Debug.LogError($"Pickup prefab '{prefab.name}' has no Pickup component.", prefab);
-                return null;
+                Debug.LogError($"Pickup prefab '{drop.prefab.name}' has no Pickup component.", drop.prefab);
+                return;
             }
 
-            pickup.Pop(Random.insideUnitCircle.normalized * popSpeed);
-            return pickup;
+            if (drop.gemValue > 0)
+            {
+                (pickup as XpGem)?.SetValue(drop.gemValue);
+            }
+
+            pickup.Pop(drop.pop);
         }
     }
 }

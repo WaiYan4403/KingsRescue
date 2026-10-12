@@ -240,9 +240,9 @@ namespace KingsRescue.World
             float multiplier = stats != null ? stats.CoinGain : 1f;
             GameManager.Instance?.AddCoins(Mathf.Max(1, Mathf.RoundToInt(amount * multiplier)));
 
-            if (PoolManager.Instance != null)
+            if (ObjectPoolManager.Instance != null)
             {
-                PoolManager.Instance.Despawn(gameObject);
+                ObjectPoolManager.Instance.Return(gameObject);
             }
             else
             {
@@ -260,7 +260,7 @@ namespace KingsRescue.World
 
         private void DropLoot()
         {
-            PoolManager pool = PoolManager.Instance;
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
             if (pool == null)
             {
                 return;
@@ -271,7 +271,11 @@ namespace KingsRescue.World
 
             if (breakEffectPrefab != null)
             {
-                pool.Spawn(breakEffectPrefab, origin, Quaternion.identity);
+                GameObject effect = pool.Spawn(breakEffectPrefab, origin, Quaternion.identity);
+                if (effect != null && effect.GetComponent<AutoDespawn>() == null)
+                {
+                    pool.ReturnDelayed(effect, 0.6f);
+                }
             }
 
             if (coinPrefab != null)
@@ -296,13 +300,23 @@ namespace KingsRescue.World
             }
         }
 
+        private static PlayerStats cachedLuck;
+
         private static float ResolveLuck()
         {
-            PlayerStats stats = Object.FindAnyObjectByType<PlayerStats>();
-            return stats != null ? Mathf.Max(0.1f, stats.Luck) : 1f;
+            if (cachedLuck == null)
+            {
+                PlayerController hero = PlayerController.Instance;
+                if (hero != null)
+                {
+                    cachedLuck = hero.GetComponent<PlayerStats>();
+                }
+            }
+
+            return cachedLuck != null ? Mathf.Max(0.1f, cachedLuck.Luck) : 1f;
         }
 
-        private Pickup SpawnPickup(PoolManager pool, GameObject prefab, Vector2 origin)
+        private Pickup SpawnPickup(ObjectPoolManager pool, GameObject prefab, Vector2 origin)
         {
             GameObject instance = pool.Spawn(prefab, origin, Quaternion.identity);
             if (instance == null)

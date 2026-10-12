@@ -38,9 +38,9 @@ namespace KingsRescue.Core
                 return;
             }
 
-            if (PoolManager.Instance != null)
+            if (ObjectPoolManager.Instance != null)
             {
-                PoolManager.Instance.Despawn(gameObject);
+                ObjectPoolManager.Instance.Return(gameObject);
             }
             else
             {
