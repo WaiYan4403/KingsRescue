@@ -89,7 +89,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: bdad9037c3a1e40ad9e0754b8d3258d0, type: 3}
   m_Color: {r: 1, g: 0.45, b: 0.12, a: 1}
@@ -115,6 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.Health
   maxHealth: 10
   hitRadius: 0.4
+  stepwiseHits: 0
 --- !u!114 &3557610777672439681
 MonoBehaviour:
   m_ObjectHideFlags: 0
