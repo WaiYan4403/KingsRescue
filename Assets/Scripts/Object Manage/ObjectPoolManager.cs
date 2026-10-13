@@ -1,11 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
+using KingsRescue.UI;
 
 /// <summary>
 /// Prefab-keyed pool used by environments, props, enemies, pickups and VFX.
-/// Every entry in <see cref="pools"/> is created in Awake, before gameplay starts.
-/// Spawn only reactivates those copies. It never instantiates during play.
+/// Every entry in <see cref="pools"/> is created before the run starts, spread across
+/// frames behind a loading screen. Spawn only reactivates those copies.
 /// Tag-based SpawnFromPool remains for older callers.
 /// </summary>
 [DefaultExecutionOrder(-200)]
@@ -21,42 +23,121 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
 
     public List<Pool> pools;
 
+    [Tooltip("How many milliseconds of Instantiate work to do each frame while the loading screen is up.")]
+    [SerializeField] private float warmBudgetMilliseconds = 10f;
+
+    private struct WarmJob
+    {
+        public GameObject prefab;
+        public int remaining;
+    }
+
     private readonly Dictionary<string, HashSet<GameObject>> taggedActive = new Dictionary<string, HashSet<GameObject>>();
     private readonly Dictionary<string, Pool> taggedConfigs = new Dictionary<string, Pool>();
 
     private readonly Dictionary<GameObject, Stack<GameObject>> prefabPools = new Dictionary<GameObject, Stack<GameObject>>();
     private readonly Dictionary<GameObject, Transform> prefabRoots = new Dictionary<GameObject, Transform>();
     private readonly HashSet<GameObject> exhausted = new HashSet<GameObject>();
+    private WarmJob[] jobs = System.Array.Empty<WarmJob>();
+    private PoolLoadingScreen loading;
+    private int created;
+    private int total;
     private bool building;
+
+    public bool IsReady { get; private set; }
+
+    public float Progress => total <= 0 ? 1f : (float)created / total;
 
     protected override void Awake()
     {
         base.Awake();
-        InitializePools();
+        BeginWarmup();
     }
 
-    private void InitializePools()
+    private void BeginWarmup()
     {
-        if (pools == null)
+        if (pools == null || pools.Count == 0)
         {
+            IsReady = true;
             return;
         }
 
-        building = true;
+        var pending = new List<WarmJob>(pools.Count);
         for (int i = 0; i < pools.Count; i++)
         {
             Pool pool = pools[i];
-            if (pool.prefab == null || string.IsNullOrEmpty(pool.tag))
+            if (pool.prefab == null || string.IsNullOrEmpty(pool.tag) || pool.size <= 0)
             {
                 continue;
             }
 
             taggedConfigs[pool.tag] = pool;
             taggedActive[pool.tag] = new HashSet<GameObject>();
-            Prewarm(pool.prefab, pool.size);
+            pending.Add(new WarmJob { prefab = pool.prefab, remaining = pool.size });
+            total += pool.size;
+        }
+
+        if (total <= 0)
+        {
+            IsReady = true;
+            return;
+        }
+
+        jobs = pending.ToArray();
+        building = true;
+        loading = PoolLoadingScreen.Show();
+        StartCoroutine(WarmRoutine());
+    }
+
+    private IEnumerator WarmRoutine()
+    {
+        yield return null;
+
+        int index = 0;
+        float budget = Mathf.Max(1f, warmBudgetMilliseconds) * 0.001f;
+        while (index < jobs.Length)
+        {
+            float deadline = Time.realtimeSinceStartup + budget;
+            while (index < jobs.Length && Time.realtimeSinceStartup < deadline)
+            {
+                WarmJob job = jobs[index];
+                if (job.prefab != null && job.remaining > 0)
+                {
+                    GameObject instance = CreateInstance(job.prefab);
+                    instance.SetActive(false);
+                    GetPrefabPool(job.prefab).Push(instance);
+                    job.remaining--;
+                    created++;
+                    jobs[index] = job;
+                }
+
+                if (job.prefab == null || job.remaining <= 0)
+                {
+                    index++;
+                }
+            }
+
+            if (loading != null)
+            {
+                loading.SetProgress(Progress);
+            }
+
+            yield return null;
         }
 
         building = false;
+        IsReady = true;
+    }
+
+    public void DismissLoading()
+    {
+        if (loading == null)
+        {
+            return;
+        }
+
+        loading.Close();
+        loading = null;
     }
 
     public void Prewarm(GameObject prefab, int count)

@@ -45,20 +45,20 @@ MonoBehaviour:
     weight: 4
     introCount: 1
     introPattern: 0
-  - enemy: {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
-    unlockAt: 140
+  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
+    unlockAt: 130
     weight: 2
-    introCount: 6
+    introCount: 5
     introPattern: 0
   - enemy: {fileID: 11400000, guid: 5a51234f69da0bf4093fd1330267856c, type: 2}
     unlockAt: 180
     weight: 3
     introCount: 6
     introPattern: 0
-  - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
-    unlockAt: 200
+  - enemy: {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
+    unlockAt: 220
     weight: 2
-    introCount: 5
+    introCount: 6
     introPattern: 0
   - enemy: {fileID: 11400000, guid: be1ca4bec745da341bcb4e5109f38763, type: 2}
     unlockAt: 240

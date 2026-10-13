@@ -88,6 +88,7 @@ namespace KingsRescue.Core
 
             GameSettings.Apply();
             ResolveSelectedPlayer();
+            Time.timeScale = 0f;
         }
 
         private void OnEnable()
@@ -108,6 +109,20 @@ namespace KingsRescue.Core
 
         private void Start()
         {
+            StartCoroutine(StartWhenPoolsReady());
+        }
+
+        private IEnumerator StartWhenPoolsReady()
+        {
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
+            while (pool != null && !pool.IsReady)
+            {
+                yield return null;
+            }
+
+            // The road tiles spawn on this frame, still under the loading screen.
+            yield return null;
+            pool?.DismissLoading();
             StartRun();
         }
 

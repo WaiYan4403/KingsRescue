@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
@@ -26,11 +27,22 @@ namespace KingsRescue.World
 
         private void Start()
         {
+            StartCoroutine(BuildWhenPoolsReady());
+        }
+
+        private IEnumerator BuildWhenPoolsReady()
+        {
             if (segmentPrefab == null)
             {
                 Debug.LogError("ScrollingBackground needs the Background prefab assigned.", this);
                 enabled = false;
-                return;
+                yield break;
+            }
+
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
+            while (pool != null && !pool.IsReady)
+            {
+                yield return null;
             }
 
             if (scenePreview != null)
@@ -54,7 +66,7 @@ namespace KingsRescue.World
                 if (segment == null)
                 {
                     enabled = false;
-                    return;
+                    yield break;
                 }
 
                 segments.Add(segment);
