@@ -3,6 +3,7 @@ using UnityEngine;
 using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.Player;
+using KingsRescue.World;
 
 namespace KingsRescue.Enemies
 {
@@ -61,6 +62,20 @@ namespace KingsRescue.Enemies
         private static Enemy[] separationEnemy = new Enemy[320];
         private static Vector2[] separationPos = new Vector2[320];
         private static int separationCount;
+
+        private const float ObstacleRadius = 0.4f;
+        private const float ObstacleCell = 3f;
+        private const float InvObstacleCell = 1f / ObstacleCell;
+
+        private static int obstacleFrame = -1;
+        private static int obstacleQuery;
+        private static readonly Dictionary<int, int> obstacleHead = new Dictionary<int, int>(64);
+        private static int[] obstacleNext = new int[128];
+        private static int[] obstacleIndex = new int[128];
+        private static Collider2D[] obstacleCol = new Collider2D[48];
+        private static int[] obstacleStamp = new int[48];
+        private static int obstacleCount;
+        private static int obstacleLinkCount;
 
         private void Awake()
         {
@@ -292,7 +307,7 @@ namespace KingsRescue.Enemies
             if (halted && Time.time >= dashUntil)
             {
                 Vector2 holdScroll = Vector2.down * (ScrollDirector.Speed * scrollInfluence);
-                transform.position = position + holdScroll * dt;
+                transform.position = ResolveObstacles(position + holdScroll * dt, Vector2.down);
                 return;
             }
 
@@ -329,7 +344,7 @@ namespace KingsRescue.Enemies
             Vector2 scroll = Vector2.down * (ScrollDirector.Speed * scrollInfluence);
             Vector2 total = cruiseVelocity + scroll + ComputeSeparation(position) + knock;
 
-            transform.position = position + total * dt;
+            transform.position = ResolveObstacles(position + total * dt, cruiseVelocity);
 
             if (canFlipSprite && spriteRenderer != null && Mathf.Abs(cruiseVelocity.x) > 0.05f)
             {
@@ -553,6 +568,199 @@ namespace KingsRescue.Enemies
                     Mathf.FloorToInt(pos.y * InvSeparationCell));
                 separationNext[slot] = separationHead.TryGetValue(key, out int head) ? head : -1;
                 separationHead[key] = slot;
+            }
+        }
+
+        private Vector2 ResolveObstacles(Vector2 position, Vector2 heading)
+        {
+            if (moveStyle == EnemyMoveStyle.Straight)
+            {
+                return position;
+            }
+
+            RebuildObstacles();
+            if (obstacleCount == 0)
+            {
+                return position;
+            }
+
+            Vector2 pos = position;
+            float minSepSq = ObstacleRadius * ObstacleRadius;
+            float escapeX = Mathf.Abs(heading.x) > 0.08f ? Mathf.Sign(heading.x) : 0f;
+            for (int iter = 0; iter < 2; iter++)
+            {
+                if (!PushOutOfObstacles(ref pos, ref escapeX, minSepSq))
+                {
+                    break;
+                }
+            }
+
+            return pos;
+        }
+
+        private bool PushOutOfObstacles(ref Vector2 pos, ref float escapeX, float minSepSq)
+        {
+            int cx = Mathf.FloorToInt(pos.x * InvObstacleCell);
+            int cy = Mathf.FloorToInt(pos.y * InvObstacleCell);
+            NextObstacleQuery();
+
+            bool hit = false;
+            for (int oy = -1; oy <= 1; oy++)
+            {
+                for (int ox = -1; ox <= 1; ox++)
+                {
+                    if (!obstacleHead.TryGetValue(SeparationKey(cx + ox, cy + oy), out int slot))
+                    {
+                        continue;
+                    }
+
+                    while (slot >= 0)
+                    {
+                        int index = obstacleIndex[slot];
+                        slot = obstacleNext[slot];
+                        if (index < 0 || obstacleStamp[index] == obstacleQuery)
+                        {
+                            continue;
+                        }
+
+                        obstacleStamp[index] = obstacleQuery;
+                        Collider2D col = obstacleCol[index];
+                        if (col == null || !col.enabled)
+                        {
+                            continue;
+                        }
+
+                        Bounds bounds = col.bounds;
+                        Vector2 center = bounds.center;
+                        float reach = ObstacleRadius + Mathf.Max(bounds.extents.x, bounds.extents.y);
+                        if ((pos - center).sqrMagnitude > reach * reach)
+                        {
+                            continue;
+                        }
+
+                        bool inside = col.OverlapPoint(pos);
+                        Vector2 closest = col.ClosestPoint(pos);
+                        Vector2 delta = pos - closest;
+                        float distSq = delta.sqrMagnitude;
+                        if (!inside && distSq >= minSepSq)
+                        {
+                            continue;
+                        }
+
+                        Vector2 fromCenter = pos - center;
+                        if (Mathf.Abs(escapeX) < 0.5f)
+                        {
+                            float raw = Mathf.Abs(fromCenter.x) > 0.01f ? fromCenter.x : 1f;
+                            escapeX = Mathf.Sign(raw);
+                        }
+
+                        Vector2 geometric;
+                        if (inside || distSq < 0.0001f)
+                        {
+                            geometric = fromCenter.sqrMagnitude > 0.0001f ? fromCenter.normalized : new Vector2(escapeX, 0f);
+                        }
+                        else
+                        {
+                            geometric = delta / Mathf.Sqrt(distSq);
+                        }
+
+                        Vector2 normal = geometric + new Vector2(escapeX, 0f);
+                        if (normal.sqrMagnitude < 0.0001f)
+                        {
+                            normal = new Vector2(escapeX, 0f);
+                        }
+
+                        normal.Normalize();
+                        float currentSep = inside ? 0f : Mathf.Sqrt(distSq);
+                        pos += normal * (ObstacleRadius - currentSep);
+
+                        float into = Vector2.Dot(cruiseVelocity, -normal);
+                        if (into > 0f)
+                        {
+                            cruiseVelocity += normal * into;
+                        }
+
+                        hit = true;
+                    }
+                }
+            }
+
+            return hit;
+        }
+
+        private static void RebuildObstacles()
+        {
+            if (obstacleFrame == Time.frameCount)
+            {
+                return;
+            }
+
+            obstacleFrame = Time.frameCount;
+            obstacleHead.Clear();
+            obstacleCount = 0;
+            obstacleLinkCount = 0;
+            System.Array.Clear(obstacleStamp, 0, obstacleStamp.Length);
+
+            List<BlockingObstacle> blockers = BlockingObstacle.Active;
+            for (int i = 0; i < blockers.Count; i++)
+            {
+                BlockingObstacle blocker = blockers[i];
+                Collider2D col = blocker != null ? blocker.Collider : null;
+                if (col == null || !col.enabled)
+                {
+                    continue;
+                }
+
+                if (obstacleCount >= obstacleCol.Length)
+                {
+                    int size = obstacleCol.Length * 2;
+                    System.Array.Resize(ref obstacleCol, size);
+                    System.Array.Resize(ref obstacleStamp, size);
+                }
+
+                int index = obstacleCount++;
+                obstacleCol[index] = col;
+
+                Bounds bounds = col.bounds;
+                Vector2 min = (Vector2)bounds.min - new Vector2(ObstacleRadius, ObstacleRadius);
+                Vector2 max = (Vector2)bounds.max + new Vector2(ObstacleRadius, ObstacleRadius);
+                int x0 = Mathf.FloorToInt(min.x * InvObstacleCell);
+                int x1 = Mathf.FloorToInt(max.x * InvObstacleCell);
+                int y0 = Mathf.FloorToInt(min.y * InvObstacleCell);
+                int y1 = Mathf.FloorToInt(max.y * InvObstacleCell);
+
+                for (int y = y0; y <= y1; y++)
+                {
+                    for (int x = x0; x <= x1; x++)
+                    {
+                        LinkObstacle(SeparationKey(x, y), index);
+                    }
+                }
+            }
+        }
+
+        private static void LinkObstacle(int key, int index)
+        {
+            if (obstacleLinkCount >= obstacleNext.Length)
+            {
+                int size = obstacleNext.Length * 2;
+                System.Array.Resize(ref obstacleNext, size);
+                System.Array.Resize(ref obstacleIndex, size);
+            }
+
+            int slot = obstacleLinkCount++;
+            obstacleIndex[slot] = index;
+            obstacleNext[slot] = obstacleHead.TryGetValue(key, out int head) ? head : -1;
+            obstacleHead[key] = slot;
+        }
+
+        private static void NextObstacleQuery()
+        {
+            obstacleQuery++;
+            if (obstacleQuery == int.MaxValue)
+            {
+                System.Array.Clear(obstacleStamp, 0, obstacleStamp.Length);
+                obstacleQuery = 1;
             }
         }
 

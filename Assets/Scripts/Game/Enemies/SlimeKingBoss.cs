@@ -32,6 +32,7 @@ namespace KingsRescue.Enemies
         [SerializeField] private SpriteRenderer body;
         [SerializeField] private SpriteRenderer landingMarker;
         [SerializeField] private Transform laserPivot;
+        [SerializeField] private GameObject waterFoams;
         [SerializeField] private SpriteRenderer laserBeam;
         [SerializeField] private float playerRadius = 0.35f;
 
@@ -97,6 +98,7 @@ namespace KingsRescue.Enemies
         private float laserFromAngle;
         private float laserToAngle;
         private float laserSweepStarted;
+        private SpriteRenderer[] laserSections = System.Array.Empty<SpriteRenderer>();
         private Vector2 perchFrom;
         private Vector2 perchTo;
         private float perchStarted;
@@ -618,7 +620,7 @@ namespace KingsRescue.Enemies
             nextLaserTick = 0f;
             ChooseLaserDirection();
             ApplyLaserAngle(laserFromAngle);
-            PulseLaser(0.92f);
+            //PulseLaser(0.92f);
         }
 
         private void TickLaserWindup()
@@ -636,13 +638,13 @@ namespace KingsRescue.Enemies
                 LayoutLaser();
                 SetLaserVisible(true);
                 ApplyLaserAngle(DownAngle);
-                PulseLaser(0.35f);
+                //PulseLaser(0.35f);
                 phaseEnds = Time.time + (laserWindup > 0.05f ? laserWindup : 0.65f);
                 return;
             }
 
             ApplyLaserAngle(DownAngle);
-            PulseLaser(0.35f);
+            //PulseLaser(0.35f);
             if (Time.time >= phaseEnds)
             {
                 BeginLaser();
@@ -654,7 +656,7 @@ namespace KingsRescue.Enemies
             float duration = laserDuration > 0.2f ? laserDuration : 3.1f;
             float t = Mathf.Clamp01((Time.time - laserSweepStarted) / duration);
             ApplyLaserAngle(Mathf.Lerp(laserFromAngle, laserToAngle, t));
-            PulseLaser(0.75f + 0.2f * Mathf.Abs(Mathf.Sin(Time.time * 14f)));
+            //PulseLaser(0.75f + 0.2f * Mathf.Abs(Mathf.Sin(Time.time * 14f)));
             TryLaserHit();
 
             if (t >= 1f)
@@ -719,16 +721,28 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            Transform root = laserBeam.transform.parent != null ? laserBeam.transform.parent : laserBeam.transform;
+            laserSections = root.GetComponentsInChildren<SpriteRenderer>(true);
+            Sprite sprite = laserBeam.sprite;
+            float height = sprite != null ? Mathf.Max(0.01f, sprite.bounds.size.y) : 1f;
+            float ppu = sprite != null ? Mathf.Max(1f, sprite.pixelsPerUnit) : 16f;
+            // Exact edges open a seam once the pivot rotates. Two pixels of overlap covers it.
+            float advance = Mathf.Max(0.01f, height - (2f / ppu));
             float length = ResolvedLaserLength();
-            float native = laserBeam.sprite != null ? Mathf.Max(0.01f, laserBeam.sprite.bounds.size.y) : 1f;
-            float nativeX = laserBeam.sprite != null ? Mathf.Max(0.01f, laserBeam.sprite.bounds.size.x) : 1f;
-            Vector2 parent = LossyAbs();
-            laserBeam.transform.localPosition = new Vector3(0f, (length * 0.5f) / parent.y, 0f);
-            laserBeam.transform.localRotation = Quaternion.identity;
-            laserBeam.transform.localScale = new Vector3(
-                (laserWidth / nativeX) / parent.x,
-                (length / native) / parent.y,
-                1f);
+
+            for (int i = 0; i < laserSections.Length; i++)
+            {
+                SpriteRenderer section = laserSections[i];
+                if (section == null)
+                {
+                    continue;
+                }
+
+                section.enabled = i * advance < length;
+                section.transform.localRotation = Quaternion.identity;
+                // Pivot +Y is the beam. Each section is one sprite tall, stacked from the mouth outward.
+                section.transform.localPosition = new Vector3(0f, (height * 0.5f) + (i * advance), 0f);
+            }
         }
 
         private float ResolvedLaserLength()
@@ -815,6 +829,7 @@ namespace KingsRescue.Enemies
             if (laserPivot != null)
             {
                 laserPivot.gameObject.SetActive(visible);
+                waterFoams.SetActive(visible);
             }
             else if (laserBeam != null)
             {
@@ -824,14 +839,31 @@ namespace KingsRescue.Enemies
 
         private void PulseLaser(float alpha)
         {
-            if (laserBeam == null)
+            if (laserSections == null || laserSections.Length == 0)
             {
+                if (laserBeam == null)
+                {
+                    return;
+                }
+
+                Color single = laserBeam.color;
+                single.a = alpha;
+                laserBeam.color = single;
                 return;
             }
 
-            Color c = laserBeam.color;
-            c.a = alpha;
-            laserBeam.color = c;
+            for (int i = 0; i < laserSections.Length; i++)
+            {
+                SpriteRenderer section = laserSections[i];
+                if (section == null)
+                {
+                    continue;
+                }
+
+                Color c = section.color;
+                c.a = alpha;
+                section.color = c;
+            }
         }
 
         private void SetVisible(bool visible)

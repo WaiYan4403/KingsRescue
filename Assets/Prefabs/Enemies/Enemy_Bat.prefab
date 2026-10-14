@@ -90,7 +90,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3578019587575532720, guid: c1aa288261905274c802a7c36ce8161a, type: 3}
+  m_Sprite: {fileID: 8444607312362396526, guid: 0835650eb8d6ad04aa93add970d3bc4f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4278bd1af9fc84a7fa2ebbc20a6b580d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.ContactDamage
-  radius: 0.5
+  radius: 0.4
   damage: 8
   interval: 0.6
   playerRadius: 0.35
