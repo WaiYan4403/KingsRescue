@@ -93,15 +93,7 @@ namespace KingsRescue.World
         private BackgroundSegment SpawnSegment(Vector3 position)
         {
             ObjectPoolManager pool = ObjectPoolManager.Instance;
-            if (pool != null)
-            {
-                return pool.Spawn(segmentPrefab, position, Quaternion.identity, root);
-            }
-
-            BackgroundSegment instance = Instantiate(segmentPrefab, position, Quaternion.identity, root);
-            instance.name = segmentPrefab.name;
-            instance.Prepare();
-            return instance;
+            return pool != null ? pool.Spawn(segmentPrefab, position, Quaternion.identity, root) : null;
         }
 
         private void RecycleIfNeeded()

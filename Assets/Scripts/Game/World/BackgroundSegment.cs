@@ -203,7 +203,8 @@ namespace KingsRescue.World
                 }
 
                 spawned.Add(instance);
-                propPoolables.Add(instance.GetComponentsInChildren<IPoolable>(true));
+                PooledObject pooled = instance.GetComponent<PooledObject>();
+                propPoolables.Add(pooled != null ? pooled.Poolables : System.Array.Empty<IPoolable>());
             }
         }
 
@@ -294,7 +295,7 @@ namespace KingsRescue.World
             ObjectPoolManager pool = ObjectPoolManager.Instance;
             GameObject instance = pool != null
                 ? pool.Spawn(prefab, worldPosition, Quaternion.identity, loosePickup ? null : parent)
-                : Instantiate(prefab, worldPosition, Quaternion.identity, loosePickup ? null : parent);
+                : null;
 
             if (instance == null)
             {

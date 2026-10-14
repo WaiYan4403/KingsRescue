@@ -6,26 +6,35 @@ public class GameMusicController : Singleton<GameMusicController>
 {
     [SerializeField] private StudioEventEmitter musicEmitter;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    // Debug keys only exist in the editor and development builds, so release builds skip the per-frame poll.
     private void Update()
     {
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard == null)
+        {
+            return;
+        }
+
         // Press G to test Gameplay music
-        if (Keyboard.current.gKey.wasPressedThisFrame)
+        if (keyboard.gKey.wasPressedThisFrame)
         {
             SetGameplayMusic();
         }
 
         // Press B to test Boss music
-        if (Keyboard.current.bKey.wasPressedThisFrame)
+        if (keyboard.bKey.wasPressedThisFrame)
         {
             SetBossMusic();
         }
 
         // Press O to test Game Over music
-        if (Keyboard.current.oKey.wasPressedThisFrame)
+        if (keyboard.oKey.wasPressedThisFrame)
         {
             SetGameOverMusic();
         }
     }
+#endif
 
     public void StopMusic()
     {

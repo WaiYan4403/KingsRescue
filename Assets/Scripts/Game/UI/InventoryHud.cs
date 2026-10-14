@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using KingsRescue.Combat;
+using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.Player;
 
@@ -68,7 +69,7 @@ namespace KingsRescue.UI
         {
             if (loadout == null)
             {
-                loadout = FindAnyObjectByType<WeaponLoadout>();
+                loadout = GameManager.Instance != null ? GameManager.Instance.Loadout : null;
             }
         }
 

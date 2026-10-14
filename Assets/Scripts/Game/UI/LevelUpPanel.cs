@@ -23,7 +23,6 @@ namespace KingsRescue.UI
         [SerializeField] private Animator animator;
 
         private readonly List<UpgradeDefinition> choices = new List<UpgradeDefinition>(4);
-        private VirtualJoystick joystick;
         private Graphic joystickZone;
         private Image overlay;
 
@@ -40,11 +39,6 @@ namespace KingsRescue.UI
                 overlay.raycastTarget = true;
             }
 
-            joystick = FindAnyObjectByType<VirtualJoystick>(FindObjectsInactive.Include);
-            if (joystick != null)
-            {
-                joystickZone = joystick.GetComponent<Graphic>();
-            }
         }
 
         private void Start()
@@ -210,6 +204,11 @@ namespace KingsRescue.UI
 
         private void SetJoystickRaycasts(bool enabled)
         {
+            if (joystickZone == null && VirtualJoystick.Instance != null)
+            {
+                joystickZone = VirtualJoystick.Instance.GetComponent<Graphic>();
+            }
+
             if (joystickZone != null)
             {
                 joystickZone.raycastTarget = enabled;

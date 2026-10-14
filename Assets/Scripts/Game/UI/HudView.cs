@@ -39,7 +39,7 @@ namespace KingsRescue.UI
         {
             if (playerHealth == null)
             {
-                playerHealth = FindAnyObjectByType<PlayerHealth>();
+                playerHealth = GameManager.Instance != null ? GameManager.Instance.PlayerHealth : null;
             }
 
             // uGUI Filled images with no sprite ignore fillAmount and always draw full.

@@ -5,7 +5,8 @@ namespace KingsRescue.Combat
 {
     /// <summary>
     /// Draws a circle sprite over melee swings and projectiles so the authored
-    /// hit radius is visible in play.
+    /// hit radius is visible in play. Every marker comes from <see cref="ObjectPoolManager"/>;
+    /// the marker prefab needs a pool entry sized for the most shots alive at once.
     /// </summary>
     public class HitboxDisplay : SingletonBehaviour<HitboxDisplay>
     {
@@ -24,7 +25,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            HitboxMarker marker = SpawnWorld(display, center);
+            HitboxMarker marker = SpawnMarker(display, center, null);
             if (marker == null)
             {
                 return;
@@ -32,12 +33,7 @@ namespace KingsRescue.Combat
 
             marker.SetPersistent(false);
             marker.SetRadius(radius);
-
-            AutoDespawn despawn = marker.GetComponent<AutoDespawn>();
-            if (despawn != null)
-            {
-                despawn.SetLifetime(lifetime > 0f ? lifetime : display.flashLifetime);
-            }
+            marker.SetLifetime(lifetime > 0f ? lifetime : display.flashLifetime);
         }
 
         /// <summary>Forward lance hit, drawn from <paramref name="origin"/> along <paramref name="direction"/>.</summary>
@@ -51,7 +47,7 @@ namespace KingsRescue.Combat
 
             Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
             float reach = Mathf.Max(0.2f, length);
-            HitboxMarker marker = SpawnWorld(display, origin + dir * (reach * 0.5f));
+            HitboxMarker marker = SpawnMarker(display, origin + dir * (reach * 0.5f), null);
             if (marker == null)
             {
                 return;
@@ -60,45 +56,46 @@ namespace KingsRescue.Combat
             marker.SetPersistent(false);
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
             marker.SetCapsule(reach, thickness, angle);
-
-            AutoDespawn despawn = marker.GetComponent<AutoDespawn>();
-            if (despawn != null)
-            {
-                despawn.SetLifetime(lifetime > 0f ? lifetime : display.flashLifetime);
-            }
+            marker.SetLifetime(lifetime > 0f ? lifetime : display.flashLifetime);
         }
 
-        /// <summary>Circle that rides a projectile for as long as it lives.</summary>
-        public static void Follow(Transform parent, float radius)
+        /// <summary>
+        /// Circle that rides a projectile for as long as it lives. Hand the result back
+        /// through <see cref="Release"/> when the projectile returns to its pool.
+        /// </summary>
+        public static HitboxMarker Follow(Transform parent, float radius)
         {
-            if (parent == null)
-            {
-                return;
-            }
-
             HitboxDisplay display = Instance;
-            HitboxMarker marker = parent.GetComponentInChildren<HitboxMarker>(true);
-            if (!CanShow(display))
+            if (parent == null || !CanShow(display))
             {
-                if (marker != null)
-                {
-                    marker.gameObject.SetActive(false);
-                }
-
-                return;
+                return null;
             }
 
+            HitboxMarker marker = SpawnMarker(display, parent.position, parent);
             if (marker == null)
             {
-                marker = Instantiate(display.markerPrefab, parent);
-                marker.name = display.markerPrefab.name;
-                marker.transform.localPosition = Vector3.zero;
-                marker.transform.localRotation = Quaternion.identity;
+                return null;
             }
 
-            marker.gameObject.SetActive(true);
+            marker.transform.localPosition = Vector3.zero;
             marker.SetPersistent(true);
             marker.SetRadius(radius);
+            return marker;
+        }
+
+        /// <summary>Returns a marker handed out by <see cref="Follow"/> to the pool.</summary>
+        public static void Release(HitboxMarker marker)
+        {
+            if (marker == null)
+            {
+                return;
+            }
+
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
+            if (pool != null)
+            {
+                pool.Return(marker.gameObject);
+            }
         }
 
         private static bool CanShow(HitboxDisplay display)
@@ -106,15 +103,12 @@ namespace KingsRescue.Combat
             return display != null && display.showHitboxes && display.markerPrefab != null;
         }
 
-        private static HitboxMarker SpawnWorld(HitboxDisplay display, Vector2 center)
+        private static HitboxMarker SpawnMarker(HitboxDisplay display, Vector2 center, Transform parent)
         {
             ObjectPoolManager pool = ObjectPoolManager.Instance;
-            if (pool != null)
-            {
-                return pool.Spawn(display.markerPrefab, center, Quaternion.identity);
-            }
-
-            return Instantiate(display.markerPrefab, center, Quaternion.identity);
+            return pool != null
+                ? pool.Spawn(display.markerPrefab, center, Quaternion.identity, parent)
+                : null;
         }
     }
 }

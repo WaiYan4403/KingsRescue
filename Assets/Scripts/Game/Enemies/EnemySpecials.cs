@@ -403,7 +403,7 @@ namespace KingsRescue.Enemies
             }
 
             PlayerController player = PlayerController.Instance;
-            PlayerStatus status = player != null ? player.GetComponent<PlayerStatus>() : null;
+            PlayerStatus status = player != null ? player.Status : null;
             if (status != null && Has(EnemyTrait.IceSlow))
             {
                 status.ApplySlow(definition.slowFactor > 0.1f ? definition.slowFactor : 0.55f, 1.4f);

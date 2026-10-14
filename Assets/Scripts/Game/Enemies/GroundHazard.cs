@@ -76,7 +76,7 @@ namespace KingsRescue.Enemies
                 player.Health.ApplyDot(damage);
             }
 
-            PlayerStatus status = player.GetComponent<PlayerStatus>();
+            PlayerStatus status = player.Status;
             if (status == null)
             {
                 return;

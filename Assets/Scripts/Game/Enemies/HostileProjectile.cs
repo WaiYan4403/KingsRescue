@@ -25,26 +25,34 @@ namespace KingsRescue.Enemies
         private float homingTurn = 4.5f;
         private GameObject source;
 
+        /// <summary>Every hostile shot currently in flight.</summary>
+        private static readonly System.Collections.Generic.List<HostileProjectile> Active = new System.Collections.Generic.List<HostileProjectile>(64);
+
         public void OnSpawned()
         {
+            if (!Active.Contains(this))
+            {
+                Active.Add(this);
+            }
         }
 
         public void OnDespawned()
         {
+            Active.Remove(this);
         }
 
         public static void DespawnAll()
         {
-            HostileProjectile[] shots = FindObjectsByType<HostileProjectile>(
-                FindObjectsInactive.Exclude,
-                FindObjectsSortMode.None);
-            for (int i = 0; i < shots.Length; i++)
+            for (int i = Active.Count - 1; i >= 0; i--)
             {
-                if (shots[i] != null)
+                HostileProjectile shot = Active[i];
+                if (shot != null)
                 {
-                    shots[i].Recycle();
+                    shot.Recycle();
                 }
             }
+
+            Active.Clear();
         }
 
         public void Launch(Vector2 direction, float speed, float damageAmount, float lifetime, float radius, float slow, float slowTime, bool homes, GameObject owner, float maxDistance = 0f)
@@ -138,7 +146,7 @@ namespace KingsRescue.Enemies
                 player.Health.TakeDamage(new DamageInfo(damage, player.transform.position, direction, 0f, source));
             }
 
-            PlayerStatus status = player.GetComponent<PlayerStatus>();
+            PlayerStatus status = player.Status;
             if (status != null && slowDuration > 0.01f && slowFactor < 0.99f)
             {
                 status.ApplySlow(slowFactor, slowDuration);

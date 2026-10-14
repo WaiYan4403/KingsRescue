@@ -86,6 +86,19 @@ namespace KingsRescue.Combat
             spriteRenderer.sortingOrder = defaultSortingOrder;
         }
 
+        public void SetLifetime(float seconds)
+        {
+            if (autoDespawn == null)
+            {
+                autoDespawn = GetComponent<AutoDespawn>();
+            }
+
+            if (autoDespawn != null)
+            {
+                autoDespawn.SetLifetime(seconds);
+            }
+        }
+
         public void SetPersistent(bool persistent)
         {
             if (autoDespawn == null)

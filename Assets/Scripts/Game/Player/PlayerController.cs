@@ -57,6 +57,9 @@ namespace KingsRescue.Player
 
         public Vector2 Velocity => velocity;
 
+        /// <summary>Cached so hostile shots never call GetComponent on a hit.</summary>
+        public PlayerStatus Status => status;
+
         /// <summary>Cached so enemies do not call GetComponent every contact check.</summary>
         public PlayerHealth Health { get; private set; }
 

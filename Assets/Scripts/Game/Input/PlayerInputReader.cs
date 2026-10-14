@@ -33,11 +33,6 @@ namespace KingsRescue.InputControl
         {
             base.Awake();
 
-            if (joystick == null)
-            {
-                joystick = FindAnyObjectByType<VirtualJoystick>(FindObjectsInactive.Include);
-            }
-
             if (actionAsset != null)
             {
                 InputActionMap map = actionAsset.FindActionMap(actionMapName, false);
@@ -63,6 +58,11 @@ namespace KingsRescue.InputControl
         private void Update()
         {
             Vector2 axis = Vector2.zero;
+
+            if (joystick == null)
+            {
+                joystick = VirtualJoystick.Instance;
+            }
 
             if (joystick != null && joystick.IsHeld)
             {

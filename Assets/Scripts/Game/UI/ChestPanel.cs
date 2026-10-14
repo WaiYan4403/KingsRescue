@@ -38,7 +38,6 @@ namespace KingsRescue.UI
 
         private readonly Queue<Vector3Int> waiting = new Queue<Vector3Int>(4);
         private readonly List<Reward> rewards = new List<Reward>(6);
-        private VirtualJoystick joystick;
         private Graphic joystickZone;
         private int revealIndex;
         private bool opening;
@@ -50,12 +49,6 @@ namespace KingsRescue.UI
             if (root == null)
             {
                 root = gameObject;
-            }
-
-            joystick = FindAnyObjectByType<VirtualJoystick>(FindObjectsInactive.Include);
-            if (joystick != null)
-            {
-                joystickZone = joystick.GetComponent<Graphic>();
             }
 
             if (openButton != null)
@@ -187,7 +180,7 @@ namespace KingsRescue.UI
         {
             rewards.Clear();
 
-            PlayerStats stats = FindAnyObjectByType<PlayerStats>();
+            PlayerStats stats = GameManager.Instance != null ? GameManager.Instance.PlayerStats : null;
             float luck = stats != null ? Mathf.Max(0.1f, stats.Luck) : 1f;
             float coinGain = stats != null ? stats.CoinGain : 1f;
 
@@ -379,6 +372,11 @@ namespace KingsRescue.UI
 
         private void SetJoystickRaycasts(bool enabled)
         {
+            if (joystickZone == null && VirtualJoystick.Instance != null)
+            {
+                joystickZone = VirtualJoystick.Instance.GetComponent<Graphic>();
+            }
+
             if (joystickZone != null)
             {
                 joystickZone.raycastTarget = enabled;

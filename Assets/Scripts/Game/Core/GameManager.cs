@@ -73,6 +73,13 @@ namespace KingsRescue.Core
 
         public CharacterDefinition SelectedCharacter => selectedCharacter;
 
+        /// <summary>The hero for this run. Resolved in Awake, before any other system runs.</summary>
+        public PlayerHealth PlayerHealth => playerHealth;
+
+        public PlayerStats PlayerStats { get; private set; }
+
+        public WeaponLoadout Loadout { get; private set; }
+
         public event Action<GameState> StateChanged;
 
         public event Action<int> KillsChanged;
@@ -283,9 +290,9 @@ namespace KingsRescue.Core
                 selectedCharacter = RunSession.SelectedCharacter;
             }
 
-            if (playerHealth == null)
+            if (playerHealth == null && PlayerController.Instance != null)
             {
-                playerHealth = FindAnyObjectByType<PlayerHealth>();
+                playerHealth = PlayerController.Instance.Health;
             }
 
             if (selectedCharacter != null && selectedCharacter.playerPrefab != null)
@@ -300,18 +307,26 @@ namespace KingsRescue.Core
                         DestroyImmediate(existing.gameObject);
                     }
 
-                    GameObject spawned = Instantiate(selectedCharacter.playerPrefab, position, rotation);
-                    spawned.name = selectedCharacter.playerPrefab.name;
-                    playerHealth = spawned.GetComponent<PlayerHealth>();
+                    ObjectPoolManager pool = ObjectPoolManager.Instance;
+                    GameObject spawned = pool != null
+                        ? pool.SpawnBeforeRun(selectedCharacter.playerPrefab, position, rotation)
+                        : null;
+                    if (spawned != null)
+                    {
+                        playerHealth = spawned.GetComponent<PlayerHealth>();
+                    }
+                    else
+                    {
+                        Debug.LogError("GameManager could not create the selected hero through ObjectPoolManager.", this);
+                    }
                 }
             }
 
-            WeaponLoadout loadout = playerHealth != null
-                ? playerHealth.GetComponent<WeaponLoadout>()
-                : FindAnyObjectByType<WeaponLoadout>();
-            if (loadout != null && selectedCharacter != null)
+            PlayerStats = playerHealth != null ? playerHealth.GetComponent<PlayerStats>() : null;
+            Loadout = playerHealth != null ? playerHealth.GetComponent<WeaponLoadout>() : null;
+            if (Loadout != null && selectedCharacter != null)
             {
-                loadout.BindCharacter(selectedCharacter);
+                Loadout.BindCharacter(selectedCharacter);
             }
 
             if (playerHealth != null)
@@ -333,10 +348,7 @@ namespace KingsRescue.Core
 
         private void RecordRun()
         {
-            WeaponLoadout loadout = playerHealth != null
-                ? playerHealth.GetComponent<WeaponLoadout>()
-                : FindAnyObjectByType<WeaponLoadout>();
-            CharacterDefinition character = loadout != null ? loadout.Character : selectedCharacter;
+            CharacterDefinition character = Loadout != null ? Loadout.Character : selectedCharacter;
             int level = ExperienceSystem.Instance != null ? ExperienceSystem.Instance.Level : 1;
 
             MetaProgress.AddCoins(Coins);

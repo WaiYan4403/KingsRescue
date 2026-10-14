@@ -14,6 +14,9 @@ namespace KingsRescue.Core
 
         public bool IsSpawned { get; private set; }
 
+        /// <summary>Cached at bind time so callers never need GetComponentsInChildren during play.</summary>
+        public IPoolable[] Poolables => poolables ?? System.Array.Empty<IPoolable>();
+
         internal void Bind(GameObject prefab)
         {
             SourcePrefab = prefab;

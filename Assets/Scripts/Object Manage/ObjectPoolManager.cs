@@ -43,6 +43,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     private int created;
     private int total;
     private bool building;
+    private bool runLive;
 
     public bool IsReady { get; private set; }
 
@@ -129,8 +130,31 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         IsReady = true;
     }
 
+    /// <summary>
+    /// One-off creation for objects that exist for the whole run, such as the hero.
+    /// Only legal before the run starts, so nothing is instantiated during gameplay.
+    /// </summary>
+    public GameObject SpawnBeforeRun(GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        if (prefab == null)
+        {
+            return null;
+        }
+
+        if (runLive)
+        {
+            Debug.LogError($"[ObjectPoolManager] '{prefab.name}' was requested after the run started. Add it to a pool and use Spawn.");
+            return null;
+        }
+
+        GameObject instance = Instantiate(prefab, position, rotation);
+        instance.name = prefab.name;
+        return instance;
+    }
+
     public void DismissLoading()
     {
+        runLive = true;
         if (loading == null)
         {
             return;

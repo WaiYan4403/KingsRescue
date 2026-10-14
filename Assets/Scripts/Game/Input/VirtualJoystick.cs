@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using KingsRescue.Core;
 
 namespace KingsRescue.InputControl
 {
@@ -10,7 +11,7 @@ namespace KingsRescue.InputControl
     /// so the player never has to look for it.
     /// </summary>
     [RequireComponent(typeof(RectTransform))]
-    public class VirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+    public class VirtualJoystick : SingletonBehaviour<VirtualJoystick>, IPointerDownHandler, IDragHandler, IPointerUpHandler
     {
         [Header("Hierarchy")]
         [Tooltip("Ring sprite. In floating mode this is repositioned to the thumb.")]
@@ -44,8 +45,9 @@ namespace KingsRescue.InputControl
         /// <summary>True while a finger or the mouse is holding the stick.</summary>
         public bool IsHeld { get; private set; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             touchZone = (RectTransform)transform;
             canvas = GetComponentInParent<Canvas>();
 

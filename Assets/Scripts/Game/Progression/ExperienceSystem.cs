@@ -38,7 +38,7 @@ namespace KingsRescue.Progression
 
             if (stats == null)
             {
-                stats = FindAnyObjectByType<PlayerStats>();
+                stats = GameManager.Instance != null ? GameManager.Instance.PlayerStats : null;
             }
 
             XpToNext = ComputeRequirement(Level);

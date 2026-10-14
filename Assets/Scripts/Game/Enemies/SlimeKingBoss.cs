@@ -862,8 +862,12 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            Transform root = laserBeam.transform.parent != null ? laserBeam.transform.parent : laserBeam.transform;
-            laserSections = root.GetComponentsInChildren<SpriteRenderer>(true);
+            if (laserSections.Length == 0)
+            {
+                Transform root = laserBeam.transform.parent != null ? laserBeam.transform.parent : laserBeam.transform;
+                laserSections = root.GetComponentsInChildren<SpriteRenderer>(true);
+            }
+
             Sprite sprite = laserBeam.sprite;
             float height = sprite != null ? Mathf.Max(0.01f, sprite.bounds.size.y) : 1f;
             float ppu = sprite != null ? Mathf.Max(1f, sprite.pixelsPerUnit) : 16f;

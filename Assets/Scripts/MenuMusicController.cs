@@ -6,26 +6,35 @@ public class MenuMusicController : Singleton<MenuMusicController>
 {
     [SerializeField] private StudioEventEmitter musicEmitter;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    // Debug keys only exist in the editor and development builds, so release builds skip the per-frame poll.
     private void Update()
     {
-        // Press G to test Gameplay music
-        if (Keyboard.current.mKey.wasPressedThisFrame)
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard == null)
+        {
+            return;
+        }
+
+        // Press M to test Main menu music
+        if (keyboard.mKey.wasPressedThisFrame)
         {
             SetMainMusic();
         }
 
-        // Press B to test Boss music
-        if (Keyboard.current.cKey.wasPressedThisFrame)
+        // Press C to test Characters music
+        if (keyboard.cKey.wasPressedThisFrame)
         {
             SetCharacterMusic();
         }
 
-        // Press O to test Game Over music
-        if (Keyboard.current.oKey.wasPressedThisFrame)
+        // Press O to test Options music
+        if (keyboard.oKey.wasPressedThisFrame)
         {
             SetOptionsMusic();
         }
     }
+#endif
 
     public void StopMusic()
     {

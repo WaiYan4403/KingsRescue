@@ -386,7 +386,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 18.625
+  orthographic size: 18.65625
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1000,7 +1000,7 @@ MonoBehaviour:
     size: 12
   - tag: FX_Hitbox
     prefab: {fileID: 8813681461099522196, guid: 612fa08fd99e6bf4fb3ccc982e18a9be, type: 3}
-    size: 24
+    size: 128
   - tag: Pickup_Health
     prefab: {fileID: 5825566481984973083, guid: fdd50c17fb5ba4e36844d6d9a97408b5, type: 3}
     size: 40
@@ -1266,7 +1266,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1549113975
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
@@ -2587,7 +2587,7 @@ SortingGroup:
   m_GameObject: {fileID: 421656902}
   m_Enabled: 1
   m_SortingLayerID: -1549113975
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_SortAtRoot: 0
   m_Sort3DAs2D: 0
@@ -3687,7 +3687,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 89266eb100000000c5012a028965aaa381e695c0
+  m_ApplyToSortingLayers: 89266eb100000000c5012a028965aaa381e695c04b7d8a99
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -7863,7 +7863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: -452.99982}
+  m_AnchoredPosition: {x: -12, y: -452.99976}
   m_SizeDelta: {x: 0, y: -921}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1255154147
@@ -9626,7 +9626,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1549113975
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
@@ -13104,11 +13104,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2147313339}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 776b875dfb515ab4ead9cd732f99e934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.UI.EnemyFieldLog
+  showWindow: 0
   label: {fileID: 0}
   refreshInterval: 0.4
   fontSize: 28

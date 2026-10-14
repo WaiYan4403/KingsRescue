@@ -30,6 +30,7 @@ namespace KingsRescue.Combat
         private bool homing;
         private float cruiseSpeed;
         private Enemy homeTarget;
+        private HitboxMarker hitbox;
         private const float HomingTurn = 7f;
 
         public void OnSpawned()
@@ -42,6 +43,16 @@ namespace KingsRescue.Combat
         public void OnDespawned()
         {
             alreadyHit.Clear();
+            ReleaseHitbox();
+        }
+
+        private void ReleaseHitbox()
+        {
+            if (hitbox != null)
+            {
+                HitboxDisplay.Release(hitbox);
+                hitbox = null;
+            }
         }
 
         public void Launch(Vector2 direction, float speed, float damageAmount, int pierce, float lifetime, float areaScale, float knockbackForce, GameObject owner, float maxDistance = 0f, bool home = false, Enemy lockedTarget = null)
@@ -63,7 +74,8 @@ namespace KingsRescue.Combat
             alreadyHit.Clear();
 
             FaceVelocity(dir);
-            HitboxDisplay.Follow(transform, hitRadius * radiusScale);
+            ReleaseHitbox();
+            hitbox = HitboxDisplay.Follow(transform, hitRadius * radiusScale);
         }
 
         private void Update()

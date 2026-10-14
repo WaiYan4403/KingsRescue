@@ -10,17 +10,22 @@ using KingsRescue.Spawning;
 namespace KingsRescue.UI
 {
     /// <summary>
-    /// On-screen roster of what is on the field, plus a Unity console dump when
-    /// the mix or a boss action changes.
+    /// On-screen roster of what is on the field and how many enemies are inside the camera view.
+    /// Turn <see cref="ShowWindow"/> off and the panel is hidden and nothing is computed.
     /// </summary>
     public class EnemyFieldLog : MonoBehaviour
     {
+        [Tooltip("Debug window on or off. While off the roster is not built and the panel is hidden.")]
+        [SerializeField] private bool showWindow = true;
         [SerializeField] private TMP_Text label;
         [SerializeField] private float refreshInterval = 0.4f;
         [SerializeField] private float fontSize = 28f;
         [SerializeField] private Vector2 panelSize = new Vector2(620f, 380f);
 
+        private GameObject panelRoot;
+        private bool windowApplied;
         private float nextRefresh;
+        private int onScreenCount;
         private string lastFingerprint;
         private readonly StringBuilder builder = new StringBuilder(512);
         private readonly List<Row> rows = new List<Row>(32);
@@ -34,17 +39,59 @@ namespace KingsRescue.UI
             public float hp;
         }
 
+        /// <summary>Debug window switch. Safe to flip at runtime.</summary>
+        public bool ShowWindow
+        {
+            get => showWindow;
+            set
+            {
+                showWindow = value;
+                ApplyVisibility();
+            }
+        }
+
         private void Awake()
         {
             if (label == null)
             {
                 BuildOverlay();
             }
+            else if (label.gameObject != gameObject)
+            {
+                // Never deactivate this object, or Update could not switch the window back on.
+                panelRoot = label.gameObject;
+            }
+
+            ApplyVisibility();
+        }
+
+        private void ApplyVisibility()
+        {
+            windowApplied = showWindow;
+            if (panelRoot != null && panelRoot.activeSelf != showWindow)
+            {
+                panelRoot.SetActive(showWindow);
+            }
+            else if (panelRoot == null && label != null)
+            {
+                label.enabled = showWindow;
+            }
+
+            if (showWindow)
+            {
+                lastFingerprint = null;
+                nextRefresh = 0f;
+            }
         }
 
         private void Update()
         {
-            if (Time.unscaledTime < nextRefresh)
+            if (showWindow != windowApplied)
+            {
+                ApplyVisibility();
+            }
+
+            if (!showWindow || Time.unscaledTime < nextRefresh)
             {
                 return;
             }
@@ -56,6 +103,9 @@ namespace KingsRescue.UI
         private void Refresh()
         {
             rows.Clear();
+            onScreenCount = 0;
+            ArenaBounds arena = ArenaBounds.Instance;
+            Rect view = arena != null ? arena.ScreenRect : default;
             List<Enemy> active = Enemy.Active;
             for (int i = 0; i < active.Count; i++)
             {
@@ -63,6 +113,11 @@ namespace KingsRescue.UI
                 if (enemy == null || !enemy.IsAlive)
                 {
                     continue;
+                }
+
+                if (arena != null && view.Contains(enemy.Position))
+                {
+                    onScreenCount++;
                 }
 
                 string name = enemy.DisplayName;
@@ -114,13 +169,13 @@ namespace KingsRescue.UI
                 builder.Append("NEW: ").AppendLine(WaveDirector.LastUnlockAnnouncement);
             }
 
+            builder.Append("On screen: ").Append(onScreenCount).Append("   On field: ").Append(active.Count).AppendLine();
             if (rows.Count == 0)
             {
                 builder.Append("Field: empty");
             }
             else
             {
-                builder.Append("On field (").Append(active.Count).AppendLine(")");
                 int shown = 0;
                 for (int i = 0; i < rows.Count && shown < 12; i++)
                 {
@@ -160,6 +215,7 @@ namespace KingsRescue.UI
         private string BuildFingerprint()
         {
             builder.Length = 0;
+            builder.Append(onScreenCount).Append('|');
             for (int i = 0; i < rows.Count; i++)
             {
                 Row row = rows[i];
@@ -190,13 +246,20 @@ namespace KingsRescue.UI
         private void BuildOverlay()
         {
             Canvas canvas = GetComponentInParent<Canvas>();
+            Transform parent = canvas != null ? canvas.transform : transform;
             if (canvas == null)
             {
-                canvas = FindAnyObjectByType<Canvas>();
+                // No HUD canvas above this object: own a small overlay so no scene search is needed.
+                var host = new GameObject("EnemyFieldLogCanvas");
+                host.transform.SetParent(transform, false);
+                Canvas own = host.AddComponent<Canvas>();
+                own.renderMode = RenderMode.ScreenSpaceOverlay;
+                own.sortingOrder = 400;
+                parent = host.transform;
             }
 
-            Transform parent = canvas != null ? canvas.transform : transform;
             GameObject panel = new GameObject("EnemyFieldLogPanel");
+            panelRoot = panel;
             panel.transform.SetParent(parent, false);
 
             RectTransform panelRect = panel.AddComponent<RectTransform>();

@@ -52,12 +52,12 @@ namespace KingsRescue.Progression
 
             if (loadout == null)
             {
-                loadout = FindAnyObjectByType<WeaponLoadout>();
+                loadout = GameManager.Instance != null ? GameManager.Instance.Loadout : null;
             }
 
             if (stats == null)
             {
-                stats = FindAnyObjectByType<PlayerStats>();
+                stats = GameManager.Instance != null ? GameManager.Instance.PlayerStats : null;
             }
         }
 

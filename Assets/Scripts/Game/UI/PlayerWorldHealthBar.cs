@@ -197,7 +197,7 @@ namespace KingsRescue.UI
             {
                 health = PlayerController.Instance != null
                     ? PlayerController.Instance.Health
-                    : FindAnyObjectByType<PlayerHealth>();
+                    : (GameManager.Instance != null ? GameManager.Instance.PlayerHealth : null);
             }
 
             if (health != null)
