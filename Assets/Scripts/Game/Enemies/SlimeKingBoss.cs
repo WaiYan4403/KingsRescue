@@ -9,7 +9,8 @@ namespace KingsRescue.Enemies
     /// <summary>
     /// First boss. Water balls and the laser are used from the top of the road:
     /// a repeating forward volley, then a beam that starts on center and commits left or right.
-    /// The vanish-slam is the close-range special.
+    /// The vanish-slam plays the jump clip, travels hidden, then plays the land clip.
+    /// The slam connects when the land clip finishes.
     /// </summary>
     public class SlimeKingBoss : MonoBehaviour, IPoolable
     {
@@ -29,10 +30,18 @@ namespace KingsRescue.Enemies
             Laser
         }
 
+        private enum JumpStage
+        {
+            Takeoff,
+            Air,
+            Land
+        }
+
         [SerializeField] private SpriteRenderer body;
         [SerializeField] private SpriteRenderer landingMarker;
         [SerializeField] private Transform laserPivot;
         [SerializeField] private GameObject waterFoams;
+        [SerializeField] private GameObject waterParticles;
         [SerializeField] private SpriteRenderer laserBeam;
         [SerializeField] private float playerRadius = 0.35f;
 
@@ -108,7 +117,14 @@ namespace KingsRescue.Enemies
         private float introStarted;
         private float runMinutes;
         private bool splitSpawned;
+        private JumpStage jumpStage;
+        private float jumpStageEnds;
+        private bool sawJumpState;
         private static readonly int AttackHash = Animator.StringToHash("Attack1");
+        private static readonly int JumpHash = Animator.StringToHash("Jump");
+        private static readonly int JumpStateHash = Animator.StringToHash("SlimeKingBlue_Jump");
+        private static readonly int LandStateHash = Animator.StringToHash("SlimeKingBlue_Land");
+        private const float JumpStageTimeout = 3f;
         private const float DownAngle = -180f;
 
         private void Awake()
@@ -135,7 +151,12 @@ namespace KingsRescue.Enemies
                     case Phase.Idle:
                         return "waiting";
                     case Phase.JumpAir:
-                        return slamLocked ? "vanish slam" : "jumping";
+                        if (jumpStage == JumpStage.Land)
+                        {
+                            return "landing";
+                        }
+
+                        return jumpStage == JumpStage.Takeoff ? "jumping" : "vanish slam";
                     case Phase.LaserWindup:
                         return "laser windup";
                     case Phase.Laser:
@@ -159,6 +180,7 @@ namespace KingsRescue.Enemies
             HideMarker();
             SetLaserVisible(false);
             SetAttackPose(false);
+            SetJumpPose(false);
         }
 
         public void OnDespawned()
@@ -173,6 +195,7 @@ namespace KingsRescue.Enemies
             HideMarker();
             SetLaserVisible(false);
             SetAttackPose(false);
+            SetJumpPose(false);
         }
 
         public void Configure(EnemyDefinition def, float runMinutes)
@@ -320,6 +343,7 @@ namespace KingsRescue.Enemies
             HideMarker();
             SetLaserVisible(false);
             SetAttackPose(false);
+            SetJumpPose(false);
         }
 
         private void ChooseNextAttack()
@@ -531,44 +555,93 @@ namespace KingsRescue.Enemies
             }
         }
 
+        private void SetJumpPose(bool jumping)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(JumpHash, jumping);
+            }
+        }
+
+        private void PlayBodyState(int stateHash)
+        {
+            if (animator == null)
+            {
+                return;
+            }
+
+            animator.Play(stateHash, 0, 0f);
+        }
+
+        private bool BodyStateFinished(int stateHash)
+        {
+            if (animator == null)
+            {
+                return true;
+            }
+
+            if (animator.IsInTransition(0))
+            {
+                AnimatorStateInfo next = animator.GetNextAnimatorStateInfo(0);
+                if (next.shortNameHash == stateHash)
+                {
+                    sawJumpState = true;
+                }
+
+                return false;
+            }
+
+            AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+            if (info.shortNameHash == stateHash)
+            {
+                sawJumpState = true;
+                return info.normalizedTime >= 1f;
+            }
+
+            return sawJumpState;
+        }
+
         private void BeginJump()
         {
             phase = Phase.JumpAir;
-            phaseEnds = Time.time + jumpAirTime;
+            jumpStage = JumpStage.Takeoff;
+            jumpStageEnds = Time.time + JumpStageTimeout;
+            sawJumpState = false;
             slamLocked = false;
             slamPoint = CurrentPlayerPoint();
             SetMove(false);
             SetContact(false);
+            SetVisible(true);
+            SetAttackPose(false);
+            SetJumpPose(true);
+            PlayBodyState(JumpStateHash);
+            SetLaserVisible(false);
+            if (health != null)
+            {
+                health.Untargetable = false;
+            }
+
+            ShowMarker(slamPoint);
+            if (animator == null)
+            {
+                BeginJumpAir();
+            }
+        }
+
+        private void BeginJumpAir()
+        {
+            jumpStage = JumpStage.Air;
+            slamLocked = false;
+            phaseEnds = Time.time + jumpAirTime;
             SetVisible(false);
             if (health != null)
             {
                 health.Untargetable = true;
             }
-
-            SetLaserVisible(false);
-            ShowMarker(slamPoint);
         }
 
-        private void TickJump()
+        private void BeginLand()
         {
-            float remaining = phaseEnds - Time.time;
-            if (!slamLocked && remaining > jumpLockLead)
-            {
-                slamPoint = CurrentPlayerPoint();
-            }
-            else
-            {
-                slamLocked = true;
-            }
-
-            ShowMarker(slamPoint);
-            PulseMarker();
-
-            if (Time.time < phaseEnds)
-            {
-                return;
-            }
-
             transform.position = slamPoint;
             SetVisible(true);
             if (health != null)
@@ -576,9 +649,77 @@ namespace KingsRescue.Enemies
                 health.Untargetable = false;
             }
 
+            sawJumpState = false;
+            jumpStage = JumpStage.Land;
+            jumpStageEnds = Time.time + JumpStageTimeout;
+            SetJumpPose(false);
+            PlayBodyState(LandStateHash);
+            if (animator == null)
+            {
+                FinishLand();
+            }
+        }
+
+        private void FinishLand()
+        {
             Slam();
             HideMarker();
             BeginIdle();
+        }
+
+        private void TickJump()
+        {
+            if (jumpStage == JumpStage.Takeoff)
+            {
+                TrackSlamPoint(false);
+                if (BodyStateFinished(JumpStateHash) || Time.time >= jumpStageEnds)
+                {
+                    BeginJumpAir();
+                }
+
+                return;
+            }
+
+            if (jumpStage == JumpStage.Air)
+            {
+                TrackSlamPoint(true);
+                if (Time.time >= phaseEnds)
+                {
+                    BeginLand();
+                }
+
+                return;
+            }
+
+            ShowMarker(slamPoint);
+            PulseMarker();
+            if (BodyStateFinished(LandStateHash) || Time.time >= jumpStageEnds)
+            {
+                FinishLand();
+            }
+        }
+
+        private void TrackSlamPoint(bool canLock)
+        {
+            if (!canLock)
+            {
+                slamPoint = CurrentPlayerPoint();
+            }
+            else
+            {
+                float remaining = phaseEnds - Time.time;
+                if (!slamLocked && remaining > jumpLockLead)
+                {
+                    slamPoint = CurrentPlayerPoint();
+                }
+                else
+                {
+                    slamLocked = true;
+                }
+            }
+
+            ShowMarker(slamPoint);
+            PulseMarker();
         }
 
         private void Slam()
@@ -830,6 +971,7 @@ namespace KingsRescue.Enemies
             {
                 laserPivot.gameObject.SetActive(visible);
                 waterFoams.SetActive(visible);
+                waterParticles.SetActive(visible);
             }
             else if (laserBeam != null)
             {

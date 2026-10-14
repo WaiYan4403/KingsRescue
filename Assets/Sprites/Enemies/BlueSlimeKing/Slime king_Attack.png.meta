@@ -1,0 +1,561 @@
+fileFormatVersion: 2
+guid: 8ba39184640d7ef41a54b03a06a951dc
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7010196851498781058
+    second: Slime king_Attack_0
+  - first:
+      213: -7109970323634304783
+    second: Slime king_Attack_1
+  - first:
+      213: 3847974558143309389
+    second: Slime king_Attack_2
+  - first:
+      213: 6479730325752690719
+    second: Slime king_Attack_3
+  - first:
+      213: -7948827090029519910
+    second: Slime king_Attack_4
+  - first:
+      213: 5692587653749416858
+    second: Slime king_Attack_5
+  - first:
+      213: 8610222950140018734
+    second: Slime king_Attack_6
+  - first:
+      213: -338205551591058020
+    second: Slime king_Attack_7
+  - first:
+      213: -7076777282868105836
+    second: Slime king_Attack_8
+  - first:
+      213: 7404437461656681653
+    second: Slime king_Attack_9
+  - first:
+      213: -3273421679579447678
+    second: Slime king_Attack_10
+  - first:
+      213: 4303988874599932460
+    second: Slime king_Attack_11
+  - first:
+      213: 5343612559901253526
+    second: Slime king_Attack_12
+  - first:
+      213: 3500293343578575987
+    second: Slime king_Attack_13
+  - first:
+      213: 5349704902618166888
+    second: Slime king_Attack_14
+  - first:
+      213: -7739877057491134479
+    second: Slime king_Attack_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Slime king_Attack_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e767adcea17c6be90800000000000000
+      internalID: -7010196851498781058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_1
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f8453039af445d90800000000000000
+      internalID: -7109970323634304783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_2
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d466fd22970c66530800000000000000
+      internalID: 3847974558143309389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_3
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f18b0d27660ace950800000000000000
+      internalID: 6479730325752690719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_4
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adbd9c550e710b190800000000000000
+      internalID: -7948827090029519910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_5
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a93228a7f42200f40800000000000000
+      internalID: 5692587653749416858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_6
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e20030c7728ad7770800000000000000
+      internalID: 8610222950140018734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_7
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c95995cb7d37e4bf0800000000000000
+      internalID: -338205551591058020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_8
+      rect:
+        serializedVersion: 2
+        x: 793
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49da71c3e8c3acd90800000000000000
+      internalID: -7076777282868105836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_9
+      rect:
+        serializedVersion: 2
+        x: 892
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5bc34a714a8d1c660800000000000000
+      internalID: 7404437461656681653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_10
+      rect:
+        serializedVersion: 2
+        x: 991
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28eba9463587292d0800000000000000
+      internalID: -3273421679579447678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_11
+      rect:
+        serializedVersion: 2
+        x: 1090
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2223c3f317dabb30800000000000000
+      internalID: 4303988874599932460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_12
+      rect:
+        serializedVersion: 2
+        x: 1189
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69fda32cf43582a40800000000000000
+      internalID: 5343612559901253526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_13
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3745aa9204a839030800000000000000
+      internalID: 3500293343578575987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_14
+      rect:
+        serializedVersion: 2
+        x: 1387
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 866b8b5d348fd3a40800000000000000
+      internalID: 5349704902618166888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime king_Attack_15
+      rect:
+        serializedVersion: 2
+        x: 1486
+        y: 1
+        width: 98
+        height: 114
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f79b07e2de669490800000000000000
+      internalID: -7739877057491134479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: bc168284faa71534ba56e76f67f7e917
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":98.0,"y":114.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.10000000149011612},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Slime king_Attack_0: -7010196851498781058
+      Slime king_Attack_1: -7109970323634304783
+      Slime king_Attack_10: -3273421679579447678
+      Slime king_Attack_11: 4303988874599932460
+      Slime king_Attack_12: 5343612559901253526
+      Slime king_Attack_13: 3500293343578575987
+      Slime king_Attack_14: 5349704902618166888
+      Slime king_Attack_15: -7739877057491134479
+      Slime king_Attack_2: 3847974558143309389
+      Slime king_Attack_3: 6479730325752690719
+      Slime king_Attack_4: -7948827090029519910
+      Slime king_Attack_5: 5692587653749416858
+      Slime king_Attack_6: 8610222950140018734
+      Slime king_Attack_7: -338205551591058020
+      Slime king_Attack_8: -7076777282868105836
+      Slime king_Attack_9: 7404437461656681653
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
