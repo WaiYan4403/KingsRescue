@@ -19,6 +19,11 @@ namespace KingsRescue.Combat
         private const float DefaultShotRange = 6.5f;
         private const float UnlimitedShotLifetime = 12f;
 
+        // Lancer effect clips are 0.35s. The slash sprite is empty at frame 0,
+        // the strike frame is 0.167s, and the sprite clears at 0.333s.
+        private const float CharacterSlashHitTime = 0.167f;
+        private const float CharacterSlashClearTime = 0.333f;
+
         private readonly List<OrbitBlade> blades = new List<OrbitBlade>(8);
         private readonly List<Enemy> strikeTargets = new List<Enemy>(16);
 
@@ -204,16 +209,21 @@ namespace KingsRescue.Combat
         private void FireMelee()
         {
             int swings = ResolveMeleeSwings();
+            if (comboRoutine != null)
+            {
+                StopCoroutine(comboRoutine);
+            }
+
+            if (definition.usesCharacterAnimators)
+            {
+                comboRoutine = StartCoroutine(SyncedCombo(swings));
+                return;
+            }
 
             if (swings <= 1)
             {
                 DoSwing(0, swings);
                 return;
-            }
-
-            if (comboRoutine != null)
-            {
-                StopCoroutine(comboRoutine);
             }
 
             comboRoutine = StartCoroutine(ComboRoutine(swings));
@@ -232,20 +242,57 @@ namespace KingsRescue.Combat
             comboRoutine = null;
         }
 
+        private IEnumerator SyncedCombo(int swings)
+        {
+            float gap = Mathf.Max(CharacterSlashClearTime, definition.comboDelay);
+            for (int i = 0; i < swings; i++)
+            {
+                PlayCharacterAttack(i, swings);
+                yield return new WaitForSeconds(CharacterSlashHitTime);
+                if (!isActiveAndEnabled || definition == null)
+                {
+                    comboRoutine = null;
+                    yield break;
+                }
+
+                ApplySwingHit(i, swings);
+                float rest = gap - CharacterSlashHitTime;
+                if (i < swings - 1 && rest > 0.01f)
+                {
+                    yield return new WaitForSeconds(rest);
+                }
+            }
+
+            comboRoutine = null;
+        }
+
         private void DoSwing(int swingIndex, int swingCount)
+        {
+            PlayCharacterAttack(swingIndex, swingCount);
+            ApplySwingHit(swingIndex, swingCount);
+        }
+
+        private void ApplySwingHit(int swingIndex, int swingCount)
         {
             WeaponLevel data = Data;
             Vector2 center = transform.position;
-            PlayCharacterAttack(swingIndex, swingCount);
-
             int unlocked = definition.GetUnlockedAttackStages(level);
             int stage = unlocked > 0 ? Mathf.Clamp(swingIndex + 1, 1, unlocked) : 0;
             float radius = ResolveArea();
-            float duration = ResolveDuration();
+            float duration = definition.usesCharacterAnimators
+                ? CharacterSlashClearTime - CharacterSlashHitTime
+                : ResolveDuration();
+
+            if (definition.usesCharacterAnimators && TrySlashHit(center, radius, out Vector2 slashCenter, out float slashRadius))
+            {
+                Targeting.DamageCircle(slashCenter, slashRadius, ResolveDamage(), data.knockback, gameObject);
+                HitboxDisplay.Flash(slashCenter, slashRadius, duration);
+                TrySpawnPowerSlash(stage);
+                return;
+            }
+
             if (IsFinishingStrike(swingIndex))
             {
-                // The last stage thrusts the lance straight up the screen. The slash
-                // circle sits under that sprite, so the strike gets its own forward box.
                 Vector2 forward = Vector2.up;
                 float length = radius;
                 float thickness = Mathf.Max(0.85f, radius * 0.4f);
@@ -257,7 +304,6 @@ namespace KingsRescue.Combat
 
             Vector2 facing = ResolveFacing(center);
 
-            // Alternate the wedge slightly left and right so a combo reads as a flurry.
             if (swingIndex > 0)
             {
                 float tilt = (swingIndex % 2 == 0 ? 1f : -1f) * data.arcDegrees * 0.25f;
@@ -272,6 +318,24 @@ namespace KingsRescue.Combat
             {
                 SpawnEffect(center, facing, radius, duration);
             }
+        }
+
+        /// <summary>
+        /// Character swings hit whatever the slash sprite covers. Area upgrades grow that shape.
+        /// </summary>
+        private bool TrySlashHit(Vector2 origin, float area, out Vector2 center, out float radius)
+        {
+            center = origin + Vector2.up * 1.2f;
+            radius = Mathf.Max(2.5f, area);
+            if (owner == null || !owner.TryGetSlashBounds(out Bounds bounds))
+            {
+                return true;
+            }
+
+            center = bounds.center;
+            float spriteReach = Mathf.Max(bounds.extents.x, bounds.extents.y);
+            radius = spriteReach * Mathf.Max(1f, area / 2f);
+            return radius > 0.2f;
         }
 
         private bool IsFinishingStrike(int swingIndex)
@@ -361,7 +425,10 @@ namespace KingsRescue.Combat
 
             WeaponLevel data = Data;
             float damage = ResolveDamage() * Mathf.Max(1f, powerUp.SlashDamageMultiplier);
-            projectile.Launch(Vector2.up, 9f, damage, 2, 0.4f, scale, data.knockback, gameObject, 3.2f);
+            float range = Mathf.Max(0.5f, powerUp.SlashRange);
+            const float speed = 9f;
+            float lifetime = range / speed + 0.05f;
+            projectile.Launch(Vector2.up, speed, damage, 2, lifetime, scale, data.knockback, gameObject, range);
         }
 
         private void FireForwardShot()

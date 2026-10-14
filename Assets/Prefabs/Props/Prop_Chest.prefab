@@ -137,7 +137,7 @@ MonoBehaviour:
   healthDropChance: 0.08
   powerUpDropChance: 0.03
   isChest: 1
-  interactRadius: 1.15
+  interactRadius: 0.8
   rareDropChance: 0.2
   minPocketCoins: 10
   maxPocketCoins: 100

@@ -54,6 +54,7 @@ namespace KingsRescue.Player
         private Vector3 spriteRestLocal;
         private bool spriteRestCached;
         private readonly List<Collider2D> overlappingObstacles = new List<Collider2D>(8);
+        private SpriteRenderer slashRenderer;
 
         public Vector2 Velocity => velocity;
 
@@ -85,6 +86,11 @@ namespace KingsRescue.Player
             if (spriteRenderer == null)
             {
                 spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            }
+
+            if (effectAnimator != null)
+            {
+                slashRenderer = effectAnimator.GetComponent<SpriteRenderer>();
             }
 
             speedParameterHash = Animator.StringToHash(speedParameter);
@@ -363,6 +369,22 @@ namespace KingsRescue.Player
             }
 
             return escape;
+        }
+
+        /// <summary>
+        /// World bounds of the slash frame currently on the effect animator.
+        /// The lancer art plays upward and does not turn toward a target.
+        /// </summary>
+        public bool TryGetSlashBounds(out Bounds bounds)
+        {
+            bounds = default;
+            if (slashRenderer == null || !slashRenderer.enabled || slashRenderer.sprite == null)
+            {
+                return false;
+            }
+
+            bounds = slashRenderer.bounds;
+            return bounds.size.sqrMagnitude > 0.04f;
         }
 
         /// <summary>

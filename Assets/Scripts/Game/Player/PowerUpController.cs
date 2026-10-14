@@ -7,7 +7,7 @@ namespace KingsRescue.Player
     /// <summary>
     /// Arcade power-up in two steps. Both keep the normal combo and fire the
     /// strike's slash straight up the road. The second step uses the same
-    /// slashes, drawn larger and hitting harder.
+    /// slashes with a longer reach, drawn larger and hitting harder.
     /// </summary>
     [RequireComponent(typeof(WeaponLoadout))]
     [RequireComponent(typeof(PlayerStats))]
@@ -22,6 +22,8 @@ namespace KingsRescue.Player
         private bool restColorCached;
         private Stage stage;
 
+        private const float ShortSlashRange = 6f;
+        private const float FinalSlashRange = 11f;
         private const float FinalSlashScale = 1.35f;
         private const float FinalSlashDamage = 1.6f;
 
@@ -40,6 +42,8 @@ namespace KingsRescue.Player
         public float SlashScale => stage == Stage.Final ? FinalSlashScale : 1f;
 
         public float SlashDamageMultiplier => stage == Stage.Final ? FinalSlashDamage : 1f;
+
+        public float SlashRange => stage == Stage.Final ? FinalSlashRange : ShortSlashRange;
 
         private void Awake()
         {
