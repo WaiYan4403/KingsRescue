@@ -1024,7 +1024,7 @@ namespace KingsRescue.Enemies
             float native = landingMarker.sprite != null ? landingMarker.sprite.bounds.size.x : 1f;
             float scale = native > 0.0001f ? diameter / native : diameter;
             Vector2 parent = LossyAbs();
-            landingMarker.transform.localScale = new Vector3(scale / parent.x, scale / parent.y, 1f);
+            //landingMarker.transform.localScale = new Vector3(scale / parent.x, scale / parent.y, 1f);
         }
 
         private void PulseMarker()

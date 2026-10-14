@@ -29,6 +29,19 @@ namespace KingsRescue.Combat
         private float radiusScale = 1f;
         private bool homing;
         private float cruiseSpeed;
+
+        /// <summary>Seconds until this shot returns to the pool, by time or by travel distance.</summary>
+        public float TimeLeft
+        {
+            get
+            {
+                float byTime = expireAt - Time.time;
+                float byTravel = maxTravel > 0f && cruiseSpeed > 0.01f
+                    ? (maxTravel - traveled) / cruiseSpeed
+                    : byTime;
+                return Mathf.Max(0f, Mathf.Min(byTime, byTravel));
+            }
+        }
         private Enemy homeTarget;
         private HitboxMarker hitbox;
         private const float HomingTurn = 7f;

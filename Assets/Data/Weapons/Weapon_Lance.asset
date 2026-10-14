@@ -42,7 +42,7 @@ MonoBehaviour:
     cooldown: 1
     count: 1
     pierce: 0
-    area: 2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -56,7 +56,7 @@ MonoBehaviour:
     cooldown: 1
     count: 1
     pierce: 0
-    area: 2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -70,7 +70,7 @@ MonoBehaviour:
     cooldown: 1.5
     count: 2
     pierce: 0
-    area: 2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -84,7 +84,7 @@ MonoBehaviour:
     cooldown: 1.5
     count: 2
     pierce: 0
-    area: 2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -98,7 +98,7 @@ MonoBehaviour:
     cooldown: 2
     count: 3
     pierce: 0
-    area: 2
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -112,7 +112,7 @@ MonoBehaviour:
     cooldown: 2
     count: 3
     pierce: 0
-    area: 3
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -126,7 +126,7 @@ MonoBehaviour:
     cooldown: 2
     count: 3
     pierce: 0
-    area: 3
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5
@@ -140,7 +140,7 @@ MonoBehaviour:
     cooldown: 1.5
     count: 3
     pierce: 0
-    area: 3
+    area: 1.5
     projectileSpeed: 12
     lifetime: 0.25
     maxDistance: 6.5

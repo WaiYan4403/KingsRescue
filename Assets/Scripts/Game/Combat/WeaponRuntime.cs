@@ -321,12 +321,14 @@ namespace KingsRescue.Combat
         }
 
         /// <summary>
-        /// Character swings hit whatever the slash sprite covers. Area upgrades grow that shape.
+        /// Character swings are centered on the slash sprite. Area 2 matches that sprite.
+        /// Every other Area value scales the circle, including values below 2.
         /// </summary>
         private bool TrySlashHit(Vector2 origin, float area, out Vector2 center, out float radius)
         {
+            float scale = Mathf.Max(0.05f, area) / 2f;
             center = origin + Vector2.up * 1.2f;
-            radius = Mathf.Max(2.5f, area);
+            radius = 2.5f * scale;
             if (owner == null || !owner.TryGetSlashBounds(out Bounds bounds))
             {
                 return true;
@@ -334,8 +336,8 @@ namespace KingsRescue.Combat
 
             center = bounds.center;
             float spriteReach = Mathf.Max(bounds.extents.x, bounds.extents.y);
-            radius = spriteReach * Mathf.Max(1f, area / 2f);
-            return radius > 0.2f;
+            radius = spriteReach * scale;
+            return radius > 0.05f;
         }
 
         private bool IsFinishingStrike(int swingIndex)

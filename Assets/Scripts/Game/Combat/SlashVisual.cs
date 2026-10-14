@@ -4,18 +4,23 @@ using KingsRescue.Core;
 namespace KingsRescue.Combat
 {
     /// <summary>
-    /// Restarts a pooled slash so each shot plays from the first frame.
+    /// Holds the idle slash while the shot flies, then plays disappear as the lifetime runs out.
     /// </summary>
     public class SlashVisual : MonoBehaviour, IPoolable
     {
         private static readonly int DisappearHash = Animator.StringToHash("Disappear");
 
+        [SerializeField] private float disappearLead = 0.35f;
+
         private Animator animator;
+        private Projectile projectile;
         private bool hasDisappear;
+        private bool disappearing;
 
         private void Awake()
         {
             animator = GetComponentInChildren<Animator>();
+            projectile = GetComponent<Projectile>();
             if (animator == null)
             {
                 return;
@@ -35,21 +40,37 @@ namespace KingsRescue.Combat
 
         public void OnSpawned()
         {
+            disappearing = false;
             if (animator == null || animator.runtimeAnimatorController == null)
             {
                 return;
             }
 
+            animator.ResetTrigger(DisappearHash);
             animator.Rebind();
             animator.Update(0f);
-            if (hasDisappear)
-            {
-                animator.SetTrigger(DisappearHash);
-            }
         }
 
         public void OnDespawned()
         {
+            disappearing = false;
+        }
+
+        private void Update()
+        {
+            if (disappearing || !hasDisappear || animator == null || projectile == null)
+            {
+                return;
+            }
+
+            float lead = disappearLead > 0.05f ? disappearLead : 0.35f;
+            if (projectile.TimeLeft > lead)
+            {
+                return;
+            }
+
+            disappearing = true;
+            animator.SetTrigger(DisappearHash);
         }
     }
 }
