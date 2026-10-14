@@ -624,7 +624,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a269315b8613e4f4182d931b4ca7b22c, type: 2}
   fallback: {fileID: 11400000, guid: 3416b03ca38be41d49aa8fc4f5d9377e, type: 2}
   choiceCount: 4
-  fourthCardLuck: 1.2
+  fourthCardLuck: 1.6
   loadout: {fileID: 1395708462}
   stats: {fileID: 1395708461}
 --- !u!114 &39098410
@@ -688,7 +688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aef2ceba5b9ed494ebfc67013ed2cc1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Core.ScrollDirector
-  baseSpeed: 2
+  baseSpeed: 2.5
   speedGainPerMinute: 0.9
   maxSpeed: 5
   scrolling: 1
@@ -1039,13 +1039,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39098406}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 737672b003e08014ca677099fa9a081e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.HitboxDisplay
   markerPrefab: {fileID: 2996400921592246358, guid: 612fa08fd99e6bf4fb3ccc982e18a9be, type: 3}
-  showHitboxes: 1
+  showHitboxes: 0
   flashLifetime: 0.2
 --- !u!1 &63217093
 GameObject:
@@ -3666,7 +3666,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &505908653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11868,7 +11868,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2011210031
 Transform:
   m_ObjectHideFlags: 0

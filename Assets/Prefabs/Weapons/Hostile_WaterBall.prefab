@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8311d99ed56754bbe65bfd5b7c6744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.HostileProjectile
-  hitRadius: 0.5
+  hitRadius: 0.7
   rotateToDirection: 1
   playerRadius: 0.35
 --- !u!114 &125398526257231943

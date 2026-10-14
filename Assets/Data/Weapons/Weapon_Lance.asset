@@ -40,7 +40,7 @@ MonoBehaviour:
     pierce: 0
     area: 2
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
@@ -54,7 +54,7 @@ MonoBehaviour:
     pierce: 0
     area: 2
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 150
@@ -68,7 +68,7 @@ MonoBehaviour:
     pierce: 0
     area: 2
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 170
@@ -82,7 +82,7 @@ MonoBehaviour:
     pierce: 0
     area: 2
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 1
     arcDegrees: 170
@@ -96,7 +96,7 @@ MonoBehaviour:
     pierce: 0
     area: 2
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 1
     arcDegrees: 170
@@ -110,7 +110,7 @@ MonoBehaviour:
     pierce: 0
     area: 3
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 1
     arcDegrees: 180
@@ -124,7 +124,7 @@ MonoBehaviour:
     pierce: 0
     area: 3
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 1
     arcDegrees: 200
@@ -138,7 +138,7 @@ MonoBehaviour:
     pierce: 0
     area: 3
     projectileSpeed: 12
-    lifetime: 0.5
+    lifetime: 0.25
     maxDistance: 6.5
     knockback: 1
     arcDegrees: 200

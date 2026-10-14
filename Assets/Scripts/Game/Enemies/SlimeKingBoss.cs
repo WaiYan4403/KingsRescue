@@ -9,14 +9,13 @@ namespace KingsRescue.Enemies
     /// <summary>
     /// First boss. Water balls and the laser are used from the top of the road:
     /// a repeating forward volley, then a beam that starts on center and commits left or right.
-    /// The vanish-slam plays the jump clip, travels hidden, then plays the land clip.
-    /// The slam connects when the land clip finishes.
+    /// The entrance and the vanish-slam both play the jump clip, travel hidden, then play the land clip.
+    /// The entrance lands on the center of the road. The slam connects when the land clip finishes.
     /// </summary>
     public class SlimeKingBoss : MonoBehaviour, IPoolable
     {
         private enum Phase
         {
-            Intro,
             Idle,
             JumpAir,
             LaserWindup,
@@ -42,11 +41,11 @@ namespace KingsRescue.Enemies
         [SerializeField] private Transform laserPivot;
         [SerializeField] private GameObject waterFoams;
         [SerializeField] private GameObject waterParticles;
+        [SerializeField] private GameObject landingParticles;
         [SerializeField] private SpriteRenderer laserBeam;
         [SerializeField] private float playerRadius = 0.35f;
 
         [Header("Timing")]
-        [SerializeField] private float introDuration = 1.35f;
         [SerializeField] private float idleMin = 1.7f;
         [SerializeField] private float idleMax = 2.4f;
         [SerializeField] private float jumpAirTime = 1.45f;
@@ -112,20 +111,21 @@ namespace KingsRescue.Enemies
         private Vector2 perchTo;
         private float perchStarted;
         private bool musicOn;
-        private float introFromY;
-        private float introToY;
-        private float introStarted;
+        private bool introLanding;
         private float runMinutes;
         private bool splitSpawned;
         private JumpStage jumpStage;
         private float jumpStageEnds;
         private bool sawJumpState;
         private static readonly int AttackHash = Animator.StringToHash("Attack1");
+        private static readonly int Attack2Hash = Animator.StringToHash("Attack2");
         private static readonly int JumpHash = Animator.StringToHash("Jump");
         private static readonly int JumpStateHash = Animator.StringToHash("SlimeKingBlue_Jump");
         private static readonly int LandStateHash = Animator.StringToHash("SlimeKingBlue_Land");
         private const float JumpStageTimeout = 3f;
         private const float DownAngle = -180f;
+        private ParticleSystem landingParticleSystem;
+        private bool landingBurstActive;
 
         private void Awake()
         {
@@ -138,6 +138,10 @@ namespace KingsRescue.Enemies
             contact = GetComponent<ContactDamage>();
             health = GetComponent<Health>();
             animator = GetComponent<Animator>();
+            if (landingParticles != null)
+            {
+                landingParticleSystem = landingParticles.GetComponent<ParticleSystem>();
+            }
         }
 
         public string StatusLine
@@ -146,8 +150,6 @@ namespace KingsRescue.Enemies
             {
                 switch (phase)
                 {
-                    case Phase.Intro:
-                        return "entering";
                     case Phase.Idle:
                         return "waiting";
                     case Phase.JumpAir:
@@ -178,8 +180,10 @@ namespace KingsRescue.Enemies
             perched = false;
             splitSpawned = false;
             HideMarker();
+            HideLandingBurst();
             SetLaserVisible(false);
             SetAttackPose(false);
+            SetAttack2Pose(false);
             SetJumpPose(false);
         }
 
@@ -193,8 +197,10 @@ namespace KingsRescue.Enemies
             }
 
             HideMarker();
+            HideLandingBurst();
             SetLaserVisible(false);
             SetAttackPose(false);
+            SetAttack2Pose(false);
             SetJumpPose(false);
         }
 
@@ -264,11 +270,10 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            TickLandingBurst();
+
             switch (phase)
             {
-                case Phase.Intro:
-                    TickIntro();
-                    break;
                 case Phase.Idle:
                     ClampToPlay();
                     if (Time.time >= phaseEnds)
@@ -304,28 +309,19 @@ namespace KingsRescue.Enemies
 
         private void BeginIntro()
         {
-            phase = Phase.Intro;
-            introStarted = Time.time;
-            phaseEnds = Time.time + introDuration;
-            SetMove(false);
-            SetContact(false);
-            SetVisible(true);
-
-            ArenaBounds bounds = ArenaBounds.Instance;
-            introFromY = transform.position.y;
-            introToY = bounds != null ? bounds.PlayRect.center.y + 1.2f : transform.position.y - 4f;
+            BeginJumpTo(IntroLandingPoint(), true);
         }
 
-        private void TickIntro()
+        private Vector2 IntroLandingPoint()
         {
-            float t = Mathf.Clamp01((Time.time - introStarted) / Mathf.Max(0.05f, introDuration));
-            Vector3 p = transform.position;
-            p.y = Mathf.Lerp(introFromY, introToY, t * t);
-            transform.position = p;
-            if (t >= 1f)
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds == null)
             {
-                BeginIdle();
+                return transform.position;
             }
+
+            Rect play = bounds.PlayRect;
+            return new Vector2(play.center.x, play.center.y + 1.2f);
         }
 
         private void BeginIdle()
@@ -343,6 +339,7 @@ namespace KingsRescue.Enemies
             HideMarker();
             SetLaserVisible(false);
             SetAttackPose(false);
+            SetAttack2Pose(false);
             SetJumpPose(false);
         }
 
@@ -376,7 +373,7 @@ namespace KingsRescue.Enemies
             SetContact(true);
             SetVisible(true);
             SetLaserVisible(false);
-            SetAttackPose(true);
+            SetAttack2Pose(true);
         }
 
         private void TickVolley()
@@ -413,7 +410,7 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            SetAttackPose(false);
+            SetAttack2Pose(false);
             BeginIdle();
         }
 
@@ -555,6 +552,14 @@ namespace KingsRescue.Enemies
             }
         }
 
+        private void SetAttack2Pose(bool attacking)
+        {
+            if (animator != null)
+            {
+                animator.SetBool(Attack2Hash, attacking);
+            }
+        }
+
         private void SetJumpPose(bool jumping)
         {
             if (animator != null)
@@ -603,16 +608,23 @@ namespace KingsRescue.Enemies
 
         private void BeginJump()
         {
+            BeginJumpTo(CurrentPlayerPoint(), false);
+        }
+
+        private void BeginJumpTo(Vector2 point, bool entrance)
+        {
+            introLanding = entrance;
             phase = Phase.JumpAir;
             jumpStage = JumpStage.Takeoff;
             jumpStageEnds = Time.time + JumpStageTimeout;
             sawJumpState = false;
-            slamLocked = false;
-            slamPoint = CurrentPlayerPoint();
+            slamLocked = entrance;
+            slamPoint = point;
             SetMove(false);
             SetContact(false);
             SetVisible(true);
             SetAttackPose(false);
+            SetAttack2Pose(false);
             SetJumpPose(true);
             PlayBodyState(JumpStateHash);
             SetLaserVisible(false);
@@ -621,6 +633,7 @@ namespace KingsRescue.Enemies
                 health.Untargetable = false;
             }
 
+            HideLandingBurst();
             ShowMarker(slamPoint);
             if (animator == null)
             {
@@ -662,16 +675,72 @@ namespace KingsRescue.Enemies
 
         private void FinishLand()
         {
-            Slam();
+            ShowLandingBurst();
+            if (!introLanding)
+            {
+                Slam();
+            }
+
+            introLanding = false;
             HideMarker();
             BeginIdle();
+        }
+
+        private void ShowLandingBurst()
+        {
+            if (landingParticles == null)
+            {
+                return;
+            }
+
+            landingParticles.SetActive(true);
+            if (landingParticleSystem != null)
+            {
+                landingParticleSystem.Clear(true);
+                landingParticleSystem.Play(true);
+            }
+
+            landingBurstActive = true;
+        }
+
+        private void TickLandingBurst()
+        {
+            if (!landingBurstActive || landingParticleSystem == null || landingParticleSystem.IsAlive(true))
+            {
+                return;
+            }
+
+            HideLandingBurst();
+        }
+
+        private void HideLandingBurst()
+        {
+            landingBurstActive = false;
+            if (landingParticleSystem != null)
+            {
+                landingParticleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+
+            if (landingParticles != null)
+            {
+                landingParticles.SetActive(false);
+            }
         }
 
         private void TickJump()
         {
             if (jumpStage == JumpStage.Takeoff)
             {
-                TrackSlamPoint(false);
+                if (introLanding)
+                {
+                    ShowMarker(slamPoint);
+                    PulseMarker();
+                }
+                else
+                {
+                    TrackSlamPoint(false);
+                }
+
                 if (BodyStateFinished(JumpStateHash) || Time.time >= jumpStageEnds)
                 {
                     BeginJumpAir();
@@ -682,7 +751,16 @@ namespace KingsRescue.Enemies
 
             if (jumpStage == JumpStage.Air)
             {
-                TrackSlamPoint(true);
+                if (introLanding)
+                {
+                    ShowMarker(slamPoint);
+                    PulseMarker();
+                }
+                else
+                {
+                    TrackSlamPoint(true);
+                }
+
                 if (Time.time >= phaseEnds)
                 {
                     BeginLand();
