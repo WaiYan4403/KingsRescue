@@ -25,6 +25,7 @@ namespace KingsRescue.Combat
         private WeaponDefinition definition;
         private PlayerStats stats;
         private PlayerController owner;
+        private PowerUpController powerUp;
         private int level = 1;
         private float nextFireTime;
         private float orbitAngle;
@@ -45,6 +46,7 @@ namespace KingsRescue.Combat
             definition = weapon;
             stats = playerStats;
             owner = playerController;
+            powerUp = playerController != null ? playerController.GetComponent<PowerUpController>() : null;
             level = Mathf.Clamp(startingLevel, 1, weapon != null ? weapon.MaxLevel : 1);
             nextFireTime = Time.time + 0.25f;
             activeOrbitCount = -1;
@@ -236,6 +238,8 @@ namespace KingsRescue.Combat
             Vector2 center = transform.position;
             PlayCharacterAttack(swingIndex, swingCount);
 
+            int unlocked = definition.GetUnlockedAttackStages(level);
+            int stage = unlocked > 0 ? Mathf.Clamp(swingIndex + 1, 1, unlocked) : 0;
             float radius = ResolveArea();
             float duration = ResolveDuration();
             if (IsFinishingStrike(swingIndex))
@@ -247,6 +251,7 @@ namespace KingsRescue.Combat
                 float thickness = Mathf.Max(0.85f, radius * 0.4f);
                 Targeting.DamageSegment(center, center + forward * length, thickness * 0.5f, ResolveDamage(), data.knockback, gameObject);
                 HitboxDisplay.FlashCapsule(center, forward, length, thickness, duration);
+                TrySpawnPowerSlash(stage);
                 return;
             }
 
@@ -261,6 +266,7 @@ namespace KingsRescue.Combat
 
             Targeting.DamageArc(center, facing, radius, data.arcDegrees, ResolveDamage(), data.knockback, gameObject);
             HitboxDisplay.Flash(center, radius, duration);
+            TrySpawnPowerSlash(stage);
 
             if (!definition.usesCharacterAnimators)
             {
@@ -316,6 +322,46 @@ namespace KingsRescue.Combat
 
             int stage = Mathf.Clamp(swingIndex + 1, 1, unlocked);
             owner.PlayAttackStage(definition.GetAttackTrigger(stage), definition.attackTriggers);
+        }
+
+        private void TrySpawnPowerSlash(int stage)
+        {
+            if (stage < 1 || powerUp == null || !powerUp.AddsSlashProjectiles)
+            {
+                return;
+            }
+
+            int unlocked = definition.GetUnlockedAttackStages(level);
+            GameObject[] prefabs = definition.powerSlashPrefabs;
+            if (stage > unlocked || prefabs == null || stage > prefabs.Length)
+            {
+                return;
+            }
+
+            GameObject prefab = prefabs[stage - 1];
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
+            if (prefab == null || pool == null)
+            {
+                return;
+            }
+
+            float scale = Mathf.Max(1f, powerUp.SlashScale);
+            GameObject instance = pool.Spawn(prefab, (Vector2)transform.position + Vector2.up * 0.35f, Quaternion.identity);
+            if (instance == null)
+            {
+                return;
+            }
+
+            instance.transform.localScale = prefab.transform.localScale * scale;
+            Projectile projectile = instance.GetComponent<Projectile>();
+            if (projectile == null)
+            {
+                return;
+            }
+
+            WeaponLevel data = Data;
+            float damage = ResolveDamage() * Mathf.Max(1f, powerUp.SlashDamageMultiplier);
+            projectile.Launch(Vector2.up, 9f, damage, 2, 0.4f, scale, data.knockback, gameObject, 3.2f);
         }
 
         private void FireForwardShot()

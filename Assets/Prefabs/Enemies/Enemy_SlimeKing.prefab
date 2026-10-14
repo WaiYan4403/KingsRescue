@@ -445,7 +445,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2660181639457930205, guid: 80bf94a999801b54fab0429c51d92759, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -605,7 +605,6 @@ MonoBehaviour:
   landingParticles: {fileID: 4970719940302654645}
   laserBeam: {fileID: 9100615360010787741}
   playerRadius: 0.35
-  introDuration: 2
   idleMin: 1.7
   idleMax: 2.4
   jumpAirTime: 1.45

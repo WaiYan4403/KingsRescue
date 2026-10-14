@@ -143,6 +143,9 @@ namespace KingsRescue.Data
         [Tooltip("Weapon level required to unlock each trigger. Missing entries default to stage index + 1.")]
         public int[] attackStageUnlockLevels = { 1, 2, 3 };
 
+        [Tooltip("First power-up. One short slash prefab per attack stage. Strikes 1 and 2 can share a prefab. An empty slot, or a stage the weapon has not unlocked, does not fire.")]
+        public GameObject[] powerSlashPrefabs = System.Array.Empty<GameObject>();
+
         [Header("Levels (index 0 is level 1)")]
         public WeaponLevel[] levels = { new WeaponLevel() };
 

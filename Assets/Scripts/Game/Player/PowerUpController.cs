@@ -1,14 +1,13 @@
 using UnityEngine;
-using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
 
 namespace KingsRescue.Player
 {
     /// <summary>
-    /// Retro arcade power-up: for a few seconds the unique weapon is replaced by
-    /// a powered form. Damage, area, cooldown and remaining time all read live
-    /// stats, so a mid-buff level-up immediately changes the next throw.
+    /// Arcade power-up in two steps. Both keep the normal combo and fire the
+    /// strike's slash straight up the road. The second step uses the same
+    /// slashes, drawn larger and hitting harder.
     /// </summary>
     [RequireComponent(typeof(WeaponLoadout))]
     [RequireComponent(typeof(PlayerStats))]
@@ -16,22 +15,36 @@ namespace KingsRescue.Player
     {
         private WeaponLoadout loadout;
         private PlayerStats stats;
-        private PlayerController controller;
-        private WeaponRuntime uniqueRuntime;
-        private WeaponRuntime poweredRuntime;
         private float activatedAt;
         private float expireAt;
         private SpriteRenderer flashTarget;
         private Color restColor = Color.white;
         private bool restColorCached;
+        private Stage stage;
 
-        public bool IsActive => poweredRuntime != null && Time.time < expireAt;
+        private const float FinalSlashScale = 1.35f;
+        private const float FinalSlashDamage = 1.6f;
+
+        private enum Stage
+        {
+            None,
+            Slash,
+            Final
+        }
+
+        public bool IsActive => stage != Stage.None && Time.time < expireAt;
+
+        /// <summary>A power-up is up, so unlocked strikes also fire a slash straight up.</summary>
+        public bool AddsSlashProjectiles => stage != Stage.None;
+
+        public float SlashScale => stage == Stage.Final ? FinalSlashScale : 1f;
+
+        public float SlashDamageMultiplier => stage == Stage.Final ? FinalSlashDamage : 1f;
 
         private void Awake()
         {
             loadout = GetComponent<WeaponLoadout>();
             stats = GetComponent<PlayerStats>();
-            controller = GetComponent<PlayerController>();
             flashTarget = GetComponentInChildren<SpriteRenderer>();
         }
 
@@ -51,8 +64,20 @@ namespace KingsRescue.Player
 
             activatedAt = Time.time;
             expireAt = activatedAt + ResolveDuration(character);
-            EnsurePoweredRuntime(powered);
-            SuppressUnique(true);
+            if (stage == Stage.Final)
+            {
+                ApplyPoweredTint(true);
+                return;
+            }
+
+            if (stage == Stage.Slash)
+            {
+                stage = Stage.Final;
+                ApplyPoweredTint(true);
+                return;
+            }
+
+            stage = Stage.Slash;
             ApplyPoweredTint(true);
         }
 
@@ -64,7 +89,7 @@ namespace KingsRescue.Player
                 return;
             }
 
-            if (poweredRuntime == null)
+            if (stage == Stage.None)
             {
                 return;
             }
@@ -74,41 +99,7 @@ namespace KingsRescue.Player
             if (Time.time >= expireAt)
             {
                 EndPowerUp();
-                return;
             }
-
-            SyncPoweredLevel();
-        }
-
-        private void EnsurePoweredRuntime(WeaponDefinition powered)
-        {
-            if (poweredRuntime != null)
-            {
-                poweredRuntime.enabled = true;
-                SyncPoweredLevel();
-                return;
-            }
-
-            var host = new GameObject($"PowerUp [{powered.displayName}]");
-            host.transform.SetParent(transform, false);
-            host.transform.localPosition = Vector3.zero;
-            poweredRuntime = host.AddComponent<WeaponRuntime>();
-            poweredRuntime.Initialize(powered, stats, controller, ResolveUniqueLevel());
-        }
-
-        private void SyncPoweredLevel()
-        {
-            if (poweredRuntime != null)
-            {
-                poweredRuntime.SetLevel(ResolveUniqueLevel());
-            }
-        }
-
-        private int ResolveUniqueLevel()
-        {
-            WeaponDefinition unique = loadout != null ? loadout.UniqueWeapon : null;
-            int level = unique != null ? loadout.GetWeaponLevel(unique) : 1;
-            return Mathf.Max(1, level);
         }
 
         private float ResolveDuration(CharacterDefinition character)
@@ -117,30 +108,10 @@ namespace KingsRescue.Player
             return baseline * Mathf.Max(0.1f, stats.DurationMultiplier);
         }
 
-        private void SuppressUnique(bool suppress)
-        {
-            WeaponDefinition unique = loadout != null ? loadout.UniqueWeapon : null;
-            if (unique == null || loadout == null || !loadout.Weapons.TryGetValue(unique, out uniqueRuntime))
-            {
-                uniqueRuntime = null;
-                return;
-            }
-
-            uniqueRuntime.enabled = !suppress;
-        }
-
         private void EndPowerUp()
         {
-            SuppressUnique(false);
+            stage = Stage.None;
             ApplyPoweredTint(false);
-
-            if (poweredRuntime != null)
-            {
-                Destroy(poweredRuntime.gameObject);
-                poweredRuntime = null;
-            }
-
-            uniqueRuntime = null;
         }
 
         private void ApplyPoweredTint(bool powered)

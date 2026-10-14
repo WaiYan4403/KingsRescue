@@ -32,6 +32,10 @@ MonoBehaviour:
   - Attack2
   - Attack3
   attackStageUnlockLevels: 010000000300000005000000
+  powerSlashPrefabs:
+  - {fileID: 629216999792180934, guid: d05aa256d350f144a93af786877d72d5, type: 3}
+  - {fileID: 629216999792180934, guid: d05aa256d350f144a93af786877d72d5, type: 3}
+  - {fileID: 5345084359085392533, guid: 39504094fac9a7540bc54800d7b5c77e, type: 3}
   levels:
   - upgradeText: 
     damage: 12

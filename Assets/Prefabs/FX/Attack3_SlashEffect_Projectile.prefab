@@ -123,6 +123,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2744856007810045675}
+  - component: {fileID: 4004884651751643978}
+  - component: {fileID: 2473650764390986351}
   m_Layer: 0
   m_Name: Attack3_SlashEffect_Projectile
   m_TagString: Untagged
@@ -146,3 +148,30 @@ Transform:
   - {fileID: 4693867538154146665}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4004884651751643978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5345084359085392533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeda06eba66c04224870ac1f6ef1f9e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.Projectile
+  hitRadius: 0.7
+  rotateToDirection: 1
+  impactEffectPrefab: {fileID: 0}
+--- !u!114 &2473650764390986351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5345084359085392533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b305f8a3deac2f4aadf78b86a3eeb7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.SlashVisual
