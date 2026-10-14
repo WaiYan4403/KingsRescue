@@ -287,6 +287,9 @@ namespace KingsRescue.Enemies
 
         private void OnDamaged(Health source, DamageInfo info)
         {
+            Vector2 at = source != null ? source.BodyCenter : (Vector2)transform.position;
+            DamageNumberDisplay.Popup(at, info.Amount, info.Critical);
+
             if (movement == null || info.Knockback <= 0.01f)
             {
                 return;

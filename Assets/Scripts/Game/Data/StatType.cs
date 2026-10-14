@@ -21,7 +21,8 @@ namespace KingsRescue.Data
         Armor = 11,
         HpRegen = 12,
         Luck = 13,
-        Duration = 14
+        Duration = 14,
+        CritChance = 15
     }
 
     public enum ModifierMode
@@ -58,7 +59,7 @@ namespace KingsRescue.Data
 
     public static class StatTypes
     {
-        public const int Count = 15;
+        public const int Count = 16;
 
         /// <summary>
         /// Base values used when a <see cref="KingsRescue.Player.PlayerStats"/> field is left at its default.
@@ -83,6 +84,7 @@ namespace KingsRescue.Data
                 case StatType.HpRegen: return 0f;
                 case StatType.Luck: return 1f;
                 case StatType.Duration: return 1f;
+                case StatType.CritChance: return 0.05f;
                 default: return 0f;
             }
         }
@@ -106,6 +108,7 @@ namespace KingsRescue.Data
                 case StatType.HpRegen: return "Recovery";
                 case StatType.Luck: return "Luck";
                 case StatType.Duration: return "Duration";
+                case StatType.CritChance: return "Crit Chance";
                 default: return stat.ToString();
             }
         }

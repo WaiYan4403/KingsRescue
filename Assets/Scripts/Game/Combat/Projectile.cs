@@ -170,7 +170,7 @@ namespace KingsRescue.Combat
 
                 alreadyHit.Add(target);
                 Vector2 direction = velocity.sqrMagnitude > 0.0001f ? velocity.normalized : Vector2.up;
-                target.TakeDamage(new DamageInfo(damage, target.Position, direction, knockback, source));
+                target.TakeDamage(PlayerHits.Strike(damage, target.Position, direction, knockback, source));
 
                 if (scenery)
                 {

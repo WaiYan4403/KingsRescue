@@ -261,7 +261,7 @@ namespace KingsRescue.Combat
             for (int i = 0; i < Scratch.Count; i++)
             {
                 Health target = Scratch[i];
-                target.TakeDamage(new DamageInfo(damage, target.Position, direction, knockback, source));
+                target.TakeDamage(PlayerHits.Strike(damage, target.Position, direction, knockback, source));
             }
 
             int count = Scratch.Count;
@@ -281,7 +281,7 @@ namespace KingsRescue.Combat
                 Vector2 direction = position - center;
                 direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
 
-                target.TakeDamage(new DamageInfo(damage, position, direction, knockback, source));
+                target.TakeDamage(PlayerHits.Strike(damage, position, direction, knockback, source));
             }
 
             int count = Scratch.Count;
@@ -314,7 +314,7 @@ namespace KingsRescue.Combat
                     continue;
                 }
 
-                target.TakeDamage(new DamageInfo(damage, position, direction, knockback, source));
+                target.TakeDamage(PlayerHits.Strike(damage, position, direction, knockback, source));
                 hits++;
             }
 

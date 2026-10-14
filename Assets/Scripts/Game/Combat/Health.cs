@@ -183,11 +183,12 @@ namespace KingsRescue.Combat
             }
 
             Current = Mathf.Max(0f, Current - amount);
-            Damaged?.Invoke(this, info);
+            DamageInfo applied = new DamageInfo(amount, info.HitPoint, info.Direction, info.Knockback, info.Source, info.Critical);
+            Damaged?.Invoke(this, applied);
 
             if (Current <= 0f)
             {
-                Died?.Invoke(this, info);
+                Died?.Invoke(this, applied);
             }
         }
 

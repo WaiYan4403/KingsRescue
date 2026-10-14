@@ -75,7 +75,7 @@ namespace KingsRescue.Combat
                 Vector2 targetPosition = target.Position;
                 Vector2 direction = targetPosition - position;
                 direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
-                target.TakeDamage(new DamageInfo(damage, targetPosition, direction, knockback, source));
+                target.TakeDamage(PlayerHits.Strike(damage, targetPosition, direction, knockback, source));
             }
 
             PruneTimers(now);

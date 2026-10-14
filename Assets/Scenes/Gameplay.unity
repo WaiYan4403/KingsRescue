@@ -512,6 +512,7 @@ GameObject:
   - component: {fileID: 39098408}
   - component: {fileID: 39098417}
   - component: {fileID: 39098419}
+  - component: {fileID: 39098420}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -1031,6 +1032,9 @@ MonoBehaviour:
   - tag: FX_SwordSwing
     prefab: {fileID: 2008132676507572747, guid: 05670906181c14763a94f5cd7898f5fe, type: 3}
     size: 24
+  - tag: FX_DamageNumber
+    prefab: {fileID: 5365876156389326022, guid: 6d11390fe11ae5846bd245a89b45d334, type: 3}
+    size: 128
   warmBudgetMilliseconds: 10
 --- !u!114 &39098419
 MonoBehaviour:
@@ -1047,6 +1051,19 @@ MonoBehaviour:
   markerPrefab: {fileID: 2996400921592246358, guid: 612fa08fd99e6bf4fb3ccc982e18a9be, type: 3}
   showHitboxes: 0
   flashLifetime: 0.2
+--- !u!114 &39098420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39098406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3506ba48667253f479914729ce87c0ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.DamageNumberDisplay
+  numberPrefab: {fileID: 565059765622618583, guid: 6d11390fe11ae5846bd245a89b45d334, type: 3}
 --- !u!1 &63217093
 GameObject:
   m_ObjectHideFlags: 0
