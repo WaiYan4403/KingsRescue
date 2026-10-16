@@ -5,19 +5,22 @@ using KingsRescue.Core;
 namespace KingsRescue.Combat
 {
     /// <summary>
-    /// A blade circling the hero. Keeps its own per-target re-hit timer so a single
-    /// pass through a crowd does not delete the whole crowd at once.
+    /// Flames circling the hero. The pivot turns around the player; the flame sprite stays upright.
+    /// Each flame keeps its own per-target re-hit timer so one pass does not clear a whole crowd.
     /// </summary>
     public class OrbitBlade : MonoBehaviour, IPoolable
     {
         [SerializeField] private float hitRadius = 0.45f;
-        [SerializeField] private bool spinSprite = true;
-        [SerializeField] private float spinDegreesPerSecond = 220f;
+        [SerializeField] private Transform pivot;
+        [SerializeField] private Transform flame;
 
         private readonly Dictionary<Health, float> nextHitTime = new Dictionary<Health, float>(16);
         private readonly List<Health> expired = new List<Health>(8);
         private readonly List<Health> overlapped = new List<Health>(16);
 
+        private SpriteRenderer flameRenderer;
+        private Animator flameAnimator;
+        private HitboxMarker hitbox;
         private float damage;
         private float knockback;
         private float rehitInterval = 0.45f;
@@ -25,14 +28,32 @@ namespace KingsRescue.Combat
         private GameObject source;
         private float nextPrune;
 
+        private void Awake()
+        {
+            if (flame == null)
+            {
+                return;
+            }
+
+            flameRenderer = flame.GetComponent<SpriteRenderer>();
+            flameAnimator = flame.GetComponent<Animator>();
+        }
+
         public void OnSpawned()
         {
             nextHitTime.Clear();
+            if (flameAnimator != null && flameAnimator.runtimeAnimatorController != null)
+            {
+                flameAnimator.Rebind();
+                flameAnimator.Update(0f);
+            }
         }
 
         public void OnDespawned()
         {
             nextHitTime.Clear();
+            HitboxDisplay.Release(hitbox);
+            hitbox = null;
         }
 
         public void Configure(float damageAmount, float areaScale, float knockbackForce, float rehit, GameObject owner)
@@ -44,18 +65,44 @@ namespace KingsRescue.Combat
             source = owner;
         }
 
-        private void Update()
+        /// <summary>
+        /// The pivot spins around the hero. The flame sits on that arm and stays upright.
+        /// </summary>
+        public void SetOrbit(Vector2 center, float angleDegrees, float radius)
         {
-            if (spinSprite)
+            transform.SetPositionAndRotation(center, Quaternion.identity);
+
+            if (pivot != null)
             {
-                transform.Rotate(0f, 0f, spinDegreesPerSecond * Time.deltaTime, Space.Self);
+                pivot.localRotation = Quaternion.Euler(0f, 0f, angleDegrees);
             }
 
+            if (flame == null)
+            {
+                return;
+            }
+
+            flame.localPosition = new Vector3(Mathf.Max(0.1f, radius), 0f, 0f);
+            flame.localRotation = Quaternion.Euler(0f, 0f, -angleDegrees);
+        }
+
+        private void Update()
+        {
             Vector2 position = transform.position;
+            if (flameRenderer != null && flameRenderer.sprite != null)
+            {
+                position = flameRenderer.bounds.center;
+            }
+            else if (flame != null)
+            {
+                position = flame.position;
+            }
+
             float now = Time.time;
 
             // Snapshot first: a lethal hit unregisters the target mid-sweep.
             Targeting.Overlap(position, hitRadius * radiusScale, overlapped);
+            HitboxDisplay.SyncCircle(ref hitbox, position, hitRadius * radiusScale);
 
             for (int i = 0; i < overlapped.Count; i++)
             {

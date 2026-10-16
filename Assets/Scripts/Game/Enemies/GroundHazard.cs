@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Player;
 
@@ -18,6 +19,7 @@ namespace KingsRescue.Enemies
         private float poisonDps;
         private float expireAt;
         private float nextTick;
+        private HitboxMarker hitbox;
 
         public void OnSpawned()
         {
@@ -25,6 +27,8 @@ namespace KingsRescue.Enemies
 
         public void OnDespawned()
         {
+            HitboxDisplay.Release(hitbox);
+            hitbox = null;
         }
 
         public void Arm(float radiusValue, float damagePerTick, float lifetime, float slow, float slowTime, float poison)
@@ -52,6 +56,8 @@ namespace KingsRescue.Enemies
                 Recycle();
                 return;
             }
+
+            HitboxDisplay.SyncCircle(ref hitbox, transform.position, radius);
 
             if (Time.time < nextTick)
             {
@@ -95,6 +101,8 @@ namespace KingsRescue.Enemies
 
         private void Recycle()
         {
+            HitboxDisplay.Release(hitbox);
+            hitbox = null;
             if (ObjectPoolManager.Instance != null)
             {
                 ObjectPoolManager.Instance.Return(gameObject);

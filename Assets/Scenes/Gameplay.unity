@@ -386,7 +386,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 18.65625
+  orthographic size: 18.6875
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1001,7 +1001,7 @@ MonoBehaviour:
     size: 12
   - tag: FX_Hitbox
     prefab: {fileID: 8813681461099522196, guid: 612fa08fd99e6bf4fb3ccc982e18a9be, type: 3}
-    size: 128
+    size: 400
   - tag: Pickup_Health
     prefab: {fileID: 5825566481984973083, guid: fdd50c17fb5ba4e36844d6d9a97408b5, type: 3}
     size: 40
@@ -1041,6 +1041,15 @@ MonoBehaviour:
   - tag: FX_Slash3
     prefab: {fileID: 5345084359085392533, guid: 39504094fac9a7540bc54800d7b5c77e, type: 3}
     size: 16
+  - tag: Music_Field
+    prefab: {fileID: 7061056992742803365, guid: 2b284c88855ab684ca347096e420ef1e, type: 3}
+    size: 4
+  - tag: MusicNotes_Particles
+    prefab: {fileID: 8115348334357128550, guid: 982da6fca4da07a4383193a23542e65d, type: 3}
+    size: 4
+  - tag: Healing_Particles
+    prefab: {fileID: 8177353074910784239, guid: 4d860785890219e4fbd9332ff2a296d5, type: 3}
+    size: 6
   warmBudgetMilliseconds: 10
 --- !u!114 &39098419
 MonoBehaviour:
@@ -3424,7 +3433,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7558809072604973040, guid: 87160caf3c003de4a9b71295184b58c2, type: 3}
       propertyPath: m_fontSize
-      value: 18
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 7558809072604973040, guid: 87160caf3c003de4a9b71295184b58c2, type: 3}
       propertyPath: m_fontAsset
@@ -7886,7 +7895,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12, y: -452.99976}
+  m_AnchoredPosition: {x: -12.000488, y: -452.99976}
   m_SizeDelta: {x: 0, y: -921}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1255154147
@@ -8702,7 +8711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1491605881118887091, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3240001
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3609096672883387995, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8748,6 +8757,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4460760701475635381, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: healFlashColor.b
+      value: 0.18956926
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460760701475635381, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: healFlashColor.g
+      value: 0.5660378
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460760701475635381, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: healFlashColor.r
+      value: 0.33074492
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460760701475635381, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: reviveHealthFraction
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4741047305990018433, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
       propertyPath: m_SortingLayer
       value: 0
@@ -8761,8 +8786,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5201774009589324401, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: m_Size.x
+      value: 6.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201774009589324401, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: m_Size.y
+      value: 5.4375
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201774009589324401, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201774009589324401, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
       propertyPath: m_SpriteSortPoint
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201774009589324401, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6968528130593668146, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
       propertyPath: m_Sort3DAs2D
@@ -13024,6 +13065,7 @@ GameObject:
   - component: {fileID: 2147313341}
   - component: {fileID: 2147313340}
   - component: {fileID: 2147313344}
+  - component: {fileID: 2147313345}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -13064,7 +13106,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 2400}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -13137,6 +13179,18 @@ MonoBehaviour:
   refreshInterval: 0.4
   fontSize: 28
   panelSize: {x: 620, y: 380}
+--- !u!114 &2147313345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2147313339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5cf58b656be984aa2726020caebd9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.UI.ResponsiveCanvas
 --- !u!1001 &6714701448186122067
 PrefabInstance:
   m_ObjectHideFlags: 0

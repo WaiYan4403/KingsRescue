@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.PassiveDefinition
   displayName: Bracer
   description: Shots fly faster.
-  icon: {fileID: 0}
+  icon: {fileID: -271475131, guid: 5066387750f00534791090481a4809f7, type: 3}
   levels:
   - upgradeText: 
     modifiers:

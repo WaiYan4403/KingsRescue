@@ -63,6 +63,7 @@ namespace KingsRescue.Enemies
         [Header("Laser")]
         [SerializeField] private float laserLength = 7.5f;
         [SerializeField] private float laserWidth = 0.55f;
+        private HitboxMarker laserHitbox;
         [SerializeField] private float laserRotateSpeed = 52f;
         [SerializeField] private float laserSweepArc = 140f;
         [SerializeField] private float laserDamage = 9f;
@@ -337,6 +338,8 @@ namespace KingsRescue.Enemies
             }
 
             HideMarker();
+            HitboxDisplay.Release(laserHitbox);
+            laserHitbox = null;
             SetLaserVisible(false);
             SetAttackPose(false);
             SetAttack2Pose(false);
@@ -802,6 +805,7 @@ namespace KingsRescue.Enemies
 
         private void Slam()
         {
+            HitboxDisplay.Flash(slamPoint, slamRadius, 0.4f);
             PlayerController player = PlayerController.Instance;
             if (player == null || player.Health == null || !player.Health.IsAlive)
             {
@@ -875,7 +879,9 @@ namespace KingsRescue.Enemies
             float duration = laserDuration > 0.2f ? laserDuration : 3.1f;
             float t = Mathf.Clamp01((Time.time - laserSweepStarted) / duration);
             ApplyLaserAngle(Mathf.Lerp(laserFromAngle, laserToAngle, t));
-            //PulseLaser(0.75f + 0.2f * Mathf.Abs(Mathf.Sin(Time.time * 14f)));
+            Vector2 origin = transform.position;
+            Vector2 beamDir = laserPivot != null ? (Vector2)laserPivot.up : Vector2.down;
+            HitboxDisplay.SyncCapsule(ref laserHitbox, origin, beamDir, ResolvedLaserLength(), laserWidth);
             TryLaserHit();
 
             if (t >= 1f)

@@ -14,7 +14,7 @@ namespace KingsRescue.Data
         /// <summary>Blades circling the hero, damaging on contact.</summary>
         Orbit = 2,
 
-        /// <summary>Pulsing damage field centred on the hero.</summary>
+        /// <summary>Music field centred on the hero. It stays up for its duration, then waits out the cooldown.</summary>
         Aura = 3,
 
         /// <summary>Projectiles aimed at the nearest enemy, like Magic Wand or Knife.</summary>
@@ -108,8 +108,11 @@ namespace KingsRescue.Data
         [Tooltip("Orbit: the blade prefab. Needs an OrbitBlade component.")]
         public GameObject orbitPrefab;
 
-        [Tooltip("MeleeSwing and Aura: optional cosmetic prefab spawned at the hit. Needs an AutoDespawn component.")]
+        [Tooltip("MeleeSwing: optional cosmetic prefab spawned at the hit. Aura: the music field prefab, parented to the hero.")]
         public GameObject effectPrefab;
+
+        [Tooltip("Aura: notes played with the music field and returned with it.")]
+        public GameObject musicNotesPrefab;
 
         [Tooltip("Whether the global Extra Projectiles stat adds to this weapon's count.")]
         public bool usesGlobalProjectileCount = true;
@@ -139,6 +142,12 @@ namespace KingsRescue.Data
 
         [Tooltip("Animator trigger names, one per unlockable attack stage (Attack1, Attack2, ...).")]
         public string[] attackTriggers = { "Attack1", "Attack2", "Attack3" };
+
+        [Tooltip("Weapon level that plays the longer effect slashes. 0 keeps the normal clips.")]
+        public int advancedReachLevel;
+
+        [Tooltip("Effect animator triggers used once advanced reach is unlocked. Same order as Attack Triggers.")]
+        public string[] advancedAttackTriggers = System.Array.Empty<string>();
 
         [Tooltip("Weapon level required to unlock each trigger. Missing entries default to stage index + 1.")]
         public int[] attackStageUnlockLevels = { 1, 2, 3 };
@@ -205,6 +214,29 @@ namespace KingsRescue.Data
 
             int index = Mathf.Clamp(stage - 1, 0, attackTriggers.Length - 1);
             return attackTriggers[index];
+        }
+
+        public bool UsesAdvancedReach(int weaponLevel)
+        {
+            return advancedReachLevel > 0
+                && weaponLevel >= advancedReachLevel
+                && advancedAttackTriggers != null
+                && advancedAttackTriggers.Length > 0;
+        }
+
+        /// <summary>
+        /// Effect-animator trigger for this strike. The body keeps the normal attack trigger.
+        /// </summary>
+        public string GetEffectAttackTrigger(int weaponLevel, int stage)
+        {
+            if (!UsesAdvancedReach(weaponLevel))
+            {
+                return GetAttackTrigger(stage);
+            }
+
+            int index = Mathf.Clamp(stage - 1, 0, advancedAttackTriggers.Length - 1);
+            string advanced = advancedAttackTriggers[index];
+            return string.IsNullOrEmpty(advanced) ? GetAttackTrigger(stage) : advanced;
         }
 
         public int GetAttackStageUnlockLevel(int stageIndex)

@@ -88,6 +88,7 @@ namespace KingsRescue.Combat
         private void OnDisable()
         {
             ClearBlades();
+            StopMusicField();
 
             if (comboRoutine != null)
             {
@@ -112,6 +113,12 @@ namespace KingsRescue.Combat
             if (definition.fireMode == WeaponFireMode.Orbit)
             {
                 UpdateOrbit();
+                return;
+            }
+
+            if (definition.fireMode == WeaponFireMode.Aura)
+            {
+                UpdateMusicField();
                 return;
             }
 
@@ -199,9 +206,6 @@ namespace KingsRescue.Combat
                     break;
                 case WeaponFireMode.GroundZone:
                     FireGroundZones();
-                    break;
-                case WeaponFireMode.Aura:
-                    FireAura();
                     break;
             }
         }
@@ -387,7 +391,9 @@ namespace KingsRescue.Combat
             }
 
             int stage = Mathf.Clamp(swingIndex + 1, 1, unlocked);
-            owner.PlayAttackStage(definition.GetAttackTrigger(stage), definition.attackTriggers);
+            string bodyTrigger = definition.GetAttackTrigger(stage);
+            string effectTrigger = definition.GetEffectAttackTrigger(level, stage);
+            owner.PlayAttackStage(bodyTrigger, definition.attackTriggers, effectTrigger, definition.advancedAttackTriggers);
         }
 
         private void TrySpawnPowerSlash(int stage)
@@ -721,14 +727,128 @@ namespace KingsRescue.Combat
             }
         }
 
-        private void FireAura()
-        {
-            WeaponLevel data = Data;
-            Vector2 center = transform.position;
-            float radius = ResolveArea();
+        private MusicField musicField;
+        private GameObject musicNotes;
+        private HitboxMarker musicHitbox;
+        private float musicUntil;
+        private float nextMusicHit;
 
-            Targeting.DamageCircle(center, radius, ResolveDamage(), data.knockback, gameObject);
-            SpawnEffect(center, Vector2.up, radius, ResolveDuration());
+        private void UpdateMusicField()
+        {
+            if (musicField != null)
+            {
+                float radius = ResolveArea();
+                musicField.SetRadius(radius);
+                HitboxDisplay.SyncCircle(ref musicHitbox, transform.position, radius);
+                if (Time.time >= nextMusicHit)
+                {
+                    WeaponLevel data = Data;
+                    nextMusicHit = Time.time + Mathf.Max(0.05f, data.rehitInterval);
+                    Targeting.DamageCircle(transform.position, radius, ResolveDamage(), data.knockback, gameObject);
+                }
+
+                if (Time.time >= musicUntil)
+                {
+                    StopMusicField();
+                    nextFireTime = Time.time + ResolveCooldown();
+                }
+
+                return;
+            }
+
+            if (Time.time < nextFireTime)
+            {
+                return;
+            }
+
+            if (!TryStartMusicField())
+            {
+                nextFireTime = Time.time + 0.5f;
+                return;
+            }
+
+            musicUntil = Time.time + Mathf.Max(0.2f, ResolveDuration());
+            nextMusicHit = Time.time;
+        }
+
+        private bool TryStartMusicField()
+        {
+            if (definition.effectPrefab == null)
+            {
+                Debug.LogError($"Weapon '{definition.name}' is a music field but has no field prefab.", definition);
+                return false;
+            }
+
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
+            if (pool == null)
+            {
+                return false;
+            }
+
+            Transform parent = owner != null ? owner.transform : transform;
+            GameObject fieldObject = pool.Spawn(definition.effectPrefab, parent.position, Quaternion.identity, parent);
+            if (fieldObject == null)
+            {
+                return false;
+            }
+
+            fieldObject.transform.localPosition = Vector3.zero;
+            fieldObject.transform.localRotation = Quaternion.identity;
+            musicField = fieldObject.GetComponent<MusicField>();
+            if (musicField == null)
+            {
+                Debug.LogError($"Music field prefab '{definition.effectPrefab.name}' has no MusicField component.", definition);
+                pool.Return(fieldObject);
+                return false;
+            }
+
+            musicField.SetRadius(ResolveArea());
+            if (definition.musicNotesPrefab != null)
+            {
+                musicNotes = pool.Spawn(definition.musicNotesPrefab, parent.position, Quaternion.identity, parent);
+                if (musicNotes != null)
+                {
+                    musicNotes.transform.localPosition = Vector3.zero;
+                    musicNotes.transform.localRotation = Quaternion.identity;
+                }
+            }
+
+            return true;
+        }
+
+        private void StopMusicField()
+        {
+            ObjectPoolManager pool = ObjectPoolManager.Instance;
+            if (musicField != null)
+            {
+                if (pool != null)
+                {
+                    pool.Return(musicField.gameObject);
+                }
+                else
+                {
+                    Destroy(musicField.gameObject);
+                }
+
+                musicField = null;
+            }
+
+            if (musicNotes != null)
+            {
+                if (pool != null)
+                {
+                    pool.Return(musicNotes);
+                }
+                else
+                {
+                    Destroy(musicNotes);
+                }
+
+                musicNotes = null;
+            }
+
+            HitboxDisplay.Release(musicHitbox);
+            musicHitbox = null;
         }
 
         // --- Orbit -----------------------------------------------------------
@@ -760,6 +880,7 @@ namespace KingsRescue.Combat
 
             RebuildBlades(ResolveCount());
             orbitUntil = Time.time + Mathf.Max(0.2f, ResolveDuration());
+            TickOrbitMotion();
         }
 
         private void TickOrbitMotion()
@@ -783,8 +904,8 @@ namespace KingsRescue.Combat
                     continue;
                 }
 
-                float angle = (orbitAngle + i * (360f / blades.Count)) * Mathf.Deg2Rad;
-                blade.transform.position = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+                float angle = orbitAngle + i * (360f / blades.Count);
+                blade.SetOrbit(center, angle, radius);
                 blade.Configure(damage, 1f, data.knockback, data.rehitInterval, gameObject);
             }
         }

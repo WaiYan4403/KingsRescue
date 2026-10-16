@@ -21,6 +21,11 @@ namespace KingsRescue.Pickups
             }
 
             health.Heal(flatHeal + health.Max * percentOfMaxHeal);
+            PlayerHealFeedback feedback = hero.GetComponent<PlayerHealFeedback>();
+            if (feedback != null)
+            {
+                feedback.Play();
+            }
         }
     }
 }

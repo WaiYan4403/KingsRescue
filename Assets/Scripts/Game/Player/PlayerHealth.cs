@@ -24,6 +24,8 @@ namespace KingsRescue.Player
         [SerializeField] private string healthParameter = "Health";
         [SerializeField] private string dieStateName = "Lancer_Die";
         [SerializeField] private Color hurtFlashColor = new Color(1f, 0.15f, 0.12f, 1f);
+        [SerializeField] private bool useHealFlash = false;
+        [SerializeField] private Color healFlashColor = new Color(0.45f, 1f, 0.55f, 1f);
         [SerializeField, Range(0.1f, 1f)] private float reviveHealthFraction = 0.5f;
         [SerializeField] private float reviveInvulnerability = 2.5f;
 
@@ -31,6 +33,7 @@ namespace KingsRescue.Player
         private WeaponLoadout loadout;
         private SpriteRenderer[] hurtRenderers;
         private bool hurtFlashOn;
+        private bool healFlashOn;
         private float invulnerableUntil;
         private float regenCarry;
         private int extraLives;
@@ -152,7 +155,9 @@ namespace KingsRescue.Player
                 GameMusicController.Instance.SetGameOverMusic();
             }
 
-            RestoreVisual();
+            healFlashOn = false;
+            hurtFlashOn = false;
+            PaintBody(null);
             PlayDeathAnimation();
             Died?.Invoke();
         }
@@ -173,7 +178,9 @@ namespace KingsRescue.Player
             reviveUsed = true;
             Current = Mathf.Max(1f, Max * Mathf.Clamp01(reviveHealthFraction));
             invulnerableUntil = Time.time + Mathf.Max(invulnerabilityDuration, reviveInvulnerability);
-            RestoreVisual();
+            healFlashOn = false;
+            hurtFlashOn = false;
+            PaintBody(null);
             HealthChanged?.Invoke(Current, Max);
             Damaged?.Invoke();
             SyncAnimatorHealth();
@@ -205,6 +212,16 @@ namespace KingsRescue.Player
 
             Current = Mathf.Min(Max, Current + amount);
             HealthChanged?.Invoke(Current, Max);
+        }
+
+        /// <summary>Green overlay held by the heal burst until its particles finish.</summary>
+        public void SetHealFlash(bool on)
+        {
+            healFlashOn = on;
+            if (!IsInvulnerable && useHealFlash)
+            {
+                PaintBody(on ? healFlashColor : (Color?)null);
+            }
         }
 
         private void OnStatsChanged()
@@ -244,11 +261,13 @@ namespace KingsRescue.Player
             {
                 // Same cadence as the old alpha blink: red on the "dim" half of each cycle.
                 bool hurt = Mathf.Repeat(Time.time * 12f, 2f) >= 1f;
-                SetHurtFlash(hurt);
+                hurtFlashOn = hurt;
+                PaintBody(hurt ? hurtFlashColor : (Color?)null);
             }
-            else if (hurtFlashOn)
+            else if (hurtFlashOn || (useHealFlash && healFlashOn))
             {
-                RestoreVisual();
+                hurtFlashOn = false;
+                PaintBody(useHealFlash && healFlashOn ? healFlashColor : (Color?)null);
             }
 
             SyncAnimatorHealth();
@@ -317,20 +336,13 @@ namespace KingsRescue.Player
             }
         }
 
-        private void RestoreVisual()
+        private void PaintBody(Color? color)
         {
-            SetHurtFlash(false);
-        }
-
-        private void SetHurtFlash(bool on)
-        {
-            hurtFlashOn = on;
             if (hurtRenderers == null)
             {
                 return;
             }
 
-            Color color = hurtFlashColor;
             for (int i = 0; i < hurtRenderers.Length; i++)
             {
                 SpriteRenderer renderer = hurtRenderers[i];
@@ -339,9 +351,9 @@ namespace KingsRescue.Player
                     continue;
                 }
 
-                if (on)
+                if (color.HasValue)
                 {
-                    SpriteFlash.Apply(renderer, color, 1f);
+                    SpriteFlash.Apply(renderer, color.Value, 1f);
                 }
                 else
                 {

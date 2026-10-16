@@ -12,9 +12,30 @@ namespace KingsRescue.Combat
     {
         [SerializeField] private HitboxMarker markerPrefab;
 
+        [Tooltip("Spawns hitbox markers for player weapons and enemy attacks. Off spawns nothing and clears any that are already showing.")]
         [SerializeField] private bool showHitboxes = true;
 
         [SerializeField] private float flashLifetime = 0.2f;
+
+        private readonly System.Collections.Generic.List<HitboxMarker> live = new System.Collections.Generic.List<HitboxMarker>(64);
+
+        private void LateUpdate()
+        {
+            if (!showHitboxes)
+            {
+                ReleaseAll();
+                return;
+            }
+
+            for (int i = live.Count - 1; i >= 0; i--)
+            {
+                HitboxMarker marker = live[i];
+                if (marker == null || !marker.gameObject.activeInHierarchy)
+                {
+                    live.RemoveAt(i);
+                }
+            }
+        }
 
         /// <summary>One-shot circle at a world point, used by melee swings.</summary>
         public static void Flash(Vector2 center, float radius, float lifetime = 0f)
@@ -83,10 +104,75 @@ namespace KingsRescue.Combat
             return marker;
         }
 
-        /// <summary>Returns a marker handed out by <see cref="Follow"/> to the pool.</summary>
+        /// <summary>
+        /// Keeps one circle on a moving attack. Pass the same marker back each frame.
+        /// A hidden display releases it and clears the reference.
+        /// </summary>
+        public static void SyncCircle(ref HitboxMarker marker, Vector2 center, float radius)
+        {
+            HitboxDisplay display = Instance;
+            if (!CanShow(display))
+            {
+                Release(marker);
+                marker = null;
+                return;
+            }
+
+            if (!IsShowing(marker))
+            {
+                marker = Pin(display, center, radius);
+                return;
+            }
+
+            marker.transform.SetPositionAndRotation(center, Quaternion.identity);
+            marker.SetRadius(radius);
+        }
+
+        /// <summary>Keeps one capsule on a beam or thrust. Length runs along the direction.</summary>
+        public static void SyncCapsule(ref HitboxMarker marker, Vector2 origin, Vector2 direction, float length, float thickness)
+        {
+            HitboxDisplay display = Instance;
+            if (!CanShow(display))
+            {
+                Release(marker);
+                marker = null;
+                return;
+            }
+
+            Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
+            float reach = Mathf.Max(0.2f, length);
+            float width = Mathf.Max(0.05f, thickness);
+            Vector2 center = origin + dir * (reach * 0.5f);
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+            if (!IsShowing(marker))
+            {
+                marker = Pin(display, center, width * 0.5f);
+            }
+
+            if (marker == null)
+            {
+                return;
+            }
+
+            marker.transform.position = center;
+            marker.SetCapsule(reach, width, angle);
+        }
+
+        /// <summary>Returns a marker handed out by <see cref="Follow"/> or a sync call to the pool.</summary>
         public static void Release(HitboxMarker marker)
         {
             if (marker == null)
+            {
+                return;
+            }
+
+            HitboxDisplay display = Instance;
+            if (display != null)
+            {
+                display.live.Remove(marker);
+            }
+
+            if (!marker.gameObject.activeInHierarchy)
             {
                 return;
             }
@@ -98,6 +184,34 @@ namespace KingsRescue.Combat
             }
         }
 
+        private void ReleaseAll()
+        {
+            for (int i = live.Count - 1; i >= 0; i--)
+            {
+                Release(live[i]);
+            }
+
+            live.Clear();
+        }
+
+        private static HitboxMarker Pin(HitboxDisplay display, Vector2 center, float radius)
+        {
+            HitboxMarker marker = SpawnMarker(display, center, null);
+            if (marker == null)
+            {
+                return null;
+            }
+
+            marker.SetPersistent(true);
+            marker.SetRadius(radius);
+            return marker;
+        }
+
+        private static bool IsShowing(HitboxMarker marker)
+        {
+            return marker != null && marker.gameObject.activeInHierarchy;
+        }
+
         private static bool CanShow(HitboxDisplay display)
         {
             return display != null && display.showHitboxes && display.markerPrefab != null;
@@ -106,9 +220,15 @@ namespace KingsRescue.Combat
         private static HitboxMarker SpawnMarker(HitboxDisplay display, Vector2 center, Transform parent)
         {
             ObjectPoolManager pool = ObjectPoolManager.Instance;
-            return pool != null
-                ? pool.Spawn(display.markerPrefab, center, Quaternion.identity, parent)
+            HitboxMarker marker = pool != null
+                ? pool.Spawn(display.markerPrefab.gameObject, center, Quaternion.identity, parent)?.GetComponent<HitboxMarker>()
                 : null;
+            if (marker != null)
+            {
+                display.live.Add(marker);
+            }
+
+            return marker;
         }
     }
 }

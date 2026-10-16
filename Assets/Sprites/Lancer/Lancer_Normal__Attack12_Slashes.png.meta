@@ -1,34 +1,31 @@
 fileFormatVersion: 2
-guid: f94faa68befd41549a0bb94b2957f64f
+guid: bed75006d3bcfcf4babd6497fb9bb669
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2878977069497087100
-    second: BlueSlimeKing_Attack_0
+      213: -2927568876389877925
+    second: Lancer_Normal__Attack12_Slashes_0
   - first:
-      213: -3410379336521332059
-    second: BlueSlimeKing_Attack_1
+      213: -2698027935224128782
+    second: Lancer_Normal__Attack12_Slashes_1
   - first:
-      213: -4519409291950386022
-    second: BlueSlimeKing_Attack_2
+      213: 1049722963440661149
+    second: Lancer_Normal__Attack12_Slashes_2
   - first:
-      213: -613011462721535547
-    second: BlueSlimeKing_Attack_3
+      213: 6790166172535576484
+    second: Lancer_Normal__Attack12_Slashes_3
   - first:
-      213: 432167913468212062
-    second: BlueSlimeKing_Attack_4
+      213: 3762331867092561385
+    second: Lancer_Normal__Attack12_Slashes_4
   - first:
-      213: -3175695518675895716
-    second: BlueSlimeKing_Attack_5
+      213: -1626838361213709873
+    second: Lancer_Normal__Attack12_Slashes_5
   - first:
-      213: -4105250778567582613
-    second: BlueSlimeKing_Attack_6
+      213: 395257891396424196
+    second: Lancer_Normal__Attack12_Slashes_6
   - first:
-      213: -5323970303595017673
-    second: BlueSlimeKing_Attack_7
-  - first:
-      213: -3008623909967273495
-    second: BlueSlimeKing_Attack_8
+      213: -5232471825459301106
+    second: Lancer_Normal__Attack12_Slashes_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -150,199 +147,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BlueSlimeKing_Attack_0
+      name: Lancer_Normal__Attack12_Slashes_0
       rect:
         serializedVersion: 2
         x: 1
         y: 1
-        width: 96
-        height: 80
+        width: 98
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c747ed7246e24f720800000000000000
-      internalID: 2878977069497087100
+      spriteID: ea744fd42adeabd479dea14a40ba6e5c
+      internalID: -2927568876389877925
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Attack_1
+      name: Lancer_Normal__Attack12_Slashes_1
       rect:
         serializedVersion: 2
-        x: 98
+        x: 100
         y: 1
-        width: 96
-        height: 80
+        width: 98
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5aa4059ff06eba0d0800000000000000
-      internalID: -3410379336521332059
+      spriteID: 1d2d94f428e18164b81f5aa13514fef2
+      internalID: -2698027935224128782
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Attack_2
+      name: Lancer_Normal__Attack12_Slashes_2
       rect:
         serializedVersion: 2
-        x: 195
+        x: 199
         y: 1
-        width: 96
-        height: 80
+        width: 98
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a9492be9135d741c0800000000000000
-      internalID: -4519409291950386022
+      spriteID: d4b3be445d31c754a8782f8d7955b667
+      internalID: 1049722963440661149
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Attack_3
+      name: Lancer_Normal__Attack12_Slashes_3
       rect:
         serializedVersion: 2
-        x: 292
+        x: 298
         y: 1
-        width: 96
-        height: 80
+        width: 98
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5c18d3192552e77f0800000000000000
-      internalID: -613011462721535547
+      spriteID: 9a7e5db5b99db794b8e9ab0ee88e9eb7
+      internalID: 6790166172535576484
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Attack_4
+      name: Lancer_Normal__Attack12_Slashes_4
       rect:
         serializedVersion: 2
-        x: 389
+        x: 397
         y: 1
-        width: 96
-        height: 80
+        width: 98
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e5338957d6e5ff500800000000000000
-      internalID: 432167913468212062
+      spriteID: 87b8d28b382b7cc4cbbd2b65e349ca07
+      internalID: 3762331867092561385
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Attack_5
+      name: Lancer_Normal__Attack12_Slashes_5
       rect:
         serializedVersion: 2
-        x: 486
+        x: 496
         y: 1
-        width: 96
-        height: 80
+        width: 98
+        height: 45
       alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c5af58650c9ade3d0800000000000000
-      internalID: -3175695518675895716
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSlimeKing_Attack_6
-      rect:
-        serializedVersion: 2
-        x: 583
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b6c559dda283707c0800000000000000
-      internalID: -4105250778567582613
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSlimeKing_Attack_7
-      rect:
-        serializedVersion: 2
-        x: 680
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 73a8d7b67357d16b0800000000000000
-      internalID: -5323970303595017673
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: BlueSlimeKing_Attack_8
-      rect:
-        serializedVersion: 2
-        x: 777
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9e167a78e783f36d0800000000000000
-      internalID: -3008623909967273495
+      spriteID: 55690e68e9a62b9449434e27a71f425f
+      internalID: -1626838361213709873
       vertices: []
       indices: 
       edges: []
@@ -351,7 +282,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 008aaea65f9eb7d40a16ded3265ae8e7
+    spriteID: ef41216672a3efa4c8a77af5d5560c88
     internalID: 0
     vertices: []
     indices: 
@@ -361,17 +292,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":96.0,"y":80.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":98.0,"y":45.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.25},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      BlueSlimeKing_Attack_0: 2878977069497087100
-      BlueSlimeKing_Attack_1: -3410379336521332059
-      BlueSlimeKing_Attack_2: -4519409291950386022
-      BlueSlimeKing_Attack_3: -613011462721535547
-      BlueSlimeKing_Attack_4: 432167913468212062
-      BlueSlimeKing_Attack_5: -3175695518675895716
-      BlueSlimeKing_Attack_6: -4105250778567582613
-      BlueSlimeKing_Attack_7: -5323970303595017673
-      BlueSlimeKing_Attack_8: -3008623909967273495
+      Lancer_Normal__Attack12_Slashes_0: -2927568876389877925
+      Lancer_Normal__Attack12_Slashes_1: -2698027935224128782
+      Lancer_Normal__Attack12_Slashes_2: 1049722963440661149
+      Lancer_Normal__Attack12_Slashes_3: 6790166172535576484
+      Lancer_Normal__Attack12_Slashes_4: 3762331867092561385
+      Lancer_Normal__Attack12_Slashes_5: -1626838361213709873
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

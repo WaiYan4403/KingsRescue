@@ -21,6 +21,7 @@ namespace KingsRescue.Enemies
         [SerializeField] private float playerRadius = 0.35f;
 
         private float nextHitTime;
+        private HitboxMarker hitbox;
 
         public event Action HitPlayer;
 
@@ -31,6 +32,8 @@ namespace KingsRescue.Enemies
 
         public void OnDespawned()
         {
+            HitboxDisplay.Release(hitbox);
+            hitbox = null;
         }
 
         public void Configure(EnemyDefinition definition, float runMinutes)
@@ -43,6 +46,8 @@ namespace KingsRescue.Enemies
 
         private void Update()
         {
+            HitboxDisplay.SyncCircle(ref hitbox, transform.position, radius);
+
             if (Time.time < nextHitTime)
             {
                 return;

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
   displayName: Axe
   description: A heavy axe thrown at the nearest foe.
-  icon: {fileID: 0}
+  icon: {fileID: 1446292121, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 4
   projectilePrefab: {fileID: 9086646655045113726, guid: 4ba5cf8d98d4f3d4dbc602f01bf38a21, type: 3}
   orbitPrefab: {fileID: 0}
@@ -31,7 +31,10 @@ MonoBehaviour:
   - Attack1
   - Attack2
   - Attack3
+  advancedReachLevel: 0
+  advancedAttackTriggers: []
   attackStageUnlockLevels: 010000000200000003000000
+  powerSlashPrefabs: []
   levels:
   - upgradeText: 
     damage: 22

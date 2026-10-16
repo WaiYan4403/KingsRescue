@@ -1,31 +1,28 @@
 fileFormatVersion: 2
-guid: 80bf94a999801b54fab0429c51d92759
+guid: c7399195a793bfc43882317ae378152a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2660181639457930205
-    second: BlueSlimeKing_Walk_0
+      213: 7665512931464355126
+    second: Music_Notes_0
   - first:
-      213: 6221051637501343157
-    second: BlueSlimeKing_Walk_1
+      213: -8572946946872291621
+    second: Music_Notes_1
   - first:
-      213: -7760685576480378679
-    second: BlueSlimeKing_Walk_2
+      213: -4916195916782699109
+    second: Music_Notes_2
   - first:
-      213: 4704987113294566719
-    second: BlueSlimeKing_Walk_3
+      213: 2549903122984463434
+    second: Music_Notes_3
   - first:
-      213: -8506535099239892484
-    second: BlueSlimeKing_Walk_4
+      213: -1994999727314362955
+    second: Music_Notes_4
   - first:
-      213: -6520789763396215839
-    second: BlueSlimeKing_Walk_5
+      213: 224549484865495145
+    second: Music_Notes_5
   - first:
-      213: 4115800876770890542
-    second: BlueSlimeKing_Walk_6
-  - first:
-      213: -7289834533333008050
-    second: BlueSlimeKing_Walk_7
+      213: -3459246941645214713
+    second: Music_Notes_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -67,7 +64,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -147,177 +144,265 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_0
+      name: Music_Notes_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ddbf7e95b1ddae420800000000000000
-      internalID: 2660181639457930205
+      spriteID: 63d9815c56f516a60800000000000000
+      internalID: 7665512931464355126
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_1
+      name: Music_Notes_1
       rect:
         serializedVersion: 2
-        x: 98
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 16
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5b531a6f08d955650800000000000000
-      internalID: 6221051637501343157
+      spriteID: bde48695c26c60980800000000000000
+      internalID: -8572946946872291621
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_2
+      name: Music_Notes_2
       rect:
         serializedVersion: 2
-        x: 195
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 32
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9c0b36806918c4490800000000000000
-      internalID: -7760685576480378679
+      spriteID: b9df0fd5cd926cbb0800000000000000
+      internalID: -4916195916782699109
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_3
+      name: Music_Notes_3
       rect:
         serializedVersion: 2
-        x: 292
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 48
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f3596b8f9d87b4140800000000000000
-      internalID: 4704987113294566719
+      spriteID: a4ce5216163136320800000000000000
+      internalID: 2549903122984463434
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_4
+      name: Music_Notes_4
       rect:
         serializedVersion: 2
-        x: 389
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 64
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cf9f9649567b2f980800000000000000
-      internalID: -8506535099239892484
+      spriteID: 5bd1d6661565054e0800000000000000
+      internalID: -1994999727314362955
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_5
+      name: Music_Notes_5
       rect:
         serializedVersion: 2
-        x: 486
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 80
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1ebd3c142408185a0800000000000000
-      internalID: -6520789763396215839
+      spriteID: 960a7e71192cd1300800000000000000
+      internalID: 224549484865495145
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_6
+      name: Music_Notes_6
       rect:
         serializedVersion: 2
-        x: 583
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e239b2a47134e1930800000000000000
-      internalID: 4115800876770890542
+      spriteID: 70c61e40c394effc0800000000000000
+      internalID: -3459246941645214713
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlueSlimeKing_Walk_7
+      name: Music_Notes_7
       rect:
         serializedVersion: 2
-        x: 680
-        y: 1
-        width: 96
-        height: 80
-      alignment: 9
-      pivot: {x: 0.5, y: 0.15}
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e418f497d1e45da90800000000000000
-      internalID: -7289834533333008050
+      spriteID: 1071ce0650a9f3941ab203cd5f015459
+      internalID: 1414750400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Music_Notes_8
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6547b1fed02ef6242b900b8a6c11b8f3
+      internalID: -1501150201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Music_Notes_9
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93969940018938d4b9f6f9d27df3063d
+      internalID: 1935302709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Music_Notes_10
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b90b570847c9854799f0cb5c2c1154e
+      internalID: -977435963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Music_Notes_11
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b70fb16b3580d44fb70e894b1f475ce
+      internalID: -435194152
       vertices: []
       indices: 
       edges: []
@@ -326,7 +411,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 41e7d080d058587489cb4b7de02accbe
+    spriteID: afd228961e081ed4f8337ab2ed7c6193
     internalID: 0
     vertices: []
     indices: 
@@ -336,16 +421,20 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":96.0,"y":80.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      BlueSlimeKing_Walk_0: 2660181639457930205
-      BlueSlimeKing_Walk_1: 6221051637501343157
-      BlueSlimeKing_Walk_2: -7760685576480378679
-      BlueSlimeKing_Walk_3: 4704987113294566719
-      BlueSlimeKing_Walk_4: -8506535099239892484
-      BlueSlimeKing_Walk_5: -6520789763396215839
-      BlueSlimeKing_Walk_6: 4115800876770890542
-      BlueSlimeKing_Walk_7: -7289834533333008050
+      Music_Notes_0: 7665512931464355126
+      Music_Notes_1: -8572946946872291621
+      Music_Notes_10: -977435963
+      Music_Notes_11: -435194152
+      Music_Notes_2: -4916195916782699109
+      Music_Notes_3: 2549903122984463434
+      Music_Notes_4: -1994999727314362955
+      Music_Notes_5: 224549484865495145
+      Music_Notes_6: -3459246941645214713
+      Music_Notes_7: 1414750400
+      Music_Notes_8: -1501150201
+      Music_Notes_9: 1935302709
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

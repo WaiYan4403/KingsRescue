@@ -463,6 +463,7 @@ namespace KingsRescue.Enemies
 
         private void HurtPlayerInRadius(Vector2 point, float radius, float damage)
         {
+            HitboxDisplay.Flash(point, radius, 0.35f);
             PlayerController player = PlayerController.Instance;
             if (player == null || player.Health == null || !player.Health.IsAlive)
             {
@@ -481,6 +482,7 @@ namespace KingsRescue.Enemies
 
         private void HurtCone(Vector2 origin, Vector2 forward, float length, float halfWidth, float damage)
         {
+            HitboxDisplay.FlashCapsule(origin, forward, length, halfWidth * 2f, 0.35f);
             PlayerController player = PlayerController.Instance;
             if (player == null || player.Health == null)
             {

@@ -389,9 +389,9 @@ namespace KingsRescue.Player
 
         /// <summary>
         /// Plays one unlockable attack stage on the body and effect animators.
-        /// Each character's unique weapon supplies the trigger names (Attack1, Attack2, ...).
+        /// The effect can use a longer clip once the weapon reaches advanced reach.
         /// </summary>
-        public void PlayAttackStage(string triggerName, string[] allStageTriggers = null)
+        public void PlayAttackStage(string triggerName, string[] allStageTriggers = null, string effectTriggerName = null, string[] effectStageTriggers = null)
         {
             if (string.IsNullOrEmpty(triggerName))
             {
@@ -399,27 +399,24 @@ namespace KingsRescue.Player
             }
 
             SetAttackTrigger(bodyAnimator, triggerName, allStageTriggers);
-            SetAttackTrigger(effectAnimator, triggerName, allStageTriggers);
+            string effectName = string.IsNullOrEmpty(effectTriggerName) ? triggerName : effectTriggerName;
+            bool longerSlash = effectName != triggerName;
+            SetAttackTrigger(
+                effectAnimator,
+                effectName,
+                longerSlash ? effectStageTriggers : allStageTriggers,
+                longerSlash ? allStageTriggers : null);
         }
 
-        private static void SetAttackTrigger(Animator animator, string triggerName, string[] allStageTriggers)
+        private static void SetAttackTrigger(Animator animator, string triggerName, string[] allStageTriggers, string[] extraResets = null)
         {
-            if (animator == null || animator.runtimeAnimatorController == null)
+            if (animator == null || animator.runtimeAnimatorController == null || string.IsNullOrEmpty(triggerName))
             {
                 return;
             }
 
-            if (allStageTriggers != null)
-            {
-                for (int i = 0; i < allStageTriggers.Length; i++)
-                {
-                    string sibling = allStageTriggers[i];
-                    if (!string.IsNullOrEmpty(sibling) && HasAnimatorParameter(animator, Animator.StringToHash(sibling)))
-                    {
-                        animator.ResetTrigger(sibling);
-                    }
-                }
-            }
+            ResetAttackTriggers(animator, allStageTriggers);
+            ResetAttackTriggers(animator, extraResets);
 
             if (!HasAnimatorParameter(animator, Animator.StringToHash(triggerName)))
             {
@@ -427,6 +424,23 @@ namespace KingsRescue.Player
             }
 
             animator.SetTrigger(triggerName);
+        }
+
+        private static void ResetAttackTriggers(Animator animator, string[] triggerNames)
+        {
+            if (animator == null || triggerNames == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < triggerNames.Length; i++)
+            {
+                string sibling = triggerNames[i];
+                if (!string.IsNullOrEmpty(sibling) && HasAnimatorParameter(animator, Animator.StringToHash(sibling)))
+                {
+                    animator.ResetTrigger(sibling);
+                }
+            }
         }
 
         private static bool HasAnimatorParameter(Animator animator, int hash)

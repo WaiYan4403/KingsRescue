@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.PassiveDefinition
   displayName: Silver Clover
   description: Luck for chests, power-ups, and a fourth level-up card.
-  icon: {fileID: 0}
+  icon: {fileID: 325392153, guid: 5066387750f00534791090481a4809f7, type: 3}
   levels:
   - upgradeText: 
     modifiers:

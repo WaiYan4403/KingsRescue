@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
   m_Name: Weapon_Orbit
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
-  displayName: Orbit Blade
-  description: A blade that circles the hero.
-  icon: {fileID: 0}
+  displayName: Blue Flames
+  description: Flames that circle the hero.
+  icon: {fileID: 8033092973025764044, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 2
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 286101483933260600, guid: ee312bfa8dfb5463d80be7bd63f67ca9, type: 3}
@@ -31,14 +31,17 @@ MonoBehaviour:
   - Attack1
   - Attack2
   - Attack3
+  advancedReachLevel: 0
+  advancedAttackTriggers: []
   attackStageUnlockLevels: 010000000200000003000000
+  powerSlashPrefabs: []
   levels:
   - upgradeText: 
     damage: 7
     cooldown: 3.2
     count: 1
     pierce: 0
-    area: 1.45
+    area: 1.8
     projectileSpeed: 12
     lifetime: 2.4
     maxDistance: 6.5
@@ -47,12 +50,12 @@ MonoBehaviour:
     spreadDegrees: 14
     rehitInterval: 0.7
     orbitSpeed: 0.7
-  - upgradeText: +1 blade
+  - upgradeText: +1 flame
     damage: 8
     cooldown: 3
     count: 2
     pierce: 0
-    area: 1.5
+    area: 1.8
     projectileSpeed: 12
     lifetime: 2.6
     maxDistance: 6.5
@@ -66,7 +69,7 @@ MonoBehaviour:
     cooldown: 2.8
     count: 3
     pierce: 0
-    area: 1.6
+    area: 1.8
     projectileSpeed: 12
     lifetime: 2.8
     maxDistance: 6.5
@@ -75,12 +78,12 @@ MonoBehaviour:
     spreadDegrees: 14
     rehitInterval: 0.65
     orbitSpeed: 0.9
-  - upgradeText: +1 blade, more reach
+  - upgradeText: +1 flame, more reach
     damage: 11
     cooldown: 2.6
     count: 4
     pierce: 0
-    area: 1.75
+    area: 2
     projectileSpeed: 12
     lifetime: 3
     maxDistance: 6.5
@@ -89,12 +92,12 @@ MonoBehaviour:
     spreadDegrees: 14
     rehitInterval: 0.62
     orbitSpeed: 0.95
-  - upgradeText: Heavier blades
+  - upgradeText: Heavier flames
     damage: 13
     cooldown: 2.4
     count: 4
     pierce: 0
-    area: 1.9
+    area: 2
     projectileSpeed: 12
     lifetime: 3.2
     maxDistance: 6.5

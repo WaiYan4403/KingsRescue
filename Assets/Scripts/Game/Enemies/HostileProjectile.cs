@@ -24,6 +24,7 @@ namespace KingsRescue.Enemies
         private bool homing;
         private float homingTurn = 4.5f;
         private GameObject source;
+        private HitboxMarker hitbox;
 
         /// <summary>Every hostile shot currently in flight.</summary>
         private static readonly System.Collections.Generic.List<HostileProjectile> Active = new System.Collections.Generic.List<HostileProjectile>(64);
@@ -39,6 +40,8 @@ namespace KingsRescue.Enemies
         public void OnDespawned()
         {
             Active.Remove(this);
+            HitboxDisplay.Release(hitbox);
+            hitbox = null;
         }
 
         public static void DespawnAll()
@@ -69,6 +72,7 @@ namespace KingsRescue.Enemies
             homing = homes;
             source = owner;
             FaceVelocity();
+            HitboxDisplay.SyncCircle(ref hitbox, transform.position, hitRadius);
         }
 
         private void Update()
@@ -90,6 +94,7 @@ namespace KingsRescue.Enemies
             transform.position = position;
             traveled += step;
             FaceVelocity();
+            HitboxDisplay.SyncCircle(ref hitbox, position, hitRadius);
 
             if ((maxTravel > 0f && traveled >= maxTravel) || Time.time >= expireAt)
             {

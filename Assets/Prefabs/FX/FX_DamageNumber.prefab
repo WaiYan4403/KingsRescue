@@ -197,6 +197,6 @@ MonoBehaviour:
   label: {fileID: 4551101876275404903}
   lifetime: 0.7
   rise: 0.9
-  baseScale: 1
-  critScale: 1.45
+  baseScale: 0.8
+  critScale: 1.2
   outlineWidth: 0.3

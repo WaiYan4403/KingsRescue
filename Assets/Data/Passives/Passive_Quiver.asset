@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.PassiveDefinition
   displayName: Quiver
   description: Extra projectiles for weapons that use Amount.
-  icon: {fileID: 0}
+  icon: {fileID: 1125377050, guid: 5066387750f00534791090481a4809f7, type: 3}
   levels:
   - upgradeText: 
     modifiers:

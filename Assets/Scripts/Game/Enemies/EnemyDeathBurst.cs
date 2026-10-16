@@ -36,6 +36,8 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            HitboxDisplay.Flash(transform.position, radius, 0.35f);
+
             PlayerController player = PlayerController.Instance;
             if (player == null || player.Health == null || !player.Health.IsAlive)
             {

@@ -202,6 +202,7 @@ namespace KingsRescue.Enemies
         {
             exploded = true;
             transform.position = impact;
+            HitboxDisplay.Flash(impact, radius, 0.35f);
 
             PlayerController player = PlayerController.Instance;
             if (player != null && player.Health != null && player.Health.IsAlive)

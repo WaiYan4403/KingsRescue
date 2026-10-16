@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
   m_Name: Weapon_Aura
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
-  displayName: Aura
-  description: A pulsing damage field.
-  icon: {fileID: 0}
+  displayName: Music
+  description: A song that harms enemies around the hero.
+  icon: {fileID: -513623971, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 3
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 0}
-  effectPrefab: {fileID: 4995287234733603234, guid: c47448577f6ac46b9b937f997abe1fb3, type: 3}
+  effectPrefab: {fileID: 7061056992742803365, guid: 2b284c88855ab684ca347096e420ef1e, type: 3}
+  musicNotesPrefab: {fileID: 8115348334357128550, guid: 982da6fca4da07a4383193a23542e65d, type: 3}
   usesGlobalProjectileCount: 0
   comboDelay: 0.12
   fanProjectiles: 1
+  aimStyle: 0
+  projectileHoming: 0
   isUniqueWeapon: 0
   requiresUnlock: 1
   usesCharacterAnimators: 0
@@ -29,16 +32,19 @@ MonoBehaviour:
   - Attack1
   - Attack2
   - Attack3
+  advancedReachLevel: 0
+  advancedAttackTriggers: []
   attackStageUnlockLevels: 010000000200000003000000
+  powerSlashPrefabs: []
   levels:
   - upgradeText: 
     damage: 4
     cooldown: 1.6
     count: 1
     pierce: 0
-    area: 1.6
+    area: 2
     projectileSpeed: 12
-    lifetime: 0.25
+    lifetime: 2.2
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
@@ -50,51 +56,51 @@ MonoBehaviour:
     cooldown: 1.5
     count: 1
     pierce: 0
-    area: 1.75
+    area: 2
     projectileSpeed: 12
-    lifetime: 0.25
+    lifetime: 2.4
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Larger aura
+  - upgradeText: Larger field
     damage: 7
     cooldown: 1.4
     count: 1
     pierce: 0
-    area: 2.05
+    area: 2.5
     projectileSpeed: 12
-    lifetime: 0.25
+    lifetime: 2.6
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Faster pulse
+  - upgradeText: Shorter rest
     damage: 9
     cooldown: 1.25
     count: 1
     pierce: 0
-    area: 2.25
+    area: 2.5
     projectileSpeed: 12
-    lifetime: 0.25
+    lifetime: 2.9
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
     spreadDegrees: 14
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Huge aura
+  - upgradeText: Huge field
     damage: 12
     cooldown: 1.15
     count: 1
     pierce: 0
-    area: 2.55
+    area: 3
     projectileSpeed: 12
-    lifetime: 0.25
+    lifetime: 3.2
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 360

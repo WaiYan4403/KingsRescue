@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 3370180711323300488}
   - component: {fileID: 113603531293512896}
   - component: {fileID: 6968528130593668146}
+  - component: {fileID: 7289799088617431727}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -135,6 +136,7 @@ MonoBehaviour:
   healthParameter: Health
   dieStateName: Lancer_Die
   hurtFlashColor: {r: 1, g: 0.15, b: 0.12, a: 1}
+  healFlashColor: {r: 0.45, g: 1, b: 0.55, a: 1}
   reviveHealthFraction: 0.5
   reviveInvulnerability: 2.5
 --- !u!114 &1348653748630193198
@@ -241,6 +243,19 @@ SortingGroup:
   m_SortingOrder: 0
   m_SortAtRoot: 1
   m_Sort3DAs2D: 0
+--- !u!114 &7289799088617431727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306224722766589929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36727bcbc86c34847898547bc329c2a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Player.PlayerHealFeedback
+  healingParticles: {fileID: 8177353074910784239, guid: 4d860785890219e4fbd9332ff2a296d5, type: 3}
 --- !u!1 &3468642812728596342
 GameObject:
   m_ObjectHideFlags: 0
