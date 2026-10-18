@@ -9,7 +9,10 @@ namespace KingsRescue.Combat
     /// </summary>
     public class MusicField : MonoBehaviour, IPoolable
     {
-        private const float SpriteRadius = 82f / 16f * 0.5f;
+        /// <summary>World radius of the smallest music-field sprite, which the note prefab is tuned to.</summary>
+        public const float BaselineRadius = 82f / 16f * 0.5f;
+
+        private const float SpriteRadius = BaselineRadius;
 
         [SerializeField] private Transform visual;
         private Animator animator;
@@ -46,6 +49,38 @@ namespace KingsRescue.Combat
 
         public void OnDespawned()
         {
+        }
+
+        /// <summary>Half the sprite's world width, after the size animation has applied.</summary>
+        public float Radius
+        {
+            get
+            {
+                SpriteRenderer renderer = ResolveRenderer();
+                if (renderer != null && renderer.sprite != null)
+                {
+                    float pixels = Mathf.Max(renderer.sprite.rect.width, renderer.sprite.rect.height);
+                    float units = pixels / Mathf.Max(1f, renderer.sprite.pixelsPerUnit);
+                    float scale = Mathf.Max(Mathf.Abs(renderer.transform.lossyScale.x), Mathf.Abs(renderer.transform.lossyScale.y));
+                    return units * 0.5f * scale;
+                }
+
+                return BaselineRadius;
+            }
+        }
+
+        private SpriteRenderer ResolveRenderer()
+        {
+            if (visual != null)
+            {
+                SpriteRenderer onVisual = visual.GetComponent<SpriteRenderer>();
+                if (onVisual != null)
+                {
+                    return onVisual;
+                }
+            }
+
+            return GetComponentInChildren<SpriteRenderer>();
         }
 
         public void SetRadius(float radius)

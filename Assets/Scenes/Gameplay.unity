@@ -344,6 +344,7 @@ GameObject:
   - component: {fileID: 34958648}
   - component: {fileID: 34958647}
   - component: {fileID: 34958650}
+  - component: {fileID: 34958651}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -493,6 +494,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &34958651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34958645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47fe111620be274ea8922713e9d56af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Core.ScreenShake
 --- !u!1 &39098406
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,8 +609,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Progression.UpgradeService
   pool:
   - {fileID: 11400000, guid: bb3ca7843eab245e7904e589b57b1b9c, type: 2}
-  - {fileID: 11400000, guid: 8acf56bbc547a473fb9f606c9181b72b, type: 2}
   - {fileID: 11400000, guid: ae3084e8235914deeb00ae23ea57962d, type: 2}
+  - {fileID: 11400000, guid: 0aeb6a7e0f631b6449ad5bcc2509a4a6, type: 2}
+  - {fileID: 11400000, guid: e53440f3347a6c448832f29946b8b4a3, type: 2}
+  - {fileID: 11400000, guid: 8acf56bbc547a473fb9f606c9181b72b, type: 2}
+  - {fileID: 11400000, guid: c3d8f1a06b254e7a9e4c2d8f1b6a30e5, type: 2}
   - {fileID: 11400000, guid: b0f4c7803d89d44a9837518a413db26b, type: 2}
   - {fileID: 11400000, guid: 8d9f7b47d8647485f9126b7fb1d241fd, type: 2}
   - {fileID: 11400000, guid: 4a1c643c9c6cf4e62a3ad52748334890, type: 2}
@@ -608,13 +624,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 91a4fe0240f104cd2ab4be53bccca4b8, type: 2}
   - {fileID: 11400000, guid: 6cdaf8318951d4733a45146322aa261b, type: 2}
   - {fileID: 11400000, guid: eef310bc658514fd1a80294dcccb385d, type: 2}
-  - {fileID: 11400000, guid: c3d8f1a06b254e7a9e4c2d8f1b6a30e5, type: 2}
-  - {fileID: 11400000, guid: 25fb39314b94f304aa0fc6cd19f1329e, type: 2}
-  - {fileID: 11400000, guid: 99c184b3ea2e9844f925f2ec26b0968b, type: 2}
   - {fileID: 11400000, guid: 58b17ad20f1f829439d6e75a98ddd26f, type: 2}
   - {fileID: 11400000, guid: 242ea4bf25ba3b046b161abfb895ec3d, type: 2}
-  - {fileID: 11400000, guid: 0aeb6a7e0f631b6449ad5bcc2509a4a6, type: 2}
-  - {fileID: 11400000, guid: e53440f3347a6c448832f29946b8b4a3, type: 2}
   - {fileID: 11400000, guid: 07b80af56f168094aaaa28e84292b666, type: 2}
   - {fileID: 11400000, guid: 473fb4b465d574444a3851a83d3e1d1c, type: 2}
   - {fileID: 11400000, guid: e5a126fab14bd024cbc593c8eea27e92, type: 2}
@@ -1044,6 +1055,12 @@ MonoBehaviour:
   - tag: Music_Field
     prefab: {fileID: 7061056992742803365, guid: 2b284c88855ab684ca347096e420ef1e, type: 3}
     size: 4
+  - tag: Music_Field 1
+    prefab: {fileID: 7061056992742803365, guid: ee89bd0620ecdd44f8bcad35a86e6f97, type: 3}
+    size: 2
+  - tag: Music_Field 2
+    prefab: {fileID: 7061056992742803365, guid: 0a8b84440b6ffa84583f2028e3bcdbee, type: 3}
+    size: 2
   - tag: MusicNotes_Particles
     prefab: {fileID: 8115348334357128550, guid: 982da6fca4da07a4383193a23542e65d, type: 3}
     size: 4

@@ -62,6 +62,36 @@ namespace KingsRescue.Meta
             }
         }
 
+        /// <summary>Snapshot used by the cloud save.</summary>
+        public static string ExportJson()
+        {
+            EnsureLoaded();
+            return JsonUtility.ToJson(data);
+        }
+
+        /// <summary>Replaces the local save with a cloud snapshot. Ignores empty or unreadable input.</summary>
+        public static void ImportJson(string json)
+        {
+            SaveData parsed = string.IsNullOrEmpty(json) ? null : JsonUtility.FromJson<SaveData>(json);
+            if (parsed == null)
+            {
+                return;
+            }
+
+            parsed.coins = Mathf.Max(0, parsed.coins);
+            parsed.characters ??= Array.Empty<CharacterSave>();
+            data = parsed;
+            Persist();
+        }
+
+        /// <summary>Forgets the local save (account sign-out). The next read starts from defaults.</summary>
+        public static void ClearLocal()
+        {
+            PlayerPrefs.DeleteKey(SaveKey);
+            data = null;
+            Changed?.Invoke();
+        }
+
         public static void AddCoins(int amount)
         {
             if (amount == 0)

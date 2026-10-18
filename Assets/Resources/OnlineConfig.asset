@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2af01017cb8de834e9a8c4eb7656329f, type: 3}
+  m_Name: OnlineConfig
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Online.OnlineConfig
+  enabled: 1
+  apiBaseUrl: https://gameleaderboard-production-034b.up.railway.app/
+  apiKey: yhg_admin_v1_8wK!2mQ@9zLp#4sT^7nX$1cV%6bR&3dF*0jH
+  gameSlug: kingsrescue
+  requestTimeoutSeconds: 15
+  googleWebClientId: 688231607532-va1p2aapa8adf3fokpe4bianfvnpp12e.apps.googleusercontent.com
+  saveDebounceSeconds: 4
+  retrySeconds: 20

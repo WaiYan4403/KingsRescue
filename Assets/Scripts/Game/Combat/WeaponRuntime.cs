@@ -704,7 +704,7 @@ namespace KingsRescue.Combat
 
                 Targeting.DamageCircle(point, radius, damage, knockback, gameObject);
                 HitboxDisplay.Flash(point, radius, duration);
-                SpawnEffect(point, Vector2.up, radius, duration);
+                SpawnEffect(point, Vector2.up, radius, duration, true);
             }
         }
 
@@ -723,11 +723,12 @@ namespace KingsRescue.Combat
                 Vector2 point = origin + Random.insideUnitCircle * spread;
                 Targeting.DamageCircle(point, puddle, damage, knockback, gameObject);
                 HitboxDisplay.Flash(point, puddle, duration);
-                SpawnEffect(point, Vector2.up, puddle, duration);
+                SpawnEffect(point, Vector2.up, puddle, duration, true);
             }
         }
 
         private MusicField musicField;
+        private GameObject activeFieldPrefab;
         private GameObject musicNotes;
         private HitboxMarker musicHitbox;
         private float musicUntil;
@@ -735,6 +736,16 @@ namespace KingsRescue.Combat
 
         private void UpdateMusicField()
         {
+            if (musicField != null && definition.GetAreaEffectPrefab(level) != activeFieldPrefab)
+            {
+                StopMusicField();
+                if (!TryStartMusicField())
+                {
+                    nextFireTime = Time.time + 0.5f;
+                    return;
+                }
+            }
+
             if (musicField != null)
             {
                 float radius = ResolveArea();
@@ -773,7 +784,8 @@ namespace KingsRescue.Combat
 
         private bool TryStartMusicField()
         {
-            if (definition.effectPrefab == null)
+            GameObject prefab = definition.GetAreaEffectPrefab(level);
+            if (prefab == null)
             {
                 Debug.LogError($"Weapon '{definition.name}' is a music field but has no field prefab.", definition);
                 return false;
@@ -786,7 +798,7 @@ namespace KingsRescue.Combat
             }
 
             Transform parent = owner != null ? owner.transform : transform;
-            GameObject fieldObject = pool.Spawn(definition.effectPrefab, parent.position, Quaternion.identity, parent);
+            GameObject fieldObject = pool.Spawn(prefab, parent.position, Quaternion.identity, parent);
             if (fieldObject == null)
             {
                 return false;
@@ -797,11 +809,12 @@ namespace KingsRescue.Combat
             musicField = fieldObject.GetComponent<MusicField>();
             if (musicField == null)
             {
-                Debug.LogError($"Music field prefab '{definition.effectPrefab.name}' has no MusicField component.", definition);
+                Debug.LogError($"Music field prefab '{prefab.name}' has no MusicField component.", definition);
                 pool.Return(fieldObject);
                 return false;
             }
 
+            activeFieldPrefab = prefab;
             musicField.SetRadius(ResolveArea());
             if (definition.musicNotesPrefab != null)
             {
@@ -810,6 +823,11 @@ namespace KingsRescue.Combat
                 {
                     musicNotes.transform.localPosition = Vector3.zero;
                     musicNotes.transform.localRotation = Quaternion.identity;
+                    MusicNotes notes = musicNotes.GetComponent<MusicNotes>();
+                    if (notes != null)
+                    {
+                        notes.ApplyFieldRadius(musicField.Radius, MusicField.BaselineRadius);
+                    }
                 }
             }
 
@@ -831,6 +849,7 @@ namespace KingsRescue.Combat
                 }
 
                 musicField = null;
+                activeFieldPrefab = null;
             }
 
             if (musicNotes != null)
@@ -997,22 +1016,26 @@ namespace KingsRescue.Combat
             return lastMoveFacing;
         }
 
-        private void SpawnEffect(Vector2 center, Vector2 facing, float radius, float lifetime)
+        private void SpawnEffect(Vector2 center, Vector2 facing, float radius, float lifetime, bool areaEffect = false)
         {
-            if (definition.effectPrefab == null || ObjectPoolManager.Instance == null)
+            GameObject prefab = areaEffect ? definition.GetAreaEffectPrefab(level) : definition.effectPrefab;
+            if (prefab == null || ObjectPoolManager.Instance == null)
             {
                 return;
             }
 
             float angle = Mathf.Atan2(facing.y, facing.x) * Mathf.Rad2Deg - 90f;
-            GameObject effect = ObjectPoolManager.Instance.Spawn(definition.effectPrefab, center, Quaternion.Euler(0f, 0f, angle));
+            GameObject effect = ObjectPoolManager.Instance.Spawn(prefab, center, Quaternion.Euler(0f, 0f, angle));
 
             if (effect == null)
             {
                 return;
             }
 
-            effect.transform.localScale = definition.effectPrefab.transform.localScale * radius;
+            if (!areaEffect || !definition.UsesSizedAreaEffects)
+            {
+                effect.transform.localScale = prefab.transform.localScale * radius;
+            }
 
             AutoDespawn despawn = effect.GetComponent<AutoDespawn>();
             if (despawn != null)

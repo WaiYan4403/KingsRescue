@@ -6,6 +6,7 @@ using KingsRescue.Combat;
 using KingsRescue.Data;
 using KingsRescue.Enemies;
 using KingsRescue.Meta;
+using KingsRescue.Online;
 using KingsRescue.Player;
 using KingsRescue.Progression;
 
@@ -354,6 +355,7 @@ namespace KingsRescue.Core
             MetaProgress.AddCoins(Coins);
             AchievementProgress.RecordSurvive(RunTime);
             Leaderboard.Submit(character, RunTime, Kills, Coins, level);
+            OnlineServices.NotifyRunFinished(RunTime);
         }
 
         public void RestartRun()

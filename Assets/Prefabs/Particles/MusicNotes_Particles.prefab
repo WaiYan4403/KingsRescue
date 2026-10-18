@@ -4846,6 +4846,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5590418105015265092}
   - component: {fileID: 1709131832316689182}
+  - component: {fileID: 5796472455734550045}
   m_Layer: 0
   m_Name: MusicNotes_Particles
   m_TagString: Untagged
@@ -4881,3 +4882,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04b28d153a236d4eba693fed3bd0919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.PooledParticles
+--- !u!114 &5796472455734550045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8115348334357128550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ca9ed43ae5b78f459e26dd8c02af2f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Combat.MusicNotes

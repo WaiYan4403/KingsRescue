@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +20,13 @@ namespace KingsRescue.UI
         [SerializeField] private GameObject settingsPanel;
         [SerializeField] private GameObject leaderboardPanel;
         [SerializeField] private GameObject achievementPanel;
+        [SerializeField] private GameObject accountPanel;
+        [SerializeField] private GameObject usernamePanel;
+        [SerializeField] private GameObject creditsPanel;
+        [SerializeField] private GameObject quitDialog;
+
+        [Header("Account")]
+        [SerializeField] private AccountMenuView accountView;
 
         [Header("Character")]
         [SerializeField] private CharacterSelectButton[] characterButtons;
@@ -34,11 +40,13 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text resetUpgradesLabel;
 
         [Header("Settings")]
-        [SerializeField] private Slider volumeSlider;
+        [SerializeField] private Slider musicSlider;
+        [SerializeField] private Slider soundSlider;
+        [SerializeField] private Toggle screenShakeToggle;
+        [SerializeField] private Toggle damageTextToggle;
 
         [Header("Leaderboards")]
-        [SerializeField] private TMP_Text[] leaderboardRows;
-        [SerializeField] private TMP_Text leaderboardEmpty;
+        [SerializeField] private LeaderboardMenuView leaderboardView;
 
         [Header("Achievements")]
         [SerializeField] private AchievementListView achievementList;
@@ -57,10 +65,7 @@ namespace KingsRescue.UI
                 roster = Resources.Load<CharacterRoster>("CharacterRoster");
             }
 
-            if (volumeSlider != null)
-            {
-                volumeSlider.SetValueWithoutNotify(GameSettings.Volume);
-            }
+            SyncSettingsControls();
 
             if (resetUpgradesButton != null)
             {
@@ -90,6 +95,12 @@ namespace KingsRescue.UI
 
         void Start()
         {
+            // First launch (or an unfinished sign-up) lands on the account screens instead of home.
+            if (accountView != null && accountView.TryBeginSetup())
+            {
+                return;
+            }
+
             ShowHome();
         }
 
@@ -104,6 +115,28 @@ namespace KingsRescue.UI
         public void ShowHome()
         {
             Show(homePanel);
+            MenuMusicController.Instance.SetMainMusic();
+        }
+
+        public void ShowAccount()
+        {
+            if (accountView != null)
+            {
+                accountView.RefreshAccount();
+            }
+
+            Show(accountPanel);
+            MenuMusicController.Instance.SetMainMusic();
+        }
+
+        public void ShowUsername()
+        {
+            if (accountView != null)
+            {
+                accountView.RefreshUsername();
+            }
+
+            Show(usernamePanel);
             MenuMusicController.Instance.SetMainMusic();
         }
 
@@ -123,20 +156,43 @@ namespace KingsRescue.UI
 
         public void ShowSettings()
         {
-            if (volumeSlider != null)
-            {
-                volumeSlider.SetValueWithoutNotify(GameSettings.Volume);
-            }
-
+            SyncSettingsControls();
             Show(settingsPanel);
             MenuMusicController.Instance.SetOptionsMusic();
         }
 
         public void ShowLeaderboards()
         {
-            RefreshLeaderboard();
             Show(leaderboardPanel);
+            if (leaderboardView != null)
+            {
+                leaderboardView.Refresh();
+            }
+
             MenuMusicController.Instance.SetOptionsMusic();
+        }
+
+        public void ShowCredits()
+        {
+            Show(creditsPanel);
+            MenuMusicController.Instance.SetOptionsMusic();
+        }
+
+        public void OpenQuitConfirm()
+        {
+            if (quitDialog != null)
+            {
+                quitDialog.SetActive(true);
+                quitDialog.transform.SetAsLastSibling();
+            }
+        }
+
+        public void CloseQuitConfirm()
+        {
+            if (quitDialog != null)
+            {
+                quitDialog.SetActive(false);
+            }
         }
 
         public void ShowAchievements()
@@ -184,9 +240,24 @@ namespace KingsRescue.UI
 #endif
         }
 
-        public void OnVolumeChanged(float value)
+        public void OnMusicChanged(float value)
         {
-            GameSettings.Volume = value;
+            GameSettings.MusicVolume = value;
+        }
+
+        public void OnSoundChanged(float value)
+        {
+            GameSettings.SoundVolume = value;
+        }
+
+        public void OnScreenShakeChanged(bool value)
+        {
+            GameSettings.ScreenShake = value;
+        }
+
+        public void OnDamageTextChanged(bool value)
+        {
+            GameSettings.ShowDamageText = value;
         }
 
         public void RefreshUpgrades()
@@ -306,42 +377,26 @@ namespace KingsRescue.UI
             }
         }
 
-        private void RefreshLeaderboard()
+        private void SyncSettingsControls()
         {
-            IReadOnlyList<LeaderboardEntry> entries = Leaderboard.Entries;
-            bool empty = entries == null || entries.Count == 0;
-
-            if (leaderboardEmpty != null)
+            if (musicSlider != null)
             {
-                leaderboardEmpty.gameObject.SetActive(empty);
-                if (empty)
-                {
-                    leaderboardEmpty.text = "No runs recorded yet.";
-                }
+                musicSlider.SetValueWithoutNotify(GameSettings.MusicVolume);
             }
 
-            if (leaderboardRows == null)
+            if (soundSlider != null)
             {
-                return;
+                soundSlider.SetValueWithoutNotify(GameSettings.SoundVolume);
             }
 
-            for (int i = 0; i < leaderboardRows.Length; i++)
+            if (screenShakeToggle != null)
             {
-                TMP_Text row = leaderboardRows[i];
-                if (row == null)
-                {
-                    continue;
-                }
+                screenShakeToggle.SetIsOnWithoutNotify(GameSettings.ScreenShake);
+            }
 
-                if (empty || i >= entries.Count)
-                {
-                    row.gameObject.SetActive(false);
-                    continue;
-                }
-
-                LeaderboardEntry entry = entries[i];
-                row.gameObject.SetActive(true);
-                row.text = $"{i + 1}. {entry.character}   {HudView.FormatClock(entry.time)}   {entry.kills} kills   Lv {entry.level}";
+            if (damageTextToggle != null)
+            {
+                damageTextToggle.SetIsOnWithoutNotify(GameSettings.ShowDamageText);
             }
         }
 
@@ -353,6 +408,10 @@ namespace KingsRescue.UI
             SetActive(settingsPanel, panel);
             SetActive(leaderboardPanel, panel);
             SetActive(achievementPanel, panel);
+            SetActive(accountPanel, panel);
+            SetActive(usernamePanel, panel);
+            SetActive(creditsPanel, panel);
+            CloseQuitConfirm();
         }
 
         private static void SetActive(GameObject target, GameObject visible)

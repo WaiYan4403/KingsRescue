@@ -123,6 +123,7 @@ namespace KingsRescue.Player
 
             HealthChanged?.Invoke(Current, Max);
             Damaged?.Invoke();
+            ScreenShake.Add(0.7f);
             SyncAnimatorHealth();
 
             if (Current <= 0f)

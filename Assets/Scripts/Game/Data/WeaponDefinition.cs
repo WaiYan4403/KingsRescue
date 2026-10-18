@@ -108,8 +108,11 @@ namespace KingsRescue.Data
         [Tooltip("Orbit: the blade prefab. Needs an OrbitBlade component.")]
         public GameObject orbitPrefab;
 
-        [Tooltip("MeleeSwing: optional cosmetic prefab spawned at the hit. Aura: the music field prefab, parented to the hero.")]
+        [Tooltip("MeleeSwing: optional cosmetic prefab spawned at the hit. Aura and other area effects use this only when Area Effect Prefabs is empty.")]
         public GameObject effectPrefab;
+
+        [Tooltip("Area-effect visuals by size. Each prefab covers two weapon levels: 1–2, 3–4, 5–6, and so on. The last prefab also covers every higher level until a larger one is added. Used by Aura, ground zones, and random strikes.")]
+        public GameObject[] areaEffectPrefabs = System.Array.Empty<GameObject>();
 
         [Tooltip("Aura: notes played with the music field and returned with it.")]
         public GameObject musicNotesPrefab;
@@ -159,6 +162,30 @@ namespace KingsRescue.Data
         public WeaponLevel[] levels = { new WeaponLevel() };
 
         public int MaxLevel => levels != null && levels.Length > 0 ? levels.Length : 1;
+
+        public bool UsesSizedAreaEffects => areaEffectPrefabs != null && areaEffectPrefabs.Length > 0;
+
+        /// <summary>
+        /// Visual for an area effect at this weapon level. Each authored prefab covers two levels.
+        /// The last prefab also covers every level above it.
+        /// </summary>
+        public GameObject GetAreaEffectPrefab(int weaponLevel)
+        {
+            if (areaEffectPrefabs != null && areaEffectPrefabs.Length > 0)
+            {
+                int band = Mathf.Max(0, weaponLevel - 1) / 2;
+                int index = Mathf.Min(band, areaEffectPrefabs.Length - 1);
+                for (int i = index; i >= 0; i--)
+                {
+                    if (areaEffectPrefabs[i] != null)
+                    {
+                        return areaEffectPrefabs[i];
+                    }
+                }
+            }
+
+            return effectPrefab;
+        }
 
         /// <summary>Level is 1-based and clamped to the authored range.</summary>
         public WeaponLevel GetLevel(int level)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using KingsRescue.Core;
+using KingsRescue.Meta;
 
 namespace KingsRescue.Combat
 {
@@ -13,6 +14,11 @@ namespace KingsRescue.Combat
 
         public static void Popup(Vector2 world, float amount, bool critical)
         {
+            if (!GameSettings.ShowDamageText)
+            {
+                return;
+            }
+
             DamageNumberDisplay display = Instance;
             if (display == null || display.numberPrefab == null || amount <= 0f)
             {

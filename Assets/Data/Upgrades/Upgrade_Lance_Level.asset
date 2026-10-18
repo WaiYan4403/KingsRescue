@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3790a49b1a1404c47bc133269e63f039, type: 3}
-  m_Name: Upgrade_Sword_Level
+  m_Name: Upgrade_Lance_Level
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.UpgradeDefinition
   kind: 1
   weight: 100

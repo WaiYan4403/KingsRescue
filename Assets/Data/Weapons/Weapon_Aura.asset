@@ -19,6 +19,10 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 7061056992742803365, guid: 2b284c88855ab684ca347096e420ef1e, type: 3}
+  areaEffectPrefabs:
+  - {fileID: 7061056992742803365, guid: 2b284c88855ab684ca347096e420ef1e, type: 3}
+  - {fileID: 7061056992742803365, guid: ee89bd0620ecdd44f8bcad35a86e6f97, type: 3}
+  - {fileID: 7061056992742803365, guid: 0a8b84440b6ffa84583f2028e3bcdbee, type: 3}
   musicNotesPrefab: {fileID: 8115348334357128550, guid: 982da6fca4da07a4383193a23542e65d, type: 3}
   usesGlobalProjectileCount: 0
   comboDelay: 0.12
@@ -70,7 +74,7 @@ MonoBehaviour:
     cooldown: 1.4
     count: 1
     pierce: 0
-    area: 2.5
+    area: 3.5
     projectileSpeed: 12
     lifetime: 2.6
     maxDistance: 6.5
@@ -98,9 +102,9 @@ MonoBehaviour:
     cooldown: 1.15
     count: 1
     pierce: 0
-    area: 3
+    area: 4
     projectileSpeed: 12
-    lifetime: 3.2
+    lifetime: 4
     maxDistance: 6.5
     knockback: 0
     arcDegrees: 360
