@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.PassiveDefinition
   displayName: Saint's Flask
   description: Mends wounds a little every second.
-  icon: {fileID: -558332895, guid: 5066387750f00534791090481a4809f7, type: 3}
+  icon: {fileID: -1559977445, guid: 5066387750f00534791090481a4809f7, type: 3}
   levels:
   - upgradeText: 
     modifiers:

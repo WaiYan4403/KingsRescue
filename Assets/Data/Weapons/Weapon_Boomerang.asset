@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
+  m_Name: Weapon_Boomerang
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
+  displayName: Boomerang
+  description: Throws a boomerang that flies out and returns, cutting on both passes.
+  icon: {fileID: 1324183073, guid: 5066387750f00534791090481a4809f7, type: 3}
+  fireMode: 10
+  projectilePrefab: {fileID: 8446787153019134309, guid: 4bbf5f4d904571e44a46eddc4e1883cd, type: 3}
+  orbitPrefab: {fileID: 0}
+  effectPrefab: {fileID: 0}
+  areaEffectPrefabs: []
+  musicNotesPrefab: {fileID: 0}
+  usesGlobalProjectileCount: 1
+  comboDelay: 0.12
+  fanProjectiles: 0
+  aimStyle: 0
+  projectileHoming: 0
+  isUniqueWeapon: 0
+  requiresUnlock: 0
+  usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  advancedReachLevel: 0
+  advancedAttackTriggers: []
+  attackStageUnlockLevels: 010000000200000003000000
+  powerSlashPrefabs: []
+  levels:
+  - upgradeText: 
+    damage: 12
+    cooldown: 1.45
+    count: 1
+    pierce: 3
+    area: 1
+    projectileSpeed: 9
+    lifetime: 2.2
+    maxDistance: 5.5
+    knockback: 0.6
+    arcDegrees: 150
+    spreadDegrees: 24
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Sharper edge
+    damage: 16
+    cooldown: 1.4
+    count: 1
+    pierce: 3
+    area: 1.05
+    projectileSpeed: 9
+    lifetime: 2.2
+    maxDistance: 5.5
+    knockback: 0.6
+    arcDegrees: 150
+    spreadDegrees: 24
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: +1 boomerang
+    damage: 16
+    cooldown: 1.35
+    count: 2
+    pierce: 4
+    area: 1.05
+    projectileSpeed: 9.5
+    lifetime: 2.4
+    maxDistance: 6
+    knockback: 0.7
+    arcDegrees: 150
+    spreadDegrees: 28
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Longer throw
+    damage: 18
+    cooldown: 1.25
+    count: 2
+    pierce: 5
+    area: 1.1
+    projectileSpeed: 10
+    lifetime: 2.6
+    maxDistance: 7
+    knockback: 0.7
+    arcDegrees: 150
+    spreadDegrees: 32
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Three returns
+    damage: 22
+    cooldown: 1.15
+    count: 3
+    pierce: 5
+    area: 1.15
+    projectileSpeed: 10
+    lifetime: 2.6
+    maxDistance: 7.5
+    knockback: 0.8
+    arcDegrees: 150
+    spreadDegrees: 36
+    rehitInterval: 0.45
+    orbitSpeed: 0.7

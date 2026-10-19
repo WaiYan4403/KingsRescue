@@ -207,6 +207,15 @@ namespace KingsRescue.Combat
                 case WeaponFireMode.GroundZone:
                     FireGroundZones();
                     break;
+                case WeaponFireMode.FreezeField:
+                    FireFreezeFields();
+                    break;
+                case WeaponFireMode.BoltStrike:
+                    FireBoltStrikes();
+                    break;
+                case WeaponFireMode.Boomerang:
+                    FireBoomerangs();
+                    break;
             }
         }
 
@@ -369,8 +378,7 @@ namespace KingsRescue.Combat
                 int unlocked = definition.GetUnlockedAttackStages(level);
                 if (unlocked > 0)
                 {
-                    int bonus = definition.usesGlobalProjectileCount ? stats.BonusProjectiles : 0;
-                    return Mathf.Max(1, unlocked + bonus);
+                    return unlocked;
                 }
             }
 
@@ -417,26 +425,37 @@ namespace KingsRescue.Combat
                 return;
             }
 
+            int extra = definition.usesGlobalProjectileCount ? Mathf.Max(0, stats.BonusProjectiles) : 0;
+            int total = 1 + extra;
             float scale = Mathf.Max(1f, powerUp.SlashScale);
-            GameObject instance = pool.Spawn(prefab, (Vector2)transform.position + Vector2.up * 0.35f, Quaternion.identity);
-            if (instance == null)
-            {
-                return;
-            }
-
-            instance.transform.localScale = prefab.transform.localScale * scale;
-            Projectile projectile = instance.GetComponent<Projectile>();
-            if (projectile == null)
-            {
-                return;
-            }
-
             WeaponLevel data = Data;
             float damage = ResolveDamage() * Mathf.Max(1f, powerUp.SlashDamageMultiplier);
             float range = Mathf.Max(0.5f, powerUp.SlashRange);
             const float speed = 9f;
             float lifetime = range / speed + 0.05f;
-            projectile.Launch(Vector2.up, speed, damage, 2, lifetime, scale, data.knockback, gameObject, range);
+            const float spread = 14f;
+            Vector2 origin = (Vector2)transform.position + Vector2.up * 0.35f;
+
+            for (int i = 0; i < total; i++)
+            {
+                float angle = total <= 1
+                    ? 0f
+                    : Mathf.Lerp(-spread * 0.5f, spread * 0.5f, i / (float)(total - 1));
+                GameObject instance = pool.Spawn(prefab, origin, Quaternion.identity);
+                if (instance == null)
+                {
+                    continue;
+                }
+
+                instance.transform.localScale = prefab.transform.localScale * scale;
+                Projectile projectile = instance.GetComponent<Projectile>();
+                if (projectile == null)
+                {
+                    continue;
+                }
+
+                projectile.Launch(Rotate(Vector2.up, angle), speed, damage, 2, lifetime, scale, data.knockback, gameObject, range);
+            }
         }
 
         private void FireForwardShot()
@@ -725,6 +744,171 @@ namespace KingsRescue.Combat
                 HitboxDisplay.Flash(point, puddle, duration);
                 SpawnEffect(point, Vector2.up, puddle, duration, true);
             }
+        }
+
+        private void FireFreezeFields()
+        {
+            if (definition.effectPrefab == null || ObjectPoolManager.Instance == null)
+            {
+                return;
+            }
+
+            int count = ResolveCount();
+            float radius = Mathf.Max(0.7f, ResolveArea());
+            float duration = Mathf.Max(0.4f, ResolveDuration());
+            float damage = ResolveDamage();
+            float reach = 4.5f + radius;
+            Targeting.CollectLiving(transform.position, reach, strikeTargets);
+
+            for (int i = strikeTargets.Count - 1; i >= 0; i--)
+            {
+                Enemy enemy = strikeTargets[i];
+                if (enemy != null && enemy.GetComponentInChildren<FreezeZone>() != null)
+                {
+                    strikeTargets.RemoveAt(i);
+                }
+            }
+
+            int casts = Mathf.Min(count, strikeTargets.Count);
+            for (int i = 0; i < casts; i++)
+            {
+                int pick = Random.Range(0, strikeTargets.Count);
+                SpawnFreeze(strikeTargets[pick], radius, damage, duration);
+                strikeTargets.RemoveAt(pick);
+            }
+        }
+
+        private void SpawnFreeze(Enemy enemy, float radius, float damage, float duration)
+        {
+            if (enemy == null)
+            {
+                return;
+            }
+
+            GameObject effect = ObjectPoolManager.Instance.Spawn(
+                definition.effectPrefab,
+                enemy.transform.position,
+                Quaternion.identity,
+                enemy.transform);
+            if (effect == null)
+            {
+                return;
+            }
+
+            effect.transform.localPosition = Vector3.zero;
+            effect.transform.localRotation = Quaternion.identity;
+            FreezeZone zone = effect.GetComponent<FreezeZone>();
+            if (zone != null)
+            {
+                zone.Attach(enemy, radius, damage, duration, gameObject);
+            }
+        }
+
+        private void FireBoltStrikes()
+        {
+            int count = ResolveCount();
+            float radius = Mathf.Max(0.4f, ResolveArea());
+            float damage = ResolveDamage();
+            float duration = Mathf.Max(0.2f, ResolveDuration());
+            float knockback = Data.knockback;
+            PlaceOnTargets(count, out int placed);
+
+            for (int i = 0; i < placed; i++)
+            {
+                Vector2 point = strikeTargets[i].transform.position;
+                Targeting.DamageCircle(point, radius, damage, knockback, gameObject);
+                HitboxDisplay.Flash(point, radius, duration);
+                SpawnBolt(point, duration);
+            }
+        }
+
+        private void FireBoomerangs()
+        {
+            if (definition.projectilePrefab == null || ObjectPoolManager.Instance == null)
+            {
+                return;
+            }
+
+            int count = ResolveCount();
+            Vector2 origin = transform.position;
+            Vector2 aim = ResolveFacing(origin);
+            WeaponLevel data = Data;
+            float speed = data.projectileSpeed * stats.ProjectileSpeedMultiplier;
+            float damage = ResolveDamage();
+            int pierce = data.pierce + stats.BonusPierce;
+            float area = ResolveArea();
+            float range = ResolveShotRange();
+
+            float step = count > 1 ? 360f / count : 0f;
+            for (int i = 0; i < count; i++)
+            {
+                float offset = step * i;
+
+                GameObject instance = ObjectPoolManager.Instance.Spawn(definition.projectilePrefab, origin, Quaternion.identity);
+                if (instance == null)
+                {
+                    continue;
+                }
+
+                Boomerang boomerang = instance.GetComponent<Boomerang>();
+                if (boomerang == null)
+                {
+                    ObjectPoolManager.Instance.Return(instance);
+                    continue;
+                }
+
+                boomerang.Launch(Rotate(aim, offset), speed, damage, pierce, ResolveDuration(), area, data.knockback, gameObject, range);
+            }
+        }
+
+        private void PlaceOnTargets(int count, out int placed)
+        {
+            Vector2 origin = transform.position;
+            Targeting.CollectLiving(origin, TargetSearchRange, strikeTargets);
+            int limit = Mathf.Min(count, strikeTargets.Count);
+            for (int i = 0; i < limit; i++)
+            {
+                int best = i;
+                float bestSqr = float.PositiveInfinity;
+                for (int j = i; j < strikeTargets.Count; j++)
+                {
+                    float sqr = ((Vector2)strikeTargets[j].transform.position - origin).sqrMagnitude;
+                    if (sqr < bestSqr)
+                    {
+                        bestSqr = sqr;
+                        best = j;
+                    }
+                }
+
+                Enemy swap = strikeTargets[i];
+                strikeTargets[i] = strikeTargets[best];
+                strikeTargets[best] = swap;
+            }
+
+            placed = limit;
+        }
+
+        private void SpawnBolt(Vector2 point, float duration)
+        {
+            if (definition.effectPrefab == null || ObjectPoolManager.Instance == null)
+            {
+                return;
+            }
+
+            GameObject effect = ObjectPoolManager.Instance.Spawn(definition.effectPrefab, point, Quaternion.identity);
+            if (effect == null)
+            {
+                return;
+            }
+
+            Animator animator = effect.GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                animator.Play(0, 0, 0f);
+                animator.Update(0f);
+            }
+
+            ObjectPoolManager.Instance.ReturnDelayed(effect, duration);
         }
 
         private MusicField musicField;

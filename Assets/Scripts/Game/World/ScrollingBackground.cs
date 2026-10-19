@@ -50,6 +50,8 @@ namespace KingsRescue.World
                 scenePreview.SetActive(false);
             }
 
+            BackgroundSegment.ResetChestSchedule();
+
             root = new GameObject("Backgrounds").transform;
             root.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 

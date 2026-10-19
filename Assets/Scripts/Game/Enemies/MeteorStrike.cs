@@ -156,6 +156,12 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            if (movement != null && movement.IsFrozen)
+            {
+                spawnedAt += Time.deltaTime;
+                return;
+            }
+
             if (indicator != null)
             {
                 indicator.transform.position = new Vector3(impact.x, impact.y, 0f);

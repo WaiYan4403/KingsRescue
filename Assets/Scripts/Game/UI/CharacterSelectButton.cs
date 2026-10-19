@@ -16,6 +16,30 @@ namespace KingsRescue.UI
 
         public CharacterDefinition Character => character;
 
+        private Material portraitMaterial;
+        private bool portraitMode;
+        private static readonly int EnableOutlineId = Shader.PropertyToID("_EnableOutline");
+        private static readonly int ColorId = Shader.PropertyToID("_Color");
+
+        private bool UsesPortraitOutline
+        {
+            get
+            {
+                if (portraitMode)
+                {
+                    return true;
+                }
+
+                if (background != null && background.material != null && background.material.HasProperty(EnableOutlineId))
+                {
+                    portraitMode = true;
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
         private void Awake()
         {
             if (button == null)
@@ -45,6 +69,12 @@ namespace KingsRescue.UI
             {
                 button.onClick.RemoveListener(OnClicked);
             }
+
+            if (portraitMaterial != null)
+            {
+                Destroy(portraitMaterial);
+                portraitMaterial = null;
+            }
         }
 
         public void OnClicked()
@@ -65,6 +95,12 @@ namespace KingsRescue.UI
             bool unlocked = character != null && AchievementProgress.IsCharacterUnlocked(character);
             ApplyLabel(unlocked);
 
+            if (UsesPortraitOutline)
+            {
+                ApplyPortrait(selected);
+                return;
+            }
+
             if (background != null)
             {
                 if (!unlocked)
@@ -76,6 +112,50 @@ namespace KingsRescue.UI
                     background.color = selected ? MenuUi.ButtonSelected : MenuUi.Button;
                 }
             }
+        }
+
+        private void ApplyPortrait(bool selected)
+        {
+            EnsurePortraitMaterial();
+            if (button != null)
+            {
+                button.transition = Selectable.Transition.None;
+            }
+
+            if (selected && portraitMaterial != null)
+            {
+                background.material = portraitMaterial;
+                background.color = Color.white;
+                portraitMaterial.SetFloat(EnableOutlineId, 1f);
+                if (portraitMaterial.HasProperty(ColorId))
+                {
+                    portraitMaterial.SetColor(ColorId, Color.white);
+                }
+
+                return;
+            }
+
+            // The outline shader draws the sprite art on its own, so a black
+            // vertex color never reaches it. The default UI material does.
+            background.material = null;
+            background.color = Color.black;
+        }
+
+        private void EnsurePortraitMaterial()
+        {
+            if (portraitMaterial != null || background == null)
+            {
+                return;
+            }
+
+            Material source = background.material;
+            if (source == null || !source.HasProperty(EnableOutlineId))
+            {
+                return;
+            }
+
+            portraitMaterial = new Material(source);
+            background.material = portraitMaterial;
         }
 
         public void ApplyLabel()

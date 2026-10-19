@@ -27,7 +27,16 @@ namespace KingsRescue.Data
         RandomStrike = 6,
 
         /// <summary>Damaging zones dropped around the hero, like Santa Water.</summary>
-        GroundZone = 7
+        GroundZone = 7,
+
+        /// <summary>A crystal planted on enemies. It damages and freezes anyone standing in it.</summary>
+        FreezeField = 8,
+
+        /// <summary>A bolt dropped on the nearest enemies, like the Lightning Wand.</summary>
+        BoltStrike = 9,
+
+        /// <summary>A shot that flies out and comes back, hitting on both passes.</summary>
+        Boomerang = 10
     }
 
     public enum WeaponAimStyle

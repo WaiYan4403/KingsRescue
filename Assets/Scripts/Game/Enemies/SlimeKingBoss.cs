@@ -271,6 +271,14 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            if (movement != null && movement.IsFrozen)
+            {
+                float paused = Time.deltaTime;
+                phaseEnds += paused;
+                jumpStageEnds += paused;
+                return;
+            }
+
             TickLandingBurst();
 
             switch (phase)

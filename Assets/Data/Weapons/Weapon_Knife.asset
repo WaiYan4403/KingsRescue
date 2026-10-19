@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
   displayName: Knife
   description: Throws along the way you walk.
-  icon: {fileID: 0}
+  icon: {fileID: 888868834, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 4
   projectilePrefab: {fileID: 9086646655045113726, guid: e416e22ec231fcc4b91cad77a1497327, type: 3}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}
+  areaEffectPrefabs: []
+  musicNotesPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
   comboDelay: 0.07
   fanProjectiles: 0
@@ -31,7 +33,10 @@ MonoBehaviour:
   - Attack1
   - Attack2
   - Attack3
+  advancedReachLevel: 0
+  advancedAttackTriggers: []
   attackStageUnlockLevels: 010000000200000003000000
+  powerSlashPrefabs: []
   levels:
   - upgradeText: 
     damage: 7

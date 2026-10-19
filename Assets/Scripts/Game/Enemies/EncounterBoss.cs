@@ -121,6 +121,13 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            if (movement != null && movement.IsFrozen)
+            {
+                phaseEnds += Time.deltaTime;
+                introStarted += Time.deltaTime;
+                return;
+            }
+
             if (!enraged && Has(BossKit.Enrage) && health != null && health.Normalised <= 0.32f)
             {
                 enraged = true;

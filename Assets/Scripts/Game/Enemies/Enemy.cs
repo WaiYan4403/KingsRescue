@@ -136,6 +136,14 @@ namespace KingsRescue.Enemies
         public void OnDespawned()
         {
             dying = true;
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                FreezeZone crystal = transform.GetChild(i).GetComponent<FreezeZone>();
+                if (crystal != null && ObjectPoolManager.Instance != null)
+                {
+                    ObjectPoolManager.Instance.Return(crystal.gameObject);
+                }
+            }
         }
 
         /// <summary>

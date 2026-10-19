@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.PassiveDefinition
   displayName: Tome
   description: Tome upgrades.
-  icon: {fileID: -1241906660, guid: 5066387750f00534791090481a4809f7, type: 3}
+  icon: {fileID: -2100570648, guid: 5066387750f00534791090481a4809f7, type: 3}
   levels:
   - upgradeText: 
     modifiers:

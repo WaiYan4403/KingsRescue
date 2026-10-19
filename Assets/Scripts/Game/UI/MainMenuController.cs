@@ -411,7 +411,24 @@ namespace KingsRescue.UI
             SetActive(accountPanel, panel);
             SetActive(usernamePanel, panel);
             SetActive(creditsPanel, panel);
+            SetCharacterStage(panel == characterPanel || panel == upgradePanel);
             CloseQuitConfirm();
+        }
+
+        private void SetCharacterStage(bool visible)
+        {
+            if (characterPanel == null)
+            {
+                return;
+            }
+
+            Transform stage = characterPanel.transform.parent;
+            if (stage == null || stage.GetComponent<Canvas>() != null)
+            {
+                return;
+            }
+
+            stage.gameObject.SetActive(visible);
         }
 
         private static void SetActive(GameObject target, GameObject visible)

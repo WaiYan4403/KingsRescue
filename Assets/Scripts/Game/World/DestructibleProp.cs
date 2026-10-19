@@ -46,6 +46,8 @@ namespace KingsRescue.World
         [Header("Chest")]
         [Tooltip("Chests open when the player walks up to them. Weapons do not damage them.")]
         [SerializeField] private bool isChest;
+
+        public bool IsChest => isChest;
         [SerializeField] private float interactRadius = 1.15f;
         [SerializeField, Range(0f, 1f)] private float rareDropChance = 0.2f;
 

@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
   displayName: Bow
   description: The archer's signature weapon.
-  icon: {fileID: 0}
+  icon: {fileID: 2066592859, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 1
   projectilePrefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}
+  areaEffectPrefabs: []
+  musicNotesPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
   comboDelay: 0.12
   fanProjectiles: 1
@@ -31,7 +33,10 @@ MonoBehaviour:
   - Attack1
   - Attack2
   - Attack3
+  advancedReachLevel: 0
+  advancedAttackTriggers: []
   attackStageUnlockLevels: 010000000200000003000000
+  powerSlashPrefabs: []
   levels:
   - upgradeText: 
     damage: 9

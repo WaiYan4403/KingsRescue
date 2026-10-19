@@ -44,6 +44,9 @@ namespace KingsRescue.Enemies
         private bool canFlipSprite;
         private float hasteUntil;
         private float hasteMult = 1f;
+        private float freezeUntil;
+
+        public bool IsFrozen => Time.time < freezeUntil;
         private float dashUntil;
         private Vector2 dashVelocity;
         private Vector2 knockbackVelocity;
@@ -92,10 +95,15 @@ namespace KingsRescue.Enemies
         {
             get
             {
-                if (halted)
-                {
-                    return "waiting";
-                }
+            if (IsFrozen)
+            {
+                return "frozen";
+            }
+
+            if (halted)
+            {
+                return "waiting";
+            }
 
                 if (Time.time < dashUntil)
                 {
@@ -130,6 +138,7 @@ namespace KingsRescue.Enemies
             jitterFactor = 1f + Random.Range(-speedJitter, speedJitter);
             hasteUntil = 0f;
             hasteMult = 1f;
+            freezeUntil = 0f;
             dashUntil = 0f;
             knockbackVelocity = Vector2.zero;
             knockbackUntil = 0f;
@@ -187,6 +196,11 @@ namespace KingsRescue.Enemies
             hasteUntil = Time.time + Mathf.Max(0.1f, duration);
         }
 
+        public void ApplyFreeze(float duration)
+        {
+            freezeUntil = Mathf.Max(freezeUntil, Time.time + Mathf.Max(0.05f, duration));
+        }
+
         public void SetHalted(bool value)
         {
             halted = value;
@@ -210,6 +224,11 @@ namespace KingsRescue.Enemies
 
         public void Dash(Vector2 velocity, float duration)
         {
+            if (IsFrozen)
+            {
+                return;
+            }
+
             dashVelocity = velocity;
             dashUntil = Time.time + Mathf.Max(0.05f, duration);
             halted = false;
@@ -221,7 +240,7 @@ namespace KingsRescue.Enemies
         /// </summary>
         public void ApplyKnockback(Vector2 direction, float force)
         {
-            if (force <= 0.01f)
+            if (IsFrozen || force <= 0.01f)
             {
                 return;
             }
@@ -303,6 +322,17 @@ namespace KingsRescue.Enemies
 
             ArenaBounds bounds = ArenaBounds.Instance;
             bool onScreen = bounds == null || bounds.IsOnScreen(position, chaseSlack);
+
+            if (IsFrozen)
+            {
+                cruiseVelocity = Vector2.zero;
+                knockbackVelocity = Vector2.zero;
+                knockbackUntil = 0f;
+                dashUntil = 0f;
+                Vector2 frozenScroll = Vector2.down * (ScrollDirector.Speed * scrollInfluence);
+                transform.position = position + frozenScroll * dt;
+                return;
+            }
 
             if (halted && Time.time >= dashUntil)
             {

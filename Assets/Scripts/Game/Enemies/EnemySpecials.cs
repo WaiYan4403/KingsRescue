@@ -148,6 +148,16 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            if (movement != null && movement.IsFrozen)
+            {
+                if (Time.time >= nextSpecial)
+                {
+                    nextSpecial = Time.time + 0.2f;
+                }
+
+                return;
+            }
+
             if (health != null && Has(EnemyTrait.FrontBlock))
             {
                 health.FacingLeft = movement != null && movement.FacingLeft;

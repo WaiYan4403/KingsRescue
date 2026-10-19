@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Core;
+using KingsRescue.Player;
 
 namespace KingsRescue.World
 {
@@ -31,6 +32,18 @@ namespace KingsRescue.World
         [Header("Breakables (drop coins)")]
         [SerializeField] private PropEntry[] breakables = Array.Empty<PropEntry>();
         [SerializeField] private Vector2Int breakableCount = new Vector2Int(1, 2);
+
+        [Header("Chests")]
+        [Tooltip("Chance a road tile grows one chest when Luck is 1. Higher Luck multiplies this. Chests are not part of the breakable lottery.")]
+        [SerializeField, Range(0f, 1f)] private float chestChanceAtBaseLuck = 0.35f;
+
+        [Tooltip("Luck cannot push a single tile above this chance.")]
+        [SerializeField, Range(0f, 1f)] private float maxChestChance = 0.62f;
+
+        [Tooltip("Road distance before another chest can appear, at Luck 1. Higher Luck shortens the gap.")]
+        [SerializeField] private float chestSpacing = 32f;
+
+        private static float nextChestDistance;
 
         [Header("Decoration (no loot)")]
         [SerializeField] private PropEntry[] decorations = Array.Empty<PropEntry>();
@@ -83,6 +96,12 @@ namespace KingsRescue.World
         public float TopY => transform.position.y + Height * 0.5f;
 
         public float BottomY => transform.position.y - Height * 0.5f;
+
+        /// <summary>Call when a run starts, before the first road tiles are laid.</summary>
+        public static void ResetChestSchedule()
+        {
+            nextChestDistance = 0f;
+        }
 
         private void Awake()
         {
@@ -141,6 +160,8 @@ namespace KingsRescue.World
 
         private void RefreshProps()
         {
+            ReleaseChests();
+
             for (int i = spawned.Count - 1; i >= 0; i--)
             {
                 if (IsOwned(spawned[i]))
@@ -157,6 +178,7 @@ namespace KingsRescue.World
                 SpawnProps(breakables, RandomCount(breakableCount), true);
                 SpawnProps(blockers, RandomCount(blockerCount), true);
                 SpawnProps(decorations, RandomCount(decorationCount), false);
+                TrySpawnChest();
                 return;
             }
 
@@ -181,6 +203,112 @@ namespace KingsRescue.World
                     SpawnProps(decorations, missing, false);
                 }
             }
+
+            TrySpawnChest();
+        }
+
+        private void ReleaseChests()
+        {
+            for (int i = spawned.Count - 1; i >= 0; i--)
+            {
+                GameObject instance = spawned[i];
+                if (!IsChest(instance))
+                {
+                    continue;
+                }
+
+                if (IsOwned(instance))
+                {
+                    Release(instance);
+                }
+
+                spawned.RemoveAt(i);
+                propPoolables.RemoveAt(i);
+            }
+        }
+
+        private void TrySpawnChest()
+        {
+            GameObject prefab = FindChestPrefab();
+            if (prefab == null)
+            {
+                return;
+            }
+
+            float luck = CurrentLuck();
+            float traveled = ScrollDirector.DistanceMeters;
+            if (traveled < nextChestDistance)
+            {
+                return;
+            }
+
+            float chance = Mathf.Clamp(chestChanceAtBaseLuck * luck, 0f, maxChestChance);
+            if (UnityEngine.Random.value >= chance)
+            {
+                return;
+            }
+
+            if (!SpawnOne(prefab))
+            {
+                return;
+            }
+
+            float gap = chestSpacing / luck;
+            nextChestDistance = traveled + Mathf.Max(Height * 0.5f, gap);
+        }
+
+        private bool SpawnOne(GameObject prefab)
+        {
+            float lastX = float.NegativeInfinity;
+            Vector3 local = PlaceLocal(true, ref lastX);
+            Vector3 world = obstaclesRoot.TransformPoint(local);
+            GameObject instance = SpawnChild(prefab, world, obstaclesRoot);
+            if (instance == null || instance.GetComponent<KingsRescue.Pickups.Pickup>() != null)
+            {
+                return false;
+            }
+
+            spawned.Add(instance);
+            PooledObject pooled = instance.GetComponent<PooledObject>();
+            propPoolables.Add(pooled != null ? pooled.Poolables : Array.Empty<IPoolable>());
+            return true;
+        }
+
+        private GameObject FindChestPrefab()
+        {
+            for (int i = 0; i < breakables.Length; i++)
+            {
+                GameObject prefab = breakables[i].prefab;
+                if (IsChest(prefab))
+                {
+                    return prefab;
+                }
+            }
+
+            return null;
+        }
+
+        private static float CurrentLuck()
+        {
+            PlayerController hero = PlayerController.Instance;
+            if (hero == null)
+            {
+                return 1f;
+            }
+
+            PlayerStats stats = hero.GetComponent<PlayerStats>();
+            return stats != null ? Mathf.Max(0.1f, stats.Luck) : 1f;
+        }
+
+        private static bool IsChest(GameObject instance)
+        {
+            if (instance == null)
+            {
+                return false;
+            }
+
+            DestructibleProp prop = instance.GetComponent<DestructibleProp>();
+            return prop != null && prop.IsChest;
         }
 
         private void SpawnProps(PropEntry[] entries, int count, bool trackSeparation)
@@ -260,7 +388,7 @@ namespace KingsRescue.World
             float total = 0f;
             for (int i = 0; i < entries.Length; i++)
             {
-                if (entries[i].prefab != null)
+                if (entries[i].prefab != null && !IsChest(entries[i].prefab))
                 {
                     total += Mathf.Max(0f, entries[i].weight);
                 }
@@ -274,7 +402,7 @@ namespace KingsRescue.World
             float roll = UnityEngine.Random.value * total;
             for (int i = 0; i < entries.Length; i++)
             {
-                if (entries[i].prefab == null)
+                if (entries[i].prefab == null || IsChest(entries[i].prefab))
                 {
                     continue;
                 }

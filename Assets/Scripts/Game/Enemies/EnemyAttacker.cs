@@ -13,6 +13,7 @@ namespace KingsRescue.Enemies
     {
         private EnemyDefinition definition;
         private EnemyAttackAnimator attackAnimator;
+        private EnemyMovement movement;
         private float damage;
         private float runMinutes;
         private float nextShot;
@@ -21,6 +22,7 @@ namespace KingsRescue.Enemies
         private void Awake()
         {
             attackAnimator = GetComponent<EnemyAttackAnimator>();
+            movement = GetComponent<EnemyMovement>();
         }
 
         public void OnSpawned()
@@ -91,6 +93,12 @@ namespace KingsRescue.Enemies
             GameManager game = GameManager.Instance;
             if (game != null && !game.IsPlaying)
             {
+                return;
+            }
+
+            if (movement != null && movement.IsFrozen)
+            {
+                nextShot = Time.time + 0.2f;
                 return;
             }
 
