@@ -329,8 +329,9 @@ namespace KingsRescue.Enemies
                 knockbackVelocity = Vector2.zero;
                 knockbackUntil = 0f;
                 dashUntil = 0f;
-                Vector2 frozenScroll = Vector2.down * (ScrollDirector.Speed * scrollInfluence);
-                transform.position = position + frozenScroll * dt;
+                // Chase uses a reduced scroll so enemies can fight the road. Frozen bodies
+                // have to match the ground exactly or they slide across it.
+                transform.position = position + ScrollDirector.Velocity * dt;
                 return;
             }
 

@@ -127,7 +127,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            nextFireTime = Time.time + ResolveCooldown();
+            nextFireTime = Time.time + ResolveShotGap();
             Fire();
         }
 
@@ -138,6 +138,67 @@ namespace KingsRescue.Combat
         private float ResolveCooldown()
         {
             return Mathf.Max(0.05f, Data.cooldown / Mathf.Max(0.1f, stats.AttackSpeed));
+        }
+
+        /// <summary>
+        /// Time until the next activation. Most weapons use the cooldown alone.
+        /// Throws and casts marked to follow duration wait out the shot, then the cooldown.
+        /// </summary>
+        private float ResolveShotGap()
+        {
+            float cooldown = ResolveCooldown();
+            if (!definition.cooldownFollowsDuration)
+            {
+                return cooldown;
+            }
+
+            return cooldown + ResolveEffectTime() + ResolveVolleyTime();
+        }
+
+        private float ResolveVolleyTime()
+        {
+            if (definition.fanProjectiles)
+            {
+                return 0f;
+            }
+
+            bool staggered = definition.fireMode == WeaponFireMode.ForwardShot
+                || definition.fireMode == WeaponFireMode.AimedShot;
+            if (!staggered)
+            {
+                return 0f;
+            }
+
+            int count = ResolveCount();
+            if (count <= 1)
+            {
+                return 0f;
+            }
+
+            return Mathf.Max(0.02f, definition.comboDelay) * (count - 1);
+        }
+
+        private float ResolveEffectTime()
+        {
+            float duration = ResolveDuration();
+            float speed = Data.projectileSpeed * Mathf.Max(0.1f, stats.ProjectileSpeedMultiplier);
+            float range = ResolveShotRange();
+            bool traveling = definition.fireMode == WeaponFireMode.Boomerang
+                || definition.fireMode == WeaponFireMode.AimedShot
+                || definition.fireMode == WeaponFireMode.RandomShot
+                || definition.fireMode == WeaponFireMode.ForwardShot;
+            if (!traveling || speed <= 0.01f || range <= 0f)
+            {
+                return duration;
+            }
+
+            float travel = range / speed;
+            if (definition.fireMode == WeaponFireMode.Boomerang)
+            {
+                travel *= 2f;
+            }
+
+            return Mathf.Min(duration, travel);
         }
 
         private float ResolveDamage()

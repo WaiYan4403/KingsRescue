@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 8151465775059127670}
   - component: {fileID: 4909982734077868649}
   - component: {fileID: 6621561650273590919}
+  - component: {fileID: 8141093546663923494}
   m_Layer: 0
   m_Name: Enemy_HobGlobin
   m_TagString: Untagged
@@ -240,3 +241,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials
+--- !u!114 &8141093546663923494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987047377786636553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9564f6a86f3cb144d9746172037e4bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemyAttackAnimator

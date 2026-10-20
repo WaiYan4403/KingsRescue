@@ -44,6 +44,7 @@ namespace KingsRescue.World
         [SerializeField] private float chestSpacing = 32f;
 
         private static float nextChestDistance;
+        private static bool openingRoad;
 
         [Header("Decoration (no loot)")]
         [SerializeField] private PropEntry[] decorations = Array.Empty<PropEntry>();
@@ -101,6 +102,15 @@ namespace KingsRescue.World
         public static void ResetChestSchedule()
         {
             nextChestDistance = 0f;
+            openingRoad = false;
+        }
+
+        /// <summary>
+        /// The tiles built before the hero walks in must not grow a chest.
+        /// </summary>
+        public static void SetOpeningRoad(bool opening)
+        {
+            openingRoad = opening;
         }
 
         private void Awake()
@@ -231,6 +241,11 @@ namespace KingsRescue.World
         {
             GameObject prefab = FindChestPrefab();
             if (prefab == null)
+            {
+                return;
+            }
+
+            if (openingRoad)
             {
                 return;
             }

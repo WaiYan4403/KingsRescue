@@ -26,6 +26,7 @@ MonoBehaviour:
   fanProjectiles: 0
   aimStyle: 1
   projectileHoming: 0
+  cooldownFollowsDuration: 1
   isUniqueWeapon: 0
   requiresUnlock: 0
   usesCharacterAnimators: 0
@@ -40,7 +41,7 @@ MonoBehaviour:
   levels:
   - upgradeText: 
     damage: 7
-    cooldown: 0.5
+    cooldown: 0.55
     count: 1
     pierce: 0
     area: 0.85

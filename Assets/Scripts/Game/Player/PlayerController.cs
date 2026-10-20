@@ -32,6 +32,16 @@ namespace KingsRescue.Player
         [Tooltip("How hard contact shoves the hero left or right around a prop.")]
         [SerializeField, Range(0f, 2f)] private float asideBias = 1.1f;
 
+        [Header("Entrance")]
+        [Tooltip("Walk speed while the hero climbs into frame. The run clock stays at zero until they arrive.")]
+        [SerializeField] private float entranceSpeed = 1.25f;
+
+        [Tooltip("How far below the camera the hero starts, in world units. Just enough that the sprite begins out of frame.")]
+        [SerializeField] private float entranceHiddenDepth = 1.6f;
+
+        [Tooltip("Stand height above the bottom of the camera once the walk finishes.")]
+        [SerializeField] private float entranceStandHeight = 2f;
+
         [Header("Flight")]
         [SerializeField] private float flyBobAmplitude = 0.14f;
         [SerializeField] private float flyBobHz = 1.6f;
@@ -55,6 +65,8 @@ namespace KingsRescue.Player
         private bool spriteRestCached;
         private readonly List<Collider2D> overlappingObstacles = new List<Collider2D>(8);
         private SpriteRenderer slashRenderer;
+        private bool runEntrance;
+        private Vector2 entranceTarget;
 
         public Vector2 Velocity => velocity;
 
@@ -68,6 +80,40 @@ namespace KingsRescue.Player
         public static Transform PlayerTransform => Instance != null ? Instance.transform : null;
 
         public static Vector2 Position => Instance != null ? (Vector2)Instance.transform.position : Vector2.zero;
+
+        /// <summary>True while the hero is walking into frame and the run has not started.</summary>
+        public bool IsEntering => runEntrance;
+
+        /// <summary>
+        /// Places the hero below the camera and walks them to the center, two units above the bottom edge.
+        /// </summary>
+        public void BeginRunEntrance()
+        {
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds == null || body == null)
+            {
+                CompleteEntrance();
+                return;
+            }
+
+            bounds.Recalculate();
+            Rect screen = bounds.ScreenRect;
+            if (screen.height < 1f)
+            {
+                CompleteEntrance();
+                return;
+            }
+
+            float x = screen.center.x;
+            entranceTarget = new Vector2(x, screen.yMin + entranceStandHeight);
+            runEntrance = true;
+            velocity = Vector2.zero;
+            inputAxis = Vector2.zero;
+
+            Vector2 start = new Vector2(x, screen.yMin - Mathf.Max(0.5f, entranceHiddenDepth));
+            body.position = start;
+            transform.position = new Vector3(start.x, start.y, transform.position.z);
+        }
 
         protected override void Awake()
         {
@@ -107,12 +153,22 @@ namespace KingsRescue.Player
                 return;
             }
 
-            inputAxis = PlayerInputReader.Axis;
+            if (!runEntrance)
+            {
+                inputAxis = PlayerInputReader.Axis;
+            }
+
             UpdateVisuals();
         }
 
         private void FixedUpdate()
         {
+            if (runEntrance)
+            {
+                StepEntrance();
+                return;
+            }
+
             if (Health != null && !Health.IsAlive)
             {
                 velocity = Vector2.zero;
@@ -155,6 +211,29 @@ namespace KingsRescue.Player
             }
 
             body.MovePosition(next);
+        }
+
+        private void StepEntrance()
+        {
+            float dt = Time.fixedDeltaTime;
+            Vector2 next = Vector2.MoveTowards(body.position, entranceTarget, Mathf.Max(0.2f, entranceSpeed) * dt);
+            velocity = dt > 0.0001f ? (next - body.position) / dt : Vector2.up * entranceSpeed;
+            body.MovePosition(next);
+
+            if ((entranceTarget - next).sqrMagnitude > 0.0004f)
+            {
+                return;
+            }
+
+            body.MovePosition(entranceTarget);
+            velocity = Vector2.zero;
+            runEntrance = false;
+            CompleteEntrance();
+        }
+
+        private void CompleteEntrance()
+        {
+            GameManager.Instance?.BeginField();
         }
 
         private void UpdateVisuals()

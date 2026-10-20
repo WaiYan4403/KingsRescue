@@ -19,8 +19,11 @@ MonoBehaviour:
   projectilePrefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}
+  areaEffectPrefabs: []
+  musicNotesPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
   comboDelay: 0.3
+  cooldownFollowsDuration: 1
   fanProjectiles: 0
   aimStyle: 0
   projectileHoming: 0
@@ -50,9 +53,9 @@ MonoBehaviour:
     spreadDegrees: 0
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Heavier bolt
+  - upgradeText: More damage
     damage: 16
-    cooldown: 0.85
+    cooldown: 0.8
     count: 1
     pierce: 0
     area: 1
@@ -66,7 +69,7 @@ MonoBehaviour:
     orbitSpeed: 0.7
   - upgradeText: Pierce 1
     damage: 16
-    cooldown: 0.85
+    cooldown: 0.75
     count: 1
     pierce: 1
     area: 1
@@ -80,7 +83,7 @@ MonoBehaviour:
     orbitSpeed: 0.7
   - upgradeText: Faster reload
     damage: 20
-    cooldown: 0.6
+    cooldown: 0.55
     count: 1
     pierce: 1
     area: 1
@@ -92,9 +95,9 @@ MonoBehaviour:
     spreadDegrees: 0
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Two-bolt burst, straight ahead
+  - upgradeText: +1 bolt, +1 pierce
     damage: 20
-    cooldown: 0.6
+    cooldown: 0.45
     count: 2
     pierce: 2
     area: 1

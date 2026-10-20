@@ -51,6 +51,7 @@ namespace KingsRescue.World
             }
 
             BackgroundSegment.ResetChestSchedule();
+            BackgroundSegment.SetOpeningRoad(true);
 
             root = new GameObject("Backgrounds").transform;
             root.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -67,12 +68,15 @@ namespace KingsRescue.World
                 BackgroundSegment segment = SpawnSegment(pos);
                 if (segment == null)
                 {
+                    BackgroundSegment.SetOpeningRoad(false);
                     enabled = false;
                     yield break;
                 }
 
                 segments.Add(segment);
             }
+
+            BackgroundSegment.SetOpeningRoad(false);
         }
 
         private void Update()

@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 1165335102114444313}
   - component: {fileID: 5508125335553501603}
   - component: {fileID: 1743784272409311288}
+  - component: {fileID: 8261467944193904235}
   m_Layer: 0
   m_Name: Enemy_GoblinMage
   m_TagString: Untagged
@@ -91,8 +92,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8522042403500378055, guid: 80093fd8ebed85b4284f79562c40719e, type: 3}
-  m_Color: {r: 0.55, g: 0.35, b: 1, a: 1}
+  m_Sprite: {fileID: -3001996299096168756, guid: 6990eda44edb03949a8cd284d47ad015, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -217,7 +218,7 @@ Animator:
   m_GameObject: {fileID: 6029562587574041385}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bad28eae4b88f9d46b90850ea84ceef1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 27667555b9a9cf04092130a2edcf685f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -253,3 +254,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af81b0703f3dab43b66caab170ebea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemySpecials
+--- !u!114 &8261467944193904235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6029562587574041385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9564f6a86f3cb144d9746172037e4bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EnemyAttackAnimator

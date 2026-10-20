@@ -1,0 +1,353 @@
+fileFormatVersion: 2
+guid: 846da7c7d94fcc048815396b69a27296
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -319509429510461966
+    second: Skeleton_Walk_0
+  - first:
+      213: -5704084491819767634
+    second: Skeleton_Walk_1
+  - first:
+      213: 8477824621842717129
+    second: Skeleton_Walk_2
+  - first:
+      213: 3051669912371892857
+    second: Skeleton_Walk_3
+  - first:
+      213: 7539542233003775106
+    second: Skeleton_Walk_4
+  - first:
+      213: 2788143195985776107
+    second: Skeleton_Walk_5
+  - first:
+      213: -119383558338234881
+    second: Skeleton_Walk_6
+  - first:
+      213: 1567333206898370016
+    second: Skeleton_Walk_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Skeleton_Walk_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f524afdddfd09bf0800000000000000
+      internalID: -319509429510461966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeleton_Walk_1
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea8a440506507d0b0800000000000000
+      internalID: -5704084491819767634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeleton_Walk_2
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c9defc739847a570800000000000000
+      internalID: 8477824621842717129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeleton_Walk_3
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9729caaed95b95a20800000000000000
+      internalID: 3051669912371892857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeleton_Walk_4
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 284de37f6b5d1a860800000000000000
+      internalID: 7539542233003775106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeleton_Walk_5
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bed87abe67971b620800000000000000
+      internalID: 2788143195985776107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeleton_Walk_6
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff53a35494dd75ef0800000000000000
+      internalID: -119383558338234881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Skeleton_Walk_7
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 1
+        width: 44
+        height: 43
+      alignment: 9
+      pivot: {x: 0.5, y: 0.15}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e5e9d16f3940c510800000000000000
+      internalID: 1567333206898370016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 3df77ddedc6b30941839d3d31b5efcf1
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":44.0,"y":43.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.15000000596046449},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Skeleton_Walk_0: -319509429510461966
+      Skeleton_Walk_1: -5704084491819767634
+      Skeleton_Walk_2: 8477824621842717129
+      Skeleton_Walk_3: 3051669912371892857
+      Skeleton_Walk_4: 7539542233003775106
+      Skeleton_Walk_5: 2788143195985776107
+      Skeleton_Walk_6: -119383558338234881
+      Skeleton_Walk_7: 1567333206898370016
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

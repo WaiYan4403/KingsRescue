@@ -62,7 +62,7 @@ namespace KingsRescue.Data
 
         public float damage = 10f;
 
-        [Tooltip("Seconds between activations, before Attack Speed is applied.")]
+        [Tooltip("Seconds between activations, before Attack Speed. When Cooldown Follows Duration is on, this is the pause after the effect ends.")]
         public float cooldown = 1.1f;
 
         [Tooltip("Projectiles per volley, blades in the ring, or swings in the combo.")]
@@ -131,6 +131,9 @@ namespace KingsRescue.Data
 
         [Tooltip("Seconds between the individual swings of a multi-hit melee combo, or bolts of a straight volley.")]
         public float comboDelay = 0.12f;
+
+        [Tooltip("The next shot waits until this one has finished, then counts down Cooldown. Used by throws and casts that should not overlap.")]
+        public bool cooldownFollowsDuration;
 
         [Tooltip("ForwardShot: when true, extra projectiles fan in an arc. When false, every shot travels straight forward.")]
         public bool fanProjectiles = true;

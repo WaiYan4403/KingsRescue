@@ -16,14 +16,20 @@ namespace KingsRescue.Enemies
         [SerializeField] private SpriteRenderer indicator;
         [SerializeField] private float playerRadius = 0.35f;
 
+        private static readonly int FallState = Animator.StringToHash("Meteor_Falling");
+
         private Vector2 impact;
-        private Vector2 start;
+        private Vector2 parked;
         private float damage;
         private float radius;
         private float warning;
         private float spawnedAt;
+        private float fallDeadline;
         private bool falling;
         private bool exploded;
+        private bool usesAnimation;
+        private bool sawFall;
+        private Animator animator;
         private EnemyMovement movement;
         private ContactDamage contact;
         private EnemyAttacker attacker;
@@ -31,6 +37,7 @@ namespace KingsRescue.Enemies
 
         private void Awake()
         {
+            animator = GetComponent<Animator>();
             movement = GetComponent<EnemyMovement>();
             contact = GetComponent<ContactDamage>();
             attacker = GetComponent<EnemyAttacker>();
@@ -118,8 +125,8 @@ namespace KingsRescue.Enemies
                 Mathf.Clamp(impactPoint.x, play.xMin, play.xMax),
                 Mathf.Clamp(impactPoint.y, play.yMin, play.yMax));
             float top = bounds != null ? bounds.TopSpawnY : impact.y + 8f;
-            start = new Vector2(impact.x, top);
-            transform.position = start;
+            parked = new Vector2(impact.x, top);
+            transform.position = parked;
         }
 
         private void PlaceVisuals(bool warningPhase)
@@ -139,8 +146,26 @@ namespace KingsRescue.Enemies
 
             if (fireball != null)
             {
-                fireball.enabled = true;
+                fireball.enabled = !warningPhase;
             }
+
+            if (warningPhase)
+            {
+                RewindFall();
+            }
+        }
+
+        private void RewindFall()
+        {
+            sawFall = false;
+            if (animator == null || animator.runtimeAnimatorController == null)
+            {
+                return;
+            }
+
+            animator.speed = 0f;
+            animator.Play(FallState, 0, 0f);
+            animator.Update(0f);
         }
 
         private void Update()
@@ -159,7 +184,24 @@ namespace KingsRescue.Enemies
             if (movement != null && movement.IsFrozen)
             {
                 spawnedAt += Time.deltaTime;
+                if (falling)
+                {
+                    fallDeadline += Time.deltaTime;
+                    if (animator != null)
+                    {
+                        animator.speed = 0f;
+                    }
+                }
+
+                // Movement is disabled on a strike, so the body has to take the road scroll itself.
+                transform.position += (Vector3)(ScrollDirector.Velocity * Time.deltaTime);
+                impact += ScrollDirector.Velocity * Time.deltaTime;
                 return;
+            }
+
+            if (animator != null && falling)
+            {
+                animator.speed = 1f;
             }
 
             if (indicator != null)
@@ -173,22 +215,73 @@ namespace KingsRescue.Enemies
                 PulseIndicator(elapsed);
                 if (elapsed >= warning)
                 {
-                    falling = true;
+                    BeginFall();
                 }
 
                 return;
             }
 
-            float fallTime = Mathf.Max(0.18f, warning * 0.45f);
-            float t = Mathf.Clamp01((elapsed - warning) / fallTime);
-            transform.position = Vector2.Lerp(start, impact, t * t);
-
-            if (t < 1f)
+            if (FallFinished() || Time.time >= fallDeadline)
             {
-                return;
+                Explode();
+            }
+        }
+
+        /// <summary>
+        /// The sheet falls inside the sprite, with the pivot on the blast point.
+        /// Damage lands when that clip finishes, which is the impact frame.
+        /// </summary>
+        private void BeginFall()
+        {
+            falling = true;
+            usesAnimation = false;
+            sawFall = false;
+            transform.position = impact;
+            PlaceVisuals(false);
+
+            float clip = 0.7f;
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                animator.speed = 1f;
+                animator.Play(FallState, 0, 0f);
+                animator.Update(0f);
+                usesAnimation = true;
+                float length = animator.GetCurrentAnimatorStateInfo(0).length;
+                if (length > 0.05f)
+                {
+                    clip = length;
+                }
             }
 
-            Explode();
+            fallDeadline = Time.time + clip + 0.05f;
+        }
+
+        private bool FallFinished()
+        {
+            if (!usesAnimation || animator == null)
+            {
+                return false;
+            }
+
+            if (animator.IsInTransition(0))
+            {
+                return false;
+            }
+
+            AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+            if (info.shortNameHash != FallState)
+            {
+                return false;
+            }
+
+            if (info.normalizedTime < 0.85f)
+            {
+                sawFall = true;
+                return false;
+            }
+
+            return sawFall && info.normalizedTime >= 1f;
         }
 
         private void PulseIndicator(float elapsed)

@@ -44,7 +44,7 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Player
+  - name: Air
     uniqueID: 3231049345
     locked: 0
   - name: Effects

@@ -114,6 +114,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
+            PooledObject enemyPool = enemy.GetComponent<PooledObject>();
             Animator[] found = enemy.GetComponentsInChildren<Animator>(true);
             if (heldAnimators.Length < found.Length)
             {
@@ -126,6 +127,14 @@ namespace KingsRescue.Combat
             {
                 Animator body = found[i];
                 if (body == null || body.transform == transform || body.transform.IsChildOf(transform))
+                {
+                    continue;
+                }
+
+                // Crystals, bolts, and other pooled effects can sit on the enemy.
+                // Only the enemy prefab's own animators should hold.
+                PooledObject owner = body.GetComponentInParent<PooledObject>();
+                if (owner != enemyPool)
                 {
                     continue;
                 }

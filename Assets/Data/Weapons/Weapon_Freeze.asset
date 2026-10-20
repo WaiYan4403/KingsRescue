@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
   m_Name: Weapon_Freeze
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
-  displayName: Freeze
-  description: A crystal sticks to a random nearby enemy, freezing them and hurting
-    them on contact.
+  displayName: Frozen
+  description: A crystal sticks to a random nearby enemy, freezing them.
   icon: {fileID: -539391412, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 8
   projectilePrefab: {fileID: 0}
@@ -24,6 +23,7 @@ MonoBehaviour:
   musicNotesPrefab: {fileID: 0}
   usesGlobalProjectileCount: 1
   comboDelay: 0.12
+  cooldownFollowsDuration: 1
   fanProjectiles: 0
   aimStyle: 0
   projectileHoming: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   levels:
   - upgradeText: 
     damage: 2
-    cooldown: 2.1
+    cooldown: 1.6
     count: 1
     pierce: 0
     area: 1.15
@@ -53,9 +53,9 @@ MonoBehaviour:
     spreadDegrees: 0
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Harder frost
+  - upgradeText: More damage
     damage: 4
-    cooldown: 2.1
+    cooldown: 1.6
     count: 1
     pierce: 0
     area: 1.15
@@ -69,7 +69,7 @@ MonoBehaviour:
     orbitSpeed: 0.7
   - upgradeText: +1 crystal
     damage: 4
-    cooldown: 1.9
+    cooldown: 1.6
     count: 2
     pierce: 0
     area: 1.15
@@ -81,9 +81,9 @@ MonoBehaviour:
     spreadDegrees: 0
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Wider frost
+  - upgradeText: +2 crystal, +2 damage
     damage: 6
-    cooldown: 1.8
+    cooldown: 1.6
     count: 4
     pierce: 0
     area: 1.15
@@ -95,7 +95,7 @@ MonoBehaviour:
     spreadDegrees: 0
     rehitInterval: 0.45
     orbitSpeed: 0.7
-  - upgradeText: Blizzard
+  - upgradeText: More crystals, more damange
     damage: 8
     cooldown: 1.6
     count: 6

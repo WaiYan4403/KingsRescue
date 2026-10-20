@@ -7,9 +7,23 @@ namespace KingsRescue.Enemies
 {
     /// <summary>
     /// Hostile shot aimed at the hero. Optional homing and a slow on hit (spider webs).
+    /// Webs play flying, then hit, then destroy before returning to the pool.
     /// </summary>
     public class HostileProjectile : MonoBehaviour, IPoolable
     {
+        private enum VisualPhase
+        {
+            Flying,
+            Hit,
+            Destroy
+        }
+
+        private static readonly int HitHash = Animator.StringToHash("Hit");
+        private static readonly int DestoryHash = Animator.StringToHash("Destory");
+        private static readonly int IdleState = Animator.StringToHash("Web_Idle");
+        private static readonly int NetState = Animator.StringToHash("Web_Net");
+        private static readonly int DestoryState = Animator.StringToHash("Web_Destory");
+
         [SerializeField] private float hitRadius = 0.28f;
         [SerializeField] private bool rotateToDirection = true;
         [SerializeField] private float playerRadius = 0.35f;
@@ -21,13 +35,23 @@ namespace KingsRescue.Enemies
         private float traveled;
         private float slowFactor;
         private float slowDuration;
+        private float phaseDeadline;
         private bool homing;
         private float homingTurn = 4.5f;
+        private bool staged;
+        private VisualPhase phase;
         private GameObject source;
         private HitboxMarker hitbox;
+        private Animator animator;
 
         /// <summary>Every hostile shot currently in flight.</summary>
         private static readonly System.Collections.Generic.List<HostileProjectile> Active = new System.Collections.Generic.List<HostileProjectile>(64);
+
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+            staged = HasTrigger(HitHash) && HasTrigger(DestoryHash);
+        }
 
         public void OnSpawned()
         {
@@ -35,6 +59,8 @@ namespace KingsRescue.Enemies
             {
                 Active.Add(this);
             }
+
+            phase = VisualPhase.Flying;
         }
 
         public void OnDespawned()
@@ -42,6 +68,12 @@ namespace KingsRescue.Enemies
             Active.Remove(this);
             HitboxDisplay.Release(hitbox);
             hitbox = null;
+            phase = VisualPhase.Flying;
+            if (staged && animator != null)
+            {
+                animator.ResetTrigger(HitHash);
+                animator.ResetTrigger(DestoryHash);
+            }
         }
 
         public static void DespawnAll()
@@ -71,6 +103,8 @@ namespace KingsRescue.Enemies
             slowDuration = slowTime;
             homing = homes;
             source = owner;
+            phase = VisualPhase.Flying;
+            BeginFlying();
             FaceVelocity();
             HitboxDisplay.SyncCircle(ref hitbox, transform.position, hitRadius);
         }
@@ -80,6 +114,26 @@ namespace KingsRescue.Enemies
             GameManager game = GameManager.Instance;
             if (game != null && !game.IsPlaying)
             {
+                return;
+            }
+
+            if (phase == VisualPhase.Hit)
+            {
+                if (StateFinished(NetState) || Time.time >= phaseDeadline)
+                {
+                    BeginDestroy();
+                }
+
+                return;
+            }
+
+            if (phase == VisualPhase.Destroy)
+            {
+                if (StateFinished(DestoryState) || Time.time >= phaseDeadline)
+                {
+                    Recycle();
+                }
+
                 return;
             }
 
@@ -98,14 +152,14 @@ namespace KingsRescue.Enemies
 
             if ((maxTravel > 0f && traveled >= maxTravel) || Time.time >= expireAt)
             {
-                Recycle();
+                EndFlight();
                 return;
             }
 
             ArenaBounds bounds = ArenaBounds.Instance;
             if (bounds != null && bounds.IsPastDespawn(position))
             {
-                Recycle();
+                EndFlight();
                 return;
             }
 
@@ -157,7 +211,109 @@ namespace KingsRescue.Enemies
                 status.ApplySlow(slowFactor, slowDuration);
             }
 
-            Recycle();
+            BeginHit();
+        }
+
+        private void BeginFlying()
+        {
+            if (!staged || animator == null)
+            {
+                return;
+            }
+
+            animator.ResetTrigger(HitHash);
+            animator.ResetTrigger(DestoryHash);
+            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            animator.speed = 1f;
+            animator.Play(IdleState, 0, 0f);
+            animator.Update(0f);
+        }
+
+        private void BeginHit()
+        {
+            velocity = Vector2.zero;
+            transform.rotation = Quaternion.identity;
+            HitboxDisplay.Release(hitbox);
+            hitbox = null;
+
+            if (!staged || animator == null)
+            {
+                Recycle();
+                return;
+            }
+
+            phase = VisualPhase.Hit;
+            phaseDeadline = Time.time + 0.5f;
+            animator.ResetTrigger(DestoryHash);
+            animator.Play(NetState, 0, 0f);
+            animator.Update(0f);
+        }
+
+        private void EndFlight()
+        {
+            if (!staged || animator == null)
+            {
+                Recycle();
+                return;
+            }
+
+            BeginDestroy();
+        }
+
+        private void BeginDestroy()
+        {
+            if (phase == VisualPhase.Destroy)
+            {
+                return;
+            }
+
+            velocity = Vector2.zero;
+            transform.rotation = Quaternion.identity;
+            HitboxDisplay.Release(hitbox);
+            hitbox = null;
+
+            if (!staged || animator == null)
+            {
+                Recycle();
+                return;
+            }
+
+            phase = VisualPhase.Destroy;
+            phaseDeadline = Time.time + 0.28f;
+            animator.ResetTrigger(HitHash);
+            animator.ResetTrigger(DestoryHash);
+            animator.Play(DestoryState, 0, 0f);
+            animator.Update(0f);
+        }
+
+        private bool StateFinished(int stateHash)
+        {
+            if (animator == null || animator.IsInTransition(0))
+            {
+                return false;
+            }
+
+            AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+            return info.shortNameHash == stateHash && info.normalizedTime >= 1f;
+        }
+
+        private bool HasTrigger(int hash)
+        {
+            if (animator == null || animator.runtimeAnimatorController == null)
+            {
+                return false;
+            }
+
+            AnimatorControllerParameter[] parameters = animator.parameters;
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i].type == AnimatorControllerParameterType.Trigger && parameters[i].nameHash == hash)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void FaceVelocity()

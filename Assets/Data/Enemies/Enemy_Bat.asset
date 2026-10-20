@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
   m_Name: Enemy_Bat
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
-  displayName: Bat
+  displayName: Hunter Bat
   prefab: {fileID: 3371409198316295035, guid: c2ed9645d39677640b4fbaedd8919f77, type: 3}
   isBoss: 0
   bossMinion: 0
@@ -20,24 +20,24 @@ MonoBehaviour:
   canFlipSprite: 1
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1
-  maxHealth: 6
-  contactDamage: 6
+  maxHealth: 4
+  contactDamage: 5
   contactInterval: 0.45
   contactRadius: 0.28
   dealsContactDamage: 1
   knockbackResistance: 0
-  moveStyle: 1
-  moveSpeed: 15
-  scrollInfluence: 0.15
-  turnResponsiveness: 12
-  followChance: 0
+  moveStyle: 3
+  moveSpeed: 5
+  scrollInfluence: 0.2
+  turnResponsiveness: 8
+  followChance: 1
   giveUpWhenPassedChance: 0
-  separationRadius: 1
-  separationStrength: 0.5
+  separationRadius: 0.7
+  separationStrength: 2
   preferredDistance: 4.5
-  spawnAsFlock: 1
-  flockMin: 15
-  flockMax: 30
+  spawnAsFlock: 0
+  flockMin: 1
+  flockMax: 1
   attackStyle: 0
   projectilePrefab: {fileID: 0}
   meteorDefinition: {fileID: 0}
@@ -63,7 +63,7 @@ MonoBehaviour:
   hazardPrefab: {fileID: 0}
   deathBurstDamage: 0
   deathBurstRadius: 1.4
-  xpValue: 1
+  xpValue: 2
   coinDropChance: 0.02
   healthDropChance: 0.005
   healthGrowthPerMinute: 0.35

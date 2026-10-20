@@ -173,11 +173,11 @@ namespace KingsRescue.UI
             GameManager game = GameManager.Instance;
             if (game == null)
             {
-                return false;
+                return true;
             }
 
-            GameState state = game.State;
-            return state == GameState.LevelUp || state == GameState.Chest || state == GameState.GameOver;
+            // Shown only once the road is moving. The walk-in and the menus keep it hidden.
+            return game.State != GameState.Playing;
         }
 
         private Vector3 FollowPoint()

@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec378569be444a1c93657821b215a59, type: 3}
+  m_Name: Weapon_FireGrimoire
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.WeaponDefinition
+  displayName: Fire Grimoire
+  description: Hurls fireballs at random enemies.
+  icon: {fileID: -7573354855677281409, guid: 5066387750f00534791090481a4809f7, type: 3}
+  fireMode: 5
+  projectilePrefab: {fileID: 9086646655045113726, guid: c4ffb9b78e93eaf4781905217c0afb8a, type: 3}
+  orbitPrefab: {fileID: 0}
+  effectPrefab: {fileID: 0}
+  areaEffectPrefabs: []
+  musicNotesPrefab: {fileID: 0}
+  usesGlobalProjectileCount: 1
+  comboDelay: 0.12
+  cooldownFollowsDuration: 1
+  fanProjectiles: 0
+  aimStyle: 0
+  projectileHoming: 0
+  isUniqueWeapon: 0
+  requiresUnlock: 1
+  usesCharacterAnimators: 0
+  attackTriggers:
+  - Attack1
+  - Attack2
+  - Attack3
+  advancedReachLevel: 0
+  advancedAttackTriggers: []
+  attackStageUnlockLevels: 010000000200000003000000
+  powerSlashPrefabs: []
+  levels:
+  - upgradeText: 
+    damage: 24
+    cooldown: 1.1
+    count: 1
+    pierce: 0
+    area: 1.15
+    projectileSpeed: 10
+    lifetime: 1.2
+    maxDistance: 8
+    knockback: 1.5
+    arcDegrees: 150
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: More damage
+    damage: 30
+    cooldown: 1.05
+    count: 1
+    pierce: 0
+    area: 1.15
+    projectileSpeed: 10
+    lifetime: 1.2
+    maxDistance: 8
+    knockback: 1.5
+    arcDegrees: 150
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: +1 fireball
+    damage: 30
+    cooldown: 1
+    count: 2
+    pierce: 0
+    area: 1.2
+    projectileSpeed: 10
+    lifetime: 1.2
+    maxDistance: 8
+    knockback: 1.6
+    arcDegrees: 150
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: Reduce cooldown
+    damage: 34
+    cooldown: 0.85
+    count: 2
+    pierce: 0
+    area: 1.25
+    projectileSpeed: 11
+    lifetime: 1.2
+    maxDistance: 8.5
+    knockback: 1.6
+    arcDegrees: 150
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7
+  - upgradeText: +1 fireball
+    damage: 38
+    cooldown: 0.75
+    count: 3
+    pierce: 0
+    area: 1.3
+    projectileSpeed: 11
+    lifetime: 1.3
+    maxDistance: 8.5
+    knockback: 1.8
+    arcDegrees: 150
+    spreadDegrees: 0
+    rehitInterval: 0.45
+    orbitSpeed: 0.7

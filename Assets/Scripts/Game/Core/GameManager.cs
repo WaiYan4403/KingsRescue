@@ -15,6 +15,7 @@ namespace KingsRescue.Core
     public enum GameState
     {
         Boot,
+        Intro,
         Playing,
         LevelUp,
         Chest,
@@ -70,6 +71,7 @@ namespace KingsRescue.Core
         public bool CanOfferLevelUp =>
             State != GameState.GameOver
             && State != GameState.Boot
+            && State != GameState.Intro
             && (playerHealth == null || playerHealth.IsAlive);
 
         public CharacterDefinition SelectedCharacter => selectedCharacter;
@@ -154,10 +156,34 @@ namespace KingsRescue.Core
             BossFightActive = false;
 
             ScrollDirector.Instance?.ResetRun();
-            SetState(GameState.Playing);
+            ScrollDirector.Instance?.SetScrolling(false);
+            SetState(GameState.Intro);
 
             KillsChanged?.Invoke(Kills);
             CoinsChanged?.Invoke(Coins);
+
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.BeginRunEntrance();
+            }
+            else
+            {
+                BeginField();
+            }
+        }
+
+        /// <summary>
+        /// The hero has reached the stand mark. The road, the clock, and spawns start together.
+        /// </summary>
+        public void BeginField()
+        {
+            if (State == GameState.Playing || State == GameState.GameOver)
+            {
+                return;
+            }
+
+            ScrollDirector.Instance?.SetScrolling(true);
+            SetState(GameState.Playing);
         }
 
         /// <summary>Stops the road. Regulars already on the field stay; new trash is hushed by WaveDirector.</summary>
@@ -400,7 +426,7 @@ namespace KingsRescue.Core
             }
 
             State = next;
-            Time.timeScale = next == GameState.Playing ? 1f : 0f;
+            Time.timeScale = next == GameState.Playing || next == GameState.Intro ? 1f : 0f;
 
             UpdateMusic(next);
             StateChanged?.Invoke(next);
@@ -415,6 +441,7 @@ namespace KingsRescue.Core
 
             switch (state)
             {
+                case GameState.Intro:
                 case GameState.Playing:
                     // Resuming from a level-up must not restart the track.
                     if (!gameplayMusicStarted)
@@ -432,7 +459,7 @@ namespace KingsRescue.Core
         private void OnApplicationFocus(bool hasFocus)
         {
             // WebGL tabs lose focus constantly; make sure a paused run stays paused correctly.
-            if (hasFocus && State == GameState.Playing)
+            if (hasFocus && (State == GameState.Playing || State == GameState.Intro))
             {
                 Time.timeScale = 1f;
             }

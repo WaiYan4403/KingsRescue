@@ -17,8 +17,8 @@ MonoBehaviour:
   isBoss: 1
   bossMinion: 0
   isElite: 0
-  canFlipSprite: 1
-  bodyTint: {r: 0.75, g: 0.45, b: 0.15, a: 1}
+  canFlipSprite: 0
+  bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1.15
   maxHealth: 1800
   contactDamage: 22
@@ -58,8 +58,7 @@ MonoBehaviour:
   summonAllies:
   - {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
   - {fileID: 11400000, guid: 5a51234f69da0bf4093fd1330267856c, type: 2}
-  - {fileID: 11400000, guid: 787aac760a2e6374c9651db3925210a0, type: 2}
-  summonCount: 4
+  summonCount: 6
   specialInterval: 3.6
   specialRadius: 1.8
   bossKit: 271

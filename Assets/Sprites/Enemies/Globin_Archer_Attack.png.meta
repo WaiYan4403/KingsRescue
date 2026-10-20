@@ -140,7 +140,7 @@ TextureImporter:
         width: 18
         height: 24
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -162,7 +162,7 @@ TextureImporter:
         width: 18
         height: 24
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -184,7 +184,7 @@ TextureImporter:
         width: 18
         height: 24
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -211,7 +211,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":18.0,"y":24.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":18.0,"y":24.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.20000000298023225},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Globin_Archer_Attack_0: 995581130574572871
       Globin_Archer_Attack_1: -2159459057780526335

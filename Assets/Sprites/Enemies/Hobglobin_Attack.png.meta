@@ -143,7 +143,7 @@ TextureImporter:
         width: 50
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -165,7 +165,7 @@ TextureImporter:
         width: 50
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -187,7 +187,7 @@ TextureImporter:
         width: 50
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -209,7 +209,7 @@ TextureImporter:
         width: 50
         height: 48
       alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -236,7 +236,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":50.0,"y":48.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.30000001192092898},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":50.0,"y":48.0},"gridSpriteOffset":{"x":1.0,"y":1.0},"gridSpritePadding":{"x":1.0,"y":1.0},"pivot":{"x":0.5,"y":0.25},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Hobglobin_Attack_0: 3431731475220308749
       Hobglobin_Attack_1: 441915346818212905

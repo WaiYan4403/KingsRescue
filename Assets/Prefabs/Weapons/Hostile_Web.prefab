@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4667036331360228467}
   - component: {fileID: 9114369610878455551}
   - component: {fileID: 7314206482273368772}
+  - component: {fileID: 1128282516927275486}
   m_Layer: 0
   m_Name: Hostile_Web
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.22, y: 0.22, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -83,8 +84,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 8
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4004708080983207187, guid: c54139d371b994bb7928af823bf84e48, type: 3}
-  m_Color: {r: 0.92, g: 0.92, b: 0.85, a: 0.9}
+  m_Sprite: {fileID: 5157428148046243323, guid: e850955072d4a18488ed9da80662199d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.9}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -122,3 +123,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Core.OffscreenDespawner
   checkInterval: 0.2
   spawnGrace: 0.25
+--- !u!95 &1128282516927275486
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7342546010400522602}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1f0b3bbcb4f366349b7c078d2439bab9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
