@@ -27,6 +27,11 @@ namespace KingsRescue.Meta
 
         private static SaveData data;
 
+        /// <summary>
+        /// When set, meta upgrades do not spend coins. The main menu checkbox turns this on for testing.
+        /// </summary>
+        public static bool DevMode { get; set; }
+
         public static int Coins
         {
             get
@@ -135,12 +140,15 @@ namespace KingsRescue.Meta
             }
 
             int cost = offer.CostForNext(current);
-            if (data.coins < cost)
+            if (!DevMode && data.coins < cost)
             {
                 return false;
             }
 
-            data.coins -= cost;
+            if (!DevMode)
+            {
+                data.coins -= cost;
+            }
             CharacterSave save = Find(character, true);
             save.levels[(int)stat] = current + 1;
             Persist();

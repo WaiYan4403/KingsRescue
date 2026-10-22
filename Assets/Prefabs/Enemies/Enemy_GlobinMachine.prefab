@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 3341479050779100669}
   - component: {fileID: 178208963252371957}
   - component: {fileID: 2491640054780431759}
+  - component: {fileID: 8841203948572610041}
   m_Layer: 0
   m_Name: Enemy_GlobinMachine
   m_TagString: Untagged
@@ -41,6 +42,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8533910998828378385}
+  - {fileID: 7203373691487091848}
+  - {fileID: 1080306825184949018}
+  - {fileID: 6524711165815726523}
+  - {fileID: 2576959131567208994}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6889880111889075204
@@ -92,7 +97,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8522042403500378055, guid: 80093fd8ebed85b4284f79562c40719e, type: 3}
+  m_Sprite: {fileID: 9011688881939091895, guid: d719dbb54ef24394d921c10e27b7977b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -218,7 +223,7 @@ Animator:
   m_GameObject: {fileID: 244735591878693721}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bad28eae4b88f9d46b90850ea84ceef1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 076c27c65537fcb4bb3954956bb70005, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -256,6 +261,129 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.EncounterBoss
   landingMarker: {fileID: 2798749682798508120}
   body: {fileID: 6889880111889075204}
+--- !u!114 &8841203948572610041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244735591878693721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4c8a1e9b2d4c07a5e8d3f17b6c9042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Enemies.GlobinMachineBoss
+  perchPadding: 0.8
+  strafeSpeed: 3.4
+  strafeDuration: 4.2
+  shotInterval: 0.7
+  sawLifetime: 12
+  sawSpeed: 4.6
+  sawScale: 2.7
+  spiralDuration: 6.5
+  spiralInterval: 0.5
+  spiralTurnSpeed: 110
+  spiralLift: 2.2
+  mainBulletParent: {fileID: 7203373691487091848}
+  leftSmallBulletParent: {fileID: 1080306825184949018}
+  rightSmallBulletParent: {fileID: 6524711165815726523}
+  sawWheelParent: {fileID: 2576959131567208994}
+  mainBulletPrefab: {fileID: 2716974212261402497, guid: a31c7e4b8f0d4a6e9c2b15d7f8a04321, type: 3}
+  smallBulletPrefab: {fileID: 2716974212261402497, guid: b42d8f5c901e4b7fac3c26e809b15432, type: 3}
+  sawWheelPrefab: {fileID: 2716974212261402497, guid: c53e906da12f4c80bd4d37f91ac26543, type: 3}
+--- !u!1 &1425054249769668454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1080306825184949018}
+  m_Layer: 0
+  m_Name: Left Small Bullet Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1080306825184949018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425054249769668454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.699, y: 1.83, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 542113583016563342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3794972471952672293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7203373691487091848}
+  m_Layer: 0
+  m_Name: Main Bullet Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7203373691487091848
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794972471952672293}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.084, y: 1.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 542113583016563342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4051919100317075229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2576959131567208994}
+  m_Layer: 0
+  m_Name: Saw Wheel Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2576959131567208994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4051919100317075229}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 542113583016563342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6636305020921226902
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,8 +465,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4004708080983207187, guid: c54139d371b994bb7928af823bf84e48, type: 3}
-  m_Color: {r: 0.35, g: 1, b: 0.85, a: 0.8}
+  m_Sprite: {fileID: 21300000, guid: 3cb7a3a1fd8d1df44abd89295451e7a9, type: 3}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.8}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -347,3 +475,34 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &8076880672822774113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6524711165815726523}
+  m_Layer: 0
+  m_Name: Right Small Bullet Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6524711165815726523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076880672822774113}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.699, y: 1.83, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 542113583016563342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

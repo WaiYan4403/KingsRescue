@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
   m_Name: Enemy_GoblinKing
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
-  displayName: Goblin King
+  displayName: Globin Machine
   prefab: {fileID: 244735591878693721, guid: dcb245a7fd6a0f94fbffedce91684a8d, type: 3}
   isBoss: 1
   bossMinion: 0
@@ -20,7 +20,7 @@ MonoBehaviour:
   canFlipSprite: 0
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1.15
-  maxHealth: 1800
+  maxHealth: 5000
   contactDamage: 22
   contactInterval: 0.6
   contactRadius: 0.9
@@ -44,11 +44,11 @@ MonoBehaviour:
   attackInterval: 1.8
   attackRange: 8
   attackDamage: 22
-  projectileSpeed: 7.2
-  projectileLifetime: 3.5
+  projectileSpeed: 10
+  projectileLifetime: 10
   projectileRadius: 0.34
   projectileHoming: 0
-  projectileMaxDistance: 6.5
+  projectileMaxDistance: 10
   slowFactor: 0.45
   slowDuration: 2.2
   meteorWarning: 1.1

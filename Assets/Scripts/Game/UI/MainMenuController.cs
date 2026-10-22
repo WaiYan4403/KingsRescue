@@ -39,6 +39,9 @@ namespace KingsRescue.UI
         [SerializeField] private Button resetUpgradesButton;
         [SerializeField] private TMP_Text resetUpgradesLabel;
 
+        [Tooltip("Upgrade purchases do not spend coins. Turn this on to test the upgrade rows.")]
+        [SerializeField] private bool devMode;
+
         [Header("Settings")]
         [SerializeField] private Slider musicSlider;
         [SerializeField] private Slider soundSlider;
@@ -55,9 +58,19 @@ namespace KingsRescue.UI
 
         public CharacterDefinition Selected => selected;
 
+        private void OnValidate()
+        {
+            MetaProgress.DevMode = devMode;
+            if (Application.isPlaying)
+            {
+                RefreshUpgrades();
+            }
+        }
+
         private void Awake()
         {
             Time.timeScale = 1f;
+            MetaProgress.DevMode = devMode;
             GameSettings.Apply();
 
             if (roster == null)
@@ -271,7 +284,9 @@ namespace KingsRescue.UI
 
             if (bankLabel != null)
             {
-                bankLabel.text = $"Bank: {MetaProgress.Coins}";
+                bankLabel.text = devMode
+                    ? $"Bank: {MetaProgress.Coins}  ·  DEV"
+                    : $"Bank: {MetaProgress.Coins}";
             }
 
             if (upgradeRows != null)

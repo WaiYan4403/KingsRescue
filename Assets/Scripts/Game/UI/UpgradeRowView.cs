@@ -83,7 +83,8 @@ namespace KingsRescue.UI
 
             if (button != null)
             {
-                button.interactable = character != null && !maxed && MetaProgress.Coins >= cost;
+                bool canPay = MetaProgress.DevMode || MetaProgress.Coins >= cost;
+                button.interactable = character != null && !maxed && canPay;
             }
         }
     }

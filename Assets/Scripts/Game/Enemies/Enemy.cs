@@ -27,6 +27,7 @@ namespace KingsRescue.Enemies
         private MeteorStrike meteor;
         private EnemyDeathBurst deathBurst;
         private SlimeKingBoss slimeKing;
+        private GlobinMachineBoss globinMachine;
         private EncounterBoss encounterBoss;
         private EnemySpecials specials;
         private HitFlash hitFlash;
@@ -60,6 +61,11 @@ namespace KingsRescue.Enemies
             if (slimeKing != null && slimeKing.enabled)
             {
                 return slimeKing.StatusLine;
+            }
+
+            if (globinMachine != null && globinMachine.enabled)
+            {
+                return globinMachine.StatusLine;
             }
 
             if (encounterBoss != null && encounterBoss.enabled)
@@ -97,6 +103,7 @@ namespace KingsRescue.Enemies
             meteor = GetComponent<MeteorStrike>();
             deathBurst = GetComponent<EnemyDeathBurst>();
             slimeKing = GetComponent<SlimeKingBoss>();
+            globinMachine = GetComponent<GlobinMachineBoss>();
             encounterBoss = GetComponent<EncounterBoss>();
             specials = GetComponent<EnemySpecials>();
             hitFlash = GetComponent<HitFlash>();
@@ -189,6 +196,7 @@ namespace KingsRescue.Enemies
 
             slimeKing?.Configure(def, runMinutes);
             encounterBoss?.Configure(def, runMinutes);
+            globinMachine?.Configure(def, runMinutes);
             ApplyVisual(def);
             specials?.Configure(def, runMinutes);
         }

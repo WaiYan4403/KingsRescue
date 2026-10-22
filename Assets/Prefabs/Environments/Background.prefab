@@ -123,6 +123,9 @@ MonoBehaviour:
   - prefab: {fileID: 6089294405615521361, guid: 306ba1df3c6cee54a87c51c7a5b3ec9d, type: 3}
     weight: 50
   breakableCount: {x: 1, y: 2}
+  chestChanceAtBaseLuck: 0.35
+  maxChestChance: 0.62
+  chestSpacing: 32
   decorations:
   - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
     weight: 10
@@ -241,8 +244,6 @@ MonoBehaviour:
   - prefab: {fileID: 889982214784732533, guid: 1af585e02841cbf4fad14cdb1c3e2164, type: 3}
     weight: 15
   - prefab: {fileID: 889982214784732533, guid: 44c38a98cbedc1441a3fcf406fb5e701, type: 3}
-    weight: 15
-  - prefab: {fileID: 889982214784732533, guid: d1ac4f322bf9fb643960ef80c1eb39d5, type: 3}
     weight: 15
   - prefab: {fileID: 889982214784732533, guid: 756288836c48c7f4285569827c928234, type: 3}
     weight: 15

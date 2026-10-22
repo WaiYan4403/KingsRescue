@@ -26,6 +26,7 @@ namespace KingsRescue.Enemies
 
         [SerializeField] private float hitRadius = 0.28f;
         [SerializeField] private bool rotateToDirection = true;
+        [SerializeField] private bool rotateZ = false;
         [SerializeField] private float playerRadius = 0.35f;
 
         private Vector2 velocity;
@@ -38,6 +39,14 @@ namespace KingsRescue.Enemies
         private float phaseDeadline;
         private bool homing;
         private float homingTurn = 4.5f;
+        private bool bounceOffScreen;
+        private bool surviveHit;
+        private float spinSpeed;
+        private float nextHitTime;
+        private Vector3 baseScale;
+        private Color baseColor = Color.white;
+        private bool visualsCached;
+        private SpriteRenderer sprite;
         private bool staged;
         private VisualPhase phase;
         private GameObject source;
@@ -50,6 +59,7 @@ namespace KingsRescue.Enemies
         private void Awake()
         {
             animator = GetComponent<Animator>();
+            CacheVisuals();
             staged = HasTrigger(HitHash) && HasTrigger(DestoryHash);
         }
 
@@ -69,6 +79,7 @@ namespace KingsRescue.Enemies
             HitboxDisplay.Release(hitbox);
             hitbox = null;
             phase = VisualPhase.Flying;
+            ResetMotion();
             if (staged && animator != null)
             {
                 animator.ResetTrigger(HitHash);
@@ -104,9 +115,38 @@ namespace KingsRescue.Enemies
             homing = homes;
             source = owner;
             phase = VisualPhase.Flying;
+            ResetMotion();
             BeginFlying();
             FaceVelocity();
             HitboxDisplay.SyncCircle(ref hitbox, transform.position, hitRadius);
+        }
+
+        /// <summary>Scales the shot art. Hit radius stays whatever Launch was given.</summary>
+        public void SetScale(float scale)
+        {
+            CacheVisuals();
+            transform.localScale = baseScale * Mathf.Max(0.2f, scale);
+        }
+
+        public void Tint(Color color)
+        {
+            CacheVisuals();
+            if (sprite != null)
+            {
+                sprite.color = color;
+            }
+        }
+
+        /// <summary>
+        /// Keeps flying after a hit and reflects off the camera edges.
+        /// Spin is degrees per second, used for saws.
+        /// </summary>
+        public void SetScreenBounce(float spinDegreesPerSecond, bool keepGoingAfterHit)
+        {
+            bounceOffScreen = true;
+            surviveHit = keepGoingAfterHit;
+            spinSpeed = spinDegreesPerSecond;
+            maxTravel = 0f;
         }
 
         private void Update()
@@ -145,9 +185,22 @@ namespace KingsRescue.Enemies
 
             float step = velocity.magnitude * dt;
             Vector2 position = (Vector2)transform.position + velocity * dt;
+            if (bounceOffScreen)
+            {
+                position = BounceInsideScreen(position);
+            }
+
             transform.position = position;
             traveled += step;
-            FaceVelocity();
+            if (Mathf.Abs(spinSpeed) > 0.01f && rotateZ)
+            {
+                transform.Rotate(0f, 0f, spinSpeed * dt);
+            }
+            else
+            {
+                FaceVelocity();
+            }
+
             HitboxDisplay.SyncCircle(ref hitbox, position, hitRadius);
 
             if ((maxTravel > 0f && traveled >= maxTravel) || Time.time >= expireAt)
@@ -156,14 +209,84 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            ArenaBounds bounds = ArenaBounds.Instance;
-            if (bounds != null && bounds.IsPastDespawn(position))
+            if (!bounceOffScreen)
             {
-                EndFlight();
-                return;
+                ArenaBounds bounds = ArenaBounds.Instance;
+                if (bounds != null && bounds.IsPastDespawn(position))
+                {
+                    EndFlight();
+                    return;
+                }
             }
 
             TryHitPlayer(position);
+        }
+
+        private Vector2 BounceInsideScreen(Vector2 position)
+        {
+            ArenaBounds bounds = ArenaBounds.Instance;
+            if (bounds == null)
+            {
+                return position;
+            }
+
+            Rect screen = bounds.ScreenRect;
+            float inset = Mathf.Max(0.2f, hitRadius);
+            if (position.x < screen.xMin + inset)
+            {
+                position.x = screen.xMin + inset;
+                velocity.x = Mathf.Abs(velocity.x);
+            }
+            else if (position.x > screen.xMax - inset)
+            {
+                position.x = screen.xMax - inset;
+                velocity.x = -Mathf.Abs(velocity.x);
+            }
+
+            if (position.y < screen.yMin + inset)
+            {
+                position.y = screen.yMin + inset;
+                velocity.y = Mathf.Abs(velocity.y);
+            }
+            else if (position.y > screen.yMax - inset)
+            {
+                position.y = screen.yMax - inset;
+                velocity.y = -Mathf.Abs(velocity.y);
+            }
+
+            return position;
+        }
+
+        private void CacheVisuals()
+        {
+            if (visualsCached)
+            {
+                return;
+            }
+
+            baseScale = transform.localScale;
+            sprite = GetComponent<SpriteRenderer>();
+            if (sprite != null)
+            {
+                baseColor = sprite.color;
+            }
+
+            visualsCached = true;
+        }
+
+        private void ResetMotion()
+        {
+            bounceOffScreen = false;
+            surviveHit = false;
+            spinSpeed = 0f;
+            nextHitTime = 0f;
+            CacheVisuals();
+            transform.localScale = baseScale;
+            transform.rotation = Quaternion.identity;
+            if (sprite != null)
+            {
+                sprite.color = baseColor;
+            }
         }
 
         private void SteerTowardPlayer(float dt)
@@ -199,16 +322,33 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            if (!player.Health.IsInvulnerable)
+            bool overlapping = true;
+            if (surviveHit && Time.time < nextHitTime)
+            {
+                overlapping = false;
+            }
+
+            if (overlapping && !player.Health.IsInvulnerable)
             {
                 Vector2 direction = velocity.sqrMagnitude > 0.0001f ? velocity.normalized : Vector2.down;
                 player.Health.TakeDamage(new DamageInfo(damage, player.transform.position, direction, 0f, source));
+                nextHitTime = Time.time + 0.45f;
+            }
+
+            if (!overlapping)
+            {
+                return;
             }
 
             PlayerStatus status = player.Status;
             if (status != null && slowDuration > 0.01f && slowFactor < 0.99f)
             {
                 status.ApplySlow(slowFactor, slowDuration);
+            }
+
+            if (surviveHit)
+            {
+                return;
             }
 
             BeginHit();

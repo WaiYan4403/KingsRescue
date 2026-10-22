@@ -21,6 +21,7 @@ namespace KingsRescue.UI
             public Image icon;
             public TMP_Text level;
             public TMP_Text initial;
+            public GameObject bg;
         }
 
         [SerializeField] private Slot[] weaponSlots = new Slot[4];
@@ -169,6 +170,7 @@ namespace KingsRescue.UI
                 slot.level.text = level > 0 ? level.ToString() : "";
                 slot.level.enabled = level > 0;
             }
+            slot.bg.SetActive(true);
         }
 
         private static void ClearSlot(Slot slot)
@@ -194,6 +196,7 @@ namespace KingsRescue.UI
                 slot.level.text = "";
                 slot.level.enabled = false;
             }
+            slot.bg.SetActive(false);
         }
 
         private static string Initial(string title)

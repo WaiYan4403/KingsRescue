@@ -19,6 +19,7 @@ namespace KingsRescue.Core
         Playing,
         LevelUp,
         Chest,
+        Paused,
         GameOver
     }
 
@@ -47,6 +48,7 @@ namespace KingsRescue.Core
 
         private int pendingLevelUps;
         private bool gameplayMusicStarted;
+        private GameState resumeState = GameState.Playing;
 
         public GameState State { get; private set; } = GameState.Boot;
 
@@ -72,6 +74,7 @@ namespace KingsRescue.Core
             State != GameState.GameOver
             && State != GameState.Boot
             && State != GameState.Intro
+            && State != GameState.Paused
             && (playerHealth == null || playerHealth.IsAlive);
 
         public CharacterDefinition SelectedCharacter => selectedCharacter;
@@ -184,6 +187,29 @@ namespace KingsRescue.Core
 
             ScrollDirector.Instance?.SetScrolling(true);
             SetState(GameState.Playing);
+        }
+
+        /// <summary>Freezes the run and remembers whether it was still the walk-in.</summary>
+        public void PauseRun()
+        {
+            if (State != GameState.Playing && State != GameState.Intro)
+            {
+                return;
+            }
+
+            resumeState = State;
+            SetState(GameState.Paused);
+        }
+
+        /// <summary>Continues the run from the state it had when pause opened.</summary>
+        public void ResumeRun()
+        {
+            if (State != GameState.Paused)
+            {
+                return;
+            }
+
+            SetState(resumeState == GameState.Intro ? GameState.Intro : GameState.Playing);
         }
 
         /// <summary>Stops the road. Regulars already on the field stay; new trash is hushed by WaveDirector.</summary>

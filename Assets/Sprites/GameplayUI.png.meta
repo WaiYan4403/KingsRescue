@@ -183,7 +183,7 @@ TextureImporter:
         height: 33
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 4, y: 4, z: 4, w: 4}
       customData: 
       outline: []
       physicsShape: []
@@ -468,7 +468,7 @@ TextureImporter:
         width: 6
         height: 6
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 3, y: 3, z: 3, w: 3}
       customData: 
       outline: []
@@ -490,7 +490,7 @@ TextureImporter:
         width: 2
         height: 2
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 1, y: 0, z: 1, w: 0}
       customData: 
       outline: []
@@ -499,6 +499,72 @@ TextureImporter:
       bones: []
       spriteID: 8bbd4b2e2a258814ba12fee5f916ceac
       internalID: 141172570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameplayUI_15
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 250
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32d2590b61da47740853861bfba5d0d9
+      internalID: -1082995642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameplayUI_16
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 285
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 2, y: 2, z: 2, w: 2}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f5e278ffdf202d47a6be42e4db93ca4
+      internalID: -2037737896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameplayUI_17
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 17
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5e09997c8ad741488119c2c5626b8fa
+      internalID: 508055149
       vertices: []
       indices: 
       edges: []
@@ -526,6 +592,9 @@ TextureImporter:
       GameplayUI_12: 4128290941009320261
       GameplayUI_13: -358980932
       GameplayUI_14: 141172570
+      GameplayUI_15: -1082995642
+      GameplayUI_16: -2037737896
+      GameplayUI_17: 508055149
       GameplayUI_2: -8366210531325010938
       GameplayUI_3: -7234902862257208533
       GameplayUI_4: 9172894320953149803
