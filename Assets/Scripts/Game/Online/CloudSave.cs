@@ -75,6 +75,11 @@ namespace KingsRescue.Online
                     return string.Empty;
                 }
 
+                if (account.Kind == AccountKind.Guest)
+                {
+                    return "Saved on this device";
+                }
+
                 if (account.SessionExpired)
                 {
                     return "Not syncing - sign in with Google again";

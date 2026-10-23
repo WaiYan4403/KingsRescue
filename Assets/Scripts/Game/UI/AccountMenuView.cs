@@ -140,11 +140,11 @@ namespace KingsRescue.UI
 
             if (first)
             {
-                accountInfo.text = "Play as a guest right away, or sign in with Google to keep your progress on every device.\nGuests can connect Google later.";
+                accountInfo.text = "Play offline as a guest, or sign in with Google to keep your progress on every device.\n\nA guest is saved on this device only. Connecting Google later creates the online account with the name you chose.";
             }
             else if (guest)
             {
-                accountInfo.text = $"Playing as <color=#F2C94C>{account.Username}</color>\nGuest account. Connect Google so your progress is never lost.";
+                accountInfo.text = $"Playing as <color=#F2C94C>{account.Username}</color>\nSaved on this device. Connect Google to create your online account.";
             }
             else
             {
@@ -160,22 +160,14 @@ namespace KingsRescue.UI
 
         // ---------------------------------------------------------------- actions
 
-        private async void OnGuestClicked()
+        private void OnGuestClicked()
         {
             if (busy || Account == null)
             {
                 return;
             }
 
-            SetBusy(true);
-            SetAccountStatus("Connecting...", false);
-            OnlineResult result = await Account.ContinueAsGuest();
-            if (this == null)
-            {
-                return;
-            }
-
-            SetBusy(false);
+            OnlineResult result = Account.ContinueAsGuest();
             if (!result.Ok)
             {
                 SetAccountStatus(result.Error, true);
@@ -255,6 +247,13 @@ namespace KingsRescue.UI
                 return;
             }
 
+            if (result.Code == "username_taken")
+            {
+                menu.ShowUsername();
+                SetUsernameStatus(result.Error, true);
+                return;
+            }
+
             SetAccountStatus(result.Error, true);
         }
 
@@ -328,6 +327,12 @@ namespace KingsRescue.UI
                 return;
             }
 
+            if (usernameInput != null)
+            {
+                usernameInput.DeactivateInputField();
+            }
+
+            WebPageReload.ResetZoom();
             menu.ShowHome();
         }
 

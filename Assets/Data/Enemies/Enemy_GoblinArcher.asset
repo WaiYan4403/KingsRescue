@@ -20,12 +20,12 @@ MonoBehaviour:
   canFlipSprite: 1
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1
-  maxHealth: 9
-  contactDamage: 4
+  maxHealth: 55
+  contactDamage: 12
   contactInterval: 0.8
   contactRadius: 0.38
   dealsContactDamage: 1
-  knockbackResistance: 0
+  knockbackResistance: 0.25
   moveStyle: 2
   moveSpeed: 1.85
   scrollInfluence: 0.35
@@ -41,19 +41,19 @@ MonoBehaviour:
   attackStyle: 1
   projectilePrefab: {fileID: 5997573724359075854, guid: 47eac5ed561ba6f4faee5ae56f588c56, type: 3}
   meteorDefinition: {fileID: 0}
-  attackInterval: 1.7
+  attackInterval: 1.25
   attackRange: 6.5
-  attackDamage: 7
-  projectileSpeed: 8.5
+  attackDamage: 22
+  projectileSpeed: 11
   projectileLifetime: 3.2
   projectileRadius: 0.22
   projectileHoming: 0
   projectileMaxDistance: 7
-  slowFactor: 0.45
+  slowFactor: 0.42
   slowDuration: 2.2
   meteorWarning: 1.1
   meteorRadius: 1.15
-  traits: 0
+  traits: 16
   summonAlly: {fileID: 0}
   summonAllies: []
   summonCount: 2
@@ -66,5 +66,5 @@ MonoBehaviour:
   xpValue: 5
   coinDropChance: 0.07
   healthDropChance: 0.02
-  healthGrowthPerMinute: 0.35
-  damageGrowthPerMinute: 0.12
+  healthGrowthPerMinute: 0.58
+  damageGrowthPerMinute: 0.32

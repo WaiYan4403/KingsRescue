@@ -139,7 +139,7 @@ namespace KingsRescue.UI
             }
 
             Show(accountPanel);
-            MenuMusicController.Instance.SetMainMusic();
+            //MenuMusicController.Instance.SetMainMusic();
         }
 
         public void ShowUsername()
@@ -150,7 +150,7 @@ namespace KingsRescue.UI
             }
 
             Show(usernamePanel);
-            MenuMusicController.Instance.SetMainMusic();
+            //MenuMusicController.Instance.SetMainMusic();
         }
 
         public void ShowCharacters()
@@ -164,7 +164,7 @@ namespace KingsRescue.UI
         {
             RefreshUpgrades();
             Show(upgradePanel);
-            MenuMusicController.Instance.SetOptionsMusic();
+            //MenuMusicController.Instance.SetOptionsMusic();
         }
 
         public void ShowSettings()

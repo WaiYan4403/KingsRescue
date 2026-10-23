@@ -161,6 +161,7 @@ namespace KingsRescue.Enemies
             }
 
             bool web = definition.attackStyle == EnemyAttackStyle.Web;
+            bool slowShot = web || (definition.traits & EnemyTrait.IceSlow) != 0;
             float range = definition.projectileMaxDistance > 0.01f ? definition.projectileMaxDistance : 6.5f;
             shot.Launch(
                 direction,
@@ -168,8 +169,8 @@ namespace KingsRescue.Enemies
                 damage,
                 definition.projectileLifetime,
                 definition.projectileRadius,
-                web ? definition.slowFactor : 1f,
-                web ? definition.slowDuration : 0f,
+                slowShot ? definition.slowFactor : 1f,
+                slowShot ? definition.slowDuration : 0f,
                 definition.projectileHoming,
                 gameObject,
                 range);

@@ -41,6 +41,8 @@ namespace KingsRescue.Enemies
 
         public Health Health => health;
 
+        public SpriteRenderer Body => body;
+
         public Vector2 Position => transform.position;
 
         public bool IsAlive => !dying && health != null && health.IsAlive;

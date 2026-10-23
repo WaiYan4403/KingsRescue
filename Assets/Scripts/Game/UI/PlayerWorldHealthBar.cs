@@ -51,6 +51,21 @@ namespace KingsRescue.UI
                 health.HealthChanged += OnHealthChanged;
                 OnHealthChanged(health.Current, health.Max);
             }
+
+            EnsureBossBar();
+        }
+
+        private void EnsureBossBar()
+        {
+            if (FindAnyObjectByType<BossWorldHealthBar>() != null)
+            {
+                return;
+            }
+
+            GameObject host = new GameObject("BossHealthBar", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            host.transform.SetParent(transform.parent, false);
+            BossWorldHealthBar bar = host.AddComponent<BossWorldHealthBar>();
+            bar.BuildLike(this);
         }
 
         private void OnDestroy()

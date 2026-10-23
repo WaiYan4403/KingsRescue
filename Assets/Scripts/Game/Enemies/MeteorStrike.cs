@@ -21,6 +21,8 @@ namespace KingsRescue.Enemies
         private Vector2 impact;
         private Vector2 parked;
         private float damage;
+        private float impactSlow = 1f;
+        private float impactSlowDuration;
         private float radius;
         private float warning;
         private float spawnedAt;
@@ -67,6 +69,9 @@ namespace KingsRescue.Enemies
             exploded = false;
             falling = false;
             damage = def.ScaledAttackDamage(runMinutes);
+            bool chills = (def.traits & EnemyTrait.IceSlow) != 0;
+            impactSlow = chills ? def.slowFactor : 1f;
+            impactSlowDuration = chills ? def.slowDuration : 0f;
             radius = Mathf.Max(0.4f, def.meteorRadius);
             warning = Mathf.Max(0.25f, def.meteorWarning);
             spawnedAt = Time.time;
@@ -312,6 +317,10 @@ namespace KingsRescue.Enemies
                 {
                     Vector2 direction = delta.sqrMagnitude > 0.0001f ? delta.normalized : Vector2.down;
                     player.Health.TakeDamage(new DamageInfo(damage, player.transform.position, direction, 0f, gameObject));
+                    if (impactSlowDuration > 0.05f && impactSlow < 0.99f && player.Status != null)
+                    {
+                        player.Status.ApplySlow(impactSlow, impactSlowDuration);
+                    }
                 }
             }
 

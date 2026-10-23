@@ -20,9 +20,8 @@ namespace KingsRescue.Online
     }
 
     /// <summary>
-    /// Who the player is: guest or Google, their username, and the backend session.
-    /// Identity lives in PlayerPrefs so the player is recognised on the next launch; progress
-    /// itself is handled by CloudSave.
+    /// Who the player is. A guest and their username live only on this device. The backend
+    /// account is created when they connect Google, using that username.
     /// </summary>
     public sealed class OnlineAccount
     {
@@ -66,11 +65,9 @@ namespace KingsRescue.Online
 
         public bool HasUsername => !string.IsNullOrEmpty(Username);
 
-        public bool CanSync => Kind != AccountKind.None && HasUsername && !string.IsNullOrEmpty(Jwt) && !SessionExpired;
+        public bool CanSync => Kind == AccountKind.Google && HasUsername && !string.IsNullOrEmpty(Jwt) && !SessionExpired;
 
         public bool GoogleSupported => GoogleSignIn.IsSupported && config.HasGoogleClientId;
-
-        private string GuestId => PlayerPrefs.GetString(GuestIdKey, string.Empty);
 
         public event Action Changed;
 
@@ -86,19 +83,19 @@ namespace KingsRescue.Online
 
         // ---------------------------------------------------------------- sign-in
 
-        public async Task<OnlineResult> ContinueAsGuest()
+        /// <summary>
+        /// Starts a guest on this device only. No account is created on the server, so the game
+        /// works with no internet. The backend row is created later, when they connect Google.
+        /// </summary>
+        public OnlineResult ContinueAsGuest()
         {
-            string guestId = EnsureGuestId();
-            ApiResult<AuthResponse> result = await api.AuthGuest(guestId);
-            if (!result.Ok)
-            {
-                return Describe(result);
-            }
-
             Kind = AccountKind.Guest;
+            GoogleLinked = false;
+            Jwt = string.Empty;
             SessionExpired = false;
-            ApplyAuth(result.Data);
-            return await FinishSignIn();
+            Persist();
+            Changed?.Invoke();
+            return OnlineResult.Success;
         }
 
         public async Task<OnlineResult> SignInWithGoogle()
@@ -121,12 +118,20 @@ namespace KingsRescue.Online
             return await FinishSignIn();
         }
 
-        /// <summary>Attaches Google to the current (guest) player so the account can be used anywhere.</summary>
+        /// <summary>
+        /// Creates the backend account for a local guest and stores their chosen username on it.
+        /// An existing Google profile is not overwritten; the player is asked before switching to it.
+        /// </summary>
         public async Task<OnlineResult> ConnectGoogle()
         {
             if (Kind == AccountKind.None)
             {
                 return OnlineResult.Fail("Choose an account first.");
+            }
+
+            if (Kind == AccountKind.Guest && !HasUsername)
+            {
+                return OnlineResult.Fail("Choose a username first.");
             }
 
             (bool tokenOk, string idToken, OnlineResult failure) = await GetGoogleToken();
@@ -135,21 +140,47 @@ namespace KingsRescue.Online
                 return failure;
             }
 
-            ApiResult<AuthResponse> result = await Authed(jwt => api.LinkGoogle(jwt, idToken));
+            string localName = Username;
+            ApiResult<AuthResponse> result = await api.AuthGoogle(idToken);
             if (!result.Ok)
             {
-                if (result.Code == CodeGoogleInUse)
-                {
-                    // Keep the token so the player can switch to that account without signing in again.
-                    pendingGoogleIdToken = idToken;
-                }
-
                 return Describe(result);
+            }
+
+            bool alreadyPlaying = !result.Data.needsUsername && result.Data.player != null && result.Data.player.IsValid;
+            if (alreadyPlaying)
+            {
+                pendingGoogleIdToken = idToken;
+                return OnlineResult.Fail("That Google account already has a profile.", CodeGoogleInUse);
             }
 
             Kind = AccountKind.Google;
             SessionExpired = false;
-            ApplyAuth(result.Data);
+            Jwt = result.Data.token;
+            GoogleLinked = true;
+
+            if (!string.IsNullOrEmpty(localName))
+            {
+                ApiResult<PlayerPayload> claim = await api.ClaimUsername(Jwt, localName);
+                if (!claim.Ok)
+                {
+                    if (claim.Status == 409)
+                    {
+                        Username = string.Empty;
+                        Persist();
+                        Changed?.Invoke();
+                        return OnlineResult.Fail("That name is already taken. Try another one.", "username_taken");
+                    }
+
+                    Persist();
+                    return Describe(claim);
+                }
+
+                Username = claim.Data.username;
+                GoogleLinked = true;
+            }
+
+            Persist();
             return await FinishSignIn();
         }
 
@@ -196,6 +227,16 @@ namespace KingsRescue.Online
                 return OnlineResult.Fail("Choose an account first.");
             }
 
+            if (Kind == AccountKind.Guest)
+            {
+                Username = cleaned;
+                GoogleLinked = false;
+                Jwt = string.Empty;
+                Persist();
+                Changed?.Invoke();
+                return OnlineResult.Success;
+            }
+
             ApiResult<PlayerPayload> result = await Authed(jwt => api.ClaimUsername(jwt, cleaned));
             if (!result.Ok)
             {
@@ -216,14 +257,9 @@ namespace KingsRescue.Online
         /// <summary>Quietly renews the session for a returning player. Never throws.</summary>
         public async Task<OnlineResult> RestoreSession()
         {
-            if (Kind == AccountKind.None)
+            if (Kind == AccountKind.None || Kind == AccountKind.Guest)
             {
                 return OnlineResult.Success;
-            }
-
-            if (!string.IsNullOrEmpty(GuestId))
-            {
-                return await RefreshGuestSession();
             }
 
             // Google-only account: validate the stored token; it cannot be renewed silently.
@@ -296,8 +332,8 @@ namespace KingsRescue.Online
         // ---------------------------------------------------------------- authenticated calls
 
         /// <summary>
-        /// Runs an API call with the current token. On a 401 the session is renewed once (guest
-        /// credentials can do that silently) and the call is repeated.
+        /// Runs an API call with the current token. A 401 means the Google session has to be signed in again.
+        /// Guests never reach the server, so this is not used to create a guest account.
         /// </summary>
         public async Task<ApiResult<T>> Authed<T>(Func<string, Task<ApiResult<T>>> call)
         {
@@ -307,18 +343,13 @@ namespace KingsRescue.Online
                 return result;
             }
 
-            OnlineResult refreshed = await RefreshGuestSession();
-            if (!refreshed.Ok)
+            if (Kind == AccountKind.Google)
             {
-                if (refreshed.Code == CodeSessionExpired)
-                {
-                    return ApiResult<T>.Fail(401, refreshed.Error, CodeSessionExpired);
-                }
-
-                return ApiResult<T>.Fail(0, refreshed.Error);
+                SessionExpired = true;
+                Changed?.Invoke();
             }
 
-            return await call(Jwt);
+            return ApiResult<T>.Fail(401, "Your Google session expired. Sign in again to sync.", CodeSessionExpired);
         }
 
         // ---------------------------------------------------------------- helpers
@@ -353,40 +384,6 @@ namespace KingsRescue.Online
             }
 
             return true;
-        }
-
-        private async Task<OnlineResult> RefreshGuestSession()
-        {
-            string guestId = GuestId;
-            if (string.IsNullOrEmpty(guestId))
-            {
-                SessionExpired = true;
-                Changed?.Invoke();
-                return OnlineResult.Fail("Your session expired. Sign in with Google again.", CodeSessionExpired);
-            }
-
-            ApiResult<AuthResponse> result = await api.AuthGuest(guestId);
-            if (!result.Ok)
-            {
-                return Describe(result);
-            }
-
-            SessionExpired = false;
-            Jwt = result.Data.token;
-
-            if (result.Data.needsUsername)
-            {
-                // The server has no player for this guest (for example a wiped database).
-                Username = string.Empty;
-            }
-            else if (result.Data.player != null && result.Data.player.IsValid)
-            {
-                Username = result.Data.player.username;
-                GoogleLinked = result.Data.player.googleLinked;
-            }
-
-            Persist();
-            return OnlineResult.Success;
         }
 
         private async Task<(bool ok, string idToken, OnlineResult failure)> GetGoogleToken()
@@ -440,21 +437,6 @@ namespace KingsRescue.Online
 
             Changed?.Invoke();
             return OnlineResult.Success;
-        }
-
-        private string EnsureGuestId()
-        {
-            string id = GuestId;
-            if (!string.IsNullOrEmpty(id))
-            {
-                return id;
-            }
-
-            // Two GUIDs = 64 hex characters of randomness; this value is the guest's password.
-            id = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
-            PlayerPrefs.SetString(GuestIdKey, id);
-            PlayerPrefs.Save();
-            return id;
         }
 
         private OnlineResult Describe<T>(ApiResult<T> result)

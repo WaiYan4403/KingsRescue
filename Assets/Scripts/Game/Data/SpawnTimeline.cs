@@ -29,8 +29,11 @@ namespace KingsRescue.Data
         }
 
         [Header("Cadence")]
-        [Tooltip("Seconds between each new enemy type.")]
+        [Tooltip("Seconds between each new enemy type when an entry leaves Unlock At at 0.")]
         public float unlockInterval = 60f;
+
+        [Tooltip("No new enemy type joins at or after this time. Types already unlocked keep spawning.")]
+        public float finalUnlock = 300f;
 
         [Header("Trickle")]
         [Tooltip("Seconds between spawn ticks at the start of the run.")]
@@ -77,12 +80,13 @@ namespace KingsRescue.Data
             }
 
             float authored = roster[index].unlockAt;
-            if (authored > 0f)
+            float time = authored > 0f ? authored : index * Mathf.Max(1f, unlockInterval);
+            if (finalUnlock > 0f && time >= finalUnlock)
             {
-                return authored;
+                return float.PositiveInfinity;
             }
 
-            return index * Mathf.Max(1f, unlockInterval);
+            return time;
         }
 
         public float SpawnIntervalAt(float runMinutes)

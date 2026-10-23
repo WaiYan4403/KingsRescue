@@ -27,7 +27,7 @@ MonoBehaviour:
   dealsContactDamage: 1
   knockbackResistance: 0
   moveStyle: 3
-  moveSpeed: 5
+  moveSpeed: 4
   scrollInfluence: 0.2
   turnResponsiveness: 8
   followChance: 1
