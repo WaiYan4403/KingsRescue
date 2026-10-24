@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using KingsRescue.Data;
 using KingsRescue.Meta;
+using ToggleSwitch = Poker.UI.ToggleSwitch.ToggleSwitch;
 
 namespace KingsRescue.UI
 {
@@ -30,23 +33,40 @@ namespace KingsRescue.UI
 
         [Header("Character")]
         [SerializeField] private CharacterSelectButton[] characterButtons;
+        [Tooltip("Hero name shown between the previous / next arrows. A locked hero also shows its unlock hint.")]
+        [SerializeField] private TMP_Text characterName;
+        [Tooltip("Optional long description (name, story, unique weapon).")]
         [SerializeField] private TMP_Text characterDetail;
+        [SerializeField] private Button startButton;
+        [SerializeField] private Button upgradesButton;
 
         [Header("Upgrades")]
         [SerializeField] private TMP_Text upgradeTitle;
+        [Tooltip("Coin balance under the UPGRADES title.")]
         [SerializeField] private TMP_Text bankLabel;
         [SerializeField] private UpgradeRowView[] upgradeRows;
         [SerializeField] private Button resetUpgradesButton;
         [SerializeField] private TMP_Text resetUpgradesLabel;
 
-        [Tooltip("Upgrade purchases do not spend coins. Turn this on to test the upgrade rows.")]
+        [Header("Selected upgrade")]
+        [SerializeField] private Image upgradeIcon;
+        [SerializeField] private TMP_Text upgradeNameLabel;
+        [SerializeField] private TMP_Text upgradeDescriptionLabel;
+        [Tooltip("Holds the coin icon and the price. Hidden once the upgrade is maxed.")]
+        [SerializeField] private GameObject upgradePriceRoot;
+        [SerializeField] private TMP_Text upgradePriceLabel;
+        [SerializeField] private Button upgradeBuyButton;
+        [SerializeField] private TMP_Text upgradeBuyLabel;
+
+        [Tooltip("Upgrade purchases do not spend coins. Turn this on to test the upgrade cards.")]
         [SerializeField] private bool devMode;
 
         [Header("Settings")]
         [SerializeField] private Slider musicSlider;
         [SerializeField] private Slider soundSlider;
-        [SerializeField] private Toggle screenShakeToggle;
-        [SerializeField] private Toggle damageTextToggle;
+        [SerializeField] private Slider sensitivitySlider;
+        [SerializeField] private ToggleSwitch screenShakeToggle;
+        [SerializeField] private ToggleSwitch damageTextToggle;
 
         [Header("Leaderboards")]
         [SerializeField] private LeaderboardMenuView leaderboardView;
@@ -55,8 +75,12 @@ namespace KingsRescue.UI
         [SerializeField] private AchievementListView achievementList;
 
         private CharacterDefinition selected;
+        private StatType selectedStat;
+        private bool hasSelectedStat;
+        private GameObject currentPanel;
 
         public CharacterDefinition Selected => selected;
+        public StatType SelectedUpgrade => selectedStat;
 
         private void OnValidate()
         {
@@ -83,6 +107,11 @@ namespace KingsRescue.UI
             if (resetUpgradesButton != null)
             {
                 resetUpgradesButton.onClick.AddListener(ResetSelectedUpgrades);
+            }
+
+            if (upgradeBuyButton != null)
+            {
+                upgradeBuyButton.onClick.AddListener(BuySelectedUpgrade);
             }
 
             AchievementProgress.EnsureLoaded();
@@ -117,13 +146,48 @@ namespace KingsRescue.UI
             ShowHome();
         }
 
+        private void Update()
+        {
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame)
+            {
+                return;
+            }
+
+            // Escape is also the Android back key.
+            if (quitDialog != null && quitDialog.activeSelf)
+            {
+                CloseQuitConfirm();
+                return;
+            }
+
+            if (currentPanel == homePanel && currentPanel != null)
+            {
+                if (Application.platform != RuntimePlatform.WebGLPlayer)
+                {
+                    OpenQuitConfirm();
+                }
+
+                return;
+            }
+
+            GoBack();
+        }
+
         private void OnDestroy()
         {
             if (resetUpgradesButton != null)
             {
                 resetUpgradesButton.onClick.RemoveListener(ResetSelectedUpgrades);
             }
+
+            if (upgradeBuyButton != null)
+            {
+                upgradeBuyButton.onClick.RemoveListener(BuySelectedUpgrade);
+            }
         }
+
+        // ---------------------------------------------------------------- navigation
 
         public void ShowHome()
         {
@@ -191,6 +255,38 @@ namespace KingsRescue.UI
             MenuMusicController.Instance.SetOptionsMusic();
         }
 
+        public void ShowAchievements()
+        {
+            if (achievementList != null)
+            {
+                achievementList.Refresh();
+            }
+
+            Show(achievementPanel);
+            MenuMusicController.Instance.SetOptionsMusic();
+        }
+
+        /// <summary>
+        /// Back button: the upgrades page returns to hero selection, every other page returns to the
+        /// main menu. The account screens have their own back handling.
+        /// </summary>
+        public void GoBack()
+        {
+            if (currentPanel == null || currentPanel == homePanel
+                || currentPanel == accountPanel || currentPanel == usernamePanel)
+            {
+                return;
+            }
+
+            if (currentPanel == upgradePanel)
+            {
+                ShowCharacters();
+                return;
+            }
+
+            ShowHome();
+        }
+
         public void OpenQuitConfirm()
         {
             if (quitDialog != null)
@@ -208,26 +304,13 @@ namespace KingsRescue.UI
             }
         }
 
-        public void ShowAchievements()
+        public void QuitGame()
         {
-            if (achievementList != null)
-            {
-                achievementList.Refresh();
-            }
-
-            Show(achievementPanel);
-            MenuMusicController.Instance.SetOptionsMusic();
-        }
-
-        public void SelectCharacter(CharacterDefinition character)
-        {
-            if (character == null)
-            {
-                return;
-            }
-
-            selected = character;
-            RefreshCharacter();
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         public void PlaySelected()
@@ -244,119 +327,116 @@ namespace KingsRescue.UI
             SceneManager.LoadScene(gameplayScene);
         }
 
-        public void QuitGame()
+        // ---------------------------------------------------------------- characters
+
+        public void SelectCharacter(CharacterDefinition character)
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }
-
-        public void OnMusicChanged(float value)
-        {
-            GameSettings.MusicVolume = value;
-        }
-
-        public void OnSoundChanged(float value)
-        {
-            GameSettings.SoundVolume = value;
-        }
-
-        public void OnScreenShakeChanged(bool value)
-        {
-            GameSettings.ScreenShake = value;
-        }
-
-        public void OnDamageTextChanged(bool value)
-        {
-            GameSettings.ShowDamageText = value;
-        }
-
-        public void RefreshUpgrades()
-        {
-            if (upgradeTitle != null)
-            {
-                upgradeTitle.text = selected != null
-                    ? $"{selected.displayName.ToUpper()} UPGRADES"
-                    : "UPGRADES";
-            }
-
-            if (bankLabel != null)
-            {
-                bankLabel.text = devMode
-                    ? $"Bank: {MetaProgress.Coins}  ·  DEV"
-                    : $"Bank: {MetaProgress.Coins}";
-            }
-
-            if (upgradeRows != null)
-            {
-                for (int i = 0; i < upgradeRows.Length; i++)
-                {
-                    if (upgradeRows[i] != null)
-                    {
-                        upgradeRows[i].Refresh(selected);
-                    }
-                }
-            }
-
-            int refund = MetaProgress.SpentOnCharacter(selected);
-            if (resetUpgradesButton != null)
-            {
-                resetUpgradesButton.interactable = selected != null && refund > 0;
-            }
-
-            if (resetUpgradesLabel != null)
-            {
-                resetUpgradesLabel.text = refund > 0
-                    ? $"RESET  (refund {refund} coins)"
-                    : "RESET UPGRADES";
-            }
-        }
-
-        public void ResetSelectedUpgrades()
-        {
-            if (selected == null)
+            if (character == null)
             {
                 return;
             }
 
-            MetaProgress.ResetCharacter(selected);
-            RefreshUpgrades();
+            selected = character;
+            RefreshCharacter();
+
+            if (currentPanel == upgradePanel)
+            {
+                RefreshUpgrades();
+            }
         }
 
-        private void SelectDefault()
+        /// <summary>Right arrow on the hero selection page.</summary>
+        public void SelectNextCharacter()
         {
+            StepCharacter(1);
+        }
+
+        /// <summary>Left arrow on the hero selection page.</summary>
+        public void SelectPreviousCharacter()
+        {
+            StepCharacter(-1);
+        }
+
+        private void StepCharacter(int direction)
+        {
+            List<CharacterDefinition> heroes = CollectHeroes();
+            if (heroes.Count == 0)
+            {
+                return;
+            }
+
+            int index = selected != null ? heroes.IndexOf(selected) : -1;
+            index = index < 0
+                ? (direction > 0 ? 0 : heroes.Count - 1)
+                : (index + direction + heroes.Count) % heroes.Count;
+
+            SelectCharacter(heroes[index]);
+        }
+
+        /// <summary>Heroes in the order the portraits appear on screen, locked ones included.</summary>
+        private List<CharacterDefinition> CollectHeroes()
+        {
+            var heroes = new List<CharacterDefinition>();
+
             if (characterButtons != null)
             {
                 for (int i = 0; i < characterButtons.Length; i++)
                 {
-                    if (characterButtons[i] != null
-                        && characterButtons[i].Character != null
-                        && AchievementProgress.IsCharacterUnlocked(characterButtons[i].Character))
+                    CharacterDefinition hero = characterButtons[i] != null ? characterButtons[i].Character : null;
+                    if (hero != null && !heroes.Contains(hero))
                     {
-                        selected = characterButtons[i].Character;
-                        return;
+                        heroes.Add(hero);
                     }
                 }
             }
 
-            if (roster != null && roster.characters != null)
+            if (heroes.Count == 0 && roster != null && roster.characters != null)
             {
                 for (int i = 0; i < roster.characters.Length; i++)
                 {
-                    if (roster.characters[i] != null
-                        && AchievementProgress.IsCharacterUnlocked(roster.characters[i]))
+                    if (roster.characters[i] != null && !heroes.Contains(roster.characters[i]))
                     {
-                        selected = roster.characters[i];
-                        return;
+                        heroes.Add(roster.characters[i]);
                     }
+                }
+            }
+
+            return heroes;
+        }
+
+        private void SelectDefault()
+        {
+            List<CharacterDefinition> heroes = CollectHeroes();
+            for (int i = 0; i < heroes.Count; i++)
+            {
+                if (AchievementProgress.IsCharacterUnlocked(heroes[i]))
+                {
+                    selected = heroes[i];
+                    return;
                 }
             }
         }
 
         private void RefreshCharacter()
         {
+            bool unlocked = selected != null && AchievementProgress.IsCharacterUnlocked(selected);
+
+            if (characterName != null)
+            {
+                if (selected == null)
+                {
+                    characterName.text = "No heroes";
+                }
+                else if (unlocked)
+                {
+                    characterName.text = selected.displayName;
+                }
+                else
+                {
+                    characterName.text = $"{selected.displayName}\n<size=60%>{AchievementCatalog.UnlockHint(selected)}</size>";
+                }
+            }
+
             if (characterDetail != null)
             {
                 if (selected == null)
@@ -367,7 +447,7 @@ namespace KingsRescue.UI
                 {
                     string weapon = selected.uniqueWeapon != null ? selected.uniqueWeapon.displayName : "None";
                     string body = $"{selected.displayName}\n{selected.description}\n\nUnique weapon: {weapon}";
-                    if (!AchievementProgress.IsCharacterUnlocked(selected))
+                    if (!unlocked)
                     {
                         AchievementDefinition unlock = AchievementCatalog.FindUnlockForCharacter(selected);
                         string hint = unlock != null ? unlock.description : "Complete an achievement to unlock this hero.";
@@ -376,6 +456,16 @@ namespace KingsRescue.UI
 
                     characterDetail.text = body;
                 }
+            }
+
+            if (startButton != null)
+            {
+                startButton.interactable = unlocked;
+            }
+
+            if (upgradesButton != null)
+            {
+                upgradesButton.interactable = unlocked;
             }
 
             if (characterButtons == null)
@@ -392,6 +482,218 @@ namespace KingsRescue.UI
             }
         }
 
+        // ---------------------------------------------------------------- upgrades
+
+        /// <summary>A card was clicked. Shows its details, price and Buy button.</summary>
+        public void SelectUpgrade(StatType stat)
+        {
+            selectedStat = stat;
+            hasSelectedStat = true;
+            RefreshUpgrades();
+        }
+
+        public void BuySelectedUpgrade()
+        {
+            if (selected == null || !hasSelectedStat)
+            {
+                return;
+            }
+
+            if (MetaProgress.TryPurchase(selected, selectedStat))
+            {
+                RefreshUpgrades();
+            }
+        }
+
+        public void RefreshUpgrades()
+        {
+            EnsureSelectedUpgrade();
+
+            if (upgradeTitle != null)
+            {
+                upgradeTitle.text = selected != null
+                    ? $"{selected.displayName.ToUpper()} UPGRADES"
+                    : "UPGRADES";
+            }
+
+            if (bankLabel != null)
+            {
+                bankLabel.text = devMode
+                    ? $"{MetaProgress.Coins}  ·  DEV"
+                    : MetaProgress.Coins.ToString();
+            }
+
+            if (upgradeRows != null)
+            {
+                for (int i = 0; i < upgradeRows.Length; i++)
+                {
+                    if (upgradeRows[i] != null)
+                    {
+                        upgradeRows[i].Refresh(selected, hasSelectedStat && upgradeRows[i].Stat == selectedStat);
+                    }
+                }
+            }
+
+            RefreshUpgradeDetail();
+
+            int refund = MetaProgress.SpentOnCharacter(selected);
+            if (resetUpgradesButton != null)
+            {
+                resetUpgradesButton.interactable = selected != null && refund > 0;
+            }
+
+            if (resetUpgradesLabel != null)
+            {
+                resetUpgradesLabel.text = refund > 0
+                    ? $"RESET  (refund {refund} coins)"
+                    : "RESET UPGRADES";
+            }
+        }
+
+        private void EnsureSelectedUpgrade()
+        {
+            if (hasSelectedStat)
+            {
+                return;
+            }
+
+            if (upgradeRows != null)
+            {
+                for (int i = 0; i < upgradeRows.Length; i++)
+                {
+                    if (upgradeRows[i] != null)
+                    {
+                        selectedStat = upgradeRows[i].Stat;
+                        hasSelectedStat = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void RefreshUpgradeDetail()
+        {
+            if (!hasSelectedStat || !MetaUpgradeCatalog.TryGet(selectedStat, out MetaUpgradeOffer offer))
+            {
+                return;
+            }
+
+            int level = selected != null ? MetaProgress.GetLevel(selected, selectedStat) : 0;
+            bool maxed = level >= offer.maxLevel;
+            int cost = offer.CostForNext(level);
+            bool canPay = MetaProgress.DevMode || MetaProgress.Coins >= cost;
+
+            if (upgradeNameLabel != null)
+            {
+                upgradeNameLabel.text = StatTypes.DisplayName(selectedStat);
+            }
+
+            if (upgradeDescriptionLabel != null)
+            {
+                upgradeDescriptionLabel.text = $"{BonusText(offer)} per level\nLevel {level} / {offer.maxLevel}";
+            }
+
+            if (upgradeIcon != null)
+            {
+                Sprite icon = IconFor(selectedStat);
+                if (icon != null)
+                {
+                    upgradeIcon.sprite = icon;
+                }
+            }
+
+            if (upgradePriceRoot != null)
+            {
+                upgradePriceRoot.SetActive(!maxed);
+            }
+
+            if (upgradePriceLabel != null)
+            {
+                upgradePriceLabel.text = maxed ? "MAX" : cost.ToString();
+            }
+
+            if (upgradeBuyLabel != null)
+            {
+                upgradeBuyLabel.text = maxed ? "MAXED" : "BUY";
+            }
+
+            if (upgradeBuyButton != null)
+            {
+                upgradeBuyButton.interactable = selected != null && !maxed && canPay;
+            }
+        }
+
+        private Sprite IconFor(StatType stat)
+        {
+            if (upgradeRows == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < upgradeRows.Length; i++)
+            {
+                if (upgradeRows[i] != null && upgradeRows[i].Stat == stat)
+                {
+                    return upgradeRows[i].Icon;
+                }
+            }
+
+            return null;
+        }
+
+        private static string BonusText(MetaUpgradeOffer offer)
+        {
+            if (offer.stat == StatType.AttackSpeed)
+            {
+                return $"-{offer.perLevel * 100f:0}% attack delay";
+            }
+
+            if (offer.mode == ModifierMode.Percent)
+            {
+                return $"+{offer.perLevel * 100f:0}%";
+            }
+
+            return $"+{offer.perLevel:0.##}";
+        }
+
+        public void ResetSelectedUpgrades()
+        {
+            if (selected == null)
+            {
+                return;
+            }
+
+            MetaProgress.ResetCharacter(selected);
+            RefreshUpgrades();
+        }
+
+        // ---------------------------------------------------------------- settings
+
+        public void OnMusicChanged(float value)
+        {
+            GameSettings.MusicVolume = value;
+        }
+
+        public void OnSoundChanged(float value)
+        {
+            GameSettings.SoundVolume = value;
+        }
+
+        public void OnSensitivityChanged(float value)
+        {
+            GameSettings.JoystickSensitivity = value;
+        }
+
+        public void OnScreenShakeChanged(bool value)
+        {
+            GameSettings.ScreenShake = value;
+        }
+
+        public void OnDamageTextChanged(bool value)
+        {
+            GameSettings.ShowDamageText = value;
+        }
+
         private void SyncSettingsControls()
         {
             if (musicSlider != null)
@@ -404,19 +706,30 @@ namespace KingsRescue.UI
                 soundSlider.SetValueWithoutNotify(GameSettings.SoundVolume);
             }
 
+            if (sensitivitySlider != null)
+            {
+                sensitivitySlider.minValue = GameSettings.MinJoystickSensitivity;
+                sensitivitySlider.maxValue = GameSettings.MaxJoystickSensitivity;
+                sensitivitySlider.SetValueWithoutNotify(GameSettings.JoystickSensitivity);
+            }
+
             if (screenShakeToggle != null)
             {
-                screenShakeToggle.SetIsOnWithoutNotify(GameSettings.ScreenShake);
+                screenShakeToggle.SetValueWithoutNotify(GameSettings.ScreenShake);
             }
 
             if (damageTextToggle != null)
             {
-                damageTextToggle.SetIsOnWithoutNotify(GameSettings.ShowDamageText);
+                damageTextToggle.SetValueWithoutNotify(GameSettings.ShowDamageText);
             }
         }
 
+        // ---------------------------------------------------------------- panels
+
         private void Show(GameObject panel)
         {
+            currentPanel = panel;
+
             SetActive(homePanel, panel);
             SetActive(characterPanel, panel);
             SetActive(upgradePanel, panel);

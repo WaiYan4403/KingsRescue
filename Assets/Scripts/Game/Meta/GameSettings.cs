@@ -12,6 +12,10 @@ namespace KingsRescue.Meta
         private const string SoundKey = "KingsRescue.Sound";
         private const string ShakeKey = "KingsRescue.ScreenShake";
         private const string DamageTextKey = "KingsRescue.DamageText";
+        private const string SensitivityKey = "KingsRescue.JoystickSensitivity";
+
+        public const float MinJoystickSensitivity = 0.5f;
+        public const float MaxJoystickSensitivity = 2f;
 
         // The FMOD project routes the soundtrack to the master bus. There is no separate music bus.
         private const string MusicBusPath = "bus:/";
@@ -62,6 +66,20 @@ namespace KingsRescue.Meta
             set
             {
                 PlayerPrefs.SetInt(DamageTextKey, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
+
+        /// <summary>
+        /// Joystick responsiveness. 1 is the default feel. Higher values reach full speed with a shorter
+        /// thumb drag, lower values need a longer drag.
+        /// </summary>
+        public static float JoystickSensitivity
+        {
+            get => Mathf.Clamp(PlayerPrefs.GetFloat(SensitivityKey, 1f), MinJoystickSensitivity, MaxJoystickSensitivity);
+            set
+            {
+                PlayerPrefs.SetFloat(SensitivityKey, Mathf.Clamp(value, MinJoystickSensitivity, MaxJoystickSensitivity));
                 PlayerPrefs.Save();
             }
         }

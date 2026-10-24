@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2418853765351917108}
   - component: {fileID: 6935876042956351680}
   - component: {fileID: 3869234003889826883}
+  - component: {fileID: 5057987952978748500}
   m_Layer: 0
   m_Name: Row Template
   m_TagString: Untagged
@@ -53,7 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
-    m_Left: 40
+    m_Left: 30
     m_Right: 40
     m_Top: 40
     m_Bottom: 40
@@ -86,6 +87,22 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &5057987952978748500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 968087467569035036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8a6fab31c158c42ac9cb7a3540c98e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.UI.AchievementRowView
+  unlockedToggle: {fileID: 0}
+  conditionText: {fileID: 0}
+  rewardIcon: {fileID: 0}
+  selectedMark: {fileID: 0}
 --- !u!1 &2745644563146665873
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +529,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 125, y: 125}
+  m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5774783170256923899
 CanvasRenderer:
@@ -747,9 +764,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
-  m_MinWidth: 400
+  m_MinWidth: 350
   m_MinHeight: 60
-  m_PreferredWidth: 550
+  m_PreferredWidth: 500
   m_PreferredHeight: 90
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1

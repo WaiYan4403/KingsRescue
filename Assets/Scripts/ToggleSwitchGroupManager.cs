@@ -34,6 +34,10 @@ namespace Poker.UI.ToggleSwitch
 
         private void Start()
         {
+            // A lone switch is a plain on/off switch. Only real groups force one option on.
+            if (_toggleSwitches.Count <= 1)
+                return;
+
             bool areAllToggledOff = true;
             foreach (var button in _toggleSwitches)
             {
@@ -56,7 +60,11 @@ namespace Poker.UI.ToggleSwitch
         public void ToggleGroup(ToggleSwitch toggleSwitch)
         {
             if (_toggleSwitches.Count <= 1)
+            {
+                // A group of one flips like a normal toggle.
+                toggleSwitch.ToggleByGroupManager(!toggleSwitch.CurrentValue);
                 return;
+            }
 
             if (allCanBeToggledOff && toggleSwitch.CurrentValue)
             {

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using KingsRescue.Core;
+using KingsRescue.Meta;
 
 namespace KingsRescue.InputControl
 {
@@ -145,7 +146,10 @@ namespace KingsRescue.InputControl
                 handle.anchoredPosition = clamped;
             }
 
-            Vector2 raw = clamped / handleRange;
+            // The knob always travels the full handleRange. Sensitivity shortens or lengthens the
+            // drag that counts as full deflection (2 = half the travel, 0.5 = double the travel).
+            float effectiveRange = handleRange / GameSettings.JoystickSensitivity;
+            Vector2 raw = Vector2.ClampMagnitude(local / effectiveRange, 1f);
             float magnitude = raw.magnitude;
 
             if (magnitude <= deadZone)

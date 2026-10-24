@@ -94,6 +94,33 @@ namespace Poker.UI.ToggleSwitch
             SetStateAndStartAnimation(valueToSetTo);
         }
 
+        /// <summary>
+        /// Sets the switch to a saved state without firing onToggleOn / onToggleOff and without animating.
+        /// Safe to call while the object is inactive.
+        /// </summary>
+        public void SetValueWithoutNotify(bool value)
+        {
+            if (_animateSliderCoroutine != null)
+            {
+                StopCoroutine(_animateSliderCoroutine);
+                _animateSliderCoroutine = null;
+            }
+
+            CurrentValue = value;
+            _previousValue = value;
+
+            if (_slider == null)
+            {
+                SetupSliderComponent();
+            }
+
+            sliderValue = value ? 1f : 0f;
+            if (_slider != null)
+            {
+                _slider.value = sliderValue;
+            }
+        }
+
 
         private void SetStateAndStartAnimation(bool state)
         {

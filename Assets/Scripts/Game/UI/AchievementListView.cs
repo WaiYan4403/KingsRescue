@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,12 +7,53 @@ using KingsRescue.Meta;
 
 namespace KingsRescue.UI
 {
+    /// <summary>
+    /// The achievements page. Spawns one row per achievement from the row template, and shows the
+    /// selected row's objective and reward in the detail strip at the bottom.
+    /// </summary>
     public class AchievementListView : MonoBehaviour
     {
+        [Header("List")]
+        [Tooltip("Parent of the spawned rows (the scroll view's Content).")]
         [SerializeField] private Transform content;
+        [Tooltip("The Row Template prefab.")]
+        [SerializeField] private AchievementRowView rowPrefab;
+        [Tooltip("Optional text shown when the catalog is empty.")]
+        [SerializeField] private TMP_Text statusLabel;
         [SerializeField] private TMP_Text bankLabel;
+        [Tooltip("Reward icon for achievements that pay coins and name no hero or weapon.")]
+        [SerializeField] private Sprite coinIcon;
 
-        private static Sprite fillSprite;
+        [Header("Selected achievement")]
+        [SerializeField] private Image detailIcon;
+        [SerializeField] private TMP_Text detailObjective;
+        [SerializeField] private TMP_Text detailReward;
+        [Tooltip("Dimmed while the selected achievement is still locked.")]
+        [SerializeField] private Graphic detailUnlockedMark;
+        [Tooltip("Shown for 'spend coins' achievements that are not bought yet.")]
+        [SerializeField] private Button buyButton;
+        [SerializeField] private TMP_Text buyLabel;
+
+        private static readonly Color LockedTint = new Color(1f, 1f, 1f, 0.3f);
+
+        private readonly List<AchievementRowView> rows = new List<AchievementRowView>();
+        private AchievementDefinition selected;
+
+        private void Awake()
+        {
+            if (buyButton != null)
+            {
+                buyButton.onClick.AddListener(OnBuyClicked);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (buyButton != null)
+            {
+                buyButton.onClick.RemoveListener(OnBuyClicked);
+            }
+        }
 
         private void OnEnable()
         {
@@ -32,111 +74,222 @@ namespace KingsRescue.UI
 
             if (bankLabel != null)
             {
-                bankLabel.text = $"Bank: {MetaProgress.Coins}";
+                bankLabel.text = MetaProgress.Coins.ToString();
             }
 
+            AchievementDefinition[] list = AchievementCatalog.All ?? new AchievementDefinition[0];
+            EnsureRows(list);
+            HideDesignTimeRows();
+
+            if (statusLabel != null)
+            {
+                statusLabel.gameObject.SetActive(rows.Count == 0);
+                if (rows.Count == 0)
+                {
+                    statusLabel.text = "No achievements yet.";
+                }
+            }
+
+            if (selected == null || !Contains(list, selected))
+            {
+                selected = rows.Count > 0 ? rows[0].Achievement : null;
+            }
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                AchievementRowView row = rows[i];
+                AchievementDefinition achievement = row.Achievement;
+                row.Show(achievement.title, achievement.description, AchievementProgress.IsCompleted(achievement), RewardIcon(achievement));
+                row.SetSelected(achievement == selected);
+            }
+
+            RefreshDetail();
+        }
+
+        /// <summary>
+        /// A row template placed in the scene to preview the layout has no achievement bound.
+        /// It stays in the scene for editing and is hidden while playing.
+        /// </summary>
+        private void HideDesignTimeRows()
+        {
             if (content == null)
             {
                 return;
             }
 
-            for (int i = content.childCount - 1; i >= 0; i--)
+            AchievementRowView[] found = content.GetComponentsInChildren<AchievementRowView>(true);
+            for (int i = 0; i < found.Length; i++)
             {
-                Destroy(content.GetChild(i).gameObject);
+                if (found[i].Achievement == null)
+                {
+                    found[i].gameObject.SetActive(false);
+                }
             }
+        }
 
-            AchievementDefinition[] list = AchievementCatalog.All;
+        private void EnsureRows(AchievementDefinition[] list)
+        {
+            int wanted = 0;
             for (int i = 0; i < list.Length; i++)
             {
                 if (list[i] != null)
                 {
-                    BuildRow(list[i]);
+                    wanted++;
+                }
+            }
+
+            bool upToDate = rows.Count == wanted;
+            if (upToDate)
+            {
+                int index = 0;
+                for (int i = 0; i < list.Length && upToDate; i++)
+                {
+                    if (list[i] == null)
+                    {
+                        continue;
+                    }
+
+                    upToDate = rows[index] != null && rows[index].Achievement == list[i];
+                    index++;
+                }
+            }
+
+            if (upToDate || content == null || rowPrefab == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                if (rows[i] != null)
+                {
+                    Destroy(rows[i].gameObject);
+                }
+            }
+
+            rows.Clear();
+
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (list[i] == null)
+                {
+                    continue;
+                }
+
+                AchievementRowView row = Instantiate(rowPrefab, content);
+                row.gameObject.SetActive(true);
+                row.Bind(list[i], OnRowClicked);
+                rows.Add(row);
+            }
+        }
+
+        private void OnRowClicked(AchievementRowView row)
+        {
+            if (row == null || row.Achievement == null)
+            {
+                return;
+            }
+
+            selected = row.Achievement;
+            for (int i = 0; i < rows.Count; i++)
+            {
+                rows[i].SetSelected(rows[i].Achievement == selected);
+            }
+
+            RefreshDetail();
+        }
+
+        private void RefreshDetail()
+        {
+            bool has = selected != null;
+            bool done = has && AchievementProgress.IsCompleted(selected);
+
+            if (detailObjective != null)
+            {
+                detailObjective.text = has ? ObjectiveText(selected, done) : string.Empty;
+            }
+
+            if (detailReward != null)
+            {
+                detailReward.text = has ? $"Reward: {selected.RewardSummary()}" : string.Empty;
+            }
+
+            if (detailIcon != null && has)
+            {
+                Sprite icon = RewardIcon(selected);
+                if (icon != null)
+                {
+                    detailIcon.sprite = icon;
+                }
+            }
+
+            if (detailUnlockedMark != null)
+            {
+                detailUnlockedMark.color = done ? Color.white : LockedTint;
+            }
+
+            if (buyButton != null)
+            {
+                bool buyable = has && selected.kind == AchievementKind.PayCoins && !done;
+                buyButton.gameObject.SetActive(buyable);
+                if (buyable)
+                {
+                    buyButton.interactable = MetaProgress.Coins >= Mathf.Max(1, selected.target);
+                    if (buyLabel != null)
+                    {
+                        buyLabel.text = $"UNLOCK ({Mathf.Max(1, selected.target)})";
+                    }
                 }
             }
         }
 
-        private void BuildRow(AchievementDefinition achievement)
+        private void OnBuyClicked()
         {
-            bool done = AchievementProgress.IsCompleted(achievement);
-            int progress = AchievementProgress.GetProgress(achievement);
+            if (selected != null)
+            {
+                AchievementProgress.TryPurchase(selected);
+            }
+        }
+
+        private static string ObjectiveText(AchievementDefinition achievement, bool done)
+        {
             int target = Mathf.Max(1, achievement.target);
-            float fill = Mathf.Clamp01(progress / (float)target);
-
-            bool canBuy = achievement.kind == AchievementKind.PayCoins && !done;
-            float rowHeight = canBuy ? 220f : 176f;
-            GameObject row = MenuUi.Image(content, achievement.Id, new Color(0.08f, 0.12f, 0.08f, 1f), new Vector2(0f, rowHeight));
-            var rowLayout = row.AddComponent<LayoutElement>();
-            rowLayout.minHeight = rowHeight;
-            rowLayout.preferredHeight = rowHeight;
-            MenuUi.Column(row, 4f, new RectOffset(14, 14, 10, 10));
-
-            TMP_Text title = MenuUi.Label(row.transform, "Title", achievement.title, 24, done ? MenuUi.Gold : MenuUi.Ink, TextAlignmentOptions.MidlineLeft);
-            Size(title.rectTransform, 28f);
-
-            TMP_Text body = MenuUi.Label(row.transform, "Body", achievement.description, 16, MenuUi.Dim, TextAlignmentOptions.TopLeft);
-            Size(body.rectTransform, 36f);
-            body.enableWordWrapping = true;
-
-            GameObject barBack = MenuUi.Image(row.transform, "Bar", new Color(0.05f, 0.07f, 0.05f, 1f), new Vector2(0f, 14f));
-            Size(barBack.GetComponent<RectTransform>(), 14f);
-            GameObject barFill = MenuUi.Image(barBack.transform, "Fill", done ? MenuUi.Gold : MenuUi.ButtonSelected, Vector2.zero);
-            MenuUi.Stretch(barFill.GetComponent<RectTransform>());
-            Image fillImage = barFill.GetComponent<Image>();
-            fillImage.sprite = WhiteSprite();
-            fillImage.type = Image.Type.Filled;
-            fillImage.fillMethod = Image.FillMethod.Horizontal;
-            fillImage.fillAmount = fill;
-
-            string progressText = achievement.kind == AchievementKind.PayCoins
-                ? (done ? "Purchased" : $"Requires {target} coins")
-                : $"{Mathf.Min(progress, target)} / {target}";
-            TMP_Text progressLabel = MenuUi.Label(row.transform, "Progress", progressText, 16, MenuUi.Ink, TextAlignmentOptions.MidlineLeft);
-            Size(progressLabel.rectTransform, 20f);
-
-            string status = done ? $"Reward: {achievement.RewardSummary()}  —  COMPLETED" : $"Reward: {achievement.RewardSummary()}";
-            TMP_Text reward = MenuUi.Label(row.transform, "Reward", status, 16, MenuUi.Gold, TextAlignmentOptions.MidlineLeft);
-            Size(reward.rectTransform, 22f);
-
-            if (canBuy)
+            if (achievement.kind == AchievementKind.PayCoins)
             {
-                Button buy = MenuUi.MakeButton(row.transform, "Buy", $"Unlock ({target})", new Vector2(0f, 36f), () =>
+                string status = done ? "Purchased" : $"Requires {target} coins";
+                return $"{achievement.description}\n{status}";
+            }
+
+            int progress = Mathf.Min(AchievementProgress.GetProgress(achievement), target);
+            return $"{achievement.description}\n{progress} / {target}";
+        }
+
+        private Sprite RewardIcon(AchievementDefinition achievement)
+        {
+            if (achievement.rewardCharacter != null && achievement.rewardCharacter.portrait != null)
+            {
+                return achievement.rewardCharacter.portrait;
+            }
+
+            if (achievement.rewardWeapon != null && achievement.rewardWeapon.icon != null)
+            {
+                return achievement.rewardWeapon.icon;
+            }
+
+            return achievement.rewardCoins > 0 ? coinIcon : null;
+        }
+
+        private static bool Contains(AchievementDefinition[] list, AchievementDefinition value)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (list[i] == value)
                 {
-                    AchievementProgress.TryPurchase(achievement);
-                });
-                Size(buy.GetComponent<RectTransform>(), 36f);
-                buy.interactable = MetaProgress.Coins >= target;
-                TMP_Text buyLabel = buy.GetComponentInChildren<TMP_Text>();
-                if (buyLabel != null)
-                {
-                    buyLabel.fontSize = 18;
+                    return true;
                 }
             }
-        }
 
-        private static void Size(RectTransform rect, float height)
-        {
-            var element = rect.gameObject.GetComponent<LayoutElement>();
-            if (element == null)
-            {
-                element = rect.gameObject.AddComponent<LayoutElement>();
-            }
-
-            element.minHeight = height;
-            element.preferredHeight = height;
-        }
-
-        private static Sprite WhiteSprite()
-        {
-            if (fillSprite == null)
-            {
-                fillSprite = Sprite.Create(
-                    Texture2D.whiteTexture,
-                    new Rect(0f, 0f, Texture2D.whiteTexture.width, Texture2D.whiteTexture.height),
-                    new Vector2(0.5f, 0.5f),
-                    4f);
-            }
-
-            return fillSprite;
+            return false;
         }
     }
 }
