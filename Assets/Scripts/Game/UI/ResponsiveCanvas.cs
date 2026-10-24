@@ -30,10 +30,11 @@ namespace KingsRescue.UI
             public Vector3 LocalScale;
         }
 
+        [SerializeField] private RectTransform hud;
+        [SerializeField] private RectTransform info;
+        [SerializeField] private RectTransform joystick;
+
         private CanvasScaler scaler;
-        private RectTransform hud;
-        private RectTransform info;
-        private RectTransform joystick;
         private Box hudBox;
         private Box infoBox;
         private Box joystickBox;
@@ -93,20 +94,18 @@ namespace KingsRescue.UI
 
         private void Cache()
         {
-            hud = transform.Find("HUD") as RectTransform;
             hasHud = hud != null;
             if (hasHud)
             {
                 hudBox = Capture(hud);
-                info = hud.Find("Info") as RectTransform;
-                hasInfo = info != null;
-                if (hasInfo)
-                {
-                    infoBox = Capture(info);
-                }
             }
 
-            joystick = transform.Find("Joystick") as RectTransform;
+            hasInfo = info != null;
+            if (hasInfo)
+            {
+                infoBox = Capture(info);
+            }
+
             hasJoystick = joystick != null;
             if (hasJoystick)
             {

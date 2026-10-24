@@ -1,8 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.InputControl;
@@ -17,6 +18,28 @@ namespace KingsRescue.UI
     /// </summary>
     public class ChestPanel : SingletonBehaviour<ChestPanel>
     {
+        /// <summary>
+        /// Spin and pulse for one sparkle child. Turns below zero spin the other way.
+        /// </summary>
+        [System.Serializable]
+        public class SparkleSpin
+        {
+            [Tooltip("Full rotations per loop. Negative spins the other way.")]
+            public float turns = 1f;
+
+            [Tooltip("Seconds for one full spin loop.")]
+            public float spinSeconds = 2.5f;
+
+            [Tooltip("Starting angle, in degrees.")]
+            public float startAngle;
+
+            [Tooltip("How far the sparkle grows past its rest size. 0 keeps it still.")]
+            public float pulse = 0.14f;
+
+            [Tooltip("Seconds to grow to the pulse size and back.")]
+            public float pulseSeconds = 0.45f;
+        }
+
         private struct Reward
         {
             public UpgradeDefinition upgrade;
@@ -34,13 +57,45 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text rewardBody;
         [SerializeField] private Sprite coinIcon;
 
+        [Header("Layout")]
+        [SerializeField] private RectTransform card;
+        [SerializeField] private RectTransform buttons;
+        [SerializeField] private RectTransform sparkles;
+        [SerializeField] private RectTransform nameRoot;
+        [SerializeField] private RectTransform descriptionRoot;
+
+        [Header("Sparkles")]
+        [Tooltip("Seconds for the sparkle group to scale in before the reward, its name, and its description appear.")]
         [SerializeField] private float openRevealDelay = 0.7f;
+
+        [Tooltip("Seconds for the sparkles and the current reward to scale out when the player moves to the next reward.")]
+        [SerializeField] private float sparkleScaleOut = 0.22f;
+
+        [Tooltip("One entry per sparkle child, top to bottom. Extra sparkles use a gentle alternating spin.")]
+        [SerializeField] private SparkleSpin[] sparkleSpins =
+        {
+            new SparkleSpin { turns = 1f, spinSeconds = 2.6f, startAngle = 0f, pulse = 0.14f, pulseSeconds = 0.42f },
+            new SparkleSpin { turns = -1f, spinSeconds = 3.8f, startAngle = 47f, pulse = 0.14f, pulseSeconds = 0.52f },
+            new SparkleSpin { turns = 1.35f, spinSeconds = 1.9f, startAngle = 94f, pulse = 0.14f, pulseSeconds = 0.62f },
+        };
 
         private readonly Queue<Vector3Int> waiting = new Queue<Vector3Int>(4);
         private readonly List<Reward> rewards = new List<Reward>(6);
         private Graphic joystickZone;
         private int revealIndex;
         private bool opening;
+        private bool revealBusy;
+        private bool closing;
+
+        private Vector3 cardScale = Vector3.one;
+        private Vector3 buttonsScale = Vector3.one;
+        private Vector3 sparkleScale = Vector3.one;
+        private Vector3 rewardScale = Vector3.one;
+        private Vector3 descriptionScale = Vector3.one;
+        private Vector3 nameScale = Vector3.one;
+        private Vector3 openScale = Vector3.one;
+        private Vector3 okScale = Vector3.one;
+        private Sequence motion;
 
         protected override void Awake()
         {
@@ -60,6 +115,8 @@ namespace KingsRescue.UI
             {
                 okButton.onClick.AddListener(OnOkClicked);
             }
+
+            CacheMotionTargets();
         }
 
         private void Start()
@@ -93,6 +150,8 @@ namespace KingsRescue.UI
                 okButton.onClick.RemoveListener(OnOkClicked);
             }
 
+            KillMotion();
+            StopSparkleSpin();
             base.OnDestroy();
         }
 
@@ -155,17 +214,13 @@ namespace KingsRescue.UI
             BuildRewards(purse.x, purse.y, purse.z);
             revealIndex = 0;
             opening = false;
+            revealBusy = false;
+            closing = false;
 
+            KillMotion();
+            StopSparkleSpin();
             ResetChestVisual();
-            if (sparkle != null)
-            {
-                sparkle.SetActive(false);
-            }
-
-            if (rewardRoot != null)
-            {
-                rewardRoot.SetActive(false);
-            }
+            PrepareHidden();
 
             SetOpenVisible(true);
             SetOkVisible(false);
@@ -174,6 +229,7 @@ namespace KingsRescue.UI
             game.PushChestPause();
             root.transform.SetAsLastSibling();
             root.SetActive(true);
+            PlayIntro();
         }
 
         private void BuildRewards(int minCoins, int maxCoins, int coinValue)
@@ -214,37 +270,33 @@ namespace KingsRescue.UI
 
         private void OnOpenClicked()
         {
-            if (opening || !root.activeSelf)
+            if (opening || closing || revealBusy || !root.activeSelf)
             {
                 return;
             }
 
             opening = true;
-            SetOpenVisible(false);
+            SnapShown();
+            HideOpenButton();
+
             if (chestAnimator != null)
             {
                 chestAnimator.ResetTrigger("Open");
                 chestAnimator.SetTrigger("Open");
             }
 
-            StartCoroutine(RevealAfterOpen());
+            StartCoroutine(DelayReveal());
         }
 
-        private IEnumerator RevealAfterOpen()
+        IEnumerator DelayReveal()
         {
-            yield return new WaitForSecondsRealtime(Mathf.Max(0.2f, openRevealDelay));
-            if (sparkle != null)
-            {
-                sparkle.SetActive(true);
-            }
-
-            ShowReward(0);
-            SetOkVisible(true);
+            yield return new WaitForSecondsRealtime(0.5f);
+            PlayReveal();
         }
 
         private void OnOkClicked()
         {
-            if (!opening)
+            if (!opening || revealBusy || closing)
             {
                 return;
             }
@@ -252,7 +304,7 @@ namespace KingsRescue.UI
             int next = revealIndex + 1;
             if (next < rewards.Count)
             {
-                ShowReward(next);
+                PlayNextReward(next);
                 return;
             }
 
@@ -285,10 +337,6 @@ namespace KingsRescue.UI
                 BindVisual(coinIcon, $"+{reward.coins} Coins", "Taken from the chest.");
             }
 
-            if (rewardRoot != null)
-            {
-                rewardRoot.SetActive(true);
-            }
         }
 
         private void BindVisual(Sprite icon, string title, string body)
@@ -299,22 +347,52 @@ namespace KingsRescue.UI
                 rewardIcon.enabled = icon != null;
             }
 
-            if (rewardTitle != null)
+            bool separateTitle = rewardTitle != null && (descriptionRoot == null || !rewardTitle.transform.IsChildOf(descriptionRoot));
+            if (separateTitle)
             {
                 rewardTitle.text = title ?? "";
             }
 
             if (rewardBody != null)
             {
-                rewardBody.text = body ?? "";
+                rewardBody.text = separateTitle || string.IsNullOrEmpty(title)
+                    ? (body ?? "")
+                    : $"<b>{title}</b>\n{body}";
             }
         }
 
         private void Close()
         {
-            StopAllCoroutines();
+            if (closing)
+            {
+                return;
+            }
+
+            closing = true;
+            revealBusy = false;
+            KillMotion();
+            StopSparkleSpin();
+
+            motion = DOTween.Sequence().SetUpdate(true);
+            JoinScale(motion, card, Vector3.zero, 0.28f, Ease.InBack);
+            JoinScale(motion, buttons, Vector3.zero, 0.28f, Ease.InBack);
+            JoinScale(motion, sparkles, Vector3.zero, 0.22f, Ease.InBack);
+            JoinScale(motion, rewardRoot != null ? rewardRoot.transform : null, Vector3.zero, 0.2f, Ease.InBack);
+            JoinScale(motion, nameRoot, Vector3.zero, 0.2f, Ease.InBack);
+            JoinScale(motion, descriptionRoot, Vector3.zero, 0.2f, Ease.InBack);
+            motion.OnComplete(FinishClose);
+        }
+
+        private void FinishClose()
+        {
             opening = false;
-            root.SetActive(false);
+            closing = false;
+            motion = null;
+            if (root != null)
+            {
+                root.SetActive(false);
+            }
+
             SetJoystickRaycasts(true);
             GameManager.Instance?.PopChestPause();
 
@@ -326,8 +404,11 @@ namespace KingsRescue.UI
 
         private void DismissImmediate()
         {
-            StopAllCoroutines();
             opening = false;
+            revealBusy = false;
+            closing = false;
+            KillMotion();
+            StopSparkleSpin();
             waiting.Clear();
             rewards.Clear();
             if (root != null)
@@ -354,11 +435,302 @@ namespace KingsRescue.UI
             chestAnimator.Update(0f);
         }
 
+        private void CacheMotionTargets()
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            cardScale = RestScale(card);
+            buttonsScale = RestScale(buttons);
+            sparkleScale = RestScale(sparkles);
+            rewardScale = RestScale(rewardRoot != null ? rewardRoot.transform : null);
+            descriptionScale = RestScale(descriptionRoot);
+            nameScale = RestScale(nameRoot);
+            openScale = RestScale(openButton != null ? openButton.transform : null);
+            okScale = RestScale(okButton != null ? okButton.transform : null);
+        }
+
+        private static Vector3 RestScale(Transform target)
+        {
+            if (target == null || target.localScale.sqrMagnitude < 0.0001f)
+            {
+                return Vector3.one;
+            }
+
+            return target.localScale;
+        }
+
+        private void PrepareHidden()
+        {
+            SetScale(card, Vector3.zero);
+            SetScale(buttons, Vector3.zero);
+            SetScale(sparkles, Vector3.zero);
+            SetScale(rewardRoot != null ? rewardRoot.transform : null, Vector3.zero);
+            SetScale(descriptionRoot, Vector3.zero);
+            SetScale(openButton != null ? openButton.transform : null, openScale);
+            SetScale(okButton != null ? okButton.transform : null, Vector3.zero);
+
+            if (sparkles != null)
+            {
+                sparkles.gameObject.SetActive(false);
+            }
+
+            if (rewardRoot != null)
+            {
+                rewardRoot.SetActive(false);
+            }
+
+            if (descriptionRoot != null)
+            {
+                descriptionRoot.gameObject.SetActive(false);
+            }
+
+            if (nameRoot != null)
+            {
+                SetScale(nameRoot, Vector3.zero);
+                nameRoot.gameObject.SetActive(false);
+            }
+        }
+
+        private void PlayIntro()
+        {
+            KillMotion();
+            motion = DOTween.Sequence().SetUpdate(true);
+            JoinScale(motion, card, cardScale, 0.42f, Ease.OutBack);
+            JoinScale(motion, buttons, buttonsScale, 0.42f, Ease.OutBack);
+        }
+
+        private void PlayReveal()
+        {
+            KillMotion();
+            revealBusy = true;
+            motion = DOTween.Sequence().SetUpdate(true);
+            AppendSparkleBloom(motion);
+            motion.AppendCallback(() => ShowReward(0));
+            AppendRewardPop(motion);
+            motion.AppendCallback(() =>
+            {
+                SetOkVisible(true);
+                SetScale(okButton != null ? okButton.transform : null, Vector3.zero);
+            });
+            AppendPop(motion, okButton != null ? okButton.transform : null, okScale, 0.26f);
+            motion.OnComplete(() => revealBusy = false);
+        }
+
+        private void PlayNextReward(int index)
+        {
+            KillMotion();
+            revealBusy = true;
+            float shrink = Mathf.Max(0.08f, sparkleScaleOut);
+            motion = DOTween.Sequence().SetUpdate(true);
+            JoinScale(motion, sparkles, Vector3.zero, shrink, Ease.InBack);
+            JoinScale(motion, rewardRoot != null ? rewardRoot.transform : null, Vector3.zero, shrink, Ease.InBack);
+            JoinScale(motion, nameRoot, Vector3.zero, shrink, Ease.InBack);
+            JoinScale(motion, descriptionRoot, Vector3.zero, shrink, Ease.InBack);
+            AppendSparkleBloom(motion);
+            motion.AppendCallback(() => ShowReward(index));
+            AppendRewardPop(motion);
+            motion.OnComplete(() => revealBusy = false);
+        }
+
+        /// <summary>Scales the sparkle group up from nothing and keeps the children spinning.</summary>
+        private void AppendSparkleBloom(Sequence sequence)
+        {
+            if (sequence == null)
+            {
+                return;
+            }
+
+            sequence.AppendCallback(() =>
+            {
+                if (sparkles == null)
+                {
+                    return;
+                }
+
+                sparkles.gameObject.SetActive(true);
+                sparkles.localScale = Vector3.zero;
+                SpinSparkles();
+            });
+
+            if (sparkles != null)
+            {
+                float bloom = Mathf.Max(0.35f, openRevealDelay);
+                sequence.Append(sparkles.DOScale(sparkleScale, bloom).SetEase(Ease.OutBack));
+            }
+        }
+
+        private void AppendRewardPop(Sequence sequence)
+        {
+            AppendPop(sequence, rewardRoot != null ? rewardRoot.transform : null, rewardScale, 0.34f);
+            AppendPop(sequence, nameRoot, nameScale, 0.28f);
+            AppendPop(sequence, descriptionRoot, descriptionScale, 0.3f);
+        }
+
+        private void HideOpenButton()
+        {
+            if (openButton == null)
+            {
+                return;
+            }
+
+            openButton.transform.DOKill();
+            openButton.transform.DOScale(Vector3.zero, 0.16f)
+                .SetEase(Ease.InBack)
+                .SetUpdate(true)
+                .OnComplete(() => SetOpenVisible(false));
+        }
+
+        private void SnapShown()
+        {
+            SetScale(card, cardScale);
+            SetScale(buttons, buttonsScale);
+        }
+
+        private void SpinSparkles()
+        {
+            if (sparkles == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < sparkles.childCount; i++)
+            {
+                Transform child = sparkles.GetChild(i);
+                child.DOKill();
+                SparkleSpin spin = SpinFor(i);
+                child.localRotation = Quaternion.Euler(0f, 0f, spin.startAngle);
+                child.localScale = Vector3.one;
+
+                float turns = spin.turns;
+                if (Mathf.Abs(turns) > 0.001f)
+                {
+                    float duration = Mathf.Max(0.05f, spin.spinSeconds);
+                    child.DOLocalRotate(new Vector3(0f, 0f, 360f * turns), duration, RotateMode.FastBeyond360)
+                        .SetEase(Ease.Linear)
+                        .SetLoops(-1, LoopType.Incremental)
+                        .SetUpdate(true);
+                }
+
+                if (spin.pulse > 0.001f)
+                {
+                    float pulseDuration = Mathf.Max(0.05f, spin.pulseSeconds);
+                    child.DOScale(1f + spin.pulse, pulseDuration)
+                        .SetEase(Ease.InOutSine)
+                        .SetLoops(-1, LoopType.Yoyo)
+                        .SetUpdate(true);
+                }
+            }
+        }
+
+        private SparkleSpin SpinFor(int index)
+        {
+            if (sparkleSpins != null && index >= 0 && index < sparkleSpins.Length && sparkleSpins[index] != null)
+            {
+                return sparkleSpins[index];
+            }
+
+            if (index == 0)
+            {
+                return new SparkleSpin { turns = 1f, spinSeconds = 2.6f, startAngle = 0f, pulse = 0.14f, pulseSeconds = 0.42f };
+            }
+
+            if (index == 1)
+            {
+                return new SparkleSpin { turns = -1f, spinSeconds = 3.8f, startAngle = 47f, pulse = 0.14f, pulseSeconds = 0.52f };
+            }
+
+            if (index == 2)
+            {
+                return new SparkleSpin { turns = 1.35f, spinSeconds = 1.9f, startAngle = 94f, pulse = 0.14f, pulseSeconds = 0.62f };
+            }
+
+            return new SparkleSpin
+            {
+                turns = index % 2 == 0 ? 1f : -1f,
+                spinSeconds = 2.4f,
+                startAngle = (index * 47f) % 360f,
+                pulse = 0.14f,
+                pulseSeconds = 0.42f + (index * 0.1f),
+            };
+        }
+
+        private void StopSparkleSpin()
+        {
+            if (sparkles == null)
+            {
+                return;
+            }
+
+            sparkles.DOKill();
+            for (int i = 0; i < sparkles.childCount; i++)
+            {
+                Transform child = sparkles.GetChild(i);
+                child.DOKill();
+                child.localScale = Vector3.one;
+            }
+        }
+
+        private void AppendPop(Sequence sequence, Transform target, Vector3 rest, float duration)
+        {
+            if (sequence == null || target == null)
+            {
+                return;
+            }
+
+            // Scale is applied when this step starts, so an earlier shrink tween is not wiped
+            // while the sequence is still being built.
+            sequence.AppendCallback(() =>
+            {
+                if (target == null)
+                {
+                    return;
+                }
+
+                target.gameObject.SetActive(true);
+                target.localScale = Vector3.zero;
+            });
+            sequence.Append(target.DOScale(rest, duration).SetEase(Ease.OutBack));
+        }
+
+        private static void JoinScale(Sequence sequence, Transform target, Vector3 scale, float duration, Ease ease)
+        {
+            if (sequence == null || target == null)
+            {
+                return;
+            }
+
+            sequence.Join(target.DOScale(scale, duration).SetEase(ease));
+        }
+
+        private void KillMotion()
+        {
+            if (motion != null)
+            {
+                motion.Kill();
+                motion = null;
+            }
+        }
+
+        private static void SetScale(Transform target, Vector3 scale)
+        {
+            if (target != null)
+            {
+                target.localScale = scale;
+            }
+        }
+
         private void SetOpenVisible(bool visible)
         {
             if (openButton != null)
             {
                 openButton.gameObject.SetActive(visible);
+                if (visible)
+                {
+                    openButton.transform.localScale = openScale;
+                }
             }
         }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -78,6 +79,9 @@ namespace KingsRescue.UI
         private StatType selectedStat;
         private bool hasSelectedStat;
         private GameObject currentPanel;
+        private GameObject requestedPanel;
+        private Coroutine panelTransition;
+        private bool panelShown;
 
         public CharacterDefinition Selected => selected;
         public StatType SelectedUpgrade => selectedStat;
@@ -728,8 +732,54 @@ namespace KingsRescue.UI
 
         private void Show(GameObject panel)
         {
-            currentPanel = panel;
+            requestedPanel = panel;
+            if (panelTransition == null)
+            {
+                panelTransition = StartCoroutine(RunPanelTransition());
+            }
+        }
 
+        /// <summary>
+        /// Settings, leaderboards, achievements and credits play a close clip. The panel stays
+        /// active until that clip finishes, then the next screen is shown.
+        /// </summary>
+        private IEnumerator RunPanelTransition()
+        {
+            while (!panelShown || currentPanel != requestedPanel)
+            {
+                GameObject target = requestedPanel;
+
+                if (panelShown && currentPanel != null && currentPanel != target && currentPanel.activeSelf
+                    && PanelClose.TryPlay(currentPanel, out float duration))
+                {
+                    float waited = 0f;
+                    while (waited < duration)
+                    {
+                        waited += Time.unscaledDeltaTime;
+                        yield return null;
+                    }
+
+                    if (currentPanel != null)
+                    {
+                        currentPanel.SetActive(false);
+                    }
+                }
+
+                if (requestedPanel != target)
+                {
+                    continue;
+                }
+
+                ApplyPanels(target);
+                currentPanel = target;
+                panelShown = true;
+            }
+
+            panelTransition = null;
+        }
+
+        private void ApplyPanels(GameObject panel)
+        {
             SetActive(homePanel, panel);
             SetActive(characterPanel, panel);
             SetActive(upgradePanel, panel);

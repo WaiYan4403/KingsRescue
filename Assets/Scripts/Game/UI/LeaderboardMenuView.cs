@@ -16,17 +16,17 @@ namespace KingsRescue.UI
         public const int TopCount = 100;
 
         [SerializeField] private TMP_Text status;
+        [SerializeField] private GameObject guestStatus;
         [SerializeField] private Transform content;
+        [SerializeField] private LeaderboardRowView firstPlace;
+        [SerializeField] private LeaderboardRowView secondPlace;
+        [SerializeField] private LeaderboardRowView thirdPlace;
+        [SerializeField] private LeaderboardRowView otherTemplate;
+        [SerializeField] private GameObject yourPlaceSlot;
+        [SerializeField] private LeaderboardRowView yourPlace;
 
         private readonly List<LeaderboardRowView> spawnedOthers = new List<LeaderboardRowView>();
-        private LeaderboardRowView firstPlace;
-        private LeaderboardRowView secondPlace;
-        private LeaderboardRowView thirdPlace;
-        private LeaderboardRowView otherTemplate;
-        private LeaderboardRowView yourPlace;
-        private GameObject yourPlaceSlot;
         private int requestId;
-        private bool rowsReady;
 
         public void Refresh()
         {
@@ -36,7 +36,11 @@ namespace KingsRescue.UI
         private async Task Load()
         {
             int id = ++requestId;
-            EnsureRows();
+            if (otherTemplate != null)
+            {
+                otherTemplate.Hide();
+            }
+
             SetStatus("Loading...");
             HidePodium();
             ClearSpawned();
@@ -75,60 +79,6 @@ namespace KingsRescue.UI
 
             ShowYou(result.Data.currentPlayer);
             RebuildLayout();
-        }
-
-        private void EnsureRows()
-        {
-            if (rowsReady)
-            {
-                return;
-            }
-
-            rowsReady = true;
-            if (content == null)
-            {
-                Transform found = transform.Find("Content");
-                content = found != null ? found : FindDeep(transform, "Content");
-            }
-
-            firstPlace = Bind(content, "1st Place");
-            secondPlace = Bind(content, "2nd Place");
-            thirdPlace = Bind(content, "3rd Place");
-            otherTemplate = Bind(content, "Other Place");
-            if (otherTemplate != null)
-            {
-                otherTemplate.Hide();
-            }
-
-            Transform yourSlot = transform.Find("Your Place");
-            if (yourSlot != null)
-            {
-                yourPlaceSlot = yourSlot.gameObject;
-                Transform card = yourSlot.Find("Your Place");
-                yourPlace = Row(card != null ? card : yourSlot);
-            }
-        }
-
-        private static LeaderboardRowView Bind(Transform parent, string childName)
-        {
-            if (parent == null)
-            {
-                return null;
-            }
-
-            Transform child = parent.Find(childName);
-            return child != null ? Row(child) : null;
-        }
-
-        private static LeaderboardRowView Row(Transform target)
-        {
-            LeaderboardRowView view = target.GetComponent<LeaderboardRowView>();
-            if (view == null)
-            {
-                view = target.gameObject.AddComponent<LeaderboardRowView>();
-            }
-
-            return view;
         }
 
         private static void ShowPodium(LeaderboardRowView row, LeaderboardEntryDto[] entries, int index)
@@ -171,10 +121,19 @@ namespace KingsRescue.UI
 
             if (!show || yourPlace == null)
             {
+                if (guestStatus != null)
+                {
+                    guestStatus.SetActive(true);
+                }
+
                 return;
             }
 
             yourPlace.Show(player.rank, player.username, player.score);
+            if (guestStatus != null)
+            {
+                guestStatus.SetActive(false);
+            }
         }
 
         private void HidePodium()
@@ -225,25 +184,6 @@ namespace KingsRescue.UI
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(board);
             }
-        }
-
-        private static Transform FindDeep(Transform root, string name)
-        {
-            if (root.name == name)
-            {
-                return root;
-            }
-
-            for (int i = 0; i < root.childCount; i++)
-            {
-                Transform found = FindDeep(root.GetChild(i), name);
-                if (found != null)
-                {
-                    return found;
-                }
-            }
-
-            return null;
         }
     }
 }

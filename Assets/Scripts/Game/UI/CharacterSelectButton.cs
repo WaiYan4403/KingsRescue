@@ -52,11 +52,6 @@ namespace KingsRescue.UI
                 background = GetComponent<Image>();
             }
 
-            if (label == null)
-            {
-                label = GetComponentInChildren<TMP_Text>();
-            }
-
             if (button != null)
             {
                 button.onClick.AddListener(OnClicked);

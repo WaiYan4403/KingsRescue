@@ -99,10 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a6fab31c158c42ac9cb7a3540c98e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.UI.AchievementRowView
-  unlockedToggle: {fileID: 0}
-  conditionText: {fileID: 0}
-  rewardIcon: {fileID: 0}
-  selectedMark: {fileID: 0}
+  unlockedToggle: {fileID: 4136245995274328429}
+  conditionText: {fileID: 8549349207418255743}
+  rewardIcon: {fileID: 2518193184681555986}
+  selectedMark: {fileID: 8660694073264831366}
 --- !u!1 &2745644563146665873
 GameObject:
   m_ObjectHideFlags: 0

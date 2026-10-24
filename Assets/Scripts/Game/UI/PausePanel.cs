@@ -1,3 +1,5 @@
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -16,8 +18,12 @@ namespace KingsRescue.UI
         [SerializeField] private Button restartButton;
         [SerializeField] private Button menuButton;
         [SerializeField] private Animator animator;
+        [SerializeField] private RectTransform card;
+        [SerializeField] private GameObject title;
 
         private bool open;
+        private bool closing;
+        private Coroutine closeRoutine;
 
         private void Awake()
         {
@@ -73,7 +79,7 @@ namespace KingsRescue.UI
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
-            if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame)
+            if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame || closing)
             {
                 return;
             }
@@ -90,6 +96,11 @@ namespace KingsRescue.UI
 
         public void Toggle()
         {
+            if (closing)
+            {
+                return;
+            }
+
             if (open)
             {
                 Resume();
@@ -118,6 +129,8 @@ namespace KingsRescue.UI
             panel.transform.SetAsLastSibling();
             if (animator != null)
             {
+                animator.enabled = true;
+                animator.speed = 1f;
                 animator.Play("PauseUI_Open", 0, 0f);
                 animator.Update(0f);
             }
@@ -127,15 +140,67 @@ namespace KingsRescue.UI
 
         private void Resume()
         {
-            if (!open)
+            if (!open || closing)
             {
                 return;
             }
 
+            if (closeRoutine != null)
+            {
+                StopCoroutine(closeRoutine);
+            }
+
+            closeRoutine = StartCoroutine(CloseThenResume());
+        }
+
+        /// <summary>
+        /// Rolls the pause card back up, then hides the panel. The open clip keeps writing that
+        /// card, so the animator is switched off until the roll-up finishes.
+        /// </summary>
+        private IEnumerator CloseThenResume()
+        {
+            closing = true;
+            float wait = 0.2f;
+
+            if (animator != null)
+            {
+                AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+                float played = Mathf.Clamp(info.normalizedTime, 0f, 1f);
+                wait = Mathf.Max(0.12f, played * info.length);
+                animator.enabled = false;
+            }
+
+            if (title != null)
+            {
+                title.SetActive(false);
+            }
+
+            if (card != null)
+            {
+                card.DOKill();
+                card.DOScaleY(0f, wait).SetEase(Ease.InBack).SetUpdate(true);
+                card.DOAnchorPosY(630f, wait).SetEase(Ease.InCubic).SetUpdate(true);
+            }
+
+            yield return new WaitForSecondsRealtime(wait);
+
+            if (card != null)
+            {
+                card.DOKill();
+            }
+
             open = false;
+            closing = false;
+            closeRoutine = null;
             if (panel != null)
             {
                 panel.SetActive(false);
+            }
+
+            if (animator != null)
+            {
+                animator.speed = 1f;
+                animator.enabled = true;
             }
 
             GameManager.Instance?.ResumeRun();

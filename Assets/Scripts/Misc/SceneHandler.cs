@@ -3,14 +3,20 @@ using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour
 {
-    [SerializeField] string sceneName;
+    [SerializeField] bool isAutoChangeScene;
+    [SerializeField] int nextSceneIndex = 1;
+    [SerializeField] float autoChangeTime = 2f;
+
     void Start()
     {
-        
+        if (isAutoChangeScene)
+        {
+            Invoke("ChangeScene", autoChangeTime);
+        }
     }
 
-    public void ChangeScene()
+    void ChangeScene()
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }

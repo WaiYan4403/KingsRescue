@@ -21,15 +21,15 @@ namespace KingsRescue.UI
         [SerializeField] private Button button;
         [SerializeField] private TMP_Text label;
 
-        [Header("Card art (found by name when left empty)")]
-        [Tooltip("Child 'Icon/Item Icon'.")]
+        [Header("Card art")]
         [SerializeField] private Image itemIcon;
-        [Tooltip("The container named 'Upgrades Slots'. Its children are the slots.")]
+        [Tooltip("The container whose children are the level slots.")]
         [SerializeField] private Transform slotsRoot;
-        [Tooltip("Optional object shown while this card is the selected one.")]
+        [Tooltip("Fill mark for each slot, in the same order as the slot children.")]
+        [SerializeField] private GameObject[] slotMarks;
+        [Tooltip("Shown while this card is the selected one.")]
         [SerializeField] private GameObject selectedFrame;
 
-        private GameObject[] slotMarks;
         private Image cardImage;
 
         public StatType Stat => stat;
@@ -48,7 +48,6 @@ namespace KingsRescue.UI
             }
 
             cardImage = GetComponent<Image>();
-            ResolveArt();
 
             if (button != null)
             {
@@ -78,8 +77,6 @@ namespace KingsRescue.UI
             {
                 return;
             }
-
-            ResolveArt();
 
             int level = character != null ? MetaProgress.GetLevel(character, stat) : 0;
 
@@ -137,50 +134,6 @@ namespace KingsRescue.UI
                 // Level needed to light slot i. Equals i + 1 when slots >= max levels.
                 int needed = Mathf.CeilToInt((i + 1) * maxLevel / (float)visibleSlots);
                 slotMarks[i].SetActive(i < visibleSlots && level >= needed);
-            }
-        }
-
-        private void ResolveArt()
-        {
-            if (itemIcon == null)
-            {
-                Transform icon = transform.Find("Icon/Item Icon");
-                if (icon != null)
-                {
-                    itemIcon = icon.GetComponent<Image>();
-                }
-            }
-
-            if (slotsRoot == null)
-            {
-                slotsRoot = transform.Find("Upgrades Slots");
-            }
-
-            if (selectedFrame == null)
-            {
-                Transform frame = transform.Find("Selected");
-                if (frame != null)
-                {
-                    selectedFrame = frame.gameObject;
-                }
-            }
-
-            if (slotMarks != null || slotsRoot == null)
-            {
-                return;
-            }
-
-            slotMarks = new GameObject[slotsRoot.childCount];
-            for (int i = 0; i < slotMarks.Length; i++)
-            {
-                Transform slot = slotsRoot.GetChild(i);
-                Transform mark = slot.Find("Unlocked Mark");
-                if (mark == null && slot.childCount > 0)
-                {
-                    mark = slot.GetChild(0);
-                }
-
-                slotMarks[i] = mark != null ? mark.gameObject : null;
             }
         }
     }

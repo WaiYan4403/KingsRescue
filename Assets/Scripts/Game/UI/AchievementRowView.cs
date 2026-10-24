@@ -26,8 +26,6 @@ namespace KingsRescue.UI
 
         private void Awake()
         {
-            ResolveParts();
-
             // The checkbox only displays state. Keep it, and the selection frame, from stealing clicks.
             if (unlockedToggle != null)
             {
@@ -78,7 +76,6 @@ namespace KingsRescue.UI
 
         public void Show(string title, string info, bool isUnlocked, Sprite icon)
         {
-            ResolveParts();
             unlocked = isUnlocked;
 
             if (conditionText != null)
@@ -117,38 +114,6 @@ namespace KingsRescue.UI
             if (value != unlocked && unlockedToggle != null)
             {
                 unlockedToggle.SetIsOnWithoutNotify(unlocked);
-            }
-        }
-
-        private void ResolveParts()
-        {
-            if (unlockedToggle == null)
-            {
-                unlockedToggle = GetComponentInChildren<Toggle>(true);
-            }
-
-            if (conditionText == null)
-            {
-                Transform text = transform.Find("Condition Text");
-                conditionText = text != null ? text.GetComponent<TMP_Text>() : GetComponentInChildren<TMP_Text>(true);
-            }
-
-            if (rewardIcon == null)
-            {
-                Transform icon = transform.Find("Icon Slot/Icon");
-                if (icon != null)
-                {
-                    rewardIcon = icon.GetComponent<Image>();
-                }
-            }
-
-            if (selectedMark == null)
-            {
-                Transform mark = transform.Find("Icon Slot/Selected");
-                if (mark != null)
-                {
-                    selectedMark = mark.gameObject;
-                }
             }
         }
     }

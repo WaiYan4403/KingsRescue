@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: warding_pulse
   title: Warding Pulse
-  description: Defeat 200 enemies to unlock Aura.
+  description: Defeat 200 enemies to unlock Saung.
   kind: 0
-  target: 200
+  target: 400
   enemy: {fileID: 0}
   rewardCoins: 0
   rewardCharacter: {fileID: 0}
