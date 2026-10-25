@@ -1,24 +1,31 @@
 using UnityEngine;
-using KingsRescue.Core;
 using KingsRescue.Player;
 
 namespace KingsRescue.Pickups
 {
     /// <summary>
-    /// One rare arcade pickup. Enemies and chests roll against these chances;
-    /// Luck raises them.
+    /// The two arcade power-ups. Each has its own prefab and drop chance.
+    /// Luck raises both chances. A normal drop never becomes the max drop.
     /// </summary>
     [CreateAssetMenu(menuName = "King's Rescue/Power-Up Catalog", fileName = "PowerUpCatalog")]
     public class PowerUpCatalog : ScriptableObject
     {
         public GameObject pickupPrefab;
 
+        public GameObject maxPickupPrefab;
+
         [Range(0f, 1f)] public float enemyDropChance = 0.012f;
+
+        [Range(0f, 1f)] public float enemyMaxDropChance = 0.004f;
 
         [Range(0f, 1f)] public float chestDropChance = 0.28f;
 
-        [Tooltip("Smashable pots and boxes. Keep this below their health drop chance.")]
+        [Range(0f, 1f)] public float chestMaxDropChance = 0.07f;
+
+        [Tooltip("Used when a smashed prop has already decided to drop a power-up, to choose the max one.")]
         [Range(0f, 1f)] public float propDropChance = 0.03f;
+
+        [Range(0f, 1f)] public float propMaxDropChance = 0.008f;
 
         [SerializeField] private float popSpeed = 2.6f;
 
@@ -37,47 +44,84 @@ namespace KingsRescue.Pickups
         public static void TryDrop(Vector2 origin, bool fromChest)
         {
             PowerUpCatalog catalog = Load();
-            if (catalog == null || catalog.pickupPrefab == null || ObjectPoolManager.Instance == null)
+            if (catalog == null || ObjectPoolManager.Instance == null)
             {
                 return;
             }
 
-            float luck = 1f;
-            PlayerController hero = PlayerController.Instance;
-            if (hero != null)
+            float luck = Luck();
+            float normalChance = fromChest ? catalog.chestDropChance : catalog.enemyDropChance;
+            float maxChance = fromChest ? catalog.chestMaxDropChance : catalog.enemyMaxDropChance;
+
+            if (Roll(normalChance, luck))
             {
-                PlayerStats stats = hero.GetComponent<PlayerStats>();
-                if (stats != null)
-                {
-                    luck = Mathf.Max(0.1f, stats.Luck);
-                }
+                catalog.Spawn(catalog.pickupPrefab, origin);
             }
 
-            float chance = fromChest ? catalog.chestDropChance : catalog.enemyDropChance;
-            if (Random.value >= Mathf.Clamp01(chance * luck))
+            if (Roll(maxChance, luck))
             {
-                return;
+                catalog.Spawn(catalog.maxPickupPrefab, origin + (Vector2)Random.insideUnitCircle * 0.45f);
             }
-
-            Spawn(origin);
         }
 
         public static void Spawn(Vector2 origin)
         {
             PowerUpCatalog catalog = Load();
-            if (catalog == null || catalog.pickupPrefab == null || ObjectPoolManager.Instance == null)
+            catalog?.Spawn(catalog.pickupPrefab, origin);
+        }
+
+        /// <summary>
+        /// A prop already passed its own drop roll. That drop is usually the normal
+        /// power-up. The max prefab takes the share of the two prop chances.
+        /// </summary>
+        public static void SpawnFromProp(Vector2 origin)
+        {
+            PowerUpCatalog catalog = Load();
+            if (catalog == null)
             {
                 return;
             }
 
-            GameObject instance = ObjectPoolManager.Instance.Spawn(catalog.pickupPrefab, origin, Quaternion.identity);
+            float normal = Mathf.Max(0f, catalog.propDropChance);
+            float max = Mathf.Max(0f, catalog.propMaxDropChance);
+            bool useMax = catalog.maxPickupPrefab != null
+                && max > 0f
+                && Random.value < max / Mathf.Max(0.0001f, normal + max);
+            catalog.Spawn(useMax ? catalog.maxPickupPrefab : catalog.pickupPrefab, origin);
+        }
+
+        private void Spawn(GameObject prefab, Vector2 origin)
+        {
+            if (prefab == null || ObjectPoolManager.Instance == null)
+            {
+                return;
+            }
+
+            GameObject instance = ObjectPoolManager.Instance.Spawn(prefab, origin, Quaternion.identity);
             if (instance == null)
             {
                 return;
             }
 
             Pickup pickup = instance.GetComponent<Pickup>();
-            pickup?.Pop(Random.insideUnitCircle.normalized * catalog.popSpeed);
+            pickup?.Pop(Random.insideUnitCircle.normalized * popSpeed);
+        }
+
+        private static bool Roll(float chance, float luck)
+        {
+            return chance > 0f && Random.value < Mathf.Clamp01(chance * luck);
+        }
+
+        private static float Luck()
+        {
+            PlayerController hero = PlayerController.Instance;
+            if (hero == null)
+            {
+                return 1f;
+            }
+
+            PlayerStats stats = hero.GetComponent<PlayerStats>();
+            return stats != null ? Mathf.Max(0.1f, stats.Luck) : 1f;
         }
     }
 }

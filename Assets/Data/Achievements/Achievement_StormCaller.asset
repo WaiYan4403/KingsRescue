@@ -20,4 +20,4 @@ MonoBehaviour:
   enemy: {fileID: 0}
   rewardCoins: 0
   rewardCharacter: {fileID: 0}
-  rewardWeapon: {fileID: 0}
+  rewardWeapon: {fileID: 11400000, guid: 8ef69a1a8b784b64b9ce30484f43b188, type: 2}

@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: PowerUpCatalog
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Pickups.PowerUpCatalog
   pickupPrefab: {fileID: 5825566481984973083, guid: f4915576817bd1947b191132f34a03b5, type: 3}
+  maxPickupPrefab: {fileID: 5825566481984973083, guid: 91d29aff6ea725f49912e024f529811e, type: 3}
   enemyDropChance: 0.012
+  enemyMaxDropChance: 0.004
   chestDropChance: 0.28
+  chestMaxDropChance: 0.07
   propDropChance: 0.03
+  propMaxDropChance: 0.008
   popSpeed: 2.6

@@ -24,6 +24,9 @@ namespace KingsRescue.UI
 
         public AchievementDefinition Achievement { get; private set; }
 
+        /// <summary>The reward sprite currently drawn on this row. The detail panel copies this.</summary>
+        public Sprite ShownIcon => rewardIcon != null && rewardIcon.enabled ? rewardIcon.sprite : null;
+
         private void Awake()
         {
             // The checkbox only displays state. Keep it, and the selection frame, from stealing clicks.
@@ -90,9 +93,11 @@ namespace KingsRescue.UI
                 unlockedToggle.SetIsOnWithoutNotify(isUnlocked);
             }
 
-            if (rewardIcon != null && icon != null)
+            if (rewardIcon != null)
             {
                 rewardIcon.sprite = icon;
+                rewardIcon.enabled = icon != null;
+                rewardIcon.preserveAspect = true;
             }
         }
 

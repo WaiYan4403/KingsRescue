@@ -56,7 +56,17 @@ namespace KingsRescue.Core
 
         public int Kills { get; private set; }
 
+        public int BossKills { get; private set; }
+
         public int Coins { get; private set; }
+
+        public int HealthPickups { get; private set; }
+
+        public int Pockets { get; private set; }
+
+        public int PowerUps { get; private set; }
+
+        public int PowerUpsMax { get; private set; }
 
         public bool IsPlaying => State == GameState.Playing && (playerHealth == null || playerHealth.IsAlive);
 
@@ -154,9 +164,15 @@ namespace KingsRescue.Core
         {
             RunTime = 0f;
             Kills = 0;
+            BossKills = 0;
             Coins = 0;
+            HealthPickups = 0;
+            Pockets = 0;
+            PowerUps = 0;
+            PowerUpsMax = 0;
             pendingLevelUps = 0;
             BossFightActive = false;
+            AchievementProgress.BeginRun();
 
             ScrollDirector.Instance?.ResetRun();
             ScrollDirector.Instance?.SetScrolling(false);
@@ -241,10 +257,37 @@ namespace KingsRescue.Core
             }
         }
 
-        public void RegisterKill(int amount = 1)
+        public void RegisterKill(int amount = 1, bool boss = false)
         {
             Kills += amount;
+            if (boss)
+            {
+                BossKills += amount;
+            }
+
             KillsChanged?.Invoke(Kills);
+        }
+
+        public void RegisterHealthPickup()
+        {
+            HealthPickups++;
+        }
+
+        public void RegisterPocket()
+        {
+            Pockets++;
+        }
+
+        public void RegisterPowerUp(bool maxForm)
+        {
+            if (maxForm)
+            {
+                PowerUpsMax++;
+            }
+            else
+            {
+                PowerUps++;
+            }
         }
 
         public void AddCoins(int amount)

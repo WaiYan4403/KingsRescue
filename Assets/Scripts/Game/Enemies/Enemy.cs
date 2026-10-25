@@ -333,7 +333,7 @@ namespace KingsRescue.Enemies
             dying = true;
 
             deathBurst?.Trigger();
-            GameManager.Instance?.RegisterKill();
+            GameManager.Instance?.RegisterKill(1, definition != null && definition.isBoss);
             AchievementProgress.RecordKill(definition);
             dropper?.DropRewards();
             slimeKing?.SpawnDeathSplit();

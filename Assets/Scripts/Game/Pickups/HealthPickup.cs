@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Core;
 using KingsRescue.Player;
 
 namespace KingsRescue.Pickups
@@ -21,6 +22,7 @@ namespace KingsRescue.Pickups
             }
 
             health.Heal(flatHeal + health.Max * percentOfMaxHeal);
+            GameManager.Instance?.RegisterHealthPickup();
             PlayerHealFeedback feedback = hero.GetComponent<PlayerHealFeedback>();
             if (feedback != null)
             {

@@ -214,13 +214,12 @@ namespace KingsRescue.UI
                 detailReward.text = has ? $"Reward: {selected.RewardSummary()}" : string.Empty;
             }
 
-            if (detailIcon != null && has)
+            if (detailIcon != null)
             {
-                Sprite icon = RewardIcon(selected);
-                if (icon != null)
-                {
-                    detailIcon.sprite = icon;
-                }
+                Sprite icon = ShownIcon();
+                detailIcon.sprite = icon;
+                detailIcon.enabled = icon != null;
+                detailIcon.preserveAspect = true;
             }
 
             if (detailUnlockedMark != null)
@@ -264,19 +263,28 @@ namespace KingsRescue.UI
             return $"{achievement.description}\n{progress} / {target}";
         }
 
+        private Sprite ShownIcon()
+        {
+            if (selected == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                AchievementRowView row = rows[i];
+                if (row != null && row.Achievement == selected)
+                {
+                    return row.ShownIcon;
+                }
+            }
+
+            return RewardIcon(selected);
+        }
+
         private Sprite RewardIcon(AchievementDefinition achievement)
         {
-            if (achievement.rewardCharacter != null && achievement.rewardCharacter.portrait != null)
-            {
-                return achievement.rewardCharacter.portrait;
-            }
-
-            if (achievement.rewardWeapon != null && achievement.rewardWeapon.icon != null)
-            {
-                return achievement.rewardWeapon.icon;
-            }
-
-            return achievement.rewardCoins > 0 ? coinIcon : null;
+            return achievement != null ? achievement.RewardIcon(coinIcon) : null;
         }
 
         private static bool Contains(AchievementDefinition[] list, AchievementDefinition value)

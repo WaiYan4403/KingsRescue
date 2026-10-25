@@ -57,7 +57,19 @@ namespace KingsRescue.Player
             EndPowerUp();
         }
 
+        /// <summary>The normal power-up. Refreshes its timer and does not become the max form.</summary>
         public void Activate()
+        {
+            Begin(Stage.Slash);
+        }
+
+        /// <summary>The max power-up. Starts at full strength on its own.</summary>
+        public void ActivateMax()
+        {
+            Begin(Stage.Final);
+        }
+
+        private void Begin(Stage next)
         {
             CharacterDefinition character = loadout != null ? loadout.Character : null;
             WeaponDefinition powered = character != null ? character.powerUpWeapon : null;
@@ -68,20 +80,15 @@ namespace KingsRescue.Player
 
             activatedAt = Time.time;
             expireAt = activatedAt + ResolveDuration(character);
-            if (stage == Stage.Final)
+
+            // A normal pickup must not downgrade a max power-up that is already running.
+            if (next == Stage.Slash && stage == Stage.Final)
             {
                 ApplyPoweredTint(true);
                 return;
             }
 
-            if (stage == Stage.Slash)
-            {
-                stage = Stage.Final;
-                ApplyPoweredTint(true);
-                return;
-            }
-
-            stage = Stage.Slash;
+            stage = next;
             ApplyPoweredTint(true);
         }
 

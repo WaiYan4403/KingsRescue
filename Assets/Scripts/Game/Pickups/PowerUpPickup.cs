@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Core;
 using KingsRescue.Meta;
 using KingsRescue.Player;
 
@@ -9,6 +10,9 @@ namespace KingsRescue.Pickups
     /// </summary>
     public class PowerUpPickup : Pickup
     {
+        [Tooltip("The stronger pickup. Counts separately and starts the powered form at full strength.")]
+        [SerializeField] private bool maxForm;
+
         [SerializeField] private SpriteRenderer flashTarget;
         [SerializeField] private Color dim = new Color(1f, 0.72f, 0.12f, 1f);
         [SerializeField] private Color bright = new Color(1f, 0.95f, 0.45f, 1f);
@@ -37,8 +41,16 @@ namespace KingsRescue.Pickups
         protected override void OnCollected(PlayerController hero)
         {
             AchievementProgress.RecordPowerUp();
+            GameManager.Instance?.RegisterPowerUp(maxForm);
             PowerUpController power = hero.GetComponent<PowerUpController>();
-            power?.Activate();
+            if (maxForm)
+            {
+                power?.ActivateMax();
+            }
+            else
+            {
+                power?.Activate();
+            }
         }
     }
 }

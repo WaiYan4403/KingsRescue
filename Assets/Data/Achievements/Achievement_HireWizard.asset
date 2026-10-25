@@ -19,5 +19,5 @@ MonoBehaviour:
   target: 800
   enemy: {fileID: 0}
   rewardCoins: 200
-  rewardCharacter: {fileID: 0}
+  rewardCharacter: {fileID: 11400000, guid: b61dcb022758b254e87054e45861cdbb, type: 2}
   rewardWeapon: {fileID: 0}

@@ -28,6 +28,7 @@ namespace KingsRescue.Pickups
         {
             PlayerStats stats = hero.GetComponent<PlayerStats>();
             float multiplier = stats != null ? stats.CoinGain : 1f;
+            GameManager.Instance?.RegisterPocket();
             GameManager.Instance?.AddCoins(Mathf.Max(1, Mathf.RoundToInt(payout * multiplier)));
         }
     }

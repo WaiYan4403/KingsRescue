@@ -240,6 +240,7 @@ namespace KingsRescue.World
             int amount = Random.Range(Mathf.Max(1, minPocketCoins), Mathf.Max(minPocketCoins, maxPocketCoins) + 1);
             PlayerStats stats = hero.GetComponent<PlayerStats>();
             float multiplier = stats != null ? stats.CoinGain : 1f;
+            GameManager.Instance?.RegisterPocket();
             GameManager.Instance?.AddCoins(Mathf.Max(1, Mathf.RoundToInt(amount * multiplier)));
 
             if (ObjectPoolManager.Instance != null)
@@ -298,7 +299,7 @@ namespace KingsRescue.World
 
             if (Random.value < Mathf.Clamp01(powerUpDropChance * luck))
             {
-                PowerUpCatalog.Spawn(origin);
+                PowerUpCatalog.SpawnFromProp(origin);
             }
         }
 

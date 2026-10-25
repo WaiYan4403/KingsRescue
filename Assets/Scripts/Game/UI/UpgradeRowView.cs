@@ -23,6 +23,8 @@ namespace KingsRescue.UI
 
         [Header("Card art")]
         [SerializeField] private Image itemIcon;
+        [Tooltip("Passive item art for this stat. Drawn on the card and copied to the detail panel.")]
+        [SerializeField] private Sprite icon;
         [Tooltip("The container whose children are the level slots.")]
         [SerializeField] private Transform slotsRoot;
         [Tooltip("Fill mark for each slot, in the same order as the slot children.")]
@@ -33,7 +35,7 @@ namespace KingsRescue.UI
         private Image cardImage;
 
         public StatType Stat => stat;
-        public Sprite Icon => itemIcon != null ? itemIcon.sprite : null;
+        public Sprite Icon => icon != null ? icon : (itemIcon != null ? itemIcon.sprite : null);
 
         private void Awake()
         {
@@ -79,6 +81,13 @@ namespace KingsRescue.UI
             }
 
             int level = character != null ? MetaProgress.GetLevel(character, stat) : 0;
+
+            if (itemIcon != null && icon != null)
+            {
+                itemIcon.sprite = icon;
+                itemIcon.enabled = true;
+                itemIcon.preserveAspect = true;
+            }
 
             if (label != null)
             {

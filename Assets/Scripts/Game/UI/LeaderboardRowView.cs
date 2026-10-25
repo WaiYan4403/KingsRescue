@@ -36,6 +36,26 @@ namespace KingsRescue.UI
             gameObject.SetActive(false);
         }
 
+        /// <summary>Keeps the card visible and clears the rank line, for the guest or offline message.</summary>
+        public void ShowBlank()
+        {
+            gameObject.SetActive(true);
+            if (rankLabel != null)
+            {
+                rankLabel.text = string.Empty;
+            }
+
+            if (nameLabel != null)
+            {
+                nameLabel.text = string.Empty;
+            }
+
+            if (scoreLabel != null)
+            {
+                scoreLabel.text = string.Empty;
+            }
+        }
+
         public void RefreshMesh()
         {
             rankLabel?.ForceMeshUpdate(true, true);

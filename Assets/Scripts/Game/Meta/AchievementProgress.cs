@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Data;
 
@@ -33,8 +34,20 @@ namespace KingsRescue.Meta
         }
 
         private static SaveData data;
+        private static readonly List<AchievementDefinition> earnedThisRun = new List<AchievementDefinition>(4);
+        private static bool recordingRun;
 
         public static event Action Changed;
+
+        /// <summary>Achievements completed since <see cref="BeginRun"/>.</summary>
+        public static IReadOnlyList<AchievementDefinition> EarnedThisRun => earnedThisRun;
+
+        /// <summary>Clears the run's achievement list. Call when a run starts.</summary>
+        public static void BeginRun()
+        {
+            recordingRun = true;
+            earnedThisRun.Clear();
+        }
 
         public static void EnsureLoaded()
         {
@@ -265,6 +278,10 @@ namespace KingsRescue.Meta
             }
 
             data.completedIds = Append(data.completedIds, achievement.Id);
+            if (recordingRun)
+            {
+                earnedThisRun.Add(achievement);
+            }
 
             if (achievement.rewardCoins > 0)
             {

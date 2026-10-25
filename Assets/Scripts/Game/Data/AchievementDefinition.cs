@@ -52,5 +52,31 @@ namespace KingsRescue.Data
 
             return parts.Count == 0 ? "Glory" : string.Join(" · ", parts);
         }
+
+        /// <summary>Item art for this reward. Coin payouts use the supplied coin sprite.</summary>
+        public Sprite RewardIcon(Sprite coinIcon)
+        {
+            if (rewardCharacter != null)
+            {
+                WeaponDefinition unique = rewardCharacter.uniqueWeapon;
+                if (unique != null && unique.icon != null)
+                {
+                    return unique.icon;
+                }
+
+                Sprite portrait = rewardCharacter.portrait;
+                if (portrait != null && portrait.texture != null && portrait.texture.name == "Items")
+                {
+                    return portrait;
+                }
+            }
+
+            if (rewardWeapon != null && rewardWeapon.icon != null)
+            {
+                return rewardWeapon.icon;
+            }
+
+            return rewardCoins > 0 ? coinIcon : null;
+        }
     }
 }

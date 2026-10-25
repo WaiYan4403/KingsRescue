@@ -16,6 +16,7 @@ namespace KingsRescue.UI
         public const int TopCount = 100;
 
         [SerializeField] private TMP_Text status;
+        [SerializeField] private GameObject networkStatus;
         [SerializeField] private GameObject guestStatus;
         [SerializeField] private Transform content;
         [SerializeField] private LeaderboardRowView firstPlace;
@@ -41,15 +42,21 @@ namespace KingsRescue.UI
                 otherTemplate.Hide();
             }
 
+            if(networkStatus != null)
+            {
+                networkStatus.SetActive(false);
+            }
+
             SetStatus("Loading...");
             HidePodium();
             ClearSpawned();
-            ShowYou(null);
+            ShowYou(null, true);
 
             OnlineServices services = OnlineServices.Instance;
             if (services == null)
             {
-                SetStatus("Online scores are turned off.");
+                SetStatus("An internet connection is required to load scores.");
+                ShowYou(null);
                 return;
             }
 
@@ -61,7 +68,8 @@ namespace KingsRescue.UI
 
             if (!result.Ok || result.Data == null)
             {
-                SetStatus(string.IsNullOrEmpty(result.Error) ? "Could not load the board." : result.Error);
+                SetStatus("An internet connection is required to load scores.");
+                ShowYou(null);
                 return;
             }
 
@@ -111,29 +119,71 @@ namespace KingsRescue.UI
             spawnedOthers.Add(row);
         }
 
-        private void ShowYou(PlayerPayload player)
+        private void ShowYou(PlayerPayload player, bool waiting = false)
         {
-            bool show = player != null && player.IsValid && player.rank > 0;
             if (yourPlaceSlot != null)
             {
-                yourPlaceSlot.SetActive(show);
+                yourPlaceSlot.SetActive(true);
             }
 
-            if (!show || yourPlace == null)
+            bool ranked = player != null && player.IsValid && player.rank > 0 && CanRecordRank();
+            if (ranked && yourPlace != null)
             {
-                if (guestStatus != null)
-                {
-                    guestStatus.SetActive(true);
-                }
-
+                yourPlace.Show(player.rank, player.username, player.score);
+                SetGuestStatus(false);
                 return;
             }
 
-            yourPlace.Show(player.rank, player.username, player.score);
-            if (guestStatus != null)
+            // The status message is a child of this card, so the card has to stay active.
+            yourPlace?.ShowBlank();
+            SetGuestStatus(!waiting);
+        }
+
+        private void SetGuestStatus(bool show)
+        {
+            if (guestStatus == null)
             {
-                guestStatus.SetActive(false);
+                return;
             }
+
+            guestStatus.SetActive(show);
+            if (!show)
+            {
+                return;
+            }
+
+            TMP_Text label = guestStatus.GetComponent<TMP_Text>();
+            if (label != null)
+            {
+                label.text = PlaceMessage();
+            }
+        }
+
+        private static bool CanRecordRank()
+        {
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                return false;
+            }
+
+            OnlineServices services = OnlineServices.Instance;
+            return services != null && services.Account != null && services.Account.Kind == AccountKind.Google;
+        }
+
+        private static string PlaceMessage()
+        {
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                return "No internet connection.";
+            }
+
+            OnlineAccount account = OnlineServices.Instance != null ? OnlineServices.Instance.Account : null;
+            if (account == null || account.Kind != AccountKind.Google)
+            {
+                return "Connect to Google to record your rank.";
+            }
+
+            return "Play a run to record your rank.";
         }
 
         private void HidePodium()
@@ -158,6 +208,10 @@ namespace KingsRescue.UI
 
         private void SetStatus(string message)
         {
+            if(networkStatus != null)
+            {
+                networkStatus.SetActive(true);
+            }
             if (status != null)
             {
                 status.text = message ?? string.Empty;
