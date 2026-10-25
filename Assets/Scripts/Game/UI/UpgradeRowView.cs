@@ -81,6 +81,7 @@ namespace KingsRescue.UI
             }
 
             int level = character != null ? MetaProgress.GetLevel(character, stat) : 0;
+            level = Mathf.Min(level, offer.maxLevel);
 
             if (itemIcon != null && icon != null)
             {

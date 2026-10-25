@@ -20,8 +20,8 @@ MonoBehaviour:
   canFlipSprite: 1
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1
-  maxHealth: 55
-  contactDamage: 12
+  maxHealth: 38
+  contactDamage: 9
   contactInterval: 0.8
   contactRadius: 0.38
   dealsContactDamage: 1
@@ -43,7 +43,7 @@ MonoBehaviour:
   meteorDefinition: {fileID: 0}
   attackInterval: 1.25
   attackRange: 6.5
-  attackDamage: 22
+  attackDamage: 14
   projectileSpeed: 11
   projectileLifetime: 3.2
   projectileRadius: 0.22
@@ -66,5 +66,5 @@ MonoBehaviour:
   xpValue: 5
   coinDropChance: 0.07
   healthDropChance: 0.02
-  healthGrowthPerMinute: 0.58
-  damageGrowthPerMinute: 0.32
+  healthGrowthPerMinute: 0.28
+  damageGrowthPerMinute: 0.12

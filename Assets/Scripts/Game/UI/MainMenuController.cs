@@ -583,6 +583,7 @@ namespace KingsRescue.UI
             }
 
             int level = selected != null ? MetaProgress.GetLevel(selected, selectedStat) : 0;
+            level = Mathf.Min(level, offer.maxLevel);
             bool maxed = level >= offer.maxLevel;
             int cost = offer.CostForNext(level);
             bool canPay = MetaProgress.DevMode || MetaProgress.Coins >= cost;
@@ -594,7 +595,20 @@ namespace KingsRescue.UI
 
             if (upgradeDescriptionLabel != null)
             {
-                upgradeDescriptionLabel.text = $"{BonusText(offer)} per level\nLevel {level} / {offer.maxLevel}";
+                float owned = offer.ModifierForLevels(level).value;
+                float shown = owned;
+                if (!maxed)
+                {
+                    float next = offer.ModifierForLevels(level + 1).value;
+                    shown = next - owned;
+                    if (shown <= 0f)
+                    {
+                        shown = next;
+                    }
+                }
+
+                string bonus = BonusText(offer, shown);
+                upgradeDescriptionLabel.text = level > 0 ? $"{bonus}\nLevel {level}" : bonus;
             }
 
             if (upgradeIcon != null)
@@ -645,19 +659,43 @@ namespace KingsRescue.UI
             return null;
         }
 
-        private static string BonusText(MetaUpgradeOffer offer)
+        private static string BonusText(MetaUpgradeOffer offer, float total)
         {
+            string name = ShortStatName(offer.stat);
             if (offer.stat == StatType.AttackSpeed)
             {
-                return $"-{offer.perLevel * 100f:0}% attack delay";
+                return $"-{total * 100f:0}% {name}";
             }
 
             if (offer.mode == ModifierMode.Percent)
             {
-                return $"+{offer.perLevel * 100f:0}%";
+                return $"+{total * 100f:0}% {name}";
             }
 
-            return $"+{offer.perLevel:0.##}";
+            return $"+{total:0.##} {name}";
+        }
+
+        private static string ShortStatName(StatType stat)
+        {
+            switch (stat)
+            {
+                case StatType.MaxHp: return "HP";
+                case StatType.MoveSpeed: return "speed";
+                case StatType.Damage: return "damage";
+                case StatType.AttackSpeed: return "cooldown";
+                case StatType.Area: return "area";
+                case StatType.ProjectileSpeed: return "shot speed";
+                case StatType.ProjectileCount: return "amount";
+                case StatType.Pierce: return "pierce";
+                case StatType.MagnetRadius: return "magnet";
+                case StatType.XpGain: return "growth";
+                case StatType.CoinGain: return "greed";
+                case StatType.Armor: return "armor";
+                case StatType.HpRegen: return "recovery";
+                case StatType.Luck: return "luck";
+                case StatType.Duration: return "duration";
+                default: return StatTypes.DisplayName(stat);
+            }
         }
 
         public void ResetSelectedUpgrades()

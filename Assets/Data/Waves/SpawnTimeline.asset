@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.SpawnTimeline
   unlockInterval: 60
   finalUnlock: 300
-  baseSpawnInterval: 1.2
-  minSpawnInterval: 0.38
-  intervalDecayPerMinute: 0.055
+  baseSpawnInterval: 1.4
+  minSpawnInterval: 0.55
+  intervalDecayPerMinute: 0.035
   baseSpawnsPerTick: 1
-  extraSpawnEveryMinutes: 5
-  maxSpawnsPerTick: 4
+  extraSpawnEveryMinutes: 7
+  maxSpawnsPerTick: 3
   pattern: 0
   eliteIntervalScale: 1.75
   flockSessionDuration: 11

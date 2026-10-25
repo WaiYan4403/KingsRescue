@@ -35,7 +35,17 @@ namespace KingsRescue.Meta
 
         public StatModifier ModifierForLevels(int levels)
         {
-            return new StatModifier(stat, mode, perLevel * levels);
+            int clamped = Mathf.Clamp(levels, 0, maxLevel);
+            float amount = perLevel * clamped;
+
+            // Amount and pierce are whole projectiles. One point as soon as the
+            // upgrade is bought, a second only when the track is finished.
+            if (stat == StatType.ProjectileCount || stat == StatType.Pierce)
+            {
+                amount = clamped <= 0 ? 0f : clamped >= maxLevel ? 2f : 1f;
+            }
+
+            return new StatModifier(stat, mode, amount);
         }
     }
 
@@ -43,21 +53,21 @@ namespace KingsRescue.Meta
     {
         public static readonly MetaUpgradeOffer[] Offers =
         {
-            new MetaUpgradeOffer(StatType.MaxHp, ModifierMode.Flat, 12f, 10, 30),
-            new MetaUpgradeOffer(StatType.Damage, ModifierMode.Percent, 0.06f, 10, 35),
-            new MetaUpgradeOffer(StatType.AttackSpeed, ModifierMode.Percent, 0.05f, 10, 35),
-            new MetaUpgradeOffer(StatType.MoveSpeed, ModifierMode.Flat, 0.25f, 8, 30),
-            new MetaUpgradeOffer(StatType.Area, ModifierMode.Percent, 0.05f, 8, 30),
-            new MetaUpgradeOffer(StatType.Armor, ModifierMode.Flat, 1f, 8, 40),
-            new MetaUpgradeOffer(StatType.HpRegen, ModifierMode.Flat, 0.35f, 10, 30),
-            new MetaUpgradeOffer(StatType.Luck, ModifierMode.Percent, 0.08f, 10, 40),
-            new MetaUpgradeOffer(StatType.Duration, ModifierMode.Percent, 0.08f, 8, 35),
-            new MetaUpgradeOffer(StatType.ProjectileCount, ModifierMode.Flat, 1f, 5, 50),
-            new MetaUpgradeOffer(StatType.ProjectileSpeed, ModifierMode.Percent, 0.08f, 8, 30),
-            new MetaUpgradeOffer(StatType.Pierce, ModifierMode.Flat, 1f, 5, 45),
-            new MetaUpgradeOffer(StatType.MagnetRadius, ModifierMode.Percent, 0.15f, 8, 30),
-            new MetaUpgradeOffer(StatType.XpGain, ModifierMode.Percent, 0.08f, 10, 35),
-            new MetaUpgradeOffer(StatType.CoinGain, ModifierMode.Percent, 0.10f, 10, 35)
+            new MetaUpgradeOffer(StatType.MaxHp, ModifierMode.Flat, 6f, 6, 30),
+            new MetaUpgradeOffer(StatType.Damage, ModifierMode.Percent, 0.03f, 6, 35),
+            new MetaUpgradeOffer(StatType.AttackSpeed, ModifierMode.Percent, 0.03f, 6, 35),
+            new MetaUpgradeOffer(StatType.MoveSpeed, ModifierMode.Flat, 0.1f, 6, 30),
+            new MetaUpgradeOffer(StatType.Area, ModifierMode.Percent, 0.03f, 6, 30),
+            new MetaUpgradeOffer(StatType.Armor, ModifierMode.Flat, 0.5f, 6, 40),
+            new MetaUpgradeOffer(StatType.HpRegen, ModifierMode.Flat, 0.12f, 6, 30),
+            new MetaUpgradeOffer(StatType.Luck, ModifierMode.Percent, 0.04f, 6, 40),
+            new MetaUpgradeOffer(StatType.Duration, ModifierMode.Percent, 0.04f, 6, 35),
+            new MetaUpgradeOffer(StatType.ProjectileCount, ModifierMode.Flat, 1f, 6, 50),
+            new MetaUpgradeOffer(StatType.ProjectileSpeed, ModifierMode.Percent, 0.04f, 6, 30),
+            new MetaUpgradeOffer(StatType.Pierce, ModifierMode.Flat, 1f, 6, 45),
+            new MetaUpgradeOffer(StatType.MagnetRadius, ModifierMode.Percent, 0.06f, 6, 30),
+            new MetaUpgradeOffer(StatType.XpGain, ModifierMode.Percent, 0.04f, 6, 35),
+            new MetaUpgradeOffer(StatType.CoinGain, ModifierMode.Percent, 0.05f, 6, 35)
         };
 
         public static bool TryGet(StatType stat, out MetaUpgradeOffer offer)
@@ -86,7 +96,7 @@ namespace KingsRescue.Meta
             for (int i = 0; i < Offers.Length; i++)
             {
                 MetaUpgradeOffer offer = Offers[i];
-                int level = MetaProgress.GetLevel(character, offer.stat);
+                int level = Mathf.Min(offer.maxLevel, MetaProgress.GetLevel(character, offer.stat));
                 if (level > 0)
                 {
                     modifiers.Add(offer.ModifierForLevels(level));

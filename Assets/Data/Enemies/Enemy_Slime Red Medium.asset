@@ -20,8 +20,8 @@ MonoBehaviour:
   canFlipSprite: 1
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1.1
-  maxHealth: 280
-  contactDamage: 32
+  maxHealth: 160
+  contactDamage: 20
   contactInterval: 0.6
   contactRadius: 0.5
   dealsContactDamage: 1
@@ -66,5 +66,5 @@ MonoBehaviour:
   xpValue: 2
   coinDropChance: 0.04
   healthDropChance: 0.015
-  healthGrowthPerMinute: 0.72
-  damageGrowthPerMinute: 0.38
+  healthGrowthPerMinute: 0.28
+  damageGrowthPerMinute: 0.14

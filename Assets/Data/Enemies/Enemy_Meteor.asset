@@ -43,7 +43,7 @@ MonoBehaviour:
   meteorDefinition: {fileID: 0}
   attackInterval: 1.8
   attackRange: 8
-  attackDamage: 46
+  attackDamage: 22
   projectileSpeed: 7
   projectileLifetime: 3.5
   projectileRadius: 0.28
@@ -66,5 +66,5 @@ MonoBehaviour:
   xpValue: 1
   coinDropChance: 0.04
   healthDropChance: 0.02
-  healthGrowthPerMinute: 0.45
-  damageGrowthPerMinute: 0.38
+  healthGrowthPerMinute: 0.28
+  damageGrowthPerMinute: 0.12
