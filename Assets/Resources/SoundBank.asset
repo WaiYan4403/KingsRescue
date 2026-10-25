@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e4c1a09f3d4e7c6b5a29180716d4e2, type: 3}
+  m_Name: SoundBank
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Audio.SoundBank
+  slots:
+  - id: 1
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.04
+  - id: 2
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.05
+  - id: 3
+    clip: {fileID: 0}
+    volume: 0.7
+    pitchMin: 0.96
+    pitchMax: 1.05
+    minInterval: 0.34
+  - id: 4
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.97
+    pitchMax: 1.04
+    minInterval: 0.08
+  - id: 5
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.97
+    pitchMax: 1.05
+    minInterval: 0.06
+  - id: 6
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.98
+    pitchMax: 1.03
+    minInterval: 0.12
+  - id: 7
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.2
+  - id: 8
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1.04
+    minInterval: 0.15
+  - id: 9
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.2
+  - id: 10
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1.03
+    minInterval: 0.1
+  - id: 11
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.1
+  - id: 12
+    clip: {fileID: 0}
+    volume: 0.85
+    pitchMin: 0.95
+    pitchMax: 1.08
+    minInterval: 0.04
+  - id: 13
+    clip: {fileID: 0}
+    volume: 0.8
+    pitchMin: 0.96
+    pitchMax: 1.06
+    minInterval: 0.04
+  - id: 14
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.98
+    pitchMax: 1.04
+    minInterval: 0.08
+  - id: 15
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.2
+  - id: 16
+    clip: {fileID: 0}
+    volume: 0.9
+    pitchMin: 0.94
+    pitchMax: 1.06
+    minInterval: 0.06
+  - id: 17
+    clip: {fileID: 0}
+    volume: 0.75
+    pitchMin: 0.94
+    pitchMax: 1.08
+    minInterval: 0.05
+  - id: 18
+    clip: {fileID: 0}
+    volume: 0.9
+    pitchMin: 0.96
+    pitchMax: 1.05
+    minInterval: 0.08
+  - id: 19
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.98
+    pitchMax: 1.02
+    minInterval: 0.3
+  - id: 20
+    clip: {fileID: 0}
+    volume: 0.9
+    pitchMin: 0.96
+    pitchMax: 1.05
+    minInterval: 0.08
+  - id: 21
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.96
+    pitchMax: 1.04
+    minInterval: 0.1
+  - id: 22
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.97
+    pitchMax: 1.04
+    minInterval: 0.12
+  - id: 23
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.95
+    pitchMax: 1.08
+    minInterval: 0.08

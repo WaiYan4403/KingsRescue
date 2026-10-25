@@ -17,6 +17,8 @@ namespace KingsRescue.Pickups
             value = Mathf.Max(1, amount);
         }
 
+        protected override SoundId CollectSound => SoundId.PickupCoin;
+
         protected override void OnCollected(PlayerController hero)
         {
             var stats = hero.GetComponent<PlayerStats>();

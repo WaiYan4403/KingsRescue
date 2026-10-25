@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.Enemies;
@@ -267,6 +268,7 @@ namespace KingsRescue.Combat
 
         private void Fire()
         {
+            SoundEffects.PlayWeapon(definition.fireMode);
             switch (definition.fireMode)
             {
                 case WeaponFireMode.MeleeSwing:
@@ -1114,6 +1116,7 @@ namespace KingsRescue.Combat
                 }
             }
 
+            SoundEffects.Play(SoundId.SpellCast);
             return true;
         }
 
@@ -1182,6 +1185,7 @@ namespace KingsRescue.Combat
 
             RebuildBlades(ResolveCount());
             orbitUntil = Time.time + Mathf.Max(0.2f, ResolveDuration());
+            SoundEffects.Play(SoundId.PlayerShoot);
             TickOrbitMotion();
         }
 

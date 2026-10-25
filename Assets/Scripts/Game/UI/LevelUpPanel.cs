@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.InputControl;
@@ -117,6 +118,7 @@ namespace KingsRescue.UI
             }
 
             service.BuildChoices(choices);
+            SoundEffects.Play(SoundId.PlayerLevelUp);
 
             if (levelLabel != null)
             {

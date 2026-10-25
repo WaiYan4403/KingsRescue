@@ -83,6 +83,8 @@ namespace KingsRescue.Pickups
             }
         }
 
+        protected override SoundId CollectSound => SoundId.PickupGem;
+
         protected override void OnCollected(PlayerController hero)
         {
             ExperienceSystem.Instance?.AddXp(value);

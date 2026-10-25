@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
@@ -131,6 +132,10 @@ namespace KingsRescue.Player
             {
                 DieFromDamage();
             }
+            else
+            {
+                SoundEffects.Play(SoundId.PlayerHurt);
+            }
         }
 
         /// <summary>Poison / standing in a zone. Does not grant i-frames.</summary>
@@ -161,6 +166,7 @@ namespace KingsRescue.Player
             hurtFlashOn = false;
             PaintBody(null);
             PlayDeathAnimation();
+            SoundEffects.Play(SoundId.PlayerDeath);
             Died?.Invoke();
         }
 
@@ -186,6 +192,7 @@ namespace KingsRescue.Player
             HealthChanged?.Invoke(Current, Max);
             Damaged?.Invoke();
             SyncAnimatorHealth();
+            SoundEffects.Play(SoundId.PlayerHurt);
             return true;
         }
 
@@ -212,8 +219,15 @@ namespace KingsRescue.Player
                 return;
             }
 
+            float before = Current;
             Current = Mathf.Min(Max, Current + amount);
+            if (Current <= before)
+            {
+                return;
+            }
+
             HealthChanged?.Invoke(Current, Max);
+            SoundEffects.Play(SoundId.PlayerHeal);
         }
 
         /// <summary>Green overlay held by the heal burst until its particles finish.</summary>

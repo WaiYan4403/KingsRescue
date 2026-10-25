@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.InputControl;
@@ -227,6 +228,7 @@ namespace KingsRescue.UI
             SetJoystickRaycasts(false);
 
             game.PushChestPause();
+            SoundEffects.Play(SoundId.ChestOpen);
             root.transform.SetAsLastSibling();
             root.SetActive(true);
             PlayIntro();

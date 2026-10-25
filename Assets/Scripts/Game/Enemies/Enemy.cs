@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
@@ -305,6 +306,7 @@ namespace KingsRescue.Enemies
 
         private void OnDamaged(Health source, DamageInfo info)
         {
+            SoundEffects.Play(SoundId.EnemyHit);
             Vector2 at = source != null ? source.BodyCenter : (Vector2)transform.position;
             DamageNumberDisplay.Popup(at, info.Amount, info.Critical);
 
@@ -331,6 +333,7 @@ namespace KingsRescue.Enemies
             }
 
             dying = true;
+            SoundEffects.Play(definition != null && definition.isBoss ? SoundId.BossDeath : SoundId.EnemyDeath);
 
             deathBurst?.Trigger();
             GameManager.Instance?.RegisterKill(1, definition != null && definition.isBoss);

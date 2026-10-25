@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Meta;
@@ -223,6 +224,7 @@ namespace KingsRescue.World
             }
 
             opened = true;
+            SoundEffects.Play(SoundId.PropBreak);
             health.Untargetable = true;
             flash?.Flash();
             ApplySprite(openedSprite != null ? openedSprite : crackedSprite);

@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Data;
 
@@ -105,6 +106,8 @@ namespace KingsRescue.Player
 
             activatedAt = Time.time;
             expireAt = activatedAt + ResolveDuration(character);
+            bool max = next == Stage.Final || stage == Stage.Final;
+            SoundEffects.Play(max ? SoundId.PowerUpMax : SoundId.PowerUp);
 
             // A normal pickup must not downgrade a max power-up that is already running.
             if (next == Stage.Slash && stage == Stage.Final)

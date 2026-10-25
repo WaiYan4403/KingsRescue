@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Data;
 using KingsRescue.Player;
 
@@ -140,6 +141,7 @@ namespace KingsRescue.UI
             }
 
             onChosen?.Invoke(bound);
+            SoundEffects.Play(SoundId.UiConfirm);
         }
     }
 }

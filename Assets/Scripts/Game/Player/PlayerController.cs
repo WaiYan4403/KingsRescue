@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.InputControl;
 using KingsRescue.World;
@@ -248,6 +249,12 @@ namespace KingsRescue.Player
             {
                 bodyAnimator.SetFloat(speedParameterHash, velocity.magnitude);
                 legAnimator.SetFloat(speedParameterHash, velocity.magnitude);
+            }
+
+            GameManager game = GameManager.Instance;
+            if (velocity.magnitude > 0.35f && (game == null || game.IsPlaying))
+            {
+                SoundEffects.Play(SoundId.PlayerFootstep);
             }
 
             if (CanFlipSprite() && spriteRenderer != null && Mathf.Abs(velocity.x) > 0.05f)

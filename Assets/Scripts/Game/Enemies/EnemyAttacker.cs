@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.Player;
@@ -133,6 +134,7 @@ namespace KingsRescue.Enemies
 
             if (cast)
             {
+                SoundEffects.Play(SoundId.EnemyAttack);
                 lastShotAt = Time.time;
                 nextShot = Time.time + Mathf.Max(0.25f, definition.attackInterval);
                 attackAnimator?.PlayAttack();

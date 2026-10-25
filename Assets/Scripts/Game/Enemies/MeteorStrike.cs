@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
@@ -305,6 +306,7 @@ namespace KingsRescue.Enemies
         private void Explode()
         {
             exploded = true;
+            SoundEffects.Play(SoundId.EnemySpell);
             transform.position = impact;
             HitboxDisplay.Flash(impact, radius, 0.35f);
 

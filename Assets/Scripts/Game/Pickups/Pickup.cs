@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Player;
 
@@ -99,6 +100,7 @@ namespace KingsRescue.Pickups
             if (hero != null)
             {
                 OnCollected(hero);
+                SoundEffects.Play(CollectSound);
             }
 
             if (ObjectPoolManager.Instance != null)
@@ -110,6 +112,8 @@ namespace KingsRescue.Pickups
                 Destroy(gameObject);
             }
         }
+
+        protected virtual SoundId CollectSound => SoundId.None;
 
         protected abstract void OnCollected(PlayerController hero);
     }

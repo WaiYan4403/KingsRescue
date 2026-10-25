@@ -24,6 +24,8 @@ namespace KingsRescue.Pickups
             Pop(Random.insideUnitCircle * popBurst);
         }
 
+        protected override SoundId CollectSound => SoundId.PickupPurse;
+
         protected override void OnCollected(PlayerController hero)
         {
             PlayerStats stats = hero.GetComponent<PlayerStats>();

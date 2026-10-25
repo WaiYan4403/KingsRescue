@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
@@ -370,6 +371,7 @@ namespace KingsRescue.Enemies
 
         private void FireTriple()
         {
+            SoundEffects.Play(SoundId.EnemyAttack);
             Vector2 origin = MuzzlePoint(ShotMuzzle.Main);
             Vector2 forward = AimDown(origin);
             float damage = ShotDamage();
@@ -381,6 +383,7 @@ namespace KingsRescue.Enemies
 
         private void ThrowSaw(Vector2 direction)
         {
+            SoundEffects.Play(SoundId.EnemyAttack);
             Vector2 dir = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.down;
             float radius = 0.55f * Mathf.Max(1.2f, sawScale);
             SpawnShot(sawWheelPrefab, MuzzlePoint(ShotMuzzle.Saw), dir, sawSpeed, ShotDamage() * 0.9f, radius, true, Mathf.Max(8f, sawLifetime));

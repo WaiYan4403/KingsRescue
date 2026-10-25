@@ -1,0 +1,24 @@
+Id,Category,Plays when,Look for,Notes
+UiClick,UI,Any button press,short soft UI click or wooden tap,One clip covers menus and the pause screen
+UiConfirm,UI,Choosing a level-up card,short positive confirm chime,Plays with the card click
+PlayerFootstep,Player,Hero is moving,single light footstep on dirt or stone,Repeats about three times a second while moving
+PlayerAttack,Player,Melee swing such as the lance,short weapon whoosh or slash,Once per swing combo start
+PlayerShoot,Player,Bow arrows knives boomerang or orbit blades,bow release or light projectile swish,Once per attack not once per arrow
+PlayerHurt,Player,Hero takes a hit,short grunt or armor tick,Skipped on the killing blow
+PlayerDeath,Player,Hero dies,short falling sting,Plays as the death animation starts
+PlayerHeal,Player,HP is restored,soft heal chime or sparkle,Hearts and the archer power-up heal both use this
+PlayerLevelUp,Game,Level-up panel opens,bright short level-up fanfare,Keep it under two seconds
+PowerUp,Player,Normal power-up is collected,magical sparkle or rising blip,The normal arcade pickup
+PowerUpMax,Player,Max power-up is collected,bigger magical surge,Louder than the normal power-up
+PickupCoin,Pickup,A coin is collected,single coin clink,Pitch varies so a handful does not sound identical
+PickupGem,Pickup,An experience gem is collected,small crystal blip,Quieter than the coin
+PickupPurse,Pickup,A coin purse is collected,coin pouch rustle or several coins,One sound for the whole purse
+ChestOpen,Game,A chest panel opens,chest lid creak plus a small chime,Plays when the reward screen appears
+PropBreak,World,A smashable pot or crate breaks,pottery crack or light wood break,Not used for chests
+EnemyHit,Combat,An enemy takes damage,soft hit tick flesh or light armor,Limited so a volley does not stack into noise
+EnemyDeath,Combat,A regular enemy dies,small pop or defeat blip,Bosses use BossDeath instead
+BossDeath,Combat,A boss dies,heavy impact or short defeat sting,One shot when the boss falls
+EnemyAttack,Combat,An enemy fires a shot or meteor,enemy bow twang spit or spell cast,Once when the attack is released
+EnemySpell,Combat,A boss special or a meteor lands,magical impact explosion or slam,Impact moment not the windup
+SpellCast,Spell,A ground zone freeze field or aura starts,ice crackle water drop or soft magic loop-free cast,Once when the weapon fires
+SpellStrike,Spell,Lightning or a random strike hits,short electric zap,Once per firing not per bolt
