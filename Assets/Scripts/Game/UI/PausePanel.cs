@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using KingsRescue.Core;
+using KingsRescue.Meta;
+using ToggleSwitch = Poker.UI.ToggleSwitch.ToggleSwitch;
 
 namespace KingsRescue.UI
 {
@@ -21,9 +23,19 @@ namespace KingsRescue.UI
         [SerializeField] private RectTransform card;
         [SerializeField] private GameObject title;
 
+        [Header("Settings")]
+        [SerializeField] private GameObject settingsPanel;
+        [SerializeField] private Slider musicSlider;
+        [SerializeField] private Slider soundSlider;
+        [SerializeField] private Slider sensitivitySlider;
+        [SerializeField] private ToggleSwitch screenShakeToggle;
+        [SerializeField] private ToggleSwitch damageTextToggle;
+
         private bool open;
         private bool closing;
+        private bool settingsOpen;
         private Coroutine closeRoutine;
+        private Coroutine settingsRoutine;
 
         private void Awake()
         {
@@ -50,6 +62,11 @@ namespace KingsRescue.UI
             if (panel != null)
             {
                 panel.SetActive(false);
+            }
+
+            if (settingsPanel != null)
+            {
+                settingsPanel.SetActive(false);
             }
         }
 
@@ -81,6 +98,12 @@ namespace KingsRescue.UI
             Keyboard keyboard = Keyboard.current;
             if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame || closing)
             {
+                return;
+            }
+
+            if (settingsOpen)
+            {
+                HideSettings();
                 return;
             }
 
@@ -138,11 +161,145 @@ namespace KingsRescue.UI
             game.PauseRun();
         }
 
+        /// <summary>Opens the settings overlay without leaving the pause or the run.</summary>
+        public void ShowSettings()
+        {
+            if (!open || closing || settingsPanel == null)
+            {
+                return;
+            }
+
+            if (settingsRoutine != null)
+            {
+                StopCoroutine(settingsRoutine);
+                settingsRoutine = null;
+            }
+
+            Animator settingsAnimator = settingsPanel.GetComponent<Animator>();
+            if (settingsAnimator != null)
+            {
+                settingsAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            }
+
+            settingsOpen = true;
+            settingsPanel.SetActive(true);
+            settingsPanel.transform.SetAsLastSibling();
+            SyncSettingsControls();
+        }
+
+        /// <summary>Closes settings and returns to the pause card. The run stays paused.</summary>
+        public void HideSettings()
+        {
+            if (!settingsOpen || settingsPanel == null)
+            {
+                return;
+            }
+
+            if (settingsRoutine != null)
+            {
+                StopCoroutine(settingsRoutine);
+            }
+
+            settingsRoutine = StartCoroutine(CloseSettings());
+        }
+
+        public void OnMusicChanged(float value)
+        {
+            GameSettings.MusicVolume = value;
+        }
+
+        public void OnSoundChanged(float value)
+        {
+            GameSettings.SoundVolume = value;
+        }
+
+        public void OnSensitivityChanged(float value)
+        {
+            GameSettings.JoystickSensitivity = value;
+        }
+
+        public void OnScreenShakeChanged(bool value)
+        {
+            GameSettings.ScreenShake = value;
+        }
+
+        public void OnDamageTextChanged(bool value)
+        {
+            GameSettings.ShowDamageText = value;
+        }
+
+        private void SyncSettingsControls()
+        {
+            if (musicSlider != null)
+            {
+                musicSlider.SetValueWithoutNotify(GameSettings.MusicVolume);
+            }
+
+            if (soundSlider != null)
+            {
+                soundSlider.SetValueWithoutNotify(GameSettings.SoundVolume);
+            }
+
+            if (sensitivitySlider != null)
+            {
+                sensitivitySlider.minValue = GameSettings.MinJoystickSensitivity;
+                sensitivitySlider.maxValue = GameSettings.MaxJoystickSensitivity;
+                sensitivitySlider.SetValueWithoutNotify(GameSettings.JoystickSensitivity);
+            }
+
+            if (screenShakeToggle != null)
+            {
+                screenShakeToggle.SetValueWithoutNotify(GameSettings.ScreenShake);
+            }
+
+            if (damageTextToggle != null)
+            {
+                damageTextToggle.SetValueWithoutNotify(GameSettings.ShowDamageText);
+            }
+        }
+
+        private IEnumerator CloseSettings()
+        {
+            float wait = 0f;
+            if (PanelClose.TryPlay(settingsPanel, out float duration))
+            {
+                wait = duration;
+            }
+
+            if (wait > 0f)
+            {
+                yield return new WaitForSecondsRealtime(wait);
+            }
+
+            if (settingsPanel != null)
+            {
+                settingsPanel.SetActive(false);
+            }
+
+            settingsOpen = false;
+            settingsRoutine = null;
+        }
+
         private void Resume()
         {
             if (!open || closing)
             {
                 return;
+            }
+
+            if (settingsOpen)
+            {
+                settingsOpen = false;
+                if (settingsRoutine != null)
+                {
+                    StopCoroutine(settingsRoutine);
+                    settingsRoutine = null;
+                }
+
+                if (settingsPanel != null)
+                {
+                    settingsPanel.SetActive(false);
+                }
             }
 
             if (closeRoutine != null)

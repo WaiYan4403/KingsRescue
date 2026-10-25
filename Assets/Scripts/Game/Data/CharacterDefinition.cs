@@ -62,6 +62,9 @@ namespace KingsRescue.Data
         [Tooltip("Available on a fresh save with no achievement. The Lancer uses this.")]
         public bool unlockedByDefault;
 
+        [Tooltip("Coin price to unlock this hero. 0 means the hero is not sold.")]
+        public int unlockCost;
+
         [Tooltip("Stays on the select screen, labeled Coming Soon, and cannot be played.")]
         public bool comingSoon;
     }

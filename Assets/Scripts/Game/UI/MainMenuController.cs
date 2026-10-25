@@ -40,6 +40,9 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text characterDetail;
         [SerializeField] private Button startButton;
         [SerializeField] private Button upgradesButton;
+        [Tooltip("Shown for a hero who is sold for coins. The label is the price plus the coin sprite.")]
+        [SerializeField] private Button characterBuyButton;
+        [SerializeField] private TMP_Text characterBuyLabel;
 
         [Header("Upgrades")]
         [SerializeField] private TMP_Text upgradeTitle;
@@ -447,6 +450,10 @@ namespace KingsRescue.UI
                 {
                     characterName.text = selected.displayName;
                 }
+                else if (selected.unlockCost > 0)
+                {
+                    characterName.text = selected.displayName;
+                }
                 else
                 {
                     characterName.text = $"{selected.displayName}\n<size=60%>{AchievementCatalog.UnlockHint(selected)}</size>";
@@ -467,7 +474,7 @@ namespace KingsRescue.UI
                     {
                         body = $"{selected.displayName}\n\nComing Soon";
                     }
-                    else if (!unlocked)
+                    else if (!unlocked && selected.unlockCost <= 0)
                     {
                         AchievementDefinition unlock = AchievementCatalog.FindUnlockForCharacter(selected);
                         string hint = unlock != null ? unlock.description : "Complete an achievement to unlock this hero.";
@@ -486,6 +493,18 @@ namespace KingsRescue.UI
             if (upgradesButton != null)
             {
                 upgradesButton.interactable = unlocked;
+            }
+
+            bool forSale = selected != null && !comingSoon && !unlocked && selected.unlockCost > 0;
+            if (characterBuyButton != null)
+            {
+                characterBuyButton.gameObject.SetActive(forSale);
+                characterBuyButton.interactable = forSale;
+            }
+
+            if (characterBuyLabel != null && forSale)
+            {
+                characterBuyLabel.text = $"Buy {{{selected.unlockCost}<sprite=0>}}";
             }
 
             if (characterButtons == null)
@@ -510,6 +529,18 @@ namespace KingsRescue.UI
             selectedStat = stat;
             hasSelectedStat = true;
             RefreshUpgrades();
+        }
+
+        /// <summary>Spends the selected hero's coin price and unlocks them.</summary>
+        public void BuySelectedCharacter()
+        {
+            if (selected == null || !AchievementProgress.TryPurchaseCharacter(selected))
+            {
+                RefreshCharacter();
+                return;
+            }
+
+            RefreshCharacter();
         }
 
         public void BuySelectedUpgrade()

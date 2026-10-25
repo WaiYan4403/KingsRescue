@@ -177,9 +177,13 @@ namespace KingsRescue.UI
 
             label.enableWordWrapping = true;
             label.fontSize = unlocked ? 28 : 20;
-            label.text = unlocked
-                ? character.displayName
-                : $"{character.displayName}\n{AchievementCatalog.UnlockHint(character)}";
+            if (unlocked || character.unlockCost > 0)
+            {
+                label.text = character.displayName;
+                return;
+            }
+
+            label.text = $"{character.displayName}\n{AchievementCatalog.UnlockHint(character)}";
         }
     }
 }

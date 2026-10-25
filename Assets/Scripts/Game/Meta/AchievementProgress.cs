@@ -23,6 +23,7 @@ namespace KingsRescue.Meta
         private class SaveData
         {
             public string[] unlockedCharacters;
+            public string[] purchasedCharacters;
             public string[] unlockedWeapons;
             public string[] unlockedPassives;
             public string[] completedIds;
@@ -117,7 +118,38 @@ namespace KingsRescue.Meta
                 return true;
             }
 
+            if (character.unlockCost > 0)
+            {
+                return Contains(data.purchasedCharacters, character.Id);
+            }
+
             return Contains(data.unlockedCharacters, character.Id);
+        }
+
+        /// <summary>Spends the hero's coin price and unlocks them. A free hero is left unchanged.</summary>
+        public static bool TryPurchaseCharacter(CharacterDefinition character)
+        {
+            if (character == null || character.comingSoon || character.unlockedByDefault || character.unlockCost <= 0)
+            {
+                return false;
+            }
+
+            EnsureLoaded();
+            if (Contains(data.purchasedCharacters, character.Id))
+            {
+                return false;
+            }
+
+            int cost = character.unlockCost;
+            if (MetaProgress.Coins < cost)
+            {
+                return false;
+            }
+
+            MetaProgress.AddCoins(-cost);
+            data.purchasedCharacters = Append(data.purchasedCharacters, character.Id);
+            Persist();
+            return true;
         }
 
         public static bool IsWeaponUnlocked(WeaponDefinition weapon)
@@ -410,6 +442,7 @@ namespace KingsRescue.Meta
             return new SaveData
             {
                 unlockedCharacters = Array.Empty<string>(),
+                purchasedCharacters = Array.Empty<string>(),
                 unlockedWeapons = Array.Empty<string>(),
                 unlockedPassives = Array.Empty<string>(),
                 completedIds = Array.Empty<string>(),
@@ -420,6 +453,7 @@ namespace KingsRescue.Meta
         private static void Normalize(SaveData save)
         {
             save.unlockedCharacters ??= Array.Empty<string>();
+            save.purchasedCharacters ??= Array.Empty<string>();
             save.unlockedWeapons ??= Array.Empty<string>();
             save.unlockedPassives ??= Array.Empty<string>();
             save.completedIds ??= Array.Empty<string>();

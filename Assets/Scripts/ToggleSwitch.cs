@@ -152,7 +152,7 @@ namespace Poker.UI.ToggleSwitch
             {
                 while (time < animationDuration)
                 {
-                    time += Time.deltaTime;
+                    time += Time.unscaledDeltaTime;
 
                     float lerpFactor = slideEase.Evaluate(time / animationDuration);
                     _slider.value = sliderValue = Mathf.Lerp(startValue, endValue, lerpFactor);
