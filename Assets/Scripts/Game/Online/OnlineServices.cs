@@ -57,14 +57,14 @@ namespace KingsRescue.Online
         }
 
         /// <summary>Called by GameManager when a run ends. Safe to call when online features are off.</summary>
-        public static void NotifyRunFinished(float survivedSeconds)
+        public static void NotifyRunFinished(float distanceMeters)
         {
             if (Instance == null)
             {
                 return;
             }
 
-            _ = Instance.Cloud.OnRunFinishedAsync(Mathf.FloorToInt(survivedSeconds));
+            _ = Instance.Cloud.OnRunFinishedAsync(Mathf.FloorToInt(Mathf.Max(0f, distanceMeters)));
         }
 
         private void Awake()

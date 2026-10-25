@@ -14,9 +14,16 @@ namespace KingsRescue.Pickups
         [SerializeField] private bool maxForm;
 
         [SerializeField] private SpriteRenderer flashTarget;
+
+        [Tooltip("Pulse the pickup between two colors. Leave off to keep the sprite's own color.")]
+        [SerializeField] private bool pulseColor;
+
         [SerializeField] private Color dim = new Color(1f, 0.72f, 0.12f, 1f);
         [SerializeField] private Color bright = new Color(1f, 0.95f, 0.45f, 1f);
         [SerializeField] private float pulseHz = 4f;
+
+        private Color restColor = Color.white;
+        private bool restColorCached;
 
         public override void OnSpawned()
         {
@@ -25,12 +32,28 @@ namespace KingsRescue.Pickups
             {
                 flashTarget = GetComponent<SpriteRenderer>();
             }
+
+            if (flashTarget != null && !restColorCached)
+            {
+                restColor = flashTarget.color;
+                restColorCached = true;
+            }
         }
 
         private void LateUpdate()
         {
             if (flashTarget == null)
             {
+                return;
+            }
+
+            if (!pulseColor)
+            {
+                if (restColorCached)
+                {
+                    flashTarget.color = restColor;
+                }
+
                 return;
             }
 

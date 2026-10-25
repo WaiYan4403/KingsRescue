@@ -29,6 +29,7 @@ namespace KingsRescue.Data
         public int rewardCoins;
         public CharacterDefinition rewardCharacter;
         public WeaponDefinition rewardWeapon;
+        public PassiveDefinition rewardPassive;
 
         public string Id => string.IsNullOrWhiteSpace(id) ? name : id;
 
@@ -48,6 +49,11 @@ namespace KingsRescue.Data
             if (rewardWeapon != null)
             {
                 parts.Add(rewardWeapon.displayName);
+            }
+
+            if (rewardPassive != null)
+            {
+                parts.Add(rewardPassive.displayName);
             }
 
             return parts.Count == 0 ? "Glory" : string.Join(" · ", parts);
@@ -74,6 +80,11 @@ namespace KingsRescue.Data
             if (rewardWeapon != null && rewardWeapon.icon != null)
             {
                 return rewardWeapon.icon;
+            }
+
+            if (rewardPassive != null && rewardPassive.icon != null)
+            {
+                return rewardPassive.icon;
             }
 
             return rewardCoins > 0 ? coinIcon : null;

@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Achievement_HireArcher
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: hire_archer
-  title: Hire the Archer
-  description: Spend 200 coins from your bank to recruit the Archer.
+  title: Heavy Purse
+  description: Spend 200 coins from your bank.
   kind: 2
   target: 200
   enemy: {fileID: 0}
   rewardCoins: 100
-  rewardCharacter: {fileID: 11400000, guid: 2a9f3d5b7c814e4f0b23d9e6f8a1c4b2, type: 2}
+  rewardCharacter: {fileID: 0}
   rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 0}

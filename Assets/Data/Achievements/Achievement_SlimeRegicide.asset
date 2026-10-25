@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: slime_regicide
   title: Slime Regicide
-  description: Defeat the Slime King.
+  description: Defeat the Slime King to unlock Plate Armor.
   kind: 1
   target: 1
   enemy: {fileID: 11400000, guid: 43352040dfd5b22419f0892f3dceb510, type: 2}
   rewardCoins: 150
   rewardCharacter: {fileID: 0}
   rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 11400000, guid: 497349ba5b18fad4597872eeed02a609, type: 2}

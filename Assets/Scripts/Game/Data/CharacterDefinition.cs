@@ -36,6 +36,21 @@ namespace KingsRescue.Data
         [Tooltip("Seconds the powered form lasts before Duration is applied.")]
         public float powerUpDuration = 8f;
 
+        [Tooltip("Extra projectiles fired with this hero's own weapon during the normal power-up. Ignores the projectile-count passive.")]
+        public int powerUpExtraProjectiles;
+
+        [Tooltip("Extra projectiles fired with this hero's own weapon during the max power-up. Ignores the projectile-count passive.")]
+        public int powerUpMaxExtraProjectiles;
+
+        [Tooltip("Fraction of max HP restored when the normal power-up is picked up.")]
+        [Range(0f, 1f)] public float powerUpHealFraction;
+
+        [Tooltip("Fraction of max HP restored when the max power-up is picked up.")]
+        [Range(0f, 1f)] public float powerUpMaxHealFraction;
+
+        [Tooltip("Seconds enemies cannot see this hero after the max power-up is picked up. 0 disables it.")]
+        public float powerUpMaxStealthDuration;
+
         [Header("Starting Stats")]
         [Tooltip("Applied on top of the player prefab's bases before meta upgrades.")]
         public StatModifier[] startingStats = System.Array.Empty<StatModifier>();
@@ -46,5 +61,8 @@ namespace KingsRescue.Data
         [Header("Unlock")]
         [Tooltip("Available on a fresh save with no achievement. The Lancer uses this.")]
         public bool unlockedByDefault;
+
+        [Tooltip("Stays on the select screen, labeled Coming Soon, and cannot be played.")]
+        public bool comingSoon;
     }
 }

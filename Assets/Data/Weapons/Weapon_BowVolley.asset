@@ -28,7 +28,7 @@ MonoBehaviour:
   projectileHoming: 0
   isUniqueWeapon: 1
   requiresUnlock: 0
-  usesCharacterAnimators: 0
+  usesCharacterAnimators: 1
   attackTriggers:
   - Attack1
   - Attack2

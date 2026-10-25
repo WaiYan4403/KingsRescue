@@ -81,6 +81,7 @@ namespace KingsRescue.Player
             Current = Max;
             ApplyCharacter(ResolveCharacter());
             HealthChanged?.Invoke(Current, Max);
+            SyncAnimatorHealth();
         }
 
         public void ApplyCharacter(CharacterDefinition character)

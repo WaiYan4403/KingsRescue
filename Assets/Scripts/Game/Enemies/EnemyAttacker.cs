@@ -107,7 +107,7 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             if (player == null)
             {
                 return;

@@ -450,7 +450,7 @@ namespace KingsRescue.Core
             MetaProgress.AddCoins(Coins);
             AchievementProgress.RecordSurvive(RunTime);
             Leaderboard.Submit(character, RunTime, Kills, Coins, level);
-            OnlineServices.NotifyRunFinished(RunTime);
+            OnlineServices.NotifyRunFinished(ScrollDirector.DistanceMeters);
         }
 
         public void RestartRun()

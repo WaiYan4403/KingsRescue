@@ -131,7 +131,7 @@ namespace KingsRescue.UI
                 }
             }
 
-            if (selected == null || !AchievementProgress.IsCharacterUnlocked(selected))
+            if (selected == null || !CanPlay(selected))
             {
                 SelectDefault();
             }
@@ -319,7 +319,7 @@ namespace KingsRescue.UI
 
         public void PlaySelected()
         {
-            if (selected == null || !AchievementProgress.IsCharacterUnlocked(selected))
+            if (!CanPlay(selected))
             {
                 ShowCharacters();
                 return;
@@ -408,12 +408,19 @@ namespace KingsRescue.UI
             return heroes;
         }
 
+        private static bool CanPlay(CharacterDefinition character)
+        {
+            return character != null
+                && !character.comingSoon
+                && AchievementProgress.IsCharacterUnlocked(character);
+        }
+
         private void SelectDefault()
         {
             List<CharacterDefinition> heroes = CollectHeroes();
             for (int i = 0; i < heroes.Count; i++)
             {
-                if (AchievementProgress.IsCharacterUnlocked(heroes[i]))
+                if (CanPlay(heroes[i]))
                 {
                     selected = heroes[i];
                     return;
@@ -423,13 +430,18 @@ namespace KingsRescue.UI
 
         private void RefreshCharacter()
         {
-            bool unlocked = selected != null && AchievementProgress.IsCharacterUnlocked(selected);
+            bool comingSoon = selected != null && selected.comingSoon;
+            bool unlocked = CanPlay(selected);
 
             if (characterName != null)
             {
                 if (selected == null)
                 {
                     characterName.text = "No heroes";
+                }
+                else if (comingSoon)
+                {
+                    characterName.text = $"{selected.displayName}\n<size=60%>Coming Soon</size>";
                 }
                 else if (unlocked)
                 {
@@ -451,7 +463,11 @@ namespace KingsRescue.UI
                 {
                     string weapon = selected.uniqueWeapon != null ? selected.uniqueWeapon.displayName : "None";
                     string body = $"{selected.displayName}\n{selected.description}\n\nUnique weapon: {weapon}";
-                    if (!unlocked)
+                    if (comingSoon)
+                    {
+                        body = $"{selected.displayName}\n\nComing Soon";
+                    }
+                    else if (!unlocked)
                     {
                         AchievementDefinition unlock = AchievementCatalog.FindUnlockForCharacter(selected);
                         string hint = unlock != null ? unlock.description : "Complete an achievement to unlock this hero.";

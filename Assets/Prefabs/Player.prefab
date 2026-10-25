@@ -110,6 +110,9 @@ MonoBehaviour:
   obstacleSkin: 0.04
   resolveIterations: 3
   asideBias: 1.1
+  entranceSpeed: 1.25
+  entranceHiddenDepth: 1.6
+  entranceStandHeight: 2
   flyBobAmplitude: 0.14
   flyBobHz: 1.6
   bodyAnimator: {fileID: 5334515133101506272}
@@ -136,6 +139,7 @@ MonoBehaviour:
   healthParameter: Health
   dieStateName: Lancer_Die
   hurtFlashColor: {r: 1, g: 0.15, b: 0.12, a: 1}
+  useHealFlash: 0
   healFlashColor: {r: 0.45, g: 1, b: 0.55, a: 1}
   reviveHealthFraction: 0.5
   reviveInvulnerability: 2.5
@@ -238,8 +242,8 @@ SortingGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1306224722766589929}
   m_Enabled: 1
-  m_SortingLayerID: -1063917951
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 1
   m_Sort3DAs2D: 0

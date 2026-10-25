@@ -87,7 +87,9 @@ namespace KingsRescue.UI
 
         public void Refresh(bool selected)
         {
-            bool unlocked = character != null && AchievementProgress.IsCharacterUnlocked(character);
+            bool unlocked = character != null
+                && !character.comingSoon
+                && AchievementProgress.IsCharacterUnlocked(character);
             ApplyLabel(unlocked);
 
             if (UsesPortraitOutline)
@@ -162,6 +164,14 @@ namespace KingsRescue.UI
         {
             if (label == null || character == null)
             {
+                return;
+            }
+
+            if (character.comingSoon)
+            {
+                label.enableWordWrapping = true;
+                label.fontSize = 20;
+                label.text = "Coming Soon";
                 return;
             }
 

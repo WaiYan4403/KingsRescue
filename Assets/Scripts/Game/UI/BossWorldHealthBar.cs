@@ -11,7 +11,6 @@ namespace KingsRescue.UI
     public class BossWorldHealthBar : MonoBehaviour
     {
         [SerializeField] private Image fill;
-        [SerializeField] private float headClearance = 0.4f;
         [SerializeField] private Vector2 screenPadding = new Vector2(8f, 8f);
 
         private RectTransform rect;
@@ -22,7 +21,6 @@ namespace KingsRescue.UI
         private CanvasGroup visibility;
         private Vector2 lastLocal;
         private float shownFill = -1f;
-        private float cachedHeadLift = 2.4f;
 
         private void Awake()
         {
@@ -157,19 +155,14 @@ namespace KingsRescue.UI
                 renderer = LargestBody(boss);
             }
 
+            float height = boss.Definition != null ? boss.Definition.healthBarHeight : 1.15f;
+            float x = boss.transform.position.x;
             if (renderer != null && renderer.enabled && renderer.sprite != null)
             {
-                Bounds bounds = renderer.bounds;
-                float lift = bounds.max.y - boss.transform.position.y;
-                if (lift > 0.2f)
-                {
-                    cachedHeadLift = lift;
-                }
-
-                return new Vector3(bounds.center.x, boss.transform.position.y + cachedHeadLift + headClearance, boss.transform.position.z);
+                x = renderer.bounds.center.x;
             }
 
-            return boss.transform.position + new Vector3(0f, cachedHeadLift + headClearance, 0f);
+            return new Vector3(x, boss.transform.position.y + height, boss.transform.position.z);
         }
 
         private static SpriteRenderer LargestBody(Enemy boss)

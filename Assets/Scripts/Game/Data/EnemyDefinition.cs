@@ -78,6 +78,9 @@ namespace KingsRescue.Data
         [Tooltip("Timed encounter. Does not despawn off-screen and is spawned by WaveDirector, not the trickle table.")]
         public bool isBoss;
 
+        [Tooltip("World units above this boss's position for the health bar. Lower it when the bar sits off the top of the screen.")]
+        public float healthBarHeight = 1.15f;
+
         [Tooltip("Allowed to stay on the field during a boss fight (adds, meteors the boss summons). Regular waves will not spawn these.")]
         public bool bossMinion;
 

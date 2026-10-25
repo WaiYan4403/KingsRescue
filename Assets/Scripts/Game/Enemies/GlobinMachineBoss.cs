@@ -505,7 +505,7 @@ namespace KingsRescue.Enemies
 
         private Vector2 AimDown(Vector2 origin)
         {
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             Vector2 forward = Vector2.down;
             if (player != null)
             {

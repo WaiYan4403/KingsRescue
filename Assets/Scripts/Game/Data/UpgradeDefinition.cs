@@ -77,7 +77,13 @@ namespace KingsRescue.Data
                         return false;
                     }
 
-                    return loadout.HasPassive(passive) || loadout.HasRoomForPassive;
+                    bool owned = loadout.HasPassive(passive);
+                    if (!owned && passive.requiresUnlock && !AchievementProgress.IsPassiveUnlocked(passive))
+                    {
+                        return false;
+                    }
+
+                    return owned || loadout.HasRoomForPassive;
 
                 case UpgradeKind.CoinBonus:
                     return true;

@@ -241,15 +241,15 @@ namespace KingsRescue.Online
             }
         }
 
-        /// <summary>Submits the best survival time to the backend leaderboard, then uploads progress.</summary>
-        public async Task OnRunFinishedAsync(int survivedSeconds)
+        /// <summary>Submits this run's distance, in meters, to the backend leaderboard, then uploads progress.</summary>
+        public async Task OnRunFinishedAsync(int distanceMeters)
         {
             if (!account.CanSync)
             {
                 return;
             }
 
-            await account.Authed(jwt => api.SubmitScore(jwt, Mathf.Max(0, survivedSeconds), MetaProgress.Coins));
+            await account.Authed(jwt => api.SubmitScore(jwt, Mathf.Max(0, distanceMeters), MetaProgress.Coins));
             PushSoon();
         }
 

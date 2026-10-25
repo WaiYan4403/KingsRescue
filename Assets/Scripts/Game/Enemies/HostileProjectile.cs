@@ -291,7 +291,7 @@ namespace KingsRescue.Enemies
 
         private void SteerTowardPlayer(float dt)
         {
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             if (player == null)
             {
                 return;

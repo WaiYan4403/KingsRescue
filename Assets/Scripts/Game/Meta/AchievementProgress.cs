@@ -24,6 +24,7 @@ namespace KingsRescue.Meta
         {
             public string[] unlockedCharacters;
             public string[] unlockedWeapons;
+            public string[] unlockedPassives;
             public string[] completedIds;
             public int totalKills;
             public int chestsSmashed;
@@ -69,6 +70,7 @@ namespace KingsRescue.Meta
             Normalize(data);
             SeedDefaultUnlocks();
             SweepCompletions();
+            GrantOwnedRewards();
             Persist();
         }
 
@@ -132,6 +134,17 @@ namespace KingsRescue.Meta
 
             EnsureLoaded();
             return Contains(data.unlockedWeapons, weapon.name);
+        }
+
+        public static bool IsPassiveUnlocked(PassiveDefinition passive)
+        {
+            if (passive == null || !passive.requiresUnlock)
+            {
+                return true;
+            }
+
+            EnsureLoaded();
+            return Contains(data.unlockedPassives, passive.name);
         }
 
         public static bool IsCompleted(AchievementDefinition achievement)
@@ -270,6 +283,33 @@ namespace KingsRescue.Meta
             }
         }
 
+        /// <summary>
+        /// Achievements finished before a reward was added still grant that unlock.
+        /// Coins are not paid again.
+        /// </summary>
+        private static void GrantOwnedRewards()
+        {
+            AchievementDefinition[] list = AchievementCatalog.All;
+            for (int i = 0; i < list.Length; i++)
+            {
+                AchievementDefinition entry = list[i];
+                if (entry == null || !IsCompleted(entry))
+                {
+                    continue;
+                }
+
+                if (entry.rewardWeapon != null)
+                {
+                    data.unlockedWeapons = Append(data.unlockedWeapons, entry.rewardWeapon.name);
+                }
+
+                if (entry.rewardPassive != null)
+                {
+                    data.unlockedPassives = Append(data.unlockedPassives, entry.rewardPassive.name);
+                }
+            }
+        }
+
         private static void Complete(AchievementDefinition achievement)
         {
             if (achievement == null || IsCompleted(achievement))
@@ -296,6 +336,11 @@ namespace KingsRescue.Meta
             if (achievement.rewardWeapon != null)
             {
                 data.unlockedWeapons = Append(data.unlockedWeapons, achievement.rewardWeapon.name);
+            }
+
+            if (achievement.rewardPassive != null)
+            {
+                data.unlockedPassives = Append(data.unlockedPassives, achievement.rewardPassive.name);
             }
 
             Persist();
@@ -366,6 +411,7 @@ namespace KingsRescue.Meta
             {
                 unlockedCharacters = Array.Empty<string>(),
                 unlockedWeapons = Array.Empty<string>(),
+                unlockedPassives = Array.Empty<string>(),
                 completedIds = Array.Empty<string>(),
                 enemyKills = Array.Empty<EnemyKill>()
             };
@@ -375,6 +421,7 @@ namespace KingsRescue.Meta
         {
             save.unlockedCharacters ??= Array.Empty<string>();
             save.unlockedWeapons ??= Array.Empty<string>();
+            save.unlockedPassives ??= Array.Empty<string>();
             save.completedIds ??= Array.Empty<string>();
             save.enemyKills ??= Array.Empty<EnemyKill>();
         }

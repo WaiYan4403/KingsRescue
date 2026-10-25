@@ -187,7 +187,7 @@ namespace KingsRescue.Enemies
             }
             else if (attackPick == 3)
             {
-                Transform player = PlayerController.PlayerTransform;
+                Transform player = PlayerController.VisibleTransform;
                 chargeDir = player != null
                     ? ((Vector2)player.position - (Vector2)transform.position).normalized
                     : Vector2.down;
@@ -213,7 +213,7 @@ namespace KingsRescue.Enemies
         private void FireAttack(int pick)
         {
             Vector2 origin = transform.position;
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             Vector2 target = player != null ? (Vector2)player.position : origin + Vector2.down;
 
             switch (pick)
@@ -305,7 +305,7 @@ namespace KingsRescue.Enemies
                 return;
             }
 
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             Vector2 point = player != null ? (Vector2)player.position : (Vector2)transform.position;
             landingMarker.transform.position = point;
             float size = (definition.specialRadius > 0.4f ? definition.specialRadius : 1.7f) * 2f;

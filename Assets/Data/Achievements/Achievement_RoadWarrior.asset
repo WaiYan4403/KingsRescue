@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: road_warrior
   title: Road Warrior
-  description: Defeat 100 enemies in total.
+  description: Defeat 100 enemies to unlock Duplicate.
   kind: 0
   target: 100
   enemy: {fileID: 0}
   rewardCoins: 50
   rewardCharacter: {fileID: 0}
   rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 11400000, guid: 8b4a738f916755e4891a168829e871ee, type: 2}

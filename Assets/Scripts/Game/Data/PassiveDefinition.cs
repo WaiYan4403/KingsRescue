@@ -26,6 +26,9 @@ namespace KingsRescue.Data
         [Header("Levels (index 0 is level 1)")]
         public PassiveLevel[] levels = { new PassiveLevel() };
 
+        [Tooltip("Hidden from a fresh run until an achievement grants it.")]
+        public bool requiresUnlock;
+
         public int MaxLevel => levels != null && levels.Length > 0 ? levels.Length : 1;
 
         public PassiveLevel GetLevel(int level)

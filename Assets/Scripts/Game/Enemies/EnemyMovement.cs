@@ -386,6 +386,11 @@ namespace KingsRescue.Enemies
         private Vector2 EnterFromOffscreen(Vector2 position)
         {
             float speed = moveSpeed * jitterFactor;
+            if (PowerUpController.IsHeroHidden)
+            {
+                return Vector2.down * speed;
+            }
+
             Vector2 target = PlayerController.Position;
             ArenaBounds bounds = ArenaBounds.Instance;
             if (bounds != null)
@@ -416,7 +421,7 @@ namespace KingsRescue.Enemies
             float speed = moveSpeed * jitterFactor;
             Vector2 cruise = Vector2.down * speed;
 
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             if (player == null)
             {
                 return cruise;

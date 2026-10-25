@@ -179,7 +179,7 @@ namespace KingsRescue.Enemies
             }
 
             nextSpecial = Time.time + SpecialInterval();
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             if (player == null)
             {
                 return;
@@ -233,7 +233,7 @@ namespace KingsRescue.Enemies
 
         private bool TryWakeMimic()
         {
-            Transform player = PlayerController.PlayerTransform;
+            Transform player = PlayerController.VisibleTransform;
             if (player == null)
             {
                 return false;

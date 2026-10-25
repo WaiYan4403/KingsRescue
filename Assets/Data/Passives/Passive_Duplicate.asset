@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e0025775fdfb4443b5ee0c60edec012, type: 3}
   m_Name: Passive_Duplicate
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.PassiveDefinition
+  requiresUnlock: 1
   displayName: Dupilcate
   description: Extra projectiles.
   icon: {fileID: 1125377050, guid: 5066387750f00534791090481a4809f7, type: 3}

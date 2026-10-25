@@ -222,6 +222,25 @@ namespace KingsRescue.Combat
             return Mathf.Max(1, Data.count + bonus);
         }
 
+        /// <summary>
+        /// Extra shots from the hero's power-up. Fixed count, so the projectile-count passive does not add more.
+        /// </summary>
+        private int PowerUpExtraProjectiles()
+        {
+            if (powerUp == null || !powerUp.IsActive || definition == null || owner == null)
+            {
+                return 0;
+            }
+
+            WeaponLoadout loadout = owner.GetComponent<WeaponLoadout>();
+            if (loadout == null || loadout.UniqueWeapon != definition)
+            {
+                return 0;
+            }
+
+            return powerUp.ExtraProjectiles;
+        }
+
         /// <summary>0 means unlimited travel; otherwise a hard world-unit cap.</summary>
         private float ResolveShotRange()
         {
@@ -486,8 +505,7 @@ namespace KingsRescue.Combat
                 return;
             }
 
-            int extra = definition.usesGlobalProjectileCount ? Mathf.Max(0, stats.BonusProjectiles) : 0;
-            int total = 1 + extra;
+            int total = 1;
             float scale = Mathf.Max(1f, powerUp.SlashScale);
             WeaponLevel data = Data;
             float damage = ResolveDamage() * Mathf.Max(1f, powerUp.SlashDamageMultiplier);
@@ -521,6 +539,7 @@ namespace KingsRescue.Combat
 
         private void FireForwardShot()
         {
+            FirePowerUpExtras();
             int count = ResolveCount();
             if (count <= 1 || definition.fanProjectiles)
             {
@@ -556,7 +575,21 @@ namespace KingsRescue.Combat
             comboRoutine = null;
         }
 
-        private void SpawnForwardShot(int shotIndex, int shotCount)
+        private void FirePowerUpExtras()
+        {
+            int extra = PowerUpExtraProjectiles();
+            if (extra <= 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < extra; i++)
+            {
+                SpawnForwardShot(i, extra, 64f, false);
+            }
+        }
+
+        private void SpawnForwardShot(int shotIndex, int shotCount, float spreadOverride = -1f, bool playAnimation = true)
         {
             if (definition.projectilePrefab == null)
             {
@@ -579,14 +612,19 @@ namespace KingsRescue.Combat
             int pierce = data.pierce + stats.BonusPierce;
             float area = ResolveArea();
 
+            float spread = spreadOverride >= 0f ? spreadOverride : data.spreadDegrees;
+            bool fan = spreadOverride >= 0f || definition.fanProjectiles;
             float offset = 0f;
-            if (definition.fanProjectiles && shotCount > 1)
+            if (fan && shotCount > 1)
             {
-                offset = Mathf.Lerp(-data.spreadDegrees * 0.5f, data.spreadDegrees * 0.5f, shotIndex / (float)(shotCount - 1));
+                offset = Mathf.Lerp(-spread * 0.5f, spread * 0.5f, shotIndex / (float)(shotCount - 1));
             }
 
             Vector2 direction = Rotate(baseDirection, offset);
-            PlayCharacterAttack(shotIndex, shotCount);
+            if (playAnimation)
+            {
+                PlayCharacterAttack(shotIndex, shotCount);
+            }
             Projectile projectile = pool.Spawn(definition.projectilePrefab, origin, Quaternion.identity)
                 .GetComponent<Projectile>();
 

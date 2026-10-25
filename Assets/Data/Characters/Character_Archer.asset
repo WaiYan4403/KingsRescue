@@ -22,5 +22,11 @@ MonoBehaviour:
   uniqueWeapon: {fileID: 11400000, guid: 344cc1c86173747aa81a4a4221739ce3, type: 2}
   powerUpWeapon: {fileID: 11400000, guid: e279b5a057de985479be3b3be5c6038b, type: 2}
   powerUpDuration: 8
+  powerUpExtraProjectiles: 4
+  powerUpMaxExtraProjectiles: 6
+  powerUpHealFraction: 0.1
+  powerUpMaxHealFraction: 0.25
+  powerUpMaxStealthDuration: 1
   startingStats: []
   extraLives: 0
+  unlockedByDefault: 1

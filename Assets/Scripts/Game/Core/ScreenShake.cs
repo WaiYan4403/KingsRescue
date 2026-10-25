@@ -30,7 +30,7 @@ namespace KingsRescue.Core
 
         private void LateUpdate()
         {
-            if (trauma <= 0f || !GameSettings.ScreenShake)
+            if (trauma <= 0f || !GameSettings.ScreenShake || IsHeldByUi())
             {
                 trauma = 0f;
                 transform.localPosition = rest;
@@ -45,12 +45,36 @@ namespace KingsRescue.Core
 
         public static void Add(float amount)
         {
-            if (Instance == null || amount <= 0f || !GameSettings.ScreenShake)
+            if (Instance == null || amount <= 0f || !GameSettings.ScreenShake || IsHeldByUi())
             {
                 return;
             }
 
             Instance.trauma = Mathf.Clamp01(Instance.trauma + amount);
+        }
+
+        /// <summary>
+        /// Level-up, chest, pause, and game over freeze time. Shake would otherwise
+        /// keep offsetting the camera, because its fade uses scaled time.
+        /// </summary>
+        private static bool IsHeldByUi()
+        {
+            GameManager game = GameManager.Instance;
+            if (game == null)
+            {
+                return false;
+            }
+
+            switch (game.State)
+            {
+                case GameState.LevelUp:
+                case GameState.Chest:
+                case GameState.Paused:
+                case GameState.GameOver:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

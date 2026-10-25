@@ -79,6 +79,12 @@ namespace KingsRescue.Player
         /// <summary>Convenience accessor for enemies, pickups and weapons.</summary>
         public static Transform PlayerTransform => Instance != null ? Instance.transform : null;
 
+        /// <summary>
+        /// Null while a power-up hides the hero. Enemies use this when choosing where to move or aim.
+        /// </summary>
+        public static Transform VisibleTransform =>
+            Instance == null || PowerUpController.IsHeroHidden ? null : Instance.transform;
+
         public static Vector2 Position => Instance != null ? (Vector2)Instance.transform.position : Vector2.zero;
 
         /// <summary>True while the hero is walking into frame and the run has not started.</summary>
@@ -499,6 +505,22 @@ namespace KingsRescue.Player
 
             if (!HasAnimatorParameter(animator, Animator.StringToHash(triggerName)))
             {
+                // The archer has one attack clip for every weapon stage. Later shots in the
+                // same volley leave that clip playing instead of restarting it.
+                const string sharedAttack = "Attack";
+                if (!HasAnimatorParameter(animator, Animator.StringToHash(sharedAttack)))
+                {
+                    return;
+                }
+
+                AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+                if (state.IsName("Attack_Body") && state.normalizedTime < 0.85f)
+                {
+                    return;
+                }
+
+                animator.ResetTrigger(sharedAttack);
+                animator.SetTrigger(sharedAttack);
                 return;
             }
 

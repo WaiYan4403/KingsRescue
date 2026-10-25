@@ -15,6 +15,7 @@ MonoBehaviour:
   displayName: Globin Machine
   prefab: {fileID: 244735591878693721, guid: dcb245a7fd6a0f94fbffedce91684a8d, type: 3}
   isBoss: 1
+  healthBarHeight: 0.7
   bossMinion: 0
   isElite: 0
   canFlipSprite: 0

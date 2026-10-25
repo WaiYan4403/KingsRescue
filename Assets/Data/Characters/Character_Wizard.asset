@@ -32,3 +32,4 @@ MonoBehaviour:
     mode: 1
     value: 0.2
   extraLives: 0
+  comingSoon: 1

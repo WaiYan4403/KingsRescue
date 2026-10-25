@@ -1145,10 +1145,10 @@ namespace KingsRescue.Enemies
             return new Vector2(Mathf.Max(0.01f, Mathf.Abs(scale.x)), Mathf.Max(0.01f, Mathf.Abs(scale.y)));
         }
 
-        private static Vector2 CurrentPlayerPoint()
+        private Vector2 CurrentPlayerPoint()
         {
-            Transform player = PlayerController.PlayerTransform;
-            Vector2 point = player != null ? (Vector2)player.position : Vector2.zero;
+            Transform player = PlayerController.VisibleTransform;
+            Vector2 point = player != null ? (Vector2)player.position : (Vector2)transform.position + Vector2.down * 3f;
             ArenaBounds bounds = ArenaBounds.Instance;
             return bounds != null ? bounds.ClampToPlayArea(point) : point;
         }

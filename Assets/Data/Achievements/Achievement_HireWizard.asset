@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Achievement_HireWizard
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: hire_wizard
-  title: Hire the Wizard
-  description: Spend 800 coins from your bank to recruit the Wizard.
+  title: Royal Purse
+  description: Spend 800 coins from your bank.
   kind: 2
   target: 800
   enemy: {fileID: 0}
   rewardCoins: 200
-  rewardCharacter: {fileID: 11400000, guid: b61dcb022758b254e87054e45861cdbb, type: 2}
+  rewardCharacter: {fileID: 0}
   rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 0}

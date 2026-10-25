@@ -12,7 +12,7 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text nameLabel;
         [SerializeField] private TMP_Text scoreLabel;
 
-        public void Show(int rank, string username, int scoreSeconds)
+        public void Show(int rank, string username, int distanceMeters)
         {
             gameObject.SetActive(true);
             if (rankLabel != null)
@@ -27,7 +27,7 @@ namespace KingsRescue.UI
 
             if (scoreLabel != null)
             {
-                scoreLabel.text = HudView.FormatClock(scoreSeconds);
+                scoreLabel.text = HudView.FormatDistance(distanceMeters);
             }
         }
 
