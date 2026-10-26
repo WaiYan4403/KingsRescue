@@ -814,7 +814,7 @@ namespace KingsRescue.Enemies
 
         private void Slam()
         {
-            SoundEffects.Play(SoundId.EnemySpell);
+            SoundEffects.PlayEnemy(definition, EnemyCue.Attack);
             HitboxDisplay.Flash(slamPoint, slamRadius, 0.4f);
             PlayerController player = PlayerController.Instance;
             if (player == null || player.Health == null || !player.Health.IsAlive)

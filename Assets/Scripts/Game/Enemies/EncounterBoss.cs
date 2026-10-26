@@ -213,7 +213,7 @@ namespace KingsRescue.Enemies
 
         private void FireAttack(int pick)
         {
-            SoundEffects.Play(SoundId.EnemySpell);
+            SoundEffects.PlayEnemy(definition, EnemyCue.Attack);
             Vector2 origin = transform.position;
             Transform player = PlayerController.VisibleTransform;
             Vector2 target = player != null ? (Vector2)player.position : origin + Vector2.down;

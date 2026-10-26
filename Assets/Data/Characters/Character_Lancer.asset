@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Character_Lancer
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.CharacterDefinition
   id: lancer
-  displayName: Thuraya
+  displayName: Kyan Sit
   description: A front-line fighter whose unique weapon is the Lance.
   portrait: {fileID: -1082995642, guid: b51259780010cb346be337402c2a1ff0, type: 3}
   playerPrefab: {fileID: 1306224722766589929, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
@@ -30,7 +30,8 @@ MonoBehaviour:
   startingStats:
   - stat: 15
     mode: 1
-    value: 10
+    value: 1
   extraLives: 0
   unlockedByDefault: 1
+  unlockCost: 0
   comingSoon: 0

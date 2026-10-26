@@ -228,7 +228,6 @@ namespace KingsRescue.UI
             SetJoystickRaycasts(false);
 
             game.PushChestPause();
-            SoundEffects.Play(SoundId.ChestOpen);
             root.transform.SetAsLastSibling();
             root.SetActive(true);
             PlayIntro();
@@ -280,6 +279,7 @@ namespace KingsRescue.UI
             opening = true;
             SnapShown();
             HideOpenButton();
+            SoundEffects.Play(SoundId.ChestOpen);
 
             if (chestAnimator != null)
             {
@@ -547,6 +547,7 @@ namespace KingsRescue.UI
 
             sequence.AppendCallback(() =>
             {
+                SoundEffects.Play(SoundId.ChestSparkle);
                 if (sparkles == null)
                 {
                     return;

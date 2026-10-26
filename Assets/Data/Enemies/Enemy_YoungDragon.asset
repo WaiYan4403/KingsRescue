@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_YoungDragon
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Young Dragon
+  voice: 17
   prefab: {fileID: 244735591878693721, guid: dcb245a7fd6a0f94fbffedce91684a8d, type: 3}
   isBoss: 1
   bossMinion: 0

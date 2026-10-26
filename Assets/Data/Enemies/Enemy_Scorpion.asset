@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Scorpion
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Scorpion
+  voice: 22
   prefab: {fileID: 4860159253479769756, guid: 2fbf6070f9e7cdf4cbd24e8214400639, type: 3}
   isBoss: 0
   bossMinion: 0

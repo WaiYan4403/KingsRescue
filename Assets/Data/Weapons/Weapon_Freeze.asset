@@ -16,6 +16,7 @@ MonoBehaviour:
   description: A crystal sticks to a random nearby enemy, freezing them.
   icon: {fileID: -539391412, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 8
+  attackSound: 9
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 5015641458365833935, guid: bc9bb5b7466eaf041a612ab67c602bd3, type: 3}

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Ogre
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Ogre
+  voice: 24
   prefab: {fileID: 4419999792255042887, guid: f49aa3ac6e0b446699823d901f7f98c2, type: 3}
   isBoss: 0
   bossMinion: 0

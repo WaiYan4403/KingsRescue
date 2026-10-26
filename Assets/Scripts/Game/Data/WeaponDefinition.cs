@@ -39,6 +39,24 @@ namespace KingsRescue.Data
         Boomerang = 10
     }
 
+    /// <summary>
+    /// Which attack clip a weapon plays. Only weapons offered in this version are listed.
+    /// </summary>
+    public enum WeaponSound
+    {
+        None = 0,
+        Lance = 1,
+        Bow = 2,
+        Crossbow = 3,
+        Knife = 4,
+        Boomerang = 5,
+        Arcane = 6,
+        Saung = 7,
+        FireGrimoire = 8,
+        Freeze = 9,
+        LightningWand = 10
+    }
+
     public enum WeaponAimStyle
     {
         /// <summary>Throw toward the closest living enemy.</summary>
@@ -110,6 +128,9 @@ namespace KingsRescue.Data
 
         [Header("Behaviour")]
         public WeaponFireMode fireMode = WeaponFireMode.MeleeSwing;
+
+        [Tooltip("Played once each time this weapon fires. None stays silent.")]
+        public WeaponSound attackSound = WeaponSound.None;
 
         [Tooltip("Projectile weapons: the prefab. Needs a Projectile component.")]
         public GameObject projectilePrefab;

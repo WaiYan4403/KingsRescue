@@ -16,6 +16,7 @@ MonoBehaviour:
   description: The lancer's signature weapon. Unlock new attack styles as it levels.
   icon: {fileID: 4337684191699249041, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 0
+  attackSound: 1
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}

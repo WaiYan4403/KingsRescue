@@ -20,7 +20,7 @@ namespace KingsRescue.Audio
         static bool bankSearched;
         static AudioSource[] pool;
         static int cursor;
-        static readonly float[] nextAllowed = new float[32];
+        static readonly float[] nextAllowed = new float[163];
         static readonly HashSet<int> boundButtons = new HashSet<int>();
         static readonly HashSet<int> boundSliders = new HashSet<int>();
         static readonly Dictionary<int, SoundId> buttonSounds = new Dictionary<int, SoundId>();
@@ -96,30 +96,20 @@ namespace KingsRescue.Audio
             voice.PlayOneShot(slot.clip, Mathf.Clamp01(slot.volume));
         }
 
-        public static void PlayWeapon(WeaponFireMode mode)
+        public static void PlayEnemy(EnemyDefinition definition, EnemyCue cue)
         {
-            switch (mode)
+            EnemyVoice voice = definition != null ? definition.voice : EnemyVoice.Generic;
+            Play(EnemySounds.Resolve(voice, cue));
+        }
+
+        public static void PlayWeapon(WeaponDefinition definition)
+        {
+            if (definition == null)
             {
-                case WeaponFireMode.MeleeSwing:
-                    Play(SoundId.PlayerAttack);
-                    break;
-                case WeaponFireMode.ForwardShot:
-                case WeaponFireMode.AimedShot:
-                case WeaponFireMode.RandomShot:
-                case WeaponFireMode.Boomerang:
-                case WeaponFireMode.Orbit:
-                    Play(SoundId.PlayerShoot);
-                    break;
-                case WeaponFireMode.RandomStrike:
-                case WeaponFireMode.BoltStrike:
-                    Play(SoundId.SpellStrike);
-                    break;
-                case WeaponFireMode.GroundZone:
-                case WeaponFireMode.FreezeField:
-                case WeaponFireMode.Aura:
-                    Play(SoundId.SpellCast);
-                    break;
+                return;
             }
+
+            Play(WeaponSounds.Resolve(definition.attackSound));
         }
 
         static SoundBank Bank

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_CursedArmor
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Cursed Armor
+  voice: 35
   prefab: {fileID: 1987047377786636553, guid: 7bae3f6495c95fd489dde2f8bcdf55f9, type: 3}
   isBoss: 0
   bossMinion: 0

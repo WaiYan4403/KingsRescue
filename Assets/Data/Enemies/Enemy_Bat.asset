@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Bat
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Hunter Bat
+  voice: 7
   prefab: {fileID: 3371409198316295035, guid: c2ed9645d39677640b4fbaedd8919f77, type: 3}
   isBoss: 0
   bossMinion: 0

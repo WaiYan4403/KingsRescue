@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_SkeletonSword
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Skelly
+  voice: 3
   prefab: {fileID: 7657488641991038239, guid: 67ef1452bf5d44907b2b0588c453103e, type: 3}
   isBoss: 0
   bossMinion: 0

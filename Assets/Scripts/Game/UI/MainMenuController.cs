@@ -84,6 +84,7 @@ namespace KingsRescue.UI
         private bool hasSelectedStat;
         private GameObject currentPanel;
         private GameObject requestedPanel;
+        private SoundId requestedOpenSound;
         private Coroutine panelTransition;
         private bool panelShown;
 
@@ -212,7 +213,7 @@ namespace KingsRescue.UI
                 accountView.RefreshAccount();
             }
 
-            Show(accountPanel);
+            Show(accountPanel, SoundId.MenuOpen);
             //MenuMusicController.Instance.SetMainMusic();
         }
 
@@ -223,34 +224,32 @@ namespace KingsRescue.UI
                 accountView.RefreshUsername();
             }
 
-            Show(usernamePanel);
+            Show(usernamePanel, SoundId.MenuOpen);
             //MenuMusicController.Instance.SetMainMusic();
         }
 
         public void ShowCharacters()
         {
-            RefreshCharacter();
-            Show(characterPanel);
-            MenuMusicController.Instance.SetCharacterMusic();
+            OpenCharacters(SoundId.MenuOpen);
         }
 
         public void ShowUpgrades()
         {
             RefreshUpgrades();
-            Show(upgradePanel);
+            Show(upgradePanel, SoundId.MenuOpen);
             //MenuMusicController.Instance.SetOptionsMusic();
         }
 
         public void ShowSettings()
         {
             SyncSettingsControls();
-            Show(settingsPanel);
+            Show(settingsPanel, SoundId.MenuOpenGold);
             MenuMusicController.Instance.SetOptionsMusic();
         }
 
         public void ShowLeaderboards()
         {
-            Show(leaderboardPanel);
+            Show(leaderboardPanel, SoundId.MenuOpenGold);
             if (leaderboardView != null)
             {
                 leaderboardView.Refresh();
@@ -261,7 +260,7 @@ namespace KingsRescue.UI
 
         public void ShowCredits()
         {
-            Show(creditsPanel);
+            Show(creditsPanel, SoundId.MenuOpenGold);
             MenuMusicController.Instance.SetOptionsMusic();
         }
 
@@ -272,8 +271,15 @@ namespace KingsRescue.UI
                 achievementList.Refresh();
             }
 
-            Show(achievementPanel);
+            Show(achievementPanel, SoundId.MenuOpenGold);
             MenuMusicController.Instance.SetOptionsMusic();
+        }
+
+        private void OpenCharacters(SoundId openSound)
+        {
+            RefreshCharacter();
+            Show(characterPanel, openSound);
+            MenuMusicController.Instance.SetCharacterMusic();
         }
 
         /// <summary>
@@ -291,7 +297,7 @@ namespace KingsRescue.UI
             SoundEffects.Play(SoundId.UiBack);
             if (currentPanel == upgradePanel)
             {
-                ShowCharacters();
+                OpenCharacters(SoundId.None);
                 return;
             }
 
@@ -300,20 +306,26 @@ namespace KingsRescue.UI
 
         public void OpenQuitConfirm()
         {
-            if (quitDialog != null)
+            if (quitDialog == null || quitDialog.activeSelf)
             {
-                quitDialog.SetActive(true);
-                quitDialog.transform.SetAsLastSibling();
+                return;
             }
+
+            quitDialog.SetActive(true);
+            quitDialog.transform.SetAsLastSibling();
+            SoundEffects.Play(SoundId.MenuOpen);
         }
 
         public void CloseQuitConfirm()
         {
-            SoundEffects.Play(SoundId.UiBack);
-            if (quitDialog != null)
+            if (quitDialog == null || !quitDialog.activeSelf)
             {
-                quitDialog.SetActive(false);
+                return;
             }
+
+            SoundEffects.Play(SoundId.UiBack);
+            SoundEffects.Play(SoundId.MenuOpen);
+            quitDialog.SetActive(false);
         }
 
         public void QuitGame()
@@ -820,9 +832,16 @@ namespace KingsRescue.UI
 
         // ---------------------------------------------------------------- panels
 
-        private void Show(GameObject panel)
+        private void Show(GameObject panel, SoundId openSound = SoundId.None)
         {
             requestedPanel = panel;
+            requestedOpenSound = openSound;
+            if (panelShown && currentPanel == panel && panelTransition == null)
+            {
+                requestedOpenSound = SoundId.None;
+                return;
+            }
+
             if (panelTransition == null)
             {
                 panelTransition = StartCoroutine(RunPanelTransition());
@@ -838,20 +857,31 @@ namespace KingsRescue.UI
             while (!panelShown || currentPanel != requestedPanel)
             {
                 GameObject target = requestedPanel;
+                SoundId closingSound = SoundId.None;
+                bool animatedClose = false;
 
-                if (panelShown && currentPanel != null && currentPanel != target && currentPanel.activeSelf
-                    && PanelClose.TryPlay(currentPanel, out float duration))
+                if (panelShown && currentPanel != null && currentPanel != target && currentPanel.activeSelf)
                 {
-                    float waited = 0f;
-                    while (waited < duration)
+                    closingSound = SoundFor(currentPanel);
+                    animatedClose = PanelClose.TryPlay(currentPanel, out float duration);
+                    if (closingSound != SoundId.None)
                     {
-                        waited += Time.unscaledDeltaTime;
-                        yield return null;
+                        SoundEffects.Play(closingSound);
                     }
 
-                    if (currentPanel != null)
+                    if (animatedClose)
                     {
-                        currentPanel.SetActive(false);
+                        float waited = 0f;
+                        while (waited < duration)
+                        {
+                            waited += Time.unscaledDeltaTime;
+                            yield return null;
+                        }
+
+                        if (currentPanel != null)
+                        {
+                            currentPanel.SetActive(false);
+                        }
                     }
                 }
 
@@ -860,12 +890,34 @@ namespace KingsRescue.UI
                     continue;
                 }
 
+                SoundId openSound = requestedOpenSound;
                 ApplyPanels(target);
                 currentPanel = target;
                 panelShown = true;
+                requestedOpenSound = SoundId.None;
+                // A plain panel swaps in one moment, so the same clip is not played twice.
+                if (openSound != SoundId.None && (animatedClose || openSound != closingSound))
+                {
+                    SoundEffects.Play(openSound);
+                }
             }
 
             panelTransition = null;
+        }
+
+        private SoundId SoundFor(GameObject panel)
+        {
+            if (panel == settingsPanel || panel == leaderboardPanel || panel == achievementPanel || panel == creditsPanel)
+            {
+                return SoundId.MenuOpenGold;
+            }
+
+            if (panel == characterPanel || panel == upgradePanel || panel == accountPanel || panel == usernamePanel)
+            {
+                return SoundId.MenuOpen;
+            }
+
+            return SoundId.None;
         }
 
         private void ApplyPanels(GameObject panel)

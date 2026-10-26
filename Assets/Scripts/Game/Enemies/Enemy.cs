@@ -306,7 +306,7 @@ namespace KingsRescue.Enemies
 
         private void OnDamaged(Health source, DamageInfo info)
         {
-            SoundEffects.Play(SoundId.EnemyHit);
+            SoundEffects.PlayEnemy(definition, EnemyCue.Hit);
             Vector2 at = source != null ? source.BodyCenter : (Vector2)transform.position;
             DamageNumberDisplay.Popup(at, info.Amount, info.Critical);
 
@@ -333,7 +333,7 @@ namespace KingsRescue.Enemies
             }
 
             dying = true;
-            SoundEffects.Play(definition != null && definition.isBoss ? SoundId.BossDeath : SoundId.EnemyDeath);
+            SoundEffects.PlayEnemy(definition, EnemyCue.Death);
 
             deathBurst?.Trigger();
             GameManager.Instance?.RegisterKill(1, definition != null && definition.isBoss);

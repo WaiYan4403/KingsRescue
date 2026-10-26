@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_GoblinBomber
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Goblin Bomber
+  voice: 2
   prefab: {fileID: 8309821208071821943, guid: 0317a6f0e122aad43b5c21ebe0414393, type: 3}
   isBoss: 0
   bossMinion: 0

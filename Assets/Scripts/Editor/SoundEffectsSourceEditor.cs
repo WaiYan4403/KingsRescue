@@ -22,6 +22,11 @@ namespace KingsRescue.EditorTools
                 return;
             }
 
+            if (source.Bank.EnsureSlots())
+            {
+                EditorUtility.SetDirty(source.Bank);
+            }
+
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Clips", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Empty slots stay silent. These clips are shared with gameplay.", MessageType.None);

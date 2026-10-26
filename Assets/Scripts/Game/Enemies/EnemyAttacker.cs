@@ -134,7 +134,7 @@ namespace KingsRescue.Enemies
 
             if (cast)
             {
-                SoundEffects.Play(SoundId.EnemyAttack);
+                SoundEffects.PlayEnemy(definition, EnemyCue.Attack);
                 lastShotAt = Time.time;
                 nextShot = Time.time + Mathf.Max(0.25f, definition.attackInterval);
                 attackAnimator?.PlayAttack();

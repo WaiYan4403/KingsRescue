@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KingsRescue.Audio
@@ -28,6 +29,65 @@ namespace KingsRescue.Audio
 
             slot = null;
             return false;
+        }
+
+        /// <summary>Adds a slot for every sound id that is not already in the bank. Existing clips stay.</summary>
+        public bool EnsureSlots()
+        {
+            var present = new HashSet<SoundId>();
+            var list = new List<SoundSlot>();
+            if (slots != null)
+            {
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    SoundSlot slot = slots[i];
+                    if (slot == null || !Enum.IsDefined(typeof(SoundId), slot.id) || slot.id == SoundId.None || !present.Add(slot.id))
+                    {
+                        continue;
+                    }
+
+                    list.Add(slot);
+                }
+            }
+
+            bool changed = slots == null || list.Count != slots.Length;
+            foreach (SoundId id in Enum.GetValues(typeof(SoundId)))
+            {
+                if (id == SoundId.None || present.Contains(id))
+                {
+                    continue;
+                }
+
+                list.Add(CreateSlot(id));
+                changed = true;
+            }
+
+            if (changed)
+            {
+                slots = list.ToArray();
+            }
+
+            return changed;
+        }
+
+        private void OnValidate()
+        {
+            EnsureSlots();
+        }
+
+        static SoundSlot CreateSlot(SoundId id)
+        {
+            string name = id.ToString();
+            bool hit = name.EndsWith("Hit");
+            bool death = name.EndsWith("Death");
+            return new SoundSlot
+            {
+                id = id,
+                volume = hit ? 0.75f : 1f,
+                pitchMin = hit || name.EndsWith("Attack") ? 0.94f : 1f,
+                pitchMax = hit ? 1.08f : death || name.EndsWith("Attack") ? 1.05f : 1f,
+                minInterval = hit ? 0.05f : 0.08f
+            };
         }
     }
 

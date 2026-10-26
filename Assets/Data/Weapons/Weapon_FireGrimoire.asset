@@ -16,6 +16,7 @@ MonoBehaviour:
   description: Hurls fireballs at random enemies.
   icon: {fileID: -7573354855677281409, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 5
+  attackSound: 8
   projectilePrefab: {fileID: 9086646655045113726, guid: c4ffb9b78e93eaf4781905217c0afb8a, type: 3}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}

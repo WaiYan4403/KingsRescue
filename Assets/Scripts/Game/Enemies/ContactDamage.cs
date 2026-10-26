@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
@@ -22,6 +23,7 @@ namespace KingsRescue.Enemies
 
         private float nextHitTime;
         private HitboxMarker hitbox;
+        private EnemyDefinition source;
 
         public event Action HitPlayer;
 
@@ -38,6 +40,7 @@ namespace KingsRescue.Enemies
 
         public void Configure(EnemyDefinition definition, float runMinutes)
         {
+            source = definition;
             radius = definition.contactRadius;
             damage = definition.ScaledContactDamage(runMinutes);
             interval = definition.contactInterval;
@@ -83,6 +86,7 @@ namespace KingsRescue.Enemies
 
             Vector2 direction = delta.sqrMagnitude > 0.0001f ? delta.normalized : Vector2.up;
             health.TakeDamage(new DamageInfo(damage, player.transform.position, direction, 0f, gameObject));
+            SoundEffects.PlayEnemy(source, EnemyCue.Attack);
             nextHitTime = Time.time + interval;
             HitPlayer?.Invoke();
         }

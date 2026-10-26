@@ -119,6 +119,7 @@ namespace KingsRescue.UI
 
             service.BuildChoices(choices);
             SoundEffects.Play(SoundId.PlayerLevelUp);
+            SoundEffects.Play(SoundId.MenuOpenPaper);
 
             if (levelLabel != null)
             {
@@ -219,6 +220,7 @@ namespace KingsRescue.UI
 
         IEnumerator DelayClose()
         {
+            SoundEffects.Play(SoundId.MenuOpenPaper);
             animator.SetTrigger("Close");
             yield return new WaitForSeconds(0.45f);
             root.SetActive(false);

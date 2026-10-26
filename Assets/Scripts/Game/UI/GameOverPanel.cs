@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
@@ -164,6 +165,7 @@ namespace KingsRescue.UI
 
             root.transform.SetAsLastSibling();
             root.SetActive(true);
+            SoundEffects.Play(SoundId.MenuOpenPaper);
             if (animator != null)
             {
                 animator.SetTrigger("Open");
@@ -400,6 +402,7 @@ namespace KingsRescue.UI
 
         private IEnumerator DelayClose()
         {
+            SoundEffects.Play(SoundId.MenuOpenPaper);
             if (animator != null)
             {
                 animator.SetTrigger("Close");

@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.World.DestructibleProp
   use: 0
+  breakSound: 0
   body: {fileID: 1349496293731026362}
   intactSprite: {fileID: -394617753, guid: c4196c348234fc141ae0302bc479c583, type: 3}
   crackedSprite: {fileID: 2086954192, guid: c4196c348234fc141ae0302bc479c583, type: 3}

@@ -7,9 +7,10 @@ UiReset,UI,Reset upgrades,short undo or paper crumple,The reset button on the up
 UiBuy,UI,Buy a hero or an upgrade,coin drop or cash register blip,Both buy buttons
 UiSlider,UI,Dragging a settings slider,soft slider tick,Repeats slowly while the handle moves
 UiToggle,UI,A settings switch,short switch click,Screen shake and damage numbers
+MenuOpen,UI,A standard menu opens or closes,short UI whoosh or soft pop,Characters upgrades account username and the quit prompt
+MenuOpenPaper,UI,A paper scroll opens or closes,parchment unroll or paper rustle,Level-up and the game-over scroll
+MenuOpenGold,UI,A gold scroll opens or closes,gold paper unroll or stiff scroll,Settings leaderboards achievements credits and pause
 PlayerFootstep,Player,Hero is moving,single light footstep on dirt or stone,Repeats about three times a second while moving
-PlayerAttack,Player,Melee swing such as the lance,short weapon whoosh or slash,Once per swing combo start
-PlayerShoot,Player,Bow arrows knives boomerang or orbit blades,bow release or light projectile swish,Once per attack not once per arrow
 PlayerHurt,Player,Hero takes a hit,short grunt or armor tick,Skipped on the killing blow
 PlayerDeath,Player,Hero dies,short falling sting,Plays as the death animation starts
 PlayerHeal,Player,HP is restored,soft heal chime or sparkle,Hearts and the archer power-up heal both use this
@@ -19,12 +20,43 @@ PowerUpMax,Player,Max power-up is collected,bigger magical surge,Louder than the
 PickupCoin,Pickup,A coin is collected,single coin clink,Pitch varies so a handful does not sound identical
 PickupGem,Pickup,An experience gem is collected,small crystal blip,Quieter than the coin
 PickupPurse,Pickup,A coin purse is collected,coin pouch rustle or several coins,One sound for the whole purse
-ChestOpen,Game,A chest panel opens,chest lid creak plus a small chime,Plays when the reward screen appears
-PropBreak,World,A smashable pot or crate breaks,pottery crack or light wood break,Not used for chests
-EnemyHit,Combat,An enemy takes damage,soft hit tick flesh or light armor,Limited so a volley does not stack into noise
-EnemyDeath,Combat,A regular enemy dies,small pop or defeat blip,Bosses use BossDeath instead
-BossDeath,Combat,A boss dies,heavy impact or short defeat sting,One shot when the boss falls
-EnemyAttack,Combat,An enemy fires a shot or meteor,enemy bow twang spit or spell cast,Once when the attack is released
-EnemySpell,Combat,A boss special or a meteor lands,magical impact explosion or slam,Impact moment not the windup
-SpellCast,Spell,A ground zone freeze field or aura starts,ice crackle water drop or soft magic loop-free cast,Once when the weapon fires
-SpellStrike,Spell,Lightning or a random strike hits,short electric zap,Once per firing not per bolt
+ChestOpen,Game,The player opens a chest,chest lid creak or latch,Once when the lid animation starts
+ChestSparkle,Game,A chest reward pops in,bright sparkle or item chime,Every item including the coins
+PotBreak,World,A pot is smashed,pottery crack or ceramic shatter,The pot prop
+BoxBreak,World,A box is smashed,light wood crate break,The box prop
+LanceLeft,Weapon,The first lance slash,slash whoosh to the left,Attack1 including the longer reach version
+LanceRight,Weapon,The second lance slash,slash whoosh to the right,Attack2 including the longer reach version
+LanceStab,Weapon,The finishing lance stab,short thrust or stab,Attack3 including the longer reach version
+Bow,Weapon,The bow fires,bow release,Nyra's bow including the extra power-up arrows
+Crossbow,Weapon,The crossbow fires,crossbow twang,Once per shot
+Knife,Weapon,A knife is thrown,light blade swish,Once per throw
+Boomerang,Weapon,A boomerang is thrown,boomerang whoosh,Once per throw
+Arcane,Weapon,The orbiting blades start,magical blade spin,Once each time the blades come out
+Saung,Weapon,The saung field starts,soft harp pluck,Once each time the music field appears
+FireGrimoire,Weapon,The grimoire fires,fire spell cast,Once per cast
+Freeze,Weapon,A freeze crystal is planted,ice crackle,Once per cast
+LightningWand,Weapon,Lightning strikes,short electric zap,Once per strike
+SlimeHit,Enemy,This creature is hit,Slime soft hit for this creature,Blue and red slimes and the Slime King
+SlimeDeath,Enemy,This creature dies,Slime short death cry or collapse,Blue and red slimes and the Slime King
+SlimeAttack,Enemy,This creature attacks or touches the hero,Slime attack swing bite or shot,Blue and red slimes and the Slime King
+GoblinHit,Enemy,This creature is hit,Goblin soft hit for this creature,Goblins goblin archers goblin mages and the Globin Machine
+GoblinDeath,Enemy,This creature dies,Goblin short death cry or collapse,Goblins goblin archers goblin mages and the Globin Machine
+GoblinAttack,Enemy,This creature attacks or touches the hero,Goblin attack swing bite or shot,Goblins goblin archers goblin mages and the Globin Machine
+SkeletonHit,Enemy,This creature is hit,Skeleton soft hit for this creature,Skeletons
+SkeletonDeath,Enemy,This creature dies,Skeleton short death cry or collapse,Skeletons
+SkeletonAttack,Enemy,This creature attacks or touches the hero,Skeleton attack swing bite or shot,Skeletons
+RatHit,Enemy,This creature is hit,Rat soft hit for this creature,Rats and rat packs
+RatDeath,Enemy,This creature dies,Rat short death cry or collapse,Rats and rat packs
+RatAttack,Enemy,This creature attacks or touches the hero,Rat attack swing bite or shot,Rats and rat packs
+SpiderHit,Enemy,This creature is hit,Spider soft hit for this creature,Spiders
+SpiderDeath,Enemy,This creature dies,Spider short death cry or collapse,Spiders
+SpiderAttack,Enemy,This creature attacks or touches the hero,Spider attack swing bite or shot,Spiders
+WolfHit,Enemy,This creature is hit,Wolf soft hit for this creature,Wolves
+WolfDeath,Enemy,This creature dies,Wolf short death cry or collapse,Wolves
+WolfAttack,Enemy,This creature attacks or touches the hero,Wolf attack swing bite or shot,Wolves
+BatHit,Enemy,This creature is hit,Bat soft hit for this creature,Bats and bat groups
+BatDeath,Enemy,This creature dies,Bat short death cry or collapse,Bats and bat groups
+BatAttack,Enemy,This creature attacks or touches the hero,Bat attack swing bite or shot,Bats and bat groups
+FireballHit,Enemy,This creature is hit,Fireball soft hit for this creature,Fireballs dropped by the goblin mage
+FireballDeath,Enemy,This creature dies,Fireball short death cry or collapse,Fireballs dropped by the goblin mage
+FireballAttack,Enemy,This creature attacks or touches the hero,Fireball impact,Fireballs dropped by the goblin mage

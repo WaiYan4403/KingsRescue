@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Shadow
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Shadow
+  voice: 11
   prefab: {fileID: 651282674222005876, guid: d9856c9a519d72d41a09a532a0d5f3b4, type: 3}
   isBoss: 0
   bossMinion: 0

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Meteor
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Fireball
+  voice: 38
   prefab: {fileID: 1032086161236406950, guid: 138fd2def73bccb4ca18889028d7ae7f, type: 3}
   isBoss: 0
   bossMinion: 0

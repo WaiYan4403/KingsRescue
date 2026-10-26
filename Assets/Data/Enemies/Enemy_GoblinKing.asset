@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Enemy_GoblinKing
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Globin Machine
+  voice: 2
   prefab: {fileID: 244735591878693721, guid: dcb245a7fd6a0f94fbffedce91684a8d, type: 3}
   isBoss: 1
-  healthBarHeight: 0.7
-  bossMinion: 0
+  healthBarHeight: 4.5
+  bossMinion: 1
   isElite: 0
   canFlipSprite: 0
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1.15
-  maxHealth: 1600
+  maxHealth: 3000
   contactDamage: 16
   contactInterval: 0.6
   contactRadius: 1.05
@@ -59,6 +60,8 @@ MonoBehaviour:
   summonAllies:
   - {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
   - {fileID: 11400000, guid: 5a51234f69da0bf4093fd1330267856c, type: 2}
+  - {fileID: 11400000, guid: 2e2cec80d33ea2545a403595083dda63, type: 2}
+  - {fileID: 11400000, guid: 6a9c470dde3195249a363888da2d3e1e, type: 2}
   summonCount: 3
   specialInterval: 3.6
   specialRadius: 1.8

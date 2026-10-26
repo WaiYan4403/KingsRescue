@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Rat
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Rat
+  voice: 4
   prefab: {fileID: 3371409198316295035, guid: 2b9075339b53ec345bfabbdb9af55cb8, type: 3}
   isBoss: 0
   bossMinion: 0

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Hobgoblin
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Hobgoblin
+  voice: 2
   prefab: {fileID: 244735591878693721, guid: 968a19308789644018e6435fc7803c17, type: 3}
   isBoss: 0
   bossMinion: 0

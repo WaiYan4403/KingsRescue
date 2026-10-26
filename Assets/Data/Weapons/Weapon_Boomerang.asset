@@ -16,6 +16,7 @@ MonoBehaviour:
   description: Throws a boomerang that flies out and returns.
   icon: {fileID: 1324183073, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 10
+  attackSound: 5
   projectilePrefab: {fileID: 8446787153019134309, guid: 4bbf5f4d904571e44a46eddc4e1883cd, type: 3}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}

@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Enemy_SlimeKing
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Slime King
+  voice: 1
   prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
   isBoss: 1
-  healthBarHeight: 0.7
-  bossMinion: 0
+  healthBarHeight: 4.5
+  bossMinion: 1
   isElite: 0
   canFlipSprite: 0
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1
-  maxHealth: 900
+  maxHealth: 1200
   contactDamage: 10
   contactInterval: 0.55
   contactRadius: 0.95
@@ -56,7 +57,10 @@ MonoBehaviour:
   meteorRadius: 1.15
   traits: 0
   summonAlly: {fileID: 0}
-  summonAllies: []
+  summonAllies:
+  - {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+  - {fileID: 11400000, guid: be1ca4bec745da341bcb4e5109f38763, type: 2}
+  - {fileID: 11400000, guid: d14b288b4f9d5fe48bbe2e69ca28e30c, type: 2}
   summonCount: 2
   specialInterval: 3.6
   specialRadius: 1.3

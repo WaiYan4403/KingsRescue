@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_DarkMage
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Dark Mage
+  voice: 30
   prefab: {fileID: 6029562587574041385, guid: ccedb2706cf9c3f439ffd89cdbf1d7d0, type: 3}
   isBoss: 0
   bossMinion: 0

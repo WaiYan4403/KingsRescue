@@ -151,6 +151,7 @@ namespace KingsRescue.UI
             open = true;
             panel.SetActive(true);
             panel.transform.SetAsLastSibling();
+            SoundEffects.Play(SoundId.MenuOpenGold);
             if (animator != null)
             {
                 animator.enabled = true;
@@ -185,6 +186,7 @@ namespace KingsRescue.UI
             settingsOpen = true;
             settingsPanel.SetActive(true);
             settingsPanel.transform.SetAsLastSibling();
+            SoundEffects.Play(SoundId.MenuOpenGold);
             SyncSettingsControls();
         }
 
@@ -197,6 +199,7 @@ namespace KingsRescue.UI
             }
 
             SoundEffects.Play(SoundId.UiBack);
+            SoundEffects.Play(SoundId.MenuOpenGold);
             if (settingsRoutine != null)
             {
                 StopCoroutine(settingsRoutine);
@@ -319,6 +322,7 @@ namespace KingsRescue.UI
         private IEnumerator CloseThenResume()
         {
             closing = true;
+            SoundEffects.Play(SoundId.MenuOpenGold);
             float wait = 0.2f;
 
             if (animator != null)

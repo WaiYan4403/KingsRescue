@@ -65,6 +65,53 @@ namespace KingsRescue.Data
     }
 
     /// <summary>
+    /// Shared sound set. Variants of one creature use the same voice.
+    /// The order is fixed: <see cref="KingsRescue.Audio.EnemySounds"/> builds slot ids from it.
+    /// </summary>
+    public enum EnemyVoice
+    {
+        Generic = 0,
+        Slime = 1,
+        Goblin = 2,
+        Skeleton = 3,
+        Rat = 4,
+        Spider = 5,
+        Wolf = 6,
+        Bat = 7,
+        Orc = 8,
+        Zombie = 9,
+        Ghost = 10,
+        Shadow = 11,
+        Wisp = 12,
+        Crow = 13,
+        Boar = 14,
+        Bear = 15,
+        Treant = 16,
+        Dragon = 17,
+        Harpy = 18,
+        Gargoyle = 19,
+        Imp = 20,
+        DemonFly = 21,
+        Scorpion = 22,
+        Troll = 23,
+        Ogre = 24,
+        EarthElemental = 25,
+        FireElemental = 26,
+        IceElemental = 27,
+        Witch = 28,
+        Cultist = 29,
+        Mage = 30,
+        Priest = 31,
+        Necromancer = 32,
+        Vampire = 33,
+        Knight = 34,
+        Armor = 35,
+        Mimic = 36,
+        Plague = 37,
+        Fireball = 38
+    }
+
+    /// <summary>
     /// Authored stats for one enemy type. The prefab stays dumb; this asset decides
     /// how hard it hits and how fast it chases.
     /// </summary>
@@ -73,6 +120,10 @@ namespace KingsRescue.Data
     {
         [Header("Identity")]
         public string displayName = "Enemy";
+
+        [Tooltip("Creature sounds. Variants of the same creature share a voice. Generic plays nothing.")]
+        public EnemyVoice voice = EnemyVoice.Generic;
+
         public GameObject prefab;
 
         [Tooltip("Timed encounter. Does not despawn off-screen and is spawned by WaveDirector, not the trickle table.")]

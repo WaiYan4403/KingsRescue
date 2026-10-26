@@ -16,6 +16,7 @@ MonoBehaviour:
   description: The archer's signature weapon.
   icon: {fileID: 2066592859, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 1
+  attackSound: 2
   projectilePrefab: {fileID: 9086646655045113726, guid: 8dd46ff04bdf64104b59f05641b72844, type: 3}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 0}

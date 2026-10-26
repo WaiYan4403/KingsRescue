@@ -16,6 +16,7 @@ MonoBehaviour:
   description: Blue flames that circle the hero.
   icon: {fileID: 8033092973025764044, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 2
+  attackSound: 6
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 286101483933260600, guid: ee312bfa8dfb5463d80be7bd63f67ca9, type: 3}
   effectPrefab: {fileID: 0}

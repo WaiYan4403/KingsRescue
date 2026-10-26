@@ -16,6 +16,7 @@ MonoBehaviour:
   description: Calls a bolt down on the nearest enemy.
   icon: {fileID: -35317126, guid: 5066387750f00534791090481a4809f7, type: 3}
   fireMode: 9
+  attackSound: 10
   projectilePrefab: {fileID: 0}
   orbitPrefab: {fileID: 0}
   effectPrefab: {fileID: 6025342629160614437, guid: 36b07561c7264b94599a1cdd1d3e17c8, type: 3}

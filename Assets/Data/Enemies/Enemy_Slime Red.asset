@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Slime Red
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Slime
+  voice: 1
   prefab: {fileID: 244735591878693721, guid: a721c595706c724479f459e2a568cddd, type: 3}
   isBoss: 0
   bossMinion: 0

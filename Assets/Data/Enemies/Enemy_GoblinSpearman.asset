@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_GoblinSpearman
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Goblin Spearman
+  voice: 2
   prefab: {fileID: 244735591878693721, guid: 79bd3a1fbc557a94ab6a2485cd810420, type: 3}
   isBoss: 0
   bossMinion: 0

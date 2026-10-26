@@ -23,8 +23,17 @@ namespace KingsRescue.World
             Interact = 2
         }
 
+        public enum BreakSound
+        {
+            Pot = 0,
+            Box = 1
+        }
+
         [Header("Use")]
         [SerializeField] private UseMode use = UseMode.Smash;
+
+        [Tooltip("Which break clip plays when this prop is smashed.")]
+        [SerializeField] private BreakSound breakSound = BreakSound.Pot;
 
         [Header("Sprites")]
         [SerializeField] private SpriteRenderer body;
@@ -224,7 +233,7 @@ namespace KingsRescue.World
             }
 
             opened = true;
-            SoundEffects.Play(SoundId.PropBreak);
+            SoundEffects.Play(breakSound == BreakSound.Box ? SoundId.BoxBreak : SoundId.PotBreak);
             health.Untargetable = true;
             flash?.Flash();
             ApplySprite(openedSprite != null ? openedSprite : crackedSprite);

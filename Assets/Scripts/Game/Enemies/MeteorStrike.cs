@@ -19,6 +19,7 @@ namespace KingsRescue.Enemies
 
         private static readonly int FallState = Animator.StringToHash("Meteor_Falling");
 
+        private EnemyDefinition definition;
         private Vector2 impact;
         private Vector2 parked;
         private float damage;
@@ -67,6 +68,7 @@ namespace KingsRescue.Enemies
             }
 
             enabled = true;
+            definition = def;
             exploded = false;
             falling = false;
             damage = def.ScaledAttackDamage(runMinutes);
@@ -306,7 +308,7 @@ namespace KingsRescue.Enemies
         private void Explode()
         {
             exploded = true;
-            SoundEffects.Play(SoundId.EnemySpell);
+            SoundEffects.PlayEnemy(definition, EnemyCue.Attack);
             transform.position = impact;
             HitboxDisplay.Flash(impact, radius, 0.35f);
 

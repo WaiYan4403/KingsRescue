@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Wolf
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Wolf
+  voice: 6
   prefab: {fileID: 4720918016224897111, guid: 17e970a88c7d01544b07358b31544e1b, type: 3}
   isBoss: 0
   bossMinion: 0

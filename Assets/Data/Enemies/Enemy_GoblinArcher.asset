@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_GoblinArcher
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
   displayName: Goblin Archer
+  voice: 2
   prefab: {fileID: 9032014044579634548, guid: a562de65538dba34882648035626a33d, type: 3}
   isBoss: 0
   bossMinion: 0

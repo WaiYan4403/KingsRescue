@@ -268,7 +268,7 @@ namespace KingsRescue.Combat
 
         private void Fire()
         {
-            SoundEffects.PlayWeapon(definition.fireMode);
+            SoundEffects.PlayWeapon(definition);
             switch (definition.fireMode)
             {
                 case WeaponFireMode.MeleeSwing:
@@ -481,9 +481,27 @@ namespace KingsRescue.Combat
             }
 
             int stage = Mathf.Clamp(swingIndex + 1, 1, unlocked);
+            if (definition.attackSound == WeaponSound.Lance)
+            {
+                SoundEffects.Play(LanceStageSound(stage));
+            }
+
             string bodyTrigger = definition.GetAttackTrigger(stage);
             string effectTrigger = definition.GetEffectAttackTrigger(level, stage);
             owner.PlayAttackStage(bodyTrigger, definition.attackTriggers, effectTrigger, definition.advancedAttackTriggers);
+        }
+
+        private static SoundId LanceStageSound(int stage)
+        {
+            switch (stage)
+            {
+                case 1:
+                    return SoundId.LanceLeft;
+                case 2:
+                    return SoundId.LanceRight;
+                default:
+                    return SoundId.LanceStab;
+            }
         }
 
         private void TrySpawnPowerSlash(int stage)
@@ -1116,7 +1134,7 @@ namespace KingsRescue.Combat
                 }
             }
 
-            SoundEffects.Play(SoundId.SpellCast);
+            SoundEffects.PlayWeapon(definition);
             return true;
         }
 
@@ -1185,7 +1203,7 @@ namespace KingsRescue.Combat
 
             RebuildBlades(ResolveCount());
             orbitUntil = Time.time + Mathf.Max(0.2f, ResolveDuration());
-            SoundEffects.Play(SoundId.PlayerShoot);
+            SoundEffects.PlayWeapon(definition);
             TickOrbitMotion();
         }
 
