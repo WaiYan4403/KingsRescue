@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,19 +6,37 @@ namespace KingsRescue.UI
 {
     /// <summary>
     /// Full-screen overlay shown while <see cref="ObjectPoolManager"/> builds its pools.
-    /// Created at runtime so the first painted frame is the loading screen, not a hitch.
+    /// Design the <c>Loading Screen</c> canvas in the Gameplay scene. A coded screen is
+    /// used only when that canvas is missing.
     /// </summary>
     public sealed class PoolLoadingScreen : MonoBehaviour
     {
-        private Image fill;
-        private Text percent;
+        [SerializeField] private Image fill;
+        [SerializeField] private TMP_Text percent;
 
-        public static PoolLoadingScreen Show()
+        bool authored;
+
+        /// <summary>Shows the scene canvas, or builds a plain stand-in when the scene has none.</summary>
+        public static PoolLoadingScreen Present()
         {
+            PoolLoadingScreen screen = FindAnyObjectByType<PoolLoadingScreen>(FindObjectsInactive.Include);
+            if (screen != null)
+            {
+                screen.authored = true;
+                screen.Open();
+                return screen;
+            }
+
             var root = new GameObject("Pool Loading");
-            var screen = root.AddComponent<PoolLoadingScreen>();
-            screen.Build();
-            return screen;
+            var created = root.AddComponent<PoolLoadingScreen>();
+            created.Build();
+            return created;
+        }
+
+        public void Open()
+        {
+            gameObject.SetActive(true);
+            SetProgress(0f);
         }
 
         public void SetProgress(float progress)
@@ -36,6 +55,12 @@ namespace KingsRescue.UI
 
         public void Close()
         {
+            if (authored)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+
             Destroy(gameObject);
         }
 
@@ -47,15 +72,15 @@ namespace KingsRescue.UI
 
             var scaler = gameObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1080f, 1920f);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+            scaler.referenceResolution = new Vector2(1080f, 2400f);
+            scaler.matchWidthOrHeight = 0.5f;
 
             gameObject.AddComponent<GraphicRaycaster>();
 
             var backdrop = CreateImage("Backdrop", transform, new Color(0.04f, 0.03f, 0.02f, 1f));
             Stretch(backdrop.rectTransform);
 
-            var title = CreateText("Title", transform, 54, FontStyle.Bold);
+            var title = CreateText("Title", transform, 54, FontStyles.Bold);
             title.text = "Loading";
             var titleRect = title.rectTransform;
             titleRect.anchorMin = titleRect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -75,7 +100,7 @@ namespace KingsRescue.UI
             fill.fillOrigin = (int)Image.OriginHorizontal.Left;
             fill.fillAmount = 0f;
 
-            percent = CreateText("Percent", transform, 32, FontStyle.Normal);
+            percent = CreateText("Percent", transform, 32, FontStyles.Normal);
             percent.text = "0%";
             var percentRect = percent.rectTransform;
             percentRect.anchorMin = percentRect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -88,21 +113,19 @@ namespace KingsRescue.UI
             var go = new GameObject(name, typeof(RectTransform), typeof(Image));
             go.transform.SetParent(parent, false);
             Image image = go.GetComponent<Image>();
-            image.sprite = WhiteSprite();
             image.color = color;
             image.raycastTarget = true;
             return image;
         }
 
-        private static Text CreateText(string name, Transform parent, int size, FontStyle style)
+        private static TMP_Text CreateText(string name, Transform parent, int size, FontStyles style)
         {
-            var go = new GameObject(name, typeof(RectTransform), typeof(Text));
+            var go = new GameObject(name, typeof(RectTransform));
             go.transform.SetParent(parent, false);
-            Text text = go.GetComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
             text.fontSize = size;
             text.fontStyle = style;
-            text.alignment = TextAnchor.MiddleCenter;
+            text.alignment = TextAlignmentOptions.Center;
             text.color = new Color(0.96f, 0.93f, 0.86f, 1f);
             text.raycastTarget = false;
             return text;
@@ -114,22 +137,6 @@ namespace KingsRescue.UI
             rect.anchorMax = Vector2.one;
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
-        }
-
-        private static Sprite whiteSprite;
-
-        private static Sprite WhiteSprite()
-        {
-            if (whiteSprite != null)
-            {
-                return whiteSprite;
-            }
-
-            var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
-            texture.SetPixel(0, 0, Color.white);
-            texture.Apply();
-            whiteSprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
-            return whiteSprite;
         }
     }
 }

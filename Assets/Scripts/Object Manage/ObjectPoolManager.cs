@@ -52,6 +52,7 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     protected override void Awake()
     {
         base.Awake();
+        loading = PoolLoadingScreen.Present();
         BeginWarmup();
     }
 
@@ -86,7 +87,6 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
 
         jobs = pending.ToArray();
         building = true;
-        loading = PoolLoadingScreen.Show();
         StartCoroutine(WarmRoutine());
     }
 

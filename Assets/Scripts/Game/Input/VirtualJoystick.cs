@@ -147,7 +147,7 @@ namespace KingsRescue.InputControl
             }
 
             // The knob always travels the full handleRange. Sensitivity shortens or lengthens the
-            // drag that counts as full deflection (2 = half the travel, 0.5 = double the travel).
+            // drag that counts as full deflection (0.75 is a shorter drag, 0.25 is a longer one).
             float effectiveRange = handleRange / GameSettings.JoystickSensitivity;
             Vector2 raw = Vector2.ClampMagnitude(local / effectiveRange, 1f);
             float magnitude = raw.magnitude;

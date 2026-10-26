@@ -571,8 +571,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.PixelPerfectCamera
   m_ComponentVersion: 1
   m_AssetsPPU: 16
-  m_RefResolutionX: 200
-  m_RefResolutionY: 360
+  m_RefResolutionX: 360
+  m_RefResolutionY: 640
   m_CropFrame: 1
   m_GridSnapping: 0
   m_FilterMode: 1
@@ -616,9 +616,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.12639405
+    x: -0.035714287
     y: 0
-    width: 0.7434944
+    width: 1.0714285
     height: 1
   near clip plane: 0.3
   far clip plane: 50

@@ -13,9 +13,11 @@ namespace KingsRescue.Meta
         private const string ShakeKey = "KingsRescue.ScreenShake";
         private const string DamageTextKey = "KingsRescue.DamageText";
         private const string SensitivityKey = "KingsRescue.JoystickSensitivity";
+        private const string SensitivityVersionKey = "KingsRescue.JoystickSensitivityVersion";
 
-        public const float MinJoystickSensitivity = 0.5f;
-        public const float MaxJoystickSensitivity = 2f;
+        public const float MinJoystickSensitivity = 0.25f;
+        public const float MaxJoystickSensitivity = 0.75f;
+        public const float DefaultJoystickSensitivity = 0.5f;
 
         // The FMOD project routes the soundtrack to the master bus. There is no separate music bus.
         private const string MusicBusPath = "bus:/";
@@ -71,17 +73,49 @@ namespace KingsRescue.Meta
         }
 
         /// <summary>
-        /// Joystick responsiveness. 1 is the default feel. Higher values reach full speed with a shorter
-        /// thumb drag, lower values need a longer drag.
+        /// Joystick responsiveness. 0.5 is the middle and matches the old lowest setting.
+        /// Higher values reach full speed with a shorter thumb drag, lower values need a longer drag.
         /// </summary>
         public static float JoystickSensitivity
         {
-            get => Mathf.Clamp(PlayerPrefs.GetFloat(SensitivityKey, 1f), MinJoystickSensitivity, MaxJoystickSensitivity);
+            get => Mathf.Clamp(ReadJoystickSensitivity(), MinJoystickSensitivity, MaxJoystickSensitivity);
             set
             {
                 PlayerPrefs.SetFloat(SensitivityKey, Mathf.Clamp(value, MinJoystickSensitivity, MaxJoystickSensitivity));
+                PlayerPrefs.SetInt(SensitivityVersionKey, 2);
                 PlayerPrefs.Save();
             }
+        }
+
+        /// <summary>
+        /// The first saved range was 0.5 to 2. That old floor is now the middle, and anything above it
+        /// is folded into the upper half so a saved slider does not jump to the new ceiling.
+        /// </summary>
+        private static float ReadJoystickSensitivity()
+        {
+            const float legacyMin = 0.5f;
+            const float legacyMax = 2f;
+
+            float stored = PlayerPrefs.GetFloat(SensitivityKey, DefaultJoystickSensitivity);
+            if (PlayerPrefs.GetInt(SensitivityVersionKey, 0) >= 2)
+            {
+                return stored;
+            }
+
+            if (PlayerPrefs.HasKey(SensitivityKey))
+            {
+                float t = Mathf.InverseLerp(legacyMin, legacyMax, stored);
+                stored = Mathf.Lerp(DefaultJoystickSensitivity, MaxJoystickSensitivity, t);
+            }
+            else
+            {
+                stored = DefaultJoystickSensitivity;
+            }
+
+            PlayerPrefs.SetFloat(SensitivityKey, stored);
+            PlayerPrefs.SetInt(SensitivityVersionKey, 2);
+            PlayerPrefs.Save();
+            return stored;
         }
 
         public static void Apply()
