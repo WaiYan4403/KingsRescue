@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Player;
 using KingsRescue.Progression;
 

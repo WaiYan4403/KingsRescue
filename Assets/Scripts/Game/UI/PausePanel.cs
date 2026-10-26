@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Meta;
 using ToggleSwitch = Poker.UI.ToggleSwitch.ToggleSwitch;
@@ -195,6 +196,7 @@ namespace KingsRescue.UI
                 return;
             }
 
+            SoundEffects.Play(SoundId.UiBack);
             if (settingsRoutine != null)
             {
                 StopCoroutine(settingsRoutine);

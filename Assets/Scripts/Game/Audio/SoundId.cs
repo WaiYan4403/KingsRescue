@@ -28,6 +28,12 @@ namespace KingsRescue.Audio
         EnemyAttack = 20,
         EnemySpell = 21,
         SpellCast = 22,
-        SpellStrike = 23
+        SpellStrike = 23,
+        UiBrowse = 24,
+        UiBack = 25,
+        UiReset = 26,
+        UiBuy = 27,
+        UiSlider = 28,
+        UiToggle = 29
     }
 }

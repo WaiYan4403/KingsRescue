@@ -22,6 +22,8 @@ namespace KingsRescue.Audio
         static int cursor;
         static readonly float[] nextAllowed = new float[32];
         static readonly HashSet<int> boundButtons = new HashSet<int>();
+        static readonly HashSet<int> boundSliders = new HashSet<int>();
+        static readonly Dictionary<int, SoundId> buttonSounds = new Dictionary<int, SoundId>();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void ListenForScenes()
@@ -33,7 +35,34 @@ namespace KingsRescue.Audio
         static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             boundButtons.Clear();
+            boundSliders.Clear();
             BindButtonsInScene();
+            BindSlidersInScene();
+        }
+
+        /// <summary>
+        /// Buttons wired in code, such as reset and buy upgrade, use this instead of the generic click.
+        /// Call it from Awake so it is in place before the scene bind runs.
+        /// </summary>
+        public static void UseButtonSound(Button button, SoundId id)
+        {
+            if (button == null || id == SoundId.None)
+            {
+                return;
+            }
+
+            buttonSounds[button.GetInstanceID()] = id;
+        }
+
+        public static void Use(SoundBank assigned)
+        {
+            if (assigned == null)
+            {
+                return;
+            }
+
+            bank = assigned;
+            bankSearched = true;
         }
 
         public static void Play(SoundId id)
@@ -143,6 +172,15 @@ namespace KingsRescue.Audio
             }
         }
 
+        static void BindSlidersInScene()
+        {
+            Slider[] sliders = Object.FindObjectsByType<Slider>(FindObjectsInactive.Include);
+            for (int i = 0; i < sliders.Length; i++)
+            {
+                BindSlider(sliders[i]);
+            }
+        }
+
         /// <summary>Buttons created after the scene loads, such as level-up cards.</summary>
         public static void BindButton(Button button)
         {
@@ -151,12 +189,81 @@ namespace KingsRescue.Audio
                 return;
             }
 
-            button.onClick.AddListener(PlayClick);
+            if (MethodPlaysItsOwnSound(button))
+            {
+                return;
+            }
+
+            SoundId id = SoundForButton(button);
+            button.onClick.AddListener(() => Play(id));
         }
 
-        static void PlayClick()
+        static void BindSlider(Slider slider)
         {
-            Play(SoundId.UiClick);
+            if (slider == null || !slider.interactable || !boundSliders.Add(slider.GetInstanceID()))
+            {
+                return;
+            }
+
+            if (slider.GetComponent<Poker.UI.ToggleSwitch.ToggleSwitch>() != null)
+            {
+                return;
+            }
+
+            slider.onValueChanged.AddListener(PlaySlider);
+        }
+
+        static void PlaySlider(float value)
+        {
+            Play(SoundId.UiSlider);
+        }
+
+        static SoundId SoundForButton(Button button)
+        {
+            if (buttonSounds.TryGetValue(button.GetInstanceID(), out SoundId chosen))
+            {
+                return chosen;
+            }
+
+            int count = button.onClick.GetPersistentEventCount();
+            for (int i = 0; i < count; i++)
+            {
+                switch (button.onClick.GetPersistentMethodName(i))
+                {
+                    case "SelectNextCharacter":
+                    case "SelectPreviousCharacter":
+                        return SoundId.UiBrowse;
+                    case "BuySelectedCharacter":
+                    case "BuySelectedUpgrade":
+                        return SoundId.UiBuy;
+                    case "ResetSelectedUpgrades":
+                        return SoundId.UiReset;
+                }
+            }
+
+            if (button.gameObject.name.IndexOf("back", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return SoundId.UiBack;
+            }
+
+            return SoundId.UiClick;
+        }
+
+        static bool MethodPlaysItsOwnSound(Button button)
+        {
+            int count = button.onClick.GetPersistentEventCount();
+            for (int i = 0; i < count; i++)
+            {
+                switch (button.onClick.GetPersistentMethodName(i))
+                {
+                    case "GoBack":
+                    case "HideSettings":
+                    case "CloseQuitConfirm":
+                        return true;
+                }
+            }
+
+            return false;
         }
     }
 }

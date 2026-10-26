@@ -17211,6 +17211,7 @@ GameObject:
   - component: {fileID: 1424051020}
   - component: {fileID: 1424051019}
   - component: {fileID: 1424051018}
+  - component: {fileID: 1424051022}
   m_Layer: 0
   m_Name: Music Controller
   m_TagString: Untagged
@@ -17244,6 +17245,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameMusicController
   musicEmitter: {fileID: 98947156}
+--- !u!114 &1424051022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424051017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c1e9a4b2d8f46e0a5b3c9176d04e8f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Audio.SoundEffectsSource
+  bank: {fileID: 11400000, guid: e2c7b94a1d8f4e6b0a3c5d7f9e1b4a80, type: 2}
 --- !u!114 &1424051020
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Meta;
 using KingsRescue.Online;
 
@@ -52,6 +53,7 @@ namespace KingsRescue.UI
             Bind(connectButton, OnConnectClicked);
             Bind(signOutButton, OnSignOutClicked);
             Bind(backButton, OnBackClicked);
+            SoundEffects.UseButtonSound(backButton, SoundId.UiBack);
             Bind(confirmButton, OnConfirmClicked);
 
             if (usernameInput != null)

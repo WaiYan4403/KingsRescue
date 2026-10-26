@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Data;
 
 namespace KingsRescue.UI
@@ -111,6 +112,7 @@ namespace KingsRescue.UI
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            SoundEffects.Play(SoundId.UiClick);
             clicked?.Invoke(this);
         }
 

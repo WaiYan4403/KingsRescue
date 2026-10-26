@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Audio.SoundBank
   slots:
   - id: 1
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 6f89e5969e240e743b74e3c71632f15b, type: 3}
     volume: 1
     pitchMin: 1
     pitchMax: 1
     minInterval: 0.04
   - id: 2
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 48f723f99953b834cb44db8845f1eb8d, type: 3}
     volume: 1
     pitchMin: 1
     pitchMax: 1
@@ -80,25 +80,25 @@ MonoBehaviour:
     pitchMax: 1
     minInterval: 0.1
   - id: 12
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 3d04d9dc0a4b10540929b3921206142e, type: 3}
     volume: 0.85
     pitchMin: 0.95
     pitchMax: 1.08
     minInterval: 0.04
   - id: 13
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 45c09e30709a8324c8c3bda90d00971c, type: 3}
     volume: 0.8
     pitchMin: 0.96
     pitchMax: 1.06
     minInterval: 0.04
   - id: 14
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 8fd624de55ac2714c904e0c685b1ae1b, type: 3}
     volume: 1
     pitchMin: 0.98
     pitchMax: 1.04
     minInterval: 0.08
   - id: 15
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 53be2b053744fdb4291145842ddc768f, type: 3}
     volume: 1
     pitchMin: 1
     pitchMax: 1
@@ -151,3 +151,39 @@ MonoBehaviour:
     pitchMin: 0.95
     pitchMax: 1.08
     minInterval: 0.08
+  - id: 24
+    clip: {fileID: 8300000, guid: d55b0696512e75e49bc3887914707bf3, type: 3}
+    volume: 1
+    pitchMin: 0.98
+    pitchMax: 1.04
+    minInterval: 0.05
+  - id: 25
+    clip: {fileID: 8300000, guid: be2fef9c307316040bc62052bfa54105, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.05
+  - id: 26
+    clip: {fileID: 8300000, guid: edeaf3926a69c4c40b420a8285083727, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.08
+  - id: 27
+    clip: {fileID: 8300000, guid: b533747013efad145a674544f14ba854, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1.03
+    minInterval: 0.08
+  - id: 28
+    clip: {fileID: 8300000, guid: cb2db6512cb50c24d92fcc0b96630757, type: 3}
+    volume: 0.35
+    pitchMin: 0.98
+    pitchMax: 1.04
+    minInterval: 0.06
+  - id: 29
+    clip: {fileID: 8300000, guid: edd304105c6d001428df25a8c99dfa6f, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.05

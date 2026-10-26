@@ -1,6 +1,12 @@
 Id,Category,Plays when,Look for,Notes
-UiClick,UI,Any button press,short soft UI click or wooden tap,One clip covers menus and the pause screen
+UiClick,UI,Any ordinary button,short soft UI click or wooden tap,Play Start Settings and the other menu buttons
 UiConfirm,UI,Choosing a level-up card,short positive confirm chime,Plays with the card click
+UiBrowse,UI,Character arrows or a character portrait,soft page turn or short whoosh,Previous and next hero and the portrait buttons
+UiBack,UI,A back button,short reverse UI tap,Menu back settings back and closing the quit prompt
+UiReset,UI,Reset upgrades,short undo or paper crumple,The reset button on the upgrade page
+UiBuy,UI,Buy a hero or an upgrade,coin drop or cash register blip,Both buy buttons
+UiSlider,UI,Dragging a settings slider,soft slider tick,Repeats slowly while the handle moves
+UiToggle,UI,A settings switch,short switch click,Screen shake and damage numbers
 PlayerFootstep,Player,Hero is moving,single light footstep on dirt or stone,Repeats about three times a second while moving
 PlayerAttack,Player,Melee swing such as the lance,short weapon whoosh or slash,Once per swing combo start
 PlayerShoot,Player,Bow arrows knives boomerang or orbit blades,bow release or light projectile swish,Once per attack not once per arrow

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 
 namespace Poker.UI.ToggleSwitch
 {
@@ -129,6 +130,7 @@ namespace Poker.UI.ToggleSwitch
 
             if (_previousValue != CurrentValue)
             {
+                SoundEffects.Play(SoundId.UiToggle);
                 if (CurrentValue)
                     onToggleOn?.Invoke();
                 else

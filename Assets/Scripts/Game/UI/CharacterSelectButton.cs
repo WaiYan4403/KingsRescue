@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Data;
 using KingsRescue.Meta;
 
@@ -54,6 +55,7 @@ namespace KingsRescue.UI
 
             if (button != null)
             {
+                SoundEffects.UseButtonSound(button, SoundId.UiBrowse);
                 button.onClick.AddListener(OnClicked);
             }
         }

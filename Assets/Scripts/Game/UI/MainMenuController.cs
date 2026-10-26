@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using KingsRescue.Audio;
 using KingsRescue.Data;
 using KingsRescue.Meta;
 using ToggleSwitch = Poker.UI.ToggleSwitch.ToggleSwitch;
@@ -114,11 +115,13 @@ namespace KingsRescue.UI
             if (resetUpgradesButton != null)
             {
                 resetUpgradesButton.onClick.AddListener(ResetSelectedUpgrades);
+                SoundEffects.UseButtonSound(resetUpgradesButton, SoundId.UiReset);
             }
 
             if (upgradeBuyButton != null)
             {
                 upgradeBuyButton.onClick.AddListener(BuySelectedUpgrade);
+                SoundEffects.UseButtonSound(upgradeBuyButton, SoundId.UiBuy);
             }
 
             AchievementProgress.EnsureLoaded();
@@ -285,6 +288,7 @@ namespace KingsRescue.UI
                 return;
             }
 
+            SoundEffects.Play(SoundId.UiBack);
             if (currentPanel == upgradePanel)
             {
                 ShowCharacters();
@@ -305,6 +309,7 @@ namespace KingsRescue.UI
 
         public void CloseQuitConfirm()
         {
+            SoundEffects.Play(SoundId.UiBack);
             if (quitDialog != null)
             {
                 quitDialog.SetActive(false);
