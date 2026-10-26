@@ -16,7 +16,7 @@ MonoBehaviour:
   voice: 1
   prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
   isBoss: 1
-  healthBarHeight: 4.5
+  healthBarHeight: 5.5
   bossMinion: 1
   isElite: 0
   canFlipSprite: 0

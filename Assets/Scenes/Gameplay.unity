@@ -278,9 +278,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: -0.035714287
+    x: 0.1279762
     y: 0
-    width: 1.0714285
+    width: 0.74404764
     height: 1
   near clip plane: 0.3
   far clip plane: 50
@@ -316,8 +316,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.PixelPerfectCamera
   m_ComponentVersion: 1
   m_AssetsPPU: 16
-  m_RefResolutionX: 360
-  m_RefResolutionY: 640
+  m_RefResolutionX: 250
+  m_RefResolutionY: 360
   m_CropFrame: 1
   m_GridSnapping: 0
   m_FilterMode: 1
@@ -750,7 +750,7 @@ MonoBehaviour:
   paddingLeft: 0
   paddingRight: 0
   paddingTop: 1
-  paddingBottom: 1
+  paddingBottom: 0.2
   spawnMargin: 2
   despawnMargin: 2
 --- !u!4 &39098416
@@ -2806,8 +2806,8 @@ Transform:
   m_GameObject: {fileID: 184361856}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.734, y: -7.8231, z: 0}
-  m_LocalScale: {x: 25.98765, y: 36.43517, z: 1}
+  m_LocalPosition: {x: -19.7, y: -7.8231, z: 0}
+  m_LocalScale: {x: 24.264763, y: 36.43517, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 421656903}
@@ -5609,7 +5609,7 @@ Transform:
   m_GameObject: {fileID: 421656902}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2274, y: 7.0603, z: 0}
+  m_LocalPosition: {x: 0, y: 7.0603, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19734,8 +19734,8 @@ Transform:
   m_GameObject: {fileID: 1607000133}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.8081, y: -7.8231, z: 0}
-  m_LocalScale: {x: 27.191397, y: 36.43517, z: 1}
+  m_LocalPosition: {x: 19.7, y: -7.8231, z: 0}
+  m_LocalScale: {x: 24.264763, y: 36.43517, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 421656903}
