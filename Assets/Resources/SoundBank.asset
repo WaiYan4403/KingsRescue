@@ -152,7 +152,7 @@ MonoBehaviour:
     pitchMax: 1.08
     minInterval: 0.05
   - id: 34
-    clip: {fileID: 8300000, guid: fbe723409527f5f4ca4af4ee605f688e, type: 3}
+    clip: {fileID: 8300000, guid: 5005a00665485e64697b05181b6ab457, type: 3}
     volume: 1
     pitchMin: 0.96
     pitchMax: 1.05
@@ -379,3 +379,63 @@ MonoBehaviour:
     pitchMin: 0.97
     pitchMax: 1.04
     minInterval: 0.08
+  - id: 163
+    clip: {fileID: 8300000, guid: dab05829c25bc6a4f864e0fed906a9cd, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.15
+  - id: 164
+    clip: {fileID: 8300000, guid: 18a3b3513237cb642b6b4daa6a78e0c1, type: 3}
+    volume: 1
+    pitchMin: 0.96
+    pitchMax: 1.04
+    minInterval: 0.12
+  - id: 165
+    clip: {fileID: 8300000, guid: 8addea45099f1e54e82e18d280c732b2, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.3
+  - id: 166
+    clip: {fileID: 8300000, guid: 5005a00665485e64697b05181b6ab457, type: 3}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.2
+  - id: 167
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.96
+    pitchMax: 1.04
+    minInterval: 0.12
+  - id: 168
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.96
+    pitchMax: 1.04
+    minInterval: 0.12
+  - id: 169
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 0.97
+    pitchMax: 1.04
+    minInterval: 0.12
+  - id: 170
+    clip: {fileID: 0}
+    volume: 1
+    pitchMin: 1
+    pitchMax: 1
+    minInterval: 0.2
+  - id: 171
+    clip: {fileID: 8300000, guid: 257b00f8f5c4850408e1c51b25c9ef8d, type: 3}
+    volume: 0.75
+    pitchMin: 0.94
+    pitchMax: 1.08
+    minInterval: 0.05
+  - id: 172
+    clip: {fileID: 8300000, guid: 33103606ee4dd454789cfd972f678564, type: 3}
+    volume: 0.75
+    pitchMin: 0.94
+    pitchMax: 1.08
+    minInterval: 0.05

@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using KingsRescue.Core;
+using KingsRescue.Data;
 using KingsRescue.Player;
 using KingsRescue.Progression;
 
@@ -24,6 +25,9 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text distanceLabel;
         [SerializeField] private TMP_Text coinLabel;
         [SerializeField] private TMP_Text killLabel;
+
+        [Header("Portrait")]
+        [SerializeField] private Image profileImage;
 
         [Header("Scene References")]
         [SerializeField] private PlayerHealth playerHealth;
@@ -59,6 +63,8 @@ namespace KingsRescue.UI
 
         private void Start()
         {
+            ApplyProfile();
+
             if (playerHealth != null)
             {
                 playerHealth.HealthChanged += OnHealthChanged;
@@ -138,6 +144,31 @@ namespace KingsRescue.UI
             }
 
             return $"{Mathf.FloorToInt(value)}m";
+        }
+
+        private void ApplyProfile()
+        {
+            if (profileImage == null)
+            {
+                return;
+            }
+
+            GameManager game = GameManager.Instance;
+            CharacterDefinition character = game != null ? game.SelectedCharacter : null;
+            if (character == null && game != null && game.Loadout != null)
+            {
+                character = game.Loadout.Character;
+            }
+
+            Sprite face = character != null ? character.portrait : null;
+            if (face == null)
+            {
+                return;
+            }
+
+            profileImage.sprite = face;
+            profileImage.preserveAspect = true;
+            profileImage.enabled = true;
         }
 
         private void OnHealthChanged(float current, float max)

@@ -14,10 +14,13 @@ namespace KingsRescue.Meta
         private const string DamageTextKey = "KingsRescue.DamageText";
         private const string SensitivityKey = "KingsRescue.JoystickSensitivity";
         private const string SensitivityVersionKey = "KingsRescue.JoystickSensitivityVersion";
+        private const string DefaultsVersionKey = "KingsRescue.SettingsDefaultsVersion";
 
         public const float MinJoystickSensitivity = 0.25f;
         public const float MaxJoystickSensitivity = 0.75f;
         public const float DefaultJoystickSensitivity = 0.5f;
+        public const float DefaultMusicVolume = 1f;
+        public const float DefaultSoundVolume = 0.6f;
 
         // The FMOD project routes the soundtrack to the master bus. There is no separate music bus.
         private const string MusicBusPath = "bus:/";
@@ -31,7 +34,7 @@ namespace KingsRescue.Meta
                     return PlayerPrefs.GetFloat(MusicKey, 1f);
                 }
 
-                return PlayerPrefs.GetFloat(LegacyVolumeKey, 1f);
+                return PlayerPrefs.GetFloat(LegacyVolumeKey, DefaultMusicVolume);
             }
             set
             {
@@ -43,7 +46,7 @@ namespace KingsRescue.Meta
 
         public static float SoundVolume
         {
-            get => PlayerPrefs.GetFloat(SoundKey, 1f);
+            get => PlayerPrefs.GetFloat(SoundKey, DefaultSoundVolume);
             set
             {
                 PlayerPrefs.SetFloat(SoundKey, Mathf.Clamp01(value));
@@ -118,8 +121,28 @@ namespace KingsRescue.Meta
             return stored;
         }
 
+        /// <summary>
+        /// One-time starting point: music full, sound at 0.6, screen shake and damage text on.
+        /// Later slider changes stay saved.
+        /// </summary>
+        public static void EnsureDefaults()
+        {
+            if (PlayerPrefs.GetInt(DefaultsVersionKey, 0) >= 1)
+            {
+                return;
+            }
+
+            PlayerPrefs.SetFloat(MusicKey, DefaultMusicVolume);
+            PlayerPrefs.SetFloat(SoundKey, DefaultSoundVolume);
+            PlayerPrefs.SetInt(ShakeKey, 1);
+            PlayerPrefs.SetInt(DamageTextKey, 1);
+            PlayerPrefs.SetInt(DefaultsVersionKey, 1);
+            PlayerPrefs.Save();
+        }
+
         public static void Apply()
         {
+            EnsureDefaults();
             AudioListener.volume = SoundVolume;
             SetBusVolume(MusicBusPath, MusicVolume);
         }

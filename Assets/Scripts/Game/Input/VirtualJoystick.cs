@@ -79,10 +79,12 @@ namespace KingsRescue.InputControl
             }
 
             ShowStick(false);
+            JoystickHandGuide.Ensure(this);
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            JoystickHandGuide.NotifyUsed();
             if (IsHeld)
             {
                 return;

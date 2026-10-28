@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: cinder_adept
   title: Cinder Adept
-  description: Defeat 50 enemies to unlock Fire Wand.
+  description: Defeat 200 enemies to unlock Fire Wand.
   kind: 0
-  target: 50
+  target: 200
   enemy: {fileID: 0}
   rewardCoins: 0
   rewardCharacter: {fileID: 0}

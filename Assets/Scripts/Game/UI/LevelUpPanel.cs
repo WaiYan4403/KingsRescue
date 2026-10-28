@@ -6,6 +6,7 @@ using KingsRescue.Audio;
 using KingsRescue.Core;
 using KingsRescue.Data;
 using KingsRescue.InputControl;
+using KingsRescue.Player;
 using KingsRescue.Progression;
 using System.Collections;
 
@@ -23,9 +24,15 @@ namespace KingsRescue.UI
         [SerializeField] private TMP_Text levelLabel;
         [SerializeField] private Animator animator;
 
+        private const float EffectLead = 1f;
+        private const string EffectObjectName = "Level Up Effect";
+
         private readonly List<UpgradeDefinition> choices = new List<UpgradeDefinition>(4);
         private Graphic joystickZone;
         private Image overlay;
+        private GameObject levelUpEffect;
+        private Coroutine leadRoutine;
+        private bool presenting;
 
         private void Awake()
         {
@@ -98,6 +105,53 @@ namespace KingsRescue.UI
             }
 
             game.PushLevelUpPause();
+            if (presenting)
+            {
+                return;
+            }
+
+            BeginLead();
+        }
+
+        /// <summary>
+        /// The panel object is inactive until the cards open, so the wait runs on the game manager.
+        /// </summary>
+        private void BeginLead()
+        {
+            presenting = true;
+            SetJoystickRaycasts(false);
+            GameManager host = GameManager.Instance;
+            if (host == null)
+            {
+                presenting = false;
+                Present();
+                return;
+            }
+
+            if (leadRoutine != null)
+            {
+                host.StopCoroutine(leadRoutine);
+            }
+
+            leadRoutine = host.StartCoroutine(PlayEffectThenPresent());
+        }
+
+        /// <summary>
+        /// The run is already paused. The hero effect and level-up sound play, then the cards open.
+        /// </summary>
+        private IEnumerator PlayEffectThenPresent()
+        {
+            SoundEffects.Play(SoundId.PlayerLevelUp);
+            ShowLevelUpEffect();
+            yield return new WaitForSecondsRealtime(EffectLead);
+            leadRoutine = null;
+            if (!presenting)
+            {
+                yield break;
+            }
+
+            HideLevelUpEffect();
+            presenting = false;
             Present();
         }
 
@@ -118,7 +172,6 @@ namespace KingsRescue.UI
             }
 
             service.BuildChoices(choices);
-            SoundEffects.Play(SoundId.PlayerLevelUp);
             SoundEffects.Play(SoundId.MenuOpenPaper);
 
             if (levelLabel != null)
@@ -187,7 +240,12 @@ namespace KingsRescue.UI
 
             if (moreQueued)
             {
-                Present();
+                if (root != null)
+                {
+                    root.SetActive(false);
+                }
+
+                BeginLead();
                 return;
             }
 
@@ -196,13 +254,75 @@ namespace KingsRescue.UI
 
         private void DismissImmediate()
         {
+            if (leadRoutine != null && GameManager.Instance != null)
+            {
+                GameManager.Instance.StopCoroutine(leadRoutine);
+                leadRoutine = null;
+            }
+
             StopAllCoroutines();
+            presenting = false;
+            HideLevelUpEffect();
             if (root != null)
             {
                 root.SetActive(false);
             }
 
             SetJoystickRaycasts(true);
+        }
+
+        private void ShowLevelUpEffect()
+        {
+            GameObject effect = FindLevelUpEffect();
+            if (effect == null)
+            {
+                return;
+            }
+
+            effect.SetActive(true);
+            Animator effectAnimator = effect.GetComponent<Animator>();
+            if (effectAnimator == null)
+            {
+                return;
+            }
+
+            effectAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            effectAnimator.Play(0, 0, 0f);
+            effectAnimator.Update(0f);
+        }
+
+        private void HideLevelUpEffect()
+        {
+            if (levelUpEffect != null)
+            {
+                levelUpEffect.SetActive(false);
+            }
+        }
+
+        private GameObject FindLevelUpEffect()
+        {
+            if (levelUpEffect != null)
+            {
+                return levelUpEffect;
+            }
+
+            PlayerController player = PlayerController.Instance;
+            if (player == null)
+            {
+                return null;
+            }
+
+            Transform[] children = player.GetComponentsInChildren<Transform>(true);
+            for (int i = 0; i < children.Length; i++)
+            {
+                if (children[i].name == EffectObjectName)
+                {
+                    levelUpEffect = children[i].gameObject;
+                    return levelUpEffect;
+                }
+            }
+
+            return null;
         }
 
         private void SetJoystickRaycasts(bool enabled)

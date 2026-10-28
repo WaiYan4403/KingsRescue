@@ -512,7 +512,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -534,7 +534,7 @@ TextureImporter:
         width: 9
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 2, y: 2, z: 2, w: 2}
       customData: 
       outline: []
@@ -556,7 +556,7 @@ TextureImporter:
         width: 30
         height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -565,6 +565,50 @@ TextureImporter:
       bones: []
       spriteID: c5e09997c8ad741488119c2c5626b8fa
       internalID: 508055149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameplayUI_18
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 272
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 3, y: 3, z: 3, w: 3}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a53044c2ff02ea4c94b1303131443b5
+      internalID: -1664368290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GameplayUI_19
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 261
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 2, y: 2, z: 2, w: 2}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 108562e34e9f3ea43b66116217eeffdf
+      internalID: -706675617
       vertices: []
       indices: 
       edges: []
@@ -595,6 +639,8 @@ TextureImporter:
       GameplayUI_15: -1082995642
       GameplayUI_16: -2037737896
       GameplayUI_17: 508055149
+      GameplayUI_18: -1664368290
+      GameplayUI_19: -706675617
       GameplayUI_2: -8366210531325010938
       GameplayUI_3: -7234902862257208533
       GameplayUI_4: 9172894320953149803

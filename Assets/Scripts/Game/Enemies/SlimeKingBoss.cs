@@ -467,6 +467,7 @@ namespace KingsRescue.Enemies
                 return;
             }
 
+            SoundEffects.Play(SoundId.SlimeKingWater);
             Vector2 origin = laserPivot != null ? (Vector2)laserPivot.position : (Vector2)transform.position;
             count = count > 0 ? count : (volleyCount > 0 ? volleyCount : 4);
             float spread = volleySpread > 0.1f ? volleySpread : 40f;
@@ -814,7 +815,7 @@ namespace KingsRescue.Enemies
 
         private void Slam()
         {
-            SoundEffects.PlayEnemy(definition, EnemyCue.Attack);
+            SoundEffects.Play(SoundId.SlimeKingSlam);
             HitboxDisplay.Flash(slamPoint, slamRadius, 0.4f);
             PlayerController player = PlayerController.Instance;
             if (player == null || player.Health == null || !player.Health.IsAlive)
@@ -848,6 +849,7 @@ namespace KingsRescue.Enemies
         private void BeginLaser()
         {
             phase = Phase.Laser;
+            SoundEffects.PlayLoop(SoundId.SlimeKingLaser);
             laserSweepStarted = Time.time;
             phaseEnds = Time.time + (laserDuration > 0.2f ? laserDuration : 3.1f);
             nextLaserTick = 0f;
@@ -896,6 +898,7 @@ namespace KingsRescue.Enemies
 
             if (t >= 1f)
             {
+                SoundEffects.StopLoop(SoundId.SlimeKingLaser);
                 SetLaserVisible(false);
                 SetAttackPose(false);
                 BeginIdle();
@@ -1201,6 +1204,7 @@ namespace KingsRescue.Enemies
 
         private void OnDisable()
         {
+            SoundEffects.StopLoop(SoundId.SlimeKingLaser);
             RestoreGameplayMusic();
         }
     }

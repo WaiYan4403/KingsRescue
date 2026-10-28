@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using KingsRescue.Core;
+using KingsRescue.Data;
 using KingsRescue.Meta;
 
 namespace KingsRescue.Online
@@ -249,7 +251,9 @@ namespace KingsRescue.Online
                 return;
             }
 
-            await account.Authed(jwt => api.SubmitScore(jwt, Mathf.Max(0, distanceMeters), MetaProgress.Coins));
+            CharacterDefinition hero = GameManager.Instance != null ? GameManager.Instance.SelectedCharacter : null;
+            string character = hero != null ? hero.Id : string.Empty;
+            await account.Authed(jwt => api.SubmitScore(jwt, Mathf.Max(0, distanceMeters), MetaProgress.Coins, character));
             PushSoon();
         }
 

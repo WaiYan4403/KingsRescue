@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: storm_caller
   title: Storm Caller
-  description: Survive 4 minutes in a single run to unlock Lightning Wand.
+  description: Survive 6 minutes in a single run to unlock Lightning Wand.
   kind: 3
-  target: 240
+  target: 360
   enemy: {fileID: 0}
   rewardCoins: 0
   rewardCharacter: {fileID: 0}

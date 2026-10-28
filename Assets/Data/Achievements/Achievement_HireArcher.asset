@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: hire_archer
   title: Heavy Purse
-  description: Spend 200 coins from your bank.
+  description: Spend 400 coins from your bank.
   kind: 2
-  target: 200
+  target: 400
   enemy: {fileID: 0}
   rewardCoins: 100
   rewardCharacter: {fileID: 0}

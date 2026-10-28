@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: rush_collector
   title: Rush Collector
-  description: Pick up 3 rare power-ups to unlock Gun.
+  description: Pick up 8 rare power-ups to unlock Gun.
   kind: 5
-  target: 3
+  target: 8
   enemy: {fileID: 0}
   rewardCoins: 75
   rewardCharacter: {fileID: 0}

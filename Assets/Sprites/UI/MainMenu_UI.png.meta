@@ -532,6 +532,50 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: MainMenu_UI_13
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 70
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 797e80e9583391e49aa0f9469737063a
+      internalID: 764331609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MainMenu_UI_18
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 70
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a9510fceeb17ab4d82c302d88fba80d
+      internalID: 1193465783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -558,6 +602,7 @@ TextureImporter:
       MainMenu_UI_15: -211389015
       MainMenu_UI_16: -1157522891
       MainMenu_UI_17: 399368902
+      MainMenu_UI_18: 1193465783
       MainMenu_UI_2: -3566518358536692658
       MainMenu_UI_3: -2477255698532624295
       MainMenu_UI_4: -2677148380070615536

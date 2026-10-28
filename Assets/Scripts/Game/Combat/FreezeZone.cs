@@ -51,10 +51,14 @@ namespace KingsRescue.Combat
             expireAt = Time.time + life;
             source = owner;
             KeepUnitScale();
-            HoldEnemyAnimation(enemy);
-            if (movement != null)
+            // Bosses still take the hit. The crystal stays so the weapon cannot strike them again until it expires.
+            if (enemy == null || !enemy.IsBoss)
             {
-                movement.ApplyFreeze(life);
+                HoldEnemyAnimation(enemy);
+                if (movement != null)
+                {
+                    movement.ApplyFreeze(life);
+                }
             }
 
             if (damage > 0.01f && target != null && target.IsAlive)

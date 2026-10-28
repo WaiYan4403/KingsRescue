@@ -15,7 +15,7 @@ MonoBehaviour:
   id: archer
   displayName: Maya
   description: A bow user whose unique weapon fans arrows up the screen.
-  portrait: {fileID: 0}
+  portrait: {fileID: 3544967838951049533, guid: 5efeb3f61d3d88f41afab929d29bb500, type: 3}
   playerPrefab: {fileID: 1306224722766589929, guid: 3b8c4e6d0a124f5e9c7d2a1f8e5b3094, type: 3}
   canFlipSprite: 0
   ignoresObstacles: 0
@@ -27,10 +27,7 @@ MonoBehaviour:
   powerUpHealFraction: 0.1
   powerUpMaxHealFraction: 0.25
   powerUpMaxStealthDuration: 1
-  startingStats:
-  - stat: 1
-    mode: 1
-    value: 1
+  startingStats: []
   extraLives: 0
   unlockedByDefault: 0
   unlockCost: 500

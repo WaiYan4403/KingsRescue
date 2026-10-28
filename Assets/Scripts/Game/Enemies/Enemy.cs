@@ -306,7 +306,18 @@ namespace KingsRescue.Enemies
 
         private void OnDamaged(Health source, DamageInfo info)
         {
-            SoundEffects.PlayEnemy(definition, EnemyCue.Hit);
+            if (slimeKing != null)
+            {
+                SoundEffects.Play(SoundId.SlimeKingHit);
+            }
+            else if (globinMachine != null)
+            {
+                SoundEffects.Play(SoundId.GlobinKingHit);
+            }
+            else
+            {
+                SoundEffects.PlayEnemy(definition, EnemyCue.Hit);
+            }
             Vector2 at = source != null ? source.BodyCenter : (Vector2)transform.position;
             DamageNumberDisplay.Popup(at, info.Amount, info.Critical);
 
@@ -333,7 +344,19 @@ namespace KingsRescue.Enemies
             }
 
             dying = true;
-            SoundEffects.PlayEnemy(definition, EnemyCue.Death);
+            if (slimeKing != null)
+            {
+                SoundEffects.StopLoop(SoundId.SlimeKingLaser);
+                SoundEffects.Play(SoundId.SlimeKingDeath);
+            }
+            else if (globinMachine != null)
+            {
+                SoundEffects.Play(SoundId.GlobinKingDeath);
+            }
+            else
+            {
+                SoundEffects.PlayEnemy(definition, EnemyCue.Death);
+            }
 
             deathBurst?.Trigger();
             GameManager.Instance?.RegisterKill(1, definition != null && definition.isBoss);

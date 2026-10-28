@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KingsRescue.Combat;
 using KingsRescue.Data;
+using KingsRescue.Meta;
 
 namespace KingsRescue.Player
 {
@@ -152,6 +153,7 @@ namespace KingsRescue.Player
 
             weapons.Add(weapon, runtime);
             weaponOrder.Add(weapon);
+            AchievementProgress.MarkCollectedWeapon(weapon);
             Changed?.Invoke();
         }
 
@@ -210,6 +212,7 @@ namespace KingsRescue.Player
             if (current == 0)
             {
                 passiveOrder.Add(passive);
+                AchievementProgress.MarkCollectedPassive(passive);
             }
 
             passiveLevels[passive] = next;

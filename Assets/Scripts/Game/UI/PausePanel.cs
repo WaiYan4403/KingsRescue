@@ -35,8 +35,10 @@ namespace KingsRescue.UI
         private bool open;
         private bool closing;
         private bool settingsOpen;
+        private bool holdSettings;
         private Coroutine closeRoutine;
         private Coroutine settingsRoutine;
+        private Coroutine settingsSettle;
 
         private void Awake()
         {
@@ -183,11 +185,20 @@ namespace KingsRescue.UI
                 settingsAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
             }
 
+            if (settingsSettle != null)
+            {
+                StopCoroutine(settingsSettle);
+                settingsSettle = null;
+            }
+
+            holdSettings = true;
             settingsOpen = true;
             settingsPanel.SetActive(true);
             settingsPanel.transform.SetAsLastSibling();
+            PanelClose.PlayOpen(settingsPanel);
             SoundEffects.Play(SoundId.MenuOpenGold);
             SyncSettingsControls();
+            settingsSettle = StartCoroutine(SettleSettings());
         }
 
         /// <summary>Closes settings and returns to the pause card. The run stays paused.</summary>
@@ -205,32 +216,85 @@ namespace KingsRescue.UI
                 StopCoroutine(settingsRoutine);
             }
 
+            if (settingsSettle != null)
+            {
+                StopCoroutine(settingsSettle);
+                settingsSettle = null;
+            }
+
+            holdSettings = true;
             settingsRoutine = StartCoroutine(CloseSettings());
         }
 
         public void OnMusicChanged(float value)
         {
+            if (holdSettings)
+            {
+                return;
+            }
+
             GameSettings.MusicVolume = value;
         }
 
         public void OnSoundChanged(float value)
         {
+            if (holdSettings)
+            {
+                return;
+            }
+
             GameSettings.SoundVolume = value;
         }
 
         public void OnSensitivityChanged(float value)
         {
+            if (holdSettings)
+            {
+                return;
+            }
+
             GameSettings.JoystickSensitivity = value;
         }
 
         public void OnScreenShakeChanged(bool value)
         {
+            if (holdSettings)
+            {
+                return;
+            }
+
             GameSettings.ScreenShake = value;
         }
 
         public void OnDamageTextChanged(bool value)
         {
+            if (holdSettings)
+            {
+                return;
+            }
+
             GameSettings.ShowDamageText = value;
+        }
+
+        /// <summary>
+        /// The scroll animator reports a collapsed slider as 0. Reapply the saved values after that pass.
+        /// </summary>
+        private IEnumerator SettleSettings()
+        {
+            yield return null;
+            if (settingsOpen)
+            {
+                SyncSettingsControls();
+            }
+
+            yield return null;
+            if (settingsOpen)
+            {
+                SyncSettingsControls();
+            }
+
+            holdSettings = false;
+            settingsSettle = null;
         }
 
         private void SyncSettingsControls()
@@ -282,6 +346,7 @@ namespace KingsRescue.UI
             }
 
             settingsOpen = false;
+            holdSettings = false;
             settingsRoutine = null;
         }
 
@@ -295,16 +360,25 @@ namespace KingsRescue.UI
             if (settingsOpen)
             {
                 settingsOpen = false;
+                holdSettings = true;
                 if (settingsRoutine != null)
                 {
                     StopCoroutine(settingsRoutine);
                     settingsRoutine = null;
                 }
 
+                if (settingsSettle != null)
+                {
+                    StopCoroutine(settingsSettle);
+                    settingsSettle = null;
+                }
+
                 if (settingsPanel != null)
                 {
                     settingsPanel.SetActive(false);
                 }
+
+                holdSettings = false;
             }
 
             if (closeRoutine != null)

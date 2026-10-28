@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: hire_wizard
   title: Royal Purse
-  description: Spend 800 coins from your bank.
+  description: Spend 1,500 coins from your bank.
   kind: 2
-  target: 800
+  target: 1500
   enemy: {fileID: 0}
   rewardCoins: 200
   rewardCharacter: {fileID: 0}

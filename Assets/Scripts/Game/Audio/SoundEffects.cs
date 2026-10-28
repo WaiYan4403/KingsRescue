@@ -20,7 +20,9 @@ namespace KingsRescue.Audio
         static bool bankSearched;
         static AudioSource[] pool;
         static int cursor;
-        static readonly float[] nextAllowed = new float[163];
+        static readonly float[] nextAllowed = new float[173];
+        static AudioSource loopVoice;
+        static SoundId loopingId = SoundId.None;
         static readonly HashSet<int> boundButtons = new HashSet<int>();
         static readonly HashSet<int> boundSliders = new HashSet<int>();
         static readonly Dictionary<int, SoundId> buttonSounds = new Dictionary<int, SoundId>();
@@ -96,6 +98,53 @@ namespace KingsRescue.Audio
             voice.PlayOneShot(slot.clip, Mathf.Clamp01(slot.volume));
         }
 
+        /// <summary>
+        /// Plays a clip on its own source and repeats it until <see cref="StopLoop"/> for the same id.
+        /// An empty clip stays silent. This source is not the one-shot pool, so a later effect cannot cut it off.
+        /// </summary>
+        public static void PlayLoop(SoundId id)
+        {
+            if (id == SoundId.None)
+            {
+                return;
+            }
+
+            SoundBank source = Bank;
+            if (source == null || !source.TryGet(id, out SoundSlot slot) || slot.clip == null)
+            {
+                StopLoop(id);
+                return;
+            }
+
+            AudioSource voice = LoopVoice();
+            if (loopingId == id && voice.isPlaying && voice.clip == slot.clip)
+            {
+                return;
+            }
+
+            float min = Mathf.Min(slot.pitchMin, slot.pitchMax);
+            float max = Mathf.Max(slot.pitchMin, slot.pitchMax);
+            voice.pitch = Mathf.Approximately(min, max) ? min : Random.Range(min, max);
+            voice.volume = Mathf.Clamp01(slot.volume);
+            voice.clip = slot.clip;
+            voice.loop = true;
+            voice.Play();
+            loopingId = id;
+        }
+
+        public static void StopLoop(SoundId id)
+        {
+            if (loopVoice == null || loopingId != id)
+            {
+                return;
+            }
+
+            loopVoice.Stop();
+            loopVoice.clip = null;
+            loopVoice.loop = false;
+            loopingId = SoundId.None;
+        }
+
         public static void PlayEnemy(EnemyDefinition definition, EnemyCue cue)
         {
             EnemyVoice voice = definition != null ? definition.voice : EnemyVoice.Generic;
@@ -151,6 +200,21 @@ namespace KingsRescue.Audio
             AudioSource next = pool[cursor];
             cursor = (cursor + 1) % pool.Length;
             return next;
+        }
+
+        static AudioSource LoopVoice()
+        {
+            if (loopVoice == null)
+            {
+                GameObject host = new GameObject("Sound Effects Loop");
+                Object.DontDestroyOnLoad(host);
+                loopVoice = host.AddComponent<AudioSource>();
+                loopVoice.playOnAwake = false;
+                loopVoice.spatialBlend = 0f;
+                loopVoice.loop = false;
+            }
+
+            return loopVoice;
         }
 
         static void BindButtonsInScene()

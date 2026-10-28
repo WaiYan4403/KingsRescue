@@ -45,9 +45,15 @@ namespace KingsRescue.Online
             return Send<PlayerPayload>("POST", "/api/players", body, jwt);
         }
 
-        public Task<ApiResult<SubmitScoreResponse>> SubmitScore(string jwt, int score, int coin)
+        public Task<ApiResult<SubmitScoreResponse>> SubmitScore(string jwt, int score, int coin, string character)
         {
-            string body = JsonUtility.ToJson(new SubmitScoreRequest { game = config.NormalizedGameSlug, score = score, coin = coin });
+            string body = JsonUtility.ToJson(new SubmitScoreRequest
+            {
+                game = config.NormalizedGameSlug,
+                score = score,
+                coin = coin,
+                character = character ?? string.Empty,
+            });
             return Send<SubmitScoreResponse>("POST", "/api/scores", body, jwt);
         }
 

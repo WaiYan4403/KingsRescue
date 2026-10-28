@@ -26,6 +26,8 @@ namespace KingsRescue.Meta
             public string[] purchasedCharacters;
             public string[] unlockedWeapons;
             public string[] unlockedPassives;
+            public string[] collectedWeapons;
+            public string[] collectedPassives;
             public string[] completedIds;
             public int totalKills;
             public int chestsSmashed;
@@ -177,6 +179,66 @@ namespace KingsRescue.Meta
 
             EnsureLoaded();
             return Contains(data.unlockedPassives, passive.name);
+        }
+
+        public static bool HasCollectedWeapon(WeaponDefinition weapon)
+        {
+            if (weapon == null)
+            {
+                return false;
+            }
+
+            EnsureLoaded();
+            return Contains(data.collectedWeapons, weapon.name);
+        }
+
+        public static bool HasCollectedPassive(PassiveDefinition passive)
+        {
+            if (passive == null)
+            {
+                return false;
+            }
+
+            EnsureLoaded();
+            return Contains(data.collectedPassives, passive.name);
+        }
+
+        /// <summary>Remembers a weapon the player has actually carried. Level-ups of one they already own do not call this.</summary>
+        public static void MarkCollectedWeapon(WeaponDefinition weapon)
+        {
+            if (weapon == null)
+            {
+                return;
+            }
+
+            EnsureLoaded();
+            string[] next = Append(data.collectedWeapons, weapon.name);
+            if (next == data.collectedWeapons)
+            {
+                return;
+            }
+
+            data.collectedWeapons = next;
+            Persist();
+        }
+
+        /// <summary>Remembers a passive the first time it is picked up.</summary>
+        public static void MarkCollectedPassive(PassiveDefinition passive)
+        {
+            if (passive == null)
+            {
+                return;
+            }
+
+            EnsureLoaded();
+            string[] next = Append(data.collectedPassives, passive.name);
+            if (next == data.collectedPassives)
+            {
+                return;
+            }
+
+            data.collectedPassives = next;
+            Persist();
         }
 
         public static bool IsCompleted(AchievementDefinition achievement)
@@ -445,6 +507,8 @@ namespace KingsRescue.Meta
                 purchasedCharacters = Array.Empty<string>(),
                 unlockedWeapons = Array.Empty<string>(),
                 unlockedPassives = Array.Empty<string>(),
+                collectedWeapons = Array.Empty<string>(),
+                collectedPassives = Array.Empty<string>(),
                 completedIds = Array.Empty<string>(),
                 enemyKills = Array.Empty<EnemyKill>()
             };
@@ -456,6 +520,8 @@ namespace KingsRescue.Meta
             save.purchasedCharacters ??= Array.Empty<string>();
             save.unlockedWeapons ??= Array.Empty<string>();
             save.unlockedPassives ??= Array.Empty<string>();
+            save.collectedWeapons ??= Array.Empty<string>();
+            save.collectedPassives ??= Array.Empty<string>();
             save.completedIds ??= Array.Empty<string>();
             save.enemyKills ??= Array.Empty<EnemyKill>();
         }

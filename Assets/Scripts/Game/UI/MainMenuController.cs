@@ -28,6 +28,7 @@ namespace KingsRescue.UI
         [SerializeField] private GameObject accountPanel;
         [SerializeField] private GameObject usernamePanel;
         [SerializeField] private GameObject creditsPanel;
+        [SerializeField] private GameObject collectionPanel;
         [SerializeField] private GameObject quitDialog;
 
         [Header("Account")]
@@ -44,6 +45,8 @@ namespace KingsRescue.UI
         [Tooltip("Shown for a hero who is sold for coins. The label is the price plus the coin sprite.")]
         [SerializeField] private Button characterBuyButton;
         [SerializeField] private TMP_Text characterBuyLabel;
+        [Tooltip("Coin balance on the character page, so a locked hero's price can be compared with what the player has.")]
+        [SerializeField] private TMP_Text characterBankLabel;
 
         [Header("Upgrades")]
         [SerializeField] private TMP_Text upgradeTitle;
@@ -78,6 +81,7 @@ namespace KingsRescue.UI
 
         [Header("Achievements")]
         [SerializeField] private AchievementListView achievementList;
+        [SerializeField] private CollectionPanel collectionView;
 
         private CharacterDefinition selected;
         private StatType selectedStat;
@@ -86,7 +90,9 @@ namespace KingsRescue.UI
         private GameObject requestedPanel;
         private SoundId requestedOpenSound;
         private Coroutine panelTransition;
+        private Coroutine settingsSettle;
         private bool panelShown;
+        private bool holdSettings;
 
         public CharacterDefinition Selected => selected;
         public StatType SelectedUpgrade => selectedStat;
@@ -242,9 +248,16 @@ namespace KingsRescue.UI
 
         public void ShowSettings()
         {
+            holdSettings = true;
             SyncSettingsControls();
             Show(settingsPanel, SoundId.MenuOpenGold);
             MenuMusicController.Instance.SetOptionsMusic();
+            if (settingsSettle != null)
+            {
+                StopCoroutine(settingsSettle);
+            }
+
+            settingsSettle = StartCoroutine(SettleSettings());
         }
 
         public void ShowLeaderboards()
@@ -272,6 +285,17 @@ namespace KingsRescue.UI
             }
 
             Show(achievementPanel, SoundId.MenuOpenGold);
+            MenuMusicController.Instance.SetOptionsMusic();
+        }
+
+        public void ShowCollections()
+        {
+            if (collectionView != null)
+            {
+                collectionView.Refresh();
+            }
+
+            Show(collectionPanel, SoundId.MenuOpenGold);
             MenuMusicController.Instance.SetOptionsMusic();
         }
 
@@ -513,10 +537,12 @@ namespace KingsRescue.UI
             }
 
             bool forSale = selected != null && !comingSoon && !unlocked && selected.unlockCost > 0;
+            bool canAfford = forSale && MetaProgress.Coins >= selected.unlockCost;
+            RefreshBank();
             if (characterBuyButton != null)
             {
                 characterBuyButton.gameObject.SetActive(forSale);
-                characterBuyButton.interactable = forSale;
+                characterBuyButton.interactable = canAfford;
             }
 
             if (characterBuyLabel != null && forSale)
@@ -531,9 +557,17 @@ namespace KingsRescue.UI
 
             for (int i = 0; i < characterButtons.Length; i++)
             {
-                if (characterButtons[i] != null)
+                if (characterButtons[i] == null)
                 {
-                    characterButtons[i].Refresh(characterButtons[i].Character == selected);
+                    continue;
+                }
+
+                bool chosen = characterButtons[i].Character == selected;
+                characterButtons[i].Refresh(chosen);
+                Animator animator = characterButtons[i].GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.enabled = chosen;
                 }
             }
         }
@@ -584,12 +618,7 @@ namespace KingsRescue.UI
                     : "UPGRADES";
             }
 
-            if (bankLabel != null)
-            {
-                bankLabel.text = devMode
-                    ? $"{MetaProgress.Coins}  ·  DEV"
-                    : MetaProgress.Coins.ToString();
-            }
+            RefreshBank();
 
             if (upgradeRows != null)
             {
@@ -615,6 +644,23 @@ namespace KingsRescue.UI
                 resetUpgradesLabel.text = refund > 0
                     ? $"RESET  (refund {refund} coins)"
                     : "RESET UPGRADES";
+            }
+        }
+
+        private void RefreshBank()
+        {
+            string text = devMode
+                ? $"{MetaProgress.Coins}  ·  DEV"
+                : MetaProgress.Coins.ToString();
+
+            if (bankLabel != null)
+            {
+                bankLabel.text = text;
+            }
+
+            if (characterBankLabel != null)
+            {
+                characterBankLabel.text = text;
             }
         }
 
@@ -777,27 +823,74 @@ namespace KingsRescue.UI
 
         public void OnMusicChanged(float value)
         {
-            GameSettings.MusicVolume = value;
+            if (!holdSettings)
+            {
+                GameSettings.MusicVolume = value;
+            }
         }
 
         public void OnSoundChanged(float value)
         {
-            GameSettings.SoundVolume = value;
+            if (!holdSettings)
+            {
+                GameSettings.SoundVolume = value;
+            }
         }
 
         public void OnSensitivityChanged(float value)
         {
-            GameSettings.JoystickSensitivity = value;
+            if (!holdSettings)
+            {
+                GameSettings.JoystickSensitivity = value;
+            }
         }
 
         public void OnScreenShakeChanged(bool value)
         {
-            GameSettings.ScreenShake = value;
+            if (!holdSettings)
+            {
+                GameSettings.ScreenShake = value;
+            }
         }
 
         public void OnDamageTextChanged(bool value)
         {
-            GameSettings.ShowDamageText = value;
+            if (!holdSettings)
+            {
+                GameSettings.ShowDamageText = value;
+            }
+        }
+
+        /// <summary>
+        /// The scroll animator reports a collapsed slider as 0. Reapply the saved values after that pass.
+        /// </summary>
+        private IEnumerator SettleSettings()
+        {
+            while (currentPanel != settingsPanel)
+            {
+                if (requestedPanel != settingsPanel)
+                {
+                    settingsSettle = null;
+                    yield break;
+                }
+
+                yield return null;
+            }
+
+            yield return null;
+            if (currentPanel == settingsPanel)
+            {
+                SyncSettingsControls();
+            }
+
+            yield return null;
+            if (currentPanel == settingsPanel)
+            {
+                SyncSettingsControls();
+                holdSettings = false;
+            }
+
+            settingsSettle = null;
         }
 
         private void SyncSettingsControls()
@@ -862,6 +955,17 @@ namespace KingsRescue.UI
 
                 if (panelShown && currentPanel != null && currentPanel != target && currentPanel.activeSelf)
                 {
+                    bool closingSettings = currentPanel == settingsPanel;
+                    if (closingSettings)
+                    {
+                        holdSettings = true;
+                        if (settingsSettle != null)
+                        {
+                            StopCoroutine(settingsSettle);
+                            settingsSettle = null;
+                        }
+                    }
+
                     closingSound = SoundFor(currentPanel);
                     animatedClose = PanelClose.TryPlay(currentPanel, out float duration);
                     if (closingSound != SoundId.None)
@@ -882,6 +986,11 @@ namespace KingsRescue.UI
                         {
                             currentPanel.SetActive(false);
                         }
+                    }
+
+                    if (closingSettings)
+                    {
+                        holdSettings = false;
                     }
                 }
 
@@ -907,7 +1016,7 @@ namespace KingsRescue.UI
 
         private SoundId SoundFor(GameObject panel)
         {
-            if (panel == settingsPanel || panel == leaderboardPanel || panel == achievementPanel || panel == creditsPanel)
+            if (panel == settingsPanel || panel == leaderboardPanel || panel == achievementPanel || panel == creditsPanel || panel == collectionPanel)
             {
                 return SoundId.MenuOpenGold;
             }
@@ -931,6 +1040,7 @@ namespace KingsRescue.UI
             SetActive(accountPanel, panel);
             SetActive(usernamePanel, panel);
             SetActive(creditsPanel, panel);
+            SetActive(collectionPanel, panel);
             SetCharacterStage(panel == characterPanel || panel == upgradePanel);
             CloseQuitConfirm();
         }
@@ -953,9 +1063,16 @@ namespace KingsRescue.UI
 
         private static void SetActive(GameObject target, GameObject visible)
         {
-            if (target != null)
+            if (target == null)
             {
-                target.SetActive(target == visible);
+                return;
+            }
+
+            bool show = target == visible;
+            target.SetActive(show);
+            if (show)
+            {
+                PanelClose.PlayOpen(target);
             }
         }
     }

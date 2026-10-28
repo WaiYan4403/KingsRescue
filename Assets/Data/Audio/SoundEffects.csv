@@ -36,12 +36,12 @@ Saung,Weapon,The saung field starts,soft harp pluck,Once each time the music fie
 FireGrimoire,Weapon,The grimoire fires,fire spell cast,Once per cast
 Freeze,Weapon,A freeze crystal is planted,ice crackle,Once per cast
 LightningWand,Weapon,Lightning strikes,short electric zap,Once per strike
-SlimeHit,Enemy,This creature is hit,Slime soft hit for this creature,Blue and red slimes and the Slime King
-SlimeDeath,Enemy,This creature dies,Slime short death cry or collapse,Blue and red slimes and the Slime King
-SlimeAttack,Enemy,This creature attacks or touches the hero,Slime attack swing bite or shot,Blue and red slimes and the Slime King
-GoblinHit,Enemy,This creature is hit,Goblin soft hit for this creature,Goblins goblin archers goblin mages and the Globin Machine
-GoblinDeath,Enemy,This creature dies,Goblin short death cry or collapse,Goblins goblin archers goblin mages and the Globin Machine
-GoblinAttack,Enemy,This creature attacks or touches the hero,Goblin attack swing bite or shot,Goblins goblin archers goblin mages and the Globin Machine
+SlimeHit,Enemy,This creature is hit,Slime soft hit for this creature,Blue and red slimes. Slime King uses SlimeKingHit
+SlimeDeath,Enemy,This creature dies,Slime short death cry or collapse,Blue and red slimes. Slime King uses SlimeKingDeath
+SlimeAttack,Enemy,This creature attacks or touches the hero,Slime attack swing bite or shot,Blue and red slimes. Slime King attacks use their own rows
+GoblinHit,Enemy,This creature is hit,Goblin soft hit for this creature,Goblins goblin archers and goblin mages. Globin King uses GlobinKingHit
+GoblinDeath,Enemy,This creature dies,Goblin short death cry or collapse,Goblins goblin archers and goblin mages. Globin King uses GlobinKingDeath
+GoblinAttack,Enemy,This creature attacks or touches the hero,Goblin attack swing bite or shot,Goblins goblin archers and goblin mages. Globin King attacks use their own rows
 SkeletonHit,Enemy,This creature is hit,Skeleton soft hit for this creature,Skeletons
 SkeletonDeath,Enemy,This creature dies,Skeleton short death cry or collapse,Skeletons
 SkeletonAttack,Enemy,This creature attacks or touches the hero,Skeleton attack swing bite or shot,Skeletons
@@ -60,3 +60,13 @@ BatAttack,Enemy,This creature attacks or touches the hero,Bat attack swing bite 
 FireballHit,Enemy,This creature is hit,Fireball soft hit for this creature,Fireballs dropped by the goblin mage
 FireballDeath,Enemy,This creature dies,Fireball short death cry or collapse,Fireballs dropped by the goblin mage
 FireballAttack,Enemy,This creature attacks or touches the hero,Fireball impact,Fireballs dropped by the goblin mage
+SlimeKingSlam,Boss,Slime King lands a slam,heavy wet slam or ground impact,Once when the slam connects
+SlimeKingWater,Boss,Slime King throws a fan of water balls,water splash or blob throw,Once per burst not once per ball
+SlimeKingLaser,Boss,Slime King fires the laser sweep,energy beam or laser hum,Loops from the start of the sweep until the beam stops
+SlimeKingDeath,Boss,Slime King dies,large slime collapse,Replaces the regular slime death for this boss only
+GlobinKingBalls,Boss,Globin King fires power balls while strafing,energy ball shot,Once per triple shot during the sideways strafe
+GlobinKingSaw,Boss,Globin King throws a saw wheel,spinning saw whoosh,Once per saw
+GlobinKingSpiral,Boss,Globin King shoots a spiral of power balls,spiral energy volley,Once per spiral burst
+GlobinKingDeath,Boss,Globin King dies,machine or goblin king collapse,Replaces the regular goblin death for this boss only
+SlimeKingHit,Boss,The player hits the Slime King,wet impact or slime squish,Replaces the regular slime hit for this boss only
+GlobinKingHit,Boss,The player hits the Globin King,metal or goblin impact,Replaces the regular goblin hit for this boss only

@@ -66,6 +66,16 @@ namespace KingsRescue.Audio
         ChestSparkle = 159,
         LanceLeft = 160,
         LanceRight = 161,
-        LanceStab = 162
+        LanceStab = 162,
+        SlimeKingSlam = 163,
+        SlimeKingWater = 164,
+        SlimeKingLaser = 165,
+        SlimeKingDeath = 166,
+        GlobinKingBalls = 167,
+        GlobinKingSaw = 168,
+        GlobinKingSpiral = 169,
+        GlobinKingDeath = 170,
+        SlimeKingHit = 171,
+        GlobinKingHit = 172
     }
 }

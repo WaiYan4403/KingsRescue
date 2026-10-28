@@ -22,14 +22,14 @@ MonoBehaviour:
   canFlipSprite: 0
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1.15
-  maxHealth: 3000
-  contactDamage: 16
+  maxHealth: 6000
+  contactDamage: 50
   contactInterval: 0.6
   contactRadius: 1.05
   dealsContactDamage: 1
   knockbackResistance: 1
   moveStyle: 3
-  moveSpeed: 2.1
+  moveSpeed: 2.5
   scrollInfluence: 0.15
   turnResponsiveness: 6
   followChance: 1
@@ -45,7 +45,7 @@ MonoBehaviour:
   meteorDefinition: {fileID: 0}
   attackInterval: 1.8
   attackRange: 8
-  attackDamage: 16
+  attackDamage: 50
   projectileSpeed: 10
   projectileLifetime: 10
   projectileRadius: 0.34
@@ -55,7 +55,7 @@ MonoBehaviour:
   slowDuration: 2.2
   meteorWarning: 1.1
   meteorRadius: 1.15
-  traits: 0
+  traits: 64
   summonAlly: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
   summonAllies:
   - {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}

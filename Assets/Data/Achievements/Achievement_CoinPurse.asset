@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
   id: coin_purse
   title: Coin Purse
-  description: Bank 300 coins across all runs.
+  description: Bank 800 coins across all runs.
   kind: 6
-  target: 300
+  target: 800
   enemy: {fileID: 0}
   rewardCoins: 40
   rewardCharacter: {fileID: 0}

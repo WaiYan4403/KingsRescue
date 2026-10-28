@@ -30,6 +30,7 @@ namespace KingsRescue.Online
         public int score;
         public int rank;
         public int coin;
+        public string character;
         public bool googleLinked;
 
         public bool IsValid => !string.IsNullOrEmpty(username);
@@ -79,6 +80,7 @@ namespace KingsRescue.Online
         public string game;
         public int score;
         public int coin;
+        public string character;
     }
 
     [Serializable]
@@ -96,6 +98,7 @@ namespace KingsRescue.Online
         public int rank;
         public string username;
         public int score;
+        public string character;
     }
 
     [Serializable]

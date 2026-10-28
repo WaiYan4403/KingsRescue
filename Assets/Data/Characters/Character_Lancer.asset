@@ -15,7 +15,7 @@ MonoBehaviour:
   id: lancer
   displayName: Kyan Sit
   description: A front-line fighter whose unique weapon is the Lance.
-  portrait: {fileID: -1082995642, guid: b51259780010cb346be337402c2a1ff0, type: 3}
+  portrait: {fileID: -3899399136662667504, guid: 5efeb3f61d3d88f41afab929d29bb500, type: 3}
   playerPrefab: {fileID: 1306224722766589929, guid: 9f011a18cfce64e318aae12feb16b3d8, type: 3}
   canFlipSprite: 0
   ignoresObstacles: 0
@@ -27,10 +27,7 @@ MonoBehaviour:
   powerUpHealFraction: 0
   powerUpMaxHealFraction: 0
   powerUpMaxStealthDuration: 0
-  startingStats:
-  - stat: 15
-    mode: 1
-    value: 1
+  startingStats: []
   extraLives: 0
   unlockedByDefault: 1
   unlockCost: 0

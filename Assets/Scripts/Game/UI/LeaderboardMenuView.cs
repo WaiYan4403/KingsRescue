@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using KingsRescue.Data;
 using KingsRescue.Online;
 
 namespace KingsRescue.UI
@@ -25,6 +26,15 @@ namespace KingsRescue.UI
         [SerializeField] private LeaderboardRowView otherTemplate;
         [SerializeField] private GameObject yourPlaceSlot;
         [SerializeField] private LeaderboardRowView yourPlace;
+        [SerializeField] private CharacterRoster roster;
+
+        [Header("Your Place, ranks 1-3")]
+        [SerializeField] private Sprite firstBadge;
+        [SerializeField] private Sprite secondBadge;
+        [SerializeField] private Sprite thirdBadge;
+        [SerializeField] private Sprite firstBorder;
+        [SerializeField] private Sprite secondBorder;
+        [SerializeField] private Sprite thirdBorder;
 
         private readonly List<LeaderboardRowView> spawnedOthers = new List<LeaderboardRowView>();
         private int requestId;
@@ -89,7 +99,7 @@ namespace KingsRescue.UI
             RebuildLayout();
         }
 
-        private static void ShowPodium(LeaderboardRowView row, LeaderboardEntryDto[] entries, int index)
+        private void ShowPodium(LeaderboardRowView row, LeaderboardEntryDto[] entries, int index)
         {
             if (row == null)
             {
@@ -103,7 +113,8 @@ namespace KingsRescue.UI
             }
 
             LeaderboardEntryDto entry = entries[index];
-            row.Show(entry.rank > 0 ? entry.rank : index + 1, entry.username, entry.score);
+            int rank = entry.rank > 0 ? entry.rank : index + 1;
+            row.Show(rank, entry.username, entry.score, PortraitFor(entry.character));
         }
 
         private void SpawnOther(LeaderboardEntryDto entry)
@@ -115,7 +126,7 @@ namespace KingsRescue.UI
 
             LeaderboardRowView row = Instantiate(otherTemplate, content);
             row.gameObject.name = "Other Place";
-            row.Show(entry.rank, entry.username, entry.score);
+            row.Show(entry.rank, entry.username, entry.score, PortraitFor(entry.character));
             spawnedOthers.Add(row);
         }
 
@@ -129,7 +140,8 @@ namespace KingsRescue.UI
             bool ranked = player != null && player.IsValid && player.rank > 0 && CanRecordRank();
             if (ranked && yourPlace != null)
             {
-                yourPlace.Show(player.rank, player.username, player.score);
+                yourPlace.Show(player.rank, player.username, player.score, PortraitFor(player.character));
+                yourPlace.ApplyRankStyle(player.rank, firstBadge, secondBadge, thirdBadge, firstBorder, secondBorder, thirdBorder);
                 SetGuestStatus(false);
                 return;
             }
@@ -157,6 +169,30 @@ namespace KingsRescue.UI
             {
                 label.text = PlaceMessage();
             }
+        }
+
+        private Sprite PortraitFor(string characterId)
+        {
+            if (roster == null || roster.characters == null || string.IsNullOrWhiteSpace(characterId))
+            {
+                return null;
+            }
+
+            for (int i = 0; i < roster.characters.Length; i++)
+            {
+                CharacterDefinition hero = roster.characters[i];
+                if (hero == null)
+                {
+                    continue;
+                }
+
+                if (hero.Id == characterId || hero.displayName == characterId || hero.name == characterId)
+                {
+                    return hero.portrait;
+                }
+            }
+
+            return null;
         }
 
         private static bool CanRecordRank()

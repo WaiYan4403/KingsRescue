@@ -251,12 +251,12 @@ TextureImporter:
       name: Leaderboard_2
       rect:
         serializedVersion: 2
-        x: 275
-        y: 294
-        width: 16
-        height: 26
-      alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+        x: 455
+        y: 289
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -339,12 +339,12 @@ TextureImporter:
       name: Leaderboard_6
       rect:
         serializedVersion: 2
-        x: 275
-        y: 263
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+        x: 455
+        y: 257
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -427,12 +427,12 @@ TextureImporter:
       name: Leaderboard_10
       rect:
         serializedVersion: 2
-        x: 275
-        y: 232
-        width: 16
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.3}
+        x: 455
+        y: 225
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -515,10 +515,10 @@ TextureImporter:
       name: Leaderboard_14
       rect:
         serializedVersion: 2
-        x: 275
-        y: 204
-        width: 16
-        height: 16
+        x: 423
+        y: 209
+        width: 18
+        height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -603,10 +603,10 @@ TextureImporter:
       name: Leaderboard_18
       rect:
         serializedVersion: 2
-        x: 275
-        y: 172
-        width: 16
-        height: 16
+        x: 455
+        y: 129
+        width: 18
+        height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1093,7 +1093,7 @@ TextureImporter:
         height: 26
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 7, y: 7, z: 7, w: 7}
       customData: 
       outline: []
       physicsShape: []
@@ -1299,6 +1299,28 @@ TextureImporter:
       bones: []
       spriteID: 35d3024e5302d544e8fec6d37098ffd9
       internalID: 543286531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Leaderboard_42
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 47
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 16, y: 16, z: 16, w: 16}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8a18c6e98f514e47ab1ef2a005c3abf
+      internalID: -949512896
       vertices: []
       indices: 
       edges: []

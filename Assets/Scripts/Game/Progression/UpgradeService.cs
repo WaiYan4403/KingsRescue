@@ -13,6 +13,9 @@ namespace KingsRescue.Progression
     /// </summary>
     public class UpgradeService : SingletonBehaviour<UpgradeService>
     {
+        [Tooltip("Shared level-up list. When this has entries it is used instead of the list below, and the Collections page reads the same asset.")]
+        [SerializeField] private UpgradePool catalog;
+
         [SerializeField] private List<UpgradeDefinition> pool = new List<UpgradeDefinition>();
 
         [Tooltip("Shown when fewer than the required number of real upgrades qualify. Should be a CoinBonus.")]
@@ -73,9 +76,10 @@ namespace KingsRescue.Progression
             }
 
             candidates.Clear();
-            for (int i = 0; i < pool.Count; i++)
+            int count = EntryCount;
+            for (int i = 0; i < count; i++)
             {
-                UpgradeDefinition entry = pool[i];
+                UpgradeDefinition entry = EntryAt(i);
                 if (entry != null && entry != fallback && entry.IsAvailable(loadout, stats))
                 {
                     candidates.Add(entry);
@@ -125,9 +129,10 @@ namespace KingsRescue.Progression
             }
 
             candidates.Clear();
-            for (int i = 0; i < pool.Count; i++)
+            int count = EntryCount;
+            for (int i = 0; i < count; i++)
             {
-                UpgradeDefinition entry = pool[i];
+                UpgradeDefinition entry = EntryAt(i);
                 if (entry == null || entry == fallback || entry.kind == UpgradeKind.CoinBonus)
                 {
                     continue;
@@ -183,5 +188,11 @@ namespace KingsRescue.Progression
 
             return candidates[candidates.Count - 1];
         }
+
+        private bool UseCatalog => catalog != null && catalog.entries != null && catalog.entries.Length > 0;
+
+        private int EntryCount => UseCatalog ? catalog.entries.Length : pool.Count;
+
+        private UpgradeDefinition EntryAt(int index) => UseCatalog ? catalog.entries[index] : pool[index];
     }
 }
