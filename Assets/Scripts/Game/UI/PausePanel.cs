@@ -446,14 +446,12 @@ namespace KingsRescue.UI
         private void Restart()
         {
             Time.timeScale = 1f;
-            GameMusicController.Instance?.StopMusic();
             GameManager.Instance?.RestartRun();
         }
 
         private void ReturnToMenu()
         {
             Time.timeScale = 1f;
-            GameMusicController.Instance?.StopMusic();
             GameManager.Instance?.ReturnToMenu();
         }
     }

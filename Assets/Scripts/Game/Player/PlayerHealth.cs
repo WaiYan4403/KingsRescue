@@ -323,7 +323,7 @@ namespace KingsRescue.Player
             int count = 0;
             for (int i = 0; i < all.Length; i++)
             {
-                if (all[i] != null && all[i].gameObject.name != "Effect")
+                if (CountsAsBody(all[i]))
                 {
                     count++;
                 }
@@ -339,7 +339,7 @@ namespace KingsRescue.Player
                 int write = 0;
                 for (int i = 0; i < all.Length; i++)
                 {
-                    if (all[i] != null && all[i].gameObject.name != "Effect")
+                    if (CountsAsBody(all[i]))
                     {
                         hurtRenderers[write++] = all[i];
                     }
@@ -350,6 +350,17 @@ namespace KingsRescue.Player
             {
                 SpriteFlash.Prepare(hurtRenderers[i]);
             }
+        }
+
+        private static bool CountsAsBody(SpriteRenderer renderer)
+        {
+            if (renderer == null)
+            {
+                return false;
+            }
+
+            string name = renderer.gameObject.name;
+            return name != "Effect" && name != "PowerUp Normal" && name != "PowerUp Max";
         }
 
         private void PaintBody(Color? color)

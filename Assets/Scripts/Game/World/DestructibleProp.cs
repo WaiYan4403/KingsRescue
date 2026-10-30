@@ -32,7 +32,7 @@ namespace KingsRescue.World
         [Header("Use")]
         [SerializeField] private UseMode use = UseMode.Smash;
 
-        [Tooltip("Which break clip plays when this prop is smashed.")]
+        [Tooltip("Which clip plays each time this prop is hit.")]
         [SerializeField] private BreakSound breakSound = BreakSound.Pot;
 
         [Header("Sprites")]
@@ -221,6 +221,7 @@ namespace KingsRescue.World
             flash?.Flash();
             if (health.Current > 0f)
             {
+                SoundEffects.Play(breakSound == BreakSound.Box ? SoundId.BoxHit : SoundId.PotHit);
                 ApplySprite(crackedSprite != null ? crackedSprite : intactSprite);
             }
         }

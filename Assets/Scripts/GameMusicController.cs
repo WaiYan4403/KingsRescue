@@ -6,6 +6,21 @@ public class GameMusicController : Singleton<GameMusicController>
 {
     [SerializeField] private StudioEventEmitter musicEmitter;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        if (Instance != this || !isActiveAndEnabled)
+        {
+            return;
+        }
+    }
+
+    protected override void OnDestroy()
+    {
+
+        base.OnDestroy();
+    }
+
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
     // Debug keys only exist in the editor and development builds, so release builds skip the per-frame poll.
     private void Update()
@@ -36,11 +51,6 @@ public class GameMusicController : Singleton<GameMusicController>
     }
 #endif
 
-    public void StopMusic()
-    {
-        musicEmitter.EventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        Debug.Log("Music stopped");
-    }
 
     public void SetGameplayMusic()
     {

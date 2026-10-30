@@ -766,6 +766,9 @@ MonoBehaviour:
   isAutoChangeScene: 1
   nextSceneIndex: 1
   autoChangeTime: 2
+  openStoryOnFirstRun: 1
+  storySceneName: Story
+  menuSceneName: MainMenu
 --- !u!4 &2062042478
 Transform:
   m_ObjectHideFlags: 0

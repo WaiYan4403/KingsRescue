@@ -321,6 +321,7 @@ namespace KingsRescue.UI
             }
 
             revealIndex = index;
+            SoundEffects.Play(SoundId.ChestSparkle);
             Reward reward = rewards[index];
             UpgradeService service = UpgradeService.Instance;
             WeaponLoadout loadout = service != null ? service.Loadout : null;
@@ -547,7 +548,6 @@ namespace KingsRescue.UI
 
             sequence.AppendCallback(() =>
             {
-                SoundEffects.Play(SoundId.ChestSparkle);
                 if (sparkles == null)
                 {
                     return;

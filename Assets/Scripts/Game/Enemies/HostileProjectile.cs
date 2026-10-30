@@ -1,4 +1,5 @@
 using UnityEngine;
+using KingsRescue.Audio;
 using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Player;
@@ -41,6 +42,7 @@ namespace KingsRescue.Enemies
         private float homingTurn = 4.5f;
         private bool bounceOffScreen;
         private bool surviveHit;
+        private bool flyLoop;
         private float spinSpeed;
         private float nextHitTime;
         private Vector3 baseScale;
@@ -75,6 +77,7 @@ namespace KingsRescue.Enemies
 
         public void OnDespawned()
         {
+            ReleaseFlyLoop();
             Active.Remove(this);
             HitboxDisplay.Release(hitbox);
             hitbox = null;
@@ -147,6 +150,27 @@ namespace KingsRescue.Enemies
             surviveHit = keepGoingAfterHit;
             spinSpeed = spinDegreesPerSecond;
             maxTravel = 0f;
+            if (!flyLoop)
+            {
+                flyLoop = true;
+                SoundEffects.PlayLoop(SoundId.GlobinKingSawFly);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseFlyLoop();
+        }
+
+        private void ReleaseFlyLoop()
+        {
+            if (!flyLoop)
+            {
+                return;
+            }
+
+            flyLoop = false;
+            SoundEffects.StopLoop(SoundId.GlobinKingSawFly);
         }
 
         private void Update()

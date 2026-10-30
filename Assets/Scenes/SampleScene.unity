@@ -2210,8 +2210,8 @@ MonoBehaviour:
     Path: "event:/Music/King\u2019s Rescue Gameplay+Boss Theme"
   Event: 
   EventPlayTrigger: 1
-  EventStopTrigger: 0
-  AllowFadeout: 1
+  EventStopTrigger: 2
+  AllowFadeout: 0
   TriggerOnce: 0
   Preload: 0
   NonRigidbodyVelocity: 0
@@ -4585,9 +4585,9 @@ MonoBehaviour:
       Data4: 2092060531
     Path: "event:/Music/King\u2019s Rescue Menu Theme"
   Event: 
-  EventPlayTrigger: 1
-  EventStopTrigger: 0
-  AllowFadeout: 1
+  EventPlayTrigger: 0
+  EventStopTrigger: 2
+  AllowFadeout: 0
   TriggerOnce: 0
   Preload: 0
   NonRigidbodyVelocity: 0

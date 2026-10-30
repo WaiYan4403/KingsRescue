@@ -9,10 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Logo.unity
     guid: a859161a77ff1bc4ca1a70a45b2fbeb3
   - enabled: 1
+    path: Assets/Scenes/Story.unity
+    guid: 4ae7ef2d32bec8c4db67cb422c7886e1
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 4e6f8a1c2d3b4a5e9f0a1b2c3d4e5f60
   - enabled: 1
     path: Assets/Scenes/Gameplay.unity
     guid: c915105cf525f417f856d087c0fd98cd
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: a9370837326c7184ea31b2738c1b95ae, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    com.unity.localization.settings: {fileID: 11400000, guid: c0cadd5a2a1164343b8edf3d51a981ce, type: 2}

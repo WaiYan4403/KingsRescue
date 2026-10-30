@@ -51,6 +51,8 @@ namespace KingsRescue.Audio
         FireballAttack = 143,
         PotBreak = 144,
         BoxBreak = 145,
+        PotHit = 176,
+        BoxHit = 177,
         Bow = 147,
         Crossbow = 148,
         Knife = 149,
@@ -73,9 +75,12 @@ namespace KingsRescue.Audio
         SlimeKingDeath = 166,
         GlobinKingBalls = 167,
         GlobinKingSaw = 168,
+        GlobinKingSawFly = 175,
         GlobinKingSpiral = 169,
         GlobinKingDeath = 170,
         SlimeKingHit = 171,
-        GlobinKingHit = 172
+        GlobinKingHit = 172,
+        Typewriter = 173,
+        AchievementUnlocked = 174
     }
 }

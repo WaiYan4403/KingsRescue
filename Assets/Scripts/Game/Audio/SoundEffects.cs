@@ -20,9 +20,10 @@ namespace KingsRescue.Audio
         static bool bankSearched;
         static AudioSource[] pool;
         static int cursor;
-        static readonly float[] nextAllowed = new float[173];
+        static readonly float[] nextAllowed = new float[178];
         static AudioSource loopVoice;
         static SoundId loopingId = SoundId.None;
+        static readonly Dictionary<int, int> loopCounts = new Dictionary<int, int>();
         static readonly HashSet<int> boundButtons = new HashSet<int>();
         static readonly HashSet<int> boundSliders = new HashSet<int>();
         static readonly Dictionary<int, SoundId> buttonSounds = new Dictionary<int, SoundId>();
@@ -75,7 +76,13 @@ namespace KingsRescue.Audio
             }
 
             SoundBank source = Bank;
-            if (source == null || !source.TryGet(id, out SoundSlot slot) || slot.clip == null)
+            if (source == null || !source.TryGet(id, out SoundSlot slot))
+            {
+                return;
+            }
+
+            AudioClip clip = PickClip(slot);
+            if (clip == null)
             {
                 return;
             }
@@ -91,15 +98,51 @@ namespace KingsRescue.Audio
                 nextAllowed[index] = Time.unscaledTime + Mathf.Max(0f, slot.minInterval);
             }
 
+            if (clip.loadState == AudioDataLoadState.Unloaded)
+            {
+                clip.LoadAudioData();
+            }
+
             AudioSource voice = NextVoice();
             float min = Mathf.Min(slot.pitchMin, slot.pitchMax);
             float max = Mathf.Max(slot.pitchMin, slot.pitchMax);
             voice.pitch = Mathf.Approximately(min, max) ? min : Random.Range(min, max);
-            voice.PlayOneShot(slot.clip, Mathf.Clamp01(slot.volume));
+            voice.PlayOneShot(clip, Mathf.Clamp01(slot.volume));
+        }
+
+        static int typewriterStep;
+
+        static AudioClip PickClip(SoundSlot slot)
+        {
+            int extra = slot.variants != null ? slot.variants.Length : 0;
+            if (extra == 0)
+            {
+                return slot.clip;
+            }
+
+            bool hasMain = slot.clip != null;
+            int count = extra + (hasMain ? 1 : 0);
+            for (int n = 0; n < count; n++)
+            {
+                int pick = (typewriterStep + n) % count;
+                AudioClip clip = hasMain
+                    ? (pick == 0 ? slot.clip : slot.variants[pick - 1])
+                    : slot.variants[pick];
+                if (clip == null)
+                {
+                    continue;
+                }
+
+                typewriterStep = (pick + 1) % count;
+                return clip;
+            }
+
+            return slot.clip;
         }
 
         /// <summary>
-        /// Plays a clip on its own source and repeats it until <see cref="StopLoop"/> for the same id.
+        /// Plays a clip on its own source and repeats it until every matching <see cref="StopLoop"/> has run.
+        /// Two starts need two stops, so overlapping saws keep one loop until the last one is gone.
         /// An empty clip stays silent. This source is not the one-shot pool, so a later effect cannot cut it off.
         /// </summary>
         public static void PlayLoop(SoundId id)
@@ -116,8 +159,12 @@ namespace KingsRescue.Audio
                 return;
             }
 
+            int key = (int)id;
+            loopCounts.TryGetValue(key, out int count);
+            loopCounts[key] = count + 1;
+
             AudioSource voice = LoopVoice();
-            if (loopingId == id && voice.isPlaying && voice.clip == slot.clip)
+            if (count > 0 && loopingId == id && voice.isPlaying && voice.clip == slot.clip)
             {
                 return;
             }
@@ -134,6 +181,19 @@ namespace KingsRescue.Audio
 
         public static void StopLoop(SoundId id)
         {
+            int key = (int)id;
+            if (loopCounts.TryGetValue(key, out int count) && count > 0)
+            {
+                count--;
+                if (count > 0)
+                {
+                    loopCounts[key] = count;
+                    return;
+                }
+
+                loopCounts.Remove(key);
+            }
+
             if (loopVoice == null || loopingId != id)
             {
                 return;

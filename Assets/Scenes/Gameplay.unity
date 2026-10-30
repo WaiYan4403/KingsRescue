@@ -242,15 +242,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.1279762
+    x: 0.093851134
     y: 0
-    width: 0.74404764
+    width: 0.8090615
     height: 1
   near clip plane: 0.3
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 18.6875
+  orthographic size: 17.1875
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -646,7 +646,7 @@ MonoBehaviour:
   stats: {fileID: 1395708461}
   baseXp: 5
   growth: 2.4
-  exponent: 2
+  exponent: 3
 --- !u!114 &39098411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8443,7 +8443,7 @@ MonoBehaviour:
       - m_Target: {fileID: 882391431}
         m_TargetAssemblyTypeName: KingsRescue.UI.PausePanel, Assembly-CSharp
         m_MethodName: OnSoundChanged
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11370,7 +11370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &880100002
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11605,8 +11605,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Loading....
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a3526e1ebd014604aa528436a5a2a3de, type: 2}
+  m_sharedMaterial: {fileID: -6859339353089550802, guid: a3526e1ebd014604aa528436a5a2a3de, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11630,12 +11630,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 26
   m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 36
+  m_fontSizeMax: 26
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -11868,7 +11868,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -100.000015}
+  m_AnchoredPosition: {x: 0, y: -112}
   m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &880100053
@@ -11893,8 +11893,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a3526e1ebd014604aa528436a5a2a3de, type: 2}
+  m_sharedMaterial: {fileID: -6859339353089550802, guid: a3526e1ebd014604aa528436a5a2a3de, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11918,8 +11918,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -13294,7 +13294,7 @@ MonoBehaviour:
       - m_Target: {fileID: 882391431}
         m_TargetAssemblyTypeName: KingsRescue.UI.PausePanel, Assembly-CSharp
         m_MethodName: OnMusicChanged
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -16595,7 +16595,7 @@ MonoBehaviour:
       - m_Target: {fileID: 882391431}
         m_TargetAssemblyTypeName: KingsRescue.UI.PausePanel, Assembly-CSharp
         m_MethodName: OnSensitivityChanged
-        m_Mode: 4
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

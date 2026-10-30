@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KingsRescue.Combat
@@ -10,16 +11,45 @@ namespace KingsRescue.Combat
     {
         public static readonly int AmountId = Shader.PropertyToID("_FlashAmount");
         public static readonly int ColorId = Shader.PropertyToID("_FlashColor");
+        public static readonly int EnableOutlineId = Shader.PropertyToID("_EnableOutline");
 
         const string ShaderName = "KingsRescue/SpriteFlash";
         const string ResourceName = "SpriteFlash";
 
         static Material material;
         static readonly MaterialPropertyBlock Block = new MaterialPropertyBlock();
+        static readonly Dictionary<int, Material> parked = new Dictionary<int, Material>();
+
+        public static bool KeepsOutline(SpriteRenderer renderer)
+        {
+            Material source = renderer != null ? renderer.sharedMaterial : null;
+            return source != null && source.HasProperty(EnableOutlineId);
+        }
+
+        /// <summary>
+        /// A hit flash may be showing this renderer. The material to return to
+        /// after the flash becomes <paramref name="material"/>.
+        /// </summary>
+        public static void ReplaceParked(SpriteRenderer renderer, Material material)
+        {
+            if (renderer == null)
+            {
+                return;
+            }
+
+            int id = renderer.GetInstanceID();
+            if (parked.ContainsKey(id))
+            {
+                parked[id] = material;
+                return;
+            }
+
+            renderer.sharedMaterial = material;
+        }
 
         public static void Prepare(SpriteRenderer renderer)
         {
-            if (renderer == null)
+            if (renderer == null || KeepsOutline(renderer))
             {
                 return;
             }
@@ -53,6 +83,7 @@ namespace KingsRescue.Combat
 
             if (renderer.sharedMaterial != mat)
             {
+                parked[renderer.GetInstanceID()] = renderer.sharedMaterial;
                 renderer.sharedMaterial = mat;
             }
 
@@ -67,6 +98,16 @@ namespace KingsRescue.Combat
             if (renderer == null)
             {
                 return;
+            }
+
+            int id = renderer.GetInstanceID();
+            if (parked.TryGetValue(id, out Material saved))
+            {
+                parked.Remove(id);
+                if (saved != null)
+                {
+                    renderer.sharedMaterial = saved;
+                }
             }
 
             renderer.GetPropertyBlock(Block);

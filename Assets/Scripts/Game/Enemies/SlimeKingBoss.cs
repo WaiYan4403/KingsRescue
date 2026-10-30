@@ -40,8 +40,8 @@ namespace KingsRescue.Enemies
         [SerializeField] private SpriteRenderer body;
         [SerializeField] private SpriteRenderer landingMarker;
         [SerializeField] private Transform laserPivot;
-        [SerializeField] private GameObject waterFoams;
-        [SerializeField] private GameObject waterParticles;
+        [SerializeField] private GameObject[] waterFoams;
+        [SerializeField] private GameObject[] waterParticles;
         [SerializeField] private GameObject landingParticles;
         [SerializeField] private SpriteRenderer laserBeam;
         [SerializeField] private float playerRadius = 0.35f;
@@ -100,6 +100,7 @@ namespace KingsRescue.Enemies
         private float phaseEnds;
         private Vector2 slamPoint;
         private bool slamLocked;
+        private bool slamSoundPlayed;
         private bool nextIsVolley = true;
         private Special nextSpecial = Special.Jump;
         private int volleysFired;
@@ -676,6 +677,12 @@ namespace KingsRescue.Enemies
             }
 
             sawJumpState = false;
+            slamSoundPlayed = true;
+            if (!introLanding)
+            {
+                SoundEffects.Play(SoundId.SlimeKingSlam);
+            }
+
             jumpStage = JumpStage.Land;
             jumpStageEnds = Time.time + JumpStageTimeout;
             SetJumpPose(false);
@@ -815,7 +822,12 @@ namespace KingsRescue.Enemies
 
         private void Slam()
         {
-            SoundEffects.Play(SoundId.SlimeKingSlam);
+            if (!slamSoundPlayed)
+            {
+                slamSoundPlayed = true;
+                SoundEffects.Play(SoundId.SlimeKingSlam);
+            }
+
             HitboxDisplay.Flash(slamPoint, slamRadius, 0.4f);
             PlayerController player = PlayerController.Instance;
             if (player == null || player.Health == null || !player.Health.IsAlive)
@@ -849,7 +861,6 @@ namespace KingsRescue.Enemies
         private void BeginLaser()
         {
             phase = Phase.Laser;
-            SoundEffects.PlayLoop(SoundId.SlimeKingLaser);
             laserSweepStarted = Time.time;
             phaseEnds = Time.time + (laserDuration > 0.2f ? laserDuration : 3.1f);
             nextLaserTick = 0f;
@@ -873,6 +884,7 @@ namespace KingsRescue.Enemies
                 LayoutLaser();
                 SetLaserVisible(true);
                 ApplyLaserAngle(DownAngle);
+                SoundEffects.PlayLoop(SoundId.SlimeKingLaser);
                 //PulseLaser(0.35f);
                 phaseEnds = Time.time + (laserWindup > 0.05f ? laserWindup : 0.65f);
                 return;
@@ -1071,8 +1083,14 @@ namespace KingsRescue.Enemies
             if (laserPivot != null)
             {
                 laserPivot.gameObject.SetActive(visible);
-                waterFoams.SetActive(visible);
-                waterParticles.SetActive(visible);
+                foreach (GameObject foam in waterFoams)
+                {
+                    foam.SetActive(visible);
+                }
+                foreach (GameObject particle in waterParticles)
+                {
+                    particle.SetActive(visible);
+                }
             }
             else if (laserBeam != null)
             {

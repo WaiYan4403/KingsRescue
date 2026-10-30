@@ -78,6 +78,18 @@ namespace KingsRescue.Audio
         static SoundSlot CreateSlot(SoundId id)
         {
             string name = id.ToString();
+            if (id == SoundId.Typewriter)
+            {
+                return new SoundSlot
+                {
+                    id = id,
+                    volume = 0.45f,
+                    pitchMin = 0.96f,
+                    pitchMax = 1.05f,
+                    minInterval = 0f
+                };
+            }
+
             bool hit = name.EndsWith("Hit");
             bool death = name.EndsWith("Death");
             return new SoundSlot
@@ -96,6 +108,9 @@ namespace KingsRescue.Audio
     {
         public SoundId id;
         public AudioClip clip;
+
+        [Tooltip("Extra takes played after the main clip, in order, then the list repeats.")]
+        public AudioClip[] variants;
 
         [Range(0f, 1f)] public float volume = 1f;
 

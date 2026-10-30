@@ -344,9 +344,16 @@ namespace KingsRescue.UI
         private IEnumerator CycleAchievements()
         {
             int index = 0;
+            int announced = 0;
             while (true)
             {
                 ShowAchievement(earned[index]);
+                if (announced < earned.Count)
+                {
+                    SoundEffects.Play(SoundId.AchievementUnlocked);
+                    announced++;
+                }
+
                 if (earned.Count < 2)
                 {
                     yield break;
@@ -388,7 +395,6 @@ namespace KingsRescue.UI
         {
             StopAchievementCycle();
             GameManager.Instance?.RestartRun();
-            GameMusicController.Instance.StopMusic();
             StartCoroutine(DelayClose());
         }
 
@@ -396,7 +402,6 @@ namespace KingsRescue.UI
         {
             StopAchievementCycle();
             GameManager.Instance?.ReturnToMenu();
-            GameMusicController.Instance.StopMusic();
             StartCoroutine(DelayClose());
         }
 

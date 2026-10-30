@@ -43,6 +43,11 @@ namespace KingsRescue.EditorTools
                 string label = ObjectNames.NicifyVariableName(id.enumDisplayNames[id.enumValueIndex]);
 
                 EditorGUILayout.PropertyField(slot.FindPropertyRelative("clip"), new GUIContent(label));
+                if (id.enumNames[id.enumValueIndex] == "Typewriter")
+                {
+                    EditorGUILayout.PropertyField(slot.FindPropertyRelative("variants"), new GUIContent(label + " Takes"), true);
+                }
+
                 if (!showPlayback)
                 {
                     continue;

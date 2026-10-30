@@ -39,6 +39,11 @@ namespace KingsRescue.UI
         private readonly List<LeaderboardRowView> spawnedOthers = new List<LeaderboardRowView>();
         private int requestId;
 
+        private void Awake()
+        {
+            EnsureRoster();
+        }
+
         public void Refresh()
         {
             _ = Load();
@@ -171,13 +176,25 @@ namespace KingsRescue.UI
             }
         }
 
+        private void EnsureRoster()
+        {
+            if (roster != null)
+            {
+                return;
+            }
+
+            roster = Resources.Load<CharacterRoster>("CharacterRoster");
+        }
+
         private Sprite PortraitFor(string characterId)
         {
+            EnsureRoster();
             if (roster == null || roster.characters == null || string.IsNullOrWhiteSpace(characterId))
             {
                 return null;
             }
 
+            string key = characterId.Trim();
             for (int i = 0; i < roster.characters.Length; i++)
             {
                 CharacterDefinition hero = roster.characters[i];
@@ -186,13 +203,45 @@ namespace KingsRescue.UI
                     continue;
                 }
 
-                if (hero.Id == characterId || hero.displayName == characterId || hero.name == characterId)
+                if (MatchesCharacterKey(hero, key))
                 {
                     return hero.portrait;
                 }
             }
 
             return null;
+        }
+
+        private static bool MatchesCharacterKey(CharacterDefinition hero, string key)
+        {
+            if (string.Equals(hero.Id, key, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (string.Equals(hero.displayName, key, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (string.Equals(hero.name, key, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            const string prefix = "Character_";
+            if (key.StartsWith(prefix, System.StringComparison.OrdinalIgnoreCase)
+                && string.Equals(hero.name, key, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (string.Equals(prefix + hero.Id, key, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static bool CanRecordRank()

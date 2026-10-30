@@ -1,5 +1,6 @@
 using UnityEngine;
 using KingsRescue.Audio;
+using KingsRescue.Combat;
 using KingsRescue.Core;
 using KingsRescue.Data;
 
@@ -25,9 +26,25 @@ namespace KingsRescue.Player
         private bool restColorsCached;
         private bool stealthVisual;
         private Stage stage;
+        private GameObject normalEffect;
+        private GameObject maxEffect;
+        private SpriteRenderer bodyRenderer;
+        private SpriteRenderer legRenderer;
+        private Material bodyOutline;
+        private Material legOutline;
+        private Material bodyShared;
+        private Material legShared;
+        private bool legBorrowedOutline;
 
         /// <summary>True while the max power-up's stealth is up. Enemies lose their aim.</summary>
         public static bool IsHeroHidden { get; private set; }
+
+        private static readonly int EnableOutlineId = Shader.PropertyToID("_EnableOutline");
+        private static readonly int OutlineColorId = Shader.PropertyToID("_Color");
+        private static readonly int OutlineColorExtraId = Shader.PropertyToID("_Outline_Color");
+        private static readonly Color DefaultOutline = Color.black;
+        private static readonly Color NormalOutline = new Color(0.2f, 0.92f, 1f, 1f);
+        private static readonly Color MaxOutline = new Color(0.7f, 0.25f, 1f, 1f);
 
         private const float ShortSlashRange = 6f;
         private const float FinalSlashRange = 11f;
@@ -74,7 +91,34 @@ namespace KingsRescue.Player
             loadout = GetComponent<WeaponLoadout>();
             stats = GetComponent<PlayerStats>();
             health = GetComponent<PlayerHealth>();
+            CachePowerVisuals();
             CacheBodySprites();
+            PrepareOutlines();
+            ShowEffect(normalEffect, false);
+            ShowEffect(maxEffect, false);
+        }
+
+        private void OnDestroy()
+        {
+            if (bodyRenderer != null && bodyShared != null)
+            {
+                bodyRenderer.sharedMaterial = bodyShared;
+            }
+
+            if (legRenderer != null && legShared != null && !legBorrowedOutline)
+            {
+                legRenderer.sharedMaterial = legShared;
+            }
+
+            if (bodyOutline != null)
+            {
+                Destroy(bodyOutline);
+            }
+
+            if (legOutline != null)
+            {
+                Destroy(legOutline);
+            }
         }
 
         private void OnDisable()
@@ -113,11 +157,13 @@ namespace KingsRescue.Player
             if (next == Stage.Slash && stage == Stage.Final)
             {
                 ApplyPoweredTint(true);
+                ShowPowerVisual(true);
                 return;
             }
 
             stage = next;
             ApplyPoweredTint(true);
+            ShowPowerVisual(next == Stage.Final);
             HealFor(character, next);
             if (next == Stage.Final && character.powerUpMaxStealthDuration > 0f)
             {
@@ -206,6 +252,7 @@ namespace KingsRescue.Player
             }
 
             ApplyPoweredTint(false);
+            HidePowerVisual();
         }
 
         private void CacheBodySprites()
@@ -214,7 +261,7 @@ namespace KingsRescue.Player
             int count = 0;
             for (int i = 0; i < all.Length; i++)
             {
-                if (all[i] != null && all[i].gameObject.name != "Effect")
+                if (IsBodySprite(all[i]))
                 {
                     count++;
                 }
@@ -225,11 +272,175 @@ namespace KingsRescue.Player
             int write = 0;
             for (int i = 0; i < all.Length; i++)
             {
-                if (all[i] != null && all[i].gameObject.name != "Effect")
+                if (IsBodySprite(all[i]))
                 {
                     bodySprites[write++] = all[i];
                 }
             }
+        }
+
+        private static bool IsBodySprite(SpriteRenderer renderer)
+        {
+            if (renderer == null)
+            {
+                return false;
+            }
+
+            string name = renderer.gameObject.name;
+            return name != "Effect" && name != "PowerUp Normal" && name != "PowerUp Max";
+        }
+
+        private void CachePowerVisuals()
+        {
+            SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>(true);
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                SpriteRenderer renderer = renderers[i];
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                switch (renderer.gameObject.name)
+                {
+                    case "PowerUp Normal":
+                        normalEffect = renderer.gameObject;
+                        break;
+                    case "PowerUp Max":
+                        maxEffect = renderer.gameObject;
+                        break;
+                    case "Body":
+                        bodyRenderer = renderer;
+                        break;
+                    case "Leg":
+                        legRenderer = renderer;
+                        break;
+                }
+            }
+        }
+
+        private void PrepareOutlines()
+        {
+            bodyShared = bodyRenderer != null ? bodyRenderer.sharedMaterial : null;
+            bodyOutline = CreateOutline(bodyRenderer);
+            if (bodyRenderer != null && bodyOutline != null)
+            {
+                PaintOutline(bodyOutline, DefaultOutline, false);
+                bodyRenderer.sharedMaterial = bodyOutline;
+            }
+
+            if (legRenderer != null && legRenderer.sharedMaterial != null && legRenderer.sharedMaterial.HasProperty(EnableOutlineId))
+            {
+                legShared = legRenderer.sharedMaterial;
+                legOutline = CreateOutline(legRenderer);
+                PaintOutline(legOutline, DefaultOutline, false);
+                legRenderer.sharedMaterial = legOutline;
+            }
+            else if (legRenderer != null && bodyOutline != null)
+            {
+                legOutline = new Material(bodyOutline);
+                legBorrowedOutline = true;
+                PaintOutline(legOutline, DefaultOutline, false);
+                legRenderer.sharedMaterial = legOutline;
+            }
+        }
+
+        private static Material CreateOutline(SpriteRenderer renderer)
+        {
+            Material source = renderer != null ? renderer.sharedMaterial : null;
+            if (source == null || !source.HasProperty(EnableOutlineId))
+            {
+                return null;
+            }
+
+            return new Material(source);
+        }
+
+        private void ShowPowerVisual(bool max)
+        {
+            ShowEffect(normalEffect, !max);
+            ShowEffect(maxEffect, max);
+            Color color = max ? MaxOutline : NormalOutline;
+            ApplyOutline(bodyRenderer, bodyOutline, color, true);
+            ApplyOutline(legRenderer, LegOutlineMaterial(), color, true);
+        }
+
+        private void HidePowerVisual()
+        {
+            ShowEffect(normalEffect, false);
+            ShowEffect(maxEffect, false);
+            ApplyOutline(bodyRenderer, bodyOutline, DefaultOutline, false);
+            ApplyOutline(legRenderer, legOutline, DefaultOutline, false);
+        }
+
+        private Material LegOutlineMaterial()
+        {
+            if (legOutline != null)
+            {
+                return legOutline;
+            }
+
+            if (legRenderer == null || bodyOutline == null)
+            {
+                return null;
+            }
+
+            legOutline = new Material(bodyOutline);
+            legBorrowedOutline = true;
+            return legOutline;
+        }
+
+        private static void ApplyOutline(SpriteRenderer renderer, Material outline, Color color, bool enabled)
+        {
+            if (renderer == null || outline == null)
+            {
+                return;
+            }
+
+            PaintOutline(outline, color, enabled);
+            SpriteFlash.ReplaceParked(renderer, outline);
+        }
+
+        private static void PaintOutline(Material outline, Color color, bool enabled)
+        {
+            if (outline == null)
+            {
+                return;
+            }
+
+            outline.SetFloat(EnableOutlineId, enabled ? 1f : 0f);
+            if (outline.HasProperty(OutlineColorId))
+            {
+                outline.SetColor(OutlineColorId, color);
+            }
+
+            if (outline.HasProperty(OutlineColorExtraId))
+            {
+                outline.SetColor(OutlineColorExtraId, color);
+            }
+        }
+
+        private static void ShowEffect(GameObject effect, bool show)
+        {
+            if (effect == null)
+            {
+                return;
+            }
+
+            effect.SetActive(show);
+            if (!show)
+            {
+                return;
+            }
+
+            Animator animator = effect.GetComponent<Animator>();
+            if (animator == null || animator.runtimeAnimatorController == null)
+            {
+                return;
+            }
+
+            animator.Play(0, 0, 0f);
+            animator.Update(0f);
         }
 
         private void RememberRestColors()
