@@ -331,7 +331,7 @@ namespace KingsRescue.Player
 
             if (count == 0)
             {
-                hurtRenderers = flashTarget != null ? new[] { flashTarget } : all;
+                hurtRenderers = flashTarget != null ? new[] { flashTarget } : Array.Empty<SpriteRenderer>();
             }
             else
             {
@@ -360,7 +360,7 @@ namespace KingsRescue.Player
             }
 
             string name = renderer.gameObject.name;
-            return name != "Effect" && name != "PowerUp Normal" && name != "PowerUp Max";
+            return name == "Body" || name == "Leg";
         }
 
         private void PaintBody(Color? color)

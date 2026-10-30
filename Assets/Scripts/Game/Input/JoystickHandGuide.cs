@@ -56,6 +56,14 @@ namespace KingsRescue.InputControl
 
         private void Awake()
         {
+            // This component is also on the Hand Guide itself. Turning that object off from
+            // here defers Awake until the guide is shown, and that second Awake hides it again.
+            if (IsHandGuide(gameObject.name))
+            {
+                enabled = false;
+                return;
+            }
+
             panel = FindPanel();
             if (panel != null)
             {
@@ -81,7 +89,7 @@ namespace KingsRescue.InputControl
                 return;
             }
 
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             if (elapsed < RevealDelay)
             {
                 return;
@@ -115,6 +123,7 @@ namespace KingsRescue.InputControl
 
             visible = true;
             panel.SetActive(true);
+            panel.transform.SetAsLastSibling();
             LetTouchesThrough(panel);
 
             Animator animator = panel.GetComponentInChildren<Animator>(true);

@@ -68,8 +68,19 @@ public class MenuMusicController : Singleton<MenuMusicController>
 
         if (musicEmitter != null && musicEmitter.EventInstance.isValid())
         {
-            musicEmitter.EventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            musicEmitter.AllowFadeout = false;
+            musicEmitter.Stop();
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            StopMusic();
+        }
+
+        base.OnDestroy();
     }
 
     public void SetMainMusic()

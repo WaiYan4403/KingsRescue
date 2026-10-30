@@ -94,6 +94,11 @@ namespace KingsRescue.UI
             root.SetActive(false);
         }
 
+        private void Update()
+        {
+            ButtonKeyCursor.Tick(root != null ? root.transform : null);
+        }
+
         private void OnDestroy()
         {
             GameManager game = GameManager.Instance;
@@ -121,6 +126,7 @@ namespace KingsRescue.UI
 
         private void OnDisable()
         {
+            ButtonKeyCursor.Release();
             StopAchievementCycle();
         }
 

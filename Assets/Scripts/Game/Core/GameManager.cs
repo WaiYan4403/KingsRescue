@@ -456,6 +456,7 @@ namespace KingsRescue.Core
         public void RestartRun()
         {
             Time.timeScale = 1f;
+            GameMusicController.Instance?.StopMusic();
             Scene active = SceneManager.GetActiveScene();
             SceneManager.LoadScene(active.buildIndex);
         }
@@ -469,6 +470,7 @@ namespace KingsRescue.Core
             }
 
             Time.timeScale = 1f;
+            GameMusicController.Instance?.StopMusic();
             SceneManager.LoadScene(menuSceneName);
         }
 

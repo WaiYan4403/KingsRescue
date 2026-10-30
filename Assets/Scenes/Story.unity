@@ -1420,7 +1420,7 @@ MonoBehaviour:
   menuSceneName: MainMenu
   skipOnPress: 0
   skipLockSeconds: 0.35
-  skipButton: {fileID: 910000030}
+  skipButton: {fileID: 0}
   skipRevealSeconds: 3
 --- !u!1 &910000030
 GameObject:
@@ -2058,8 +2058,8 @@ MonoBehaviour:
     Path: "event:/Music/King\u2019s Rescue Menu Theme"
   Event: 
   EventPlayTrigger: 1
-  EventStopTrigger: 0
-  AllowFadeout: 1
+  EventStopTrigger: 2
+  AllowFadeout: 0
   TriggerOnce: 0
   Preload: 0
   NonRigidbodyVelocity: 0

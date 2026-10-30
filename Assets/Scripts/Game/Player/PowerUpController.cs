@@ -287,7 +287,7 @@ namespace KingsRescue.Player
             }
 
             string name = renderer.gameObject.name;
-            return name != "Effect" && name != "PowerUp Normal" && name != "PowerUp Max";
+            return name == "Body" || name == "Leg";
         }
 
         private void CachePowerVisuals()

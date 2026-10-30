@@ -268,13 +268,13 @@ TextureImporter:
       name: LevelUpUI_1
       rect:
         serializedVersion: 2
-        x: 129
+        x: 128
         y: 278
-        width: 112
+        width: 114
         height: 43
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 57, y: 6, z: 55, w: 6}
       customData: 
       outline: []
       physicsShape: []
@@ -436,6 +436,28 @@ TextureImporter:
       bones: []
       spriteID: 84323ae0dc37dcb90800000000000000
       internalID: -7219987303053974712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LevelUpUI_3
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 126
+        width: 114
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 57, y: 6, z: 57, w: 6}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b8d7f5bc17804e4ab7257b02c33ec34
+      internalID: -6987840827686033055
       vertices: []
       indices: 
       edges: []

@@ -132,6 +132,16 @@ namespace KingsRescue.UI
             root.SetActive(false);
         }
 
+        private void Update()
+        {
+            ButtonKeyCursor.Tick(root != null ? root.transform : null);
+        }
+
+        private void OnDisable()
+        {
+            ButtonKeyCursor.Release();
+        }
+
         protected override void OnDestroy()
         {
             GameManager game = GameManager.Instance;

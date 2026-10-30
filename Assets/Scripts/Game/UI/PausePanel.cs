@@ -1,5 +1,4 @@
 using System.Collections;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -62,6 +61,11 @@ namespace KingsRescue.UI
                 menuButton.onClick.AddListener(ReturnToMenu);
             }
 
+            if (animator == null && panel != null)
+            {
+                animator = panel.GetComponent<Animator>();
+            }
+
             if (panel != null)
             {
                 panel.SetActive(false);
@@ -99,24 +103,28 @@ namespace KingsRescue.UI
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
-            if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame || closing)
+            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame && !closing)
             {
-                return;
+                if (settingsOpen)
+                {
+                    HideSettings();
+                }
+                else if (open)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Open();
+                }
             }
 
-            if (settingsOpen)
+            if (open && !closing)
             {
-                HideSettings();
-                return;
-            }
-
-            if (open)
-            {
-                Resume();
-            }
-            else
-            {
-                Open();
+                Transform scope = settingsOpen && settingsPanel != null
+                    ? settingsPanel.transform
+                    : panel != null ? panel.transform : null;
+                ButtonKeyCursor.Tick(scope);
             }
         }
 
@@ -157,8 +165,9 @@ namespace KingsRescue.UI
             if (animator != null)
             {
                 animator.enabled = true;
+                animator.updateMode = AnimatorUpdateMode.UnscaledTime;
                 animator.speed = 1f;
-                animator.Play("PauseUI_Open", 0, 0f);
+                animator.Play("ScrollCover_Open", 0, 0f);
                 animator.Update(0f);
             }
 
@@ -390,40 +399,35 @@ namespace KingsRescue.UI
         }
 
         /// <summary>
-        /// Rolls the pause card back up, then hides the panel. The open clip keeps writing that
-        /// card, so the animator is switched off until the roll-up finishes.
+        /// Plays ScrollCover_Close on the pause animator, then hides the panel.
         /// </summary>
         private IEnumerator CloseThenResume()
         {
             closing = true;
+            ButtonKeyCursor.Release();
             SoundEffects.Play(SoundId.MenuOpenGold);
-            float wait = 0.2f;
+
+            if (animator == null && panel != null)
+            {
+                animator = panel.GetComponent<Animator>();
+            }
 
             if (animator != null)
             {
-                AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
-                float played = Mathf.Clamp(info.normalizedTime, 0f, 1f);
-                wait = Mathf.Max(0.12f, played * info.length);
-                animator.enabled = false;
+                animator.enabled = true;
+                animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+                animator.speed = 1f;
             }
 
-            if (title != null)
+            float wait = 0f;
+            if (PanelClose.TryPlay(panel, out float duration))
             {
-                title.SetActive(false);
+                wait = duration;
             }
 
-            if (card != null)
+            if (wait > 0f)
             {
-                card.DOKill();
-                card.DOScaleY(0f, wait).SetEase(Ease.InBack).SetUpdate(true);
-                card.DOAnchorPosY(630f, wait).SetEase(Ease.InCubic).SetUpdate(true);
-            }
-
-            yield return new WaitForSecondsRealtime(wait);
-
-            if (card != null)
-            {
-                card.DOKill();
+                yield return new WaitForSecondsRealtime(wait);
             }
 
             open = false;
@@ -432,12 +436,6 @@ namespace KingsRescue.UI
             if (panel != null)
             {
                 panel.SetActive(false);
-            }
-
-            if (animator != null)
-            {
-                animator.speed = 1f;
-                animator.enabled = true;
             }
 
             GameManager.Instance?.ResumeRun();

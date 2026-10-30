@@ -17,8 +17,23 @@ public class GameMusicController : Singleton<GameMusicController>
 
     protected override void OnDestroy()
     {
-
+        StopMusic();
         base.OnDestroy();
+    }
+
+    /// <summary>
+    /// Cuts the gameplay theme immediately. The emitter does not stop itself when the scene unloads,
+    /// so the loop would keep playing under the menu theme.
+    /// </summary>
+    public void StopMusic()
+    {
+        if (musicEmitter == null)
+        {
+            return;
+        }
+
+        musicEmitter.AllowFadeout = false;
+        musicEmitter.Stop();
     }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

@@ -13,7 +13,7 @@ namespace KingsRescue.World
     {
         [SerializeField] private BackgroundSegment segmentPrefab;
 
-        [Tooltip("How many tiles are kept alive. 3 covers a typical portrait view plus one ahead.")]
+        [Tooltip("How many tiles are kept alive on a normal portrait view. Taller screens add one more above and one more below.")]
         [SerializeField] private int segmentCount = 3;
 
         [Tooltip("1 = matches the world scroll exactly. Use smaller values for distant parallax layers.")]
@@ -45,18 +45,21 @@ namespace KingsRescue.World
                 yield return null;
             }
 
+            BackgroundSegment.ResetChestSchedule();
+            BackgroundSegment.SetOpeningRoad(true);
+
+            // The pixel-perfect camera writes its real height during the first render.
+            yield return new WaitForEndOfFrame();
+
             if (scenePreview != null)
             {
                 scenePreview.SetActive(false);
             }
 
-            BackgroundSegment.ResetChestSchedule();
-            BackgroundSegment.SetOpeningRoad(true);
-
             root = new GameObject("Backgrounds").transform;
             root.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-            int count = Mathf.Max(2, segmentCount);
+            int count = CountForView();
             float height = segmentPrefab.Height;
             Vector3 origin = new Vector3(0f, 0f, segmentPrefab.transform.position.z);
             int middle = count / 2;
@@ -94,6 +97,40 @@ namespace KingsRescue.World
             }
 
             RecycleIfNeeded();
+        }
+
+        /// <summary>
+        /// A long portrait view reaches past the normal stack. Add one ground above
+        /// and one below until the tiles clear the screen.
+        /// </summary>
+        private int CountForView()
+        {
+            int count = Mathf.Max(2, segmentCount);
+            float tile = segmentPrefab.Height;
+            float visible = VisibleWorldHeight();
+            if (tile <= 0.01f || visible <= 0.01f)
+            {
+                return count;
+            }
+
+            float halfView = visible * 0.5f;
+            while (count < 7 && count * tile * 0.5f - halfView < tile * 0.5f)
+            {
+                count += 2;
+            }
+
+            return count;
+        }
+
+        private static float VisibleWorldHeight()
+        {
+            Camera cam = Camera.main;
+            if (cam == null || !cam.orthographic)
+            {
+                return 0f;
+            }
+
+            return cam.orthographicSize * 2f;
         }
 
         private BackgroundSegment SpawnSegment(Vector3 position)

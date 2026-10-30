@@ -14,7 +14,8 @@ namespace KingsRescue.UI
     /// </summary>
     public class AccountMenuView : MonoBehaviour
     {
-        private static readonly Color ErrorColor = new Color(1f, 0.45f, 0.4f, 1f);
+        [SerializeField] private Color errorColor = new Color(1f, 0.45f, 0.4f, 1f);
+        [SerializeField] private Color dimColor = new Color(1f, 1f, 1f, 0.5f);
 
         [SerializeField] private MainMenuController menu;
         [Tooltip("Home panel button that opens the account screen. Hidden when online features are off.")]
@@ -377,7 +378,7 @@ namespace KingsRescue.UI
             SetStatus(usernameStatus, message, error);
         }
 
-        private static void SetStatus(TMP_Text label, string message, bool error)
+        private void SetStatus(TMP_Text label, string message, bool error)
         {
             if (label == null)
             {
@@ -385,7 +386,7 @@ namespace KingsRescue.UI
             }
 
             label.text = message ?? string.Empty;
-            label.color = error ? ErrorColor : MenuUi.Dim;
+            label.color = error ? errorColor : dimColor;
         }
 
         private static void Bind(Button button, UnityEngine.Events.UnityAction action)

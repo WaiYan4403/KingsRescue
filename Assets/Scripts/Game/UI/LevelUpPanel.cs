@@ -72,6 +72,16 @@ namespace KingsRescue.UI
             root.SetActive(false);
         }
 
+        private void Update()
+        {
+            ButtonKeyCursor.Tick(root != null ? root.transform : null);
+        }
+
+        private void OnDisable()
+        {
+            ButtonKeyCursor.Release();
+        }
+
         private void OnDestroy()
         {
             ExperienceSystem xp = ExperienceSystem.Instance;

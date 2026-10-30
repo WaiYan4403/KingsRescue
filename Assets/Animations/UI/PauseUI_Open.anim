@@ -40,7 +40,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Card
+    path: Parent/Card
   m_FloatCurves:
   - serializedVersion: 2
     curve:
@@ -68,7 +68,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: Card
+    path: Parent/Card
     classID: 224
     script: {fileID: 0}
     flags: 0
@@ -106,7 +106,7 @@ AnimationClip:
     - time: 0.5
       value: {fileID: 3343972014757956404, guid: 317e60f2f7a524a4f96dd5d1853e3422, type: 3}
     attribute: m_Sprite
-    path: Scroll
+    path: Parent/Scroll
     classID: 114
     script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
     flags: 2
@@ -207,7 +207,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: Card
+    path: Parent/Card
     classID: 224
     script: {fileID: 0}
     flags: 0
@@ -237,7 +237,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: Card
+    path: Parent/Card
     classID: 224
     script: {fileID: 0}
     flags: 0
@@ -267,7 +267,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: Card
+    path: Parent/Card
     classID: 224
     script: {fileID: 0}
     flags: 0
@@ -297,7 +297,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.y
-    path: Card
+    path: Parent/Card
     classID: 224
     script: {fileID: 0}
     flags: 0

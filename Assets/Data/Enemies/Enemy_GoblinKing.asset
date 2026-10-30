@@ -22,7 +22,7 @@ MonoBehaviour:
   canFlipSprite: 0
   bodyTint: {r: 1, g: 1, b: 1, a: 1}
   bodyScale: 1.15
-  maxHealth: 6000
+  maxHealth: 3500
   contactDamage: 50
   contactInterval: 0.6
   contactRadius: 1.05

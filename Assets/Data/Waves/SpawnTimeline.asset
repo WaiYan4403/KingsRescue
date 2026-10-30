@@ -58,7 +58,7 @@ MonoBehaviour:
     introPattern: 0
   - enemy: {fileID: 11400000, guid: 0378decbd0e467a4ba43b2ec2436df5b, type: 2}
     unlockAt: 145
-    weight: 3
+    weight: 1
     introCount: 2
     introPattern: 0
   - enemy: {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
@@ -73,7 +73,7 @@ MonoBehaviour:
     introPattern: 0
   - enemy: {fileID: 11400000, guid: d14b288b4f9d5fe48bbe2e69ca28e30c, type: 2}
     unlockAt: 210
-    weight: 3
+    weight: 1
     introCount: 3
     introPattern: 0
   - enemy: {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
