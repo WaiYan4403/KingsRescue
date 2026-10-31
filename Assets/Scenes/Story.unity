@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &109960009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 26, y: -53}
+  m_AnchoredPosition: {x: 26, y: -201}
   m_SizeDelta: {x: -80, y: 2006.25}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &202070605
@@ -752,7 +752,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -48.00049}
+  m_AnchoredPosition: {x: 0, y: -48}
   m_SizeDelta: {x: 1080, y: 200}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &824760735
@@ -1408,7 +1408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Story.StorySequenceController
   scenes:
   - root: {fileID: 1153466471}
-    duration: 13.5
+    duration: 12
   - root: {fileID: 1672978092}
     duration: 9.5
   - root: {fileID: 826785379}
@@ -1420,7 +1420,7 @@ MonoBehaviour:
   menuSceneName: MainMenu
   skipOnPress: 0
   skipLockSeconds: 0.35
-  skipButton: {fileID: 0}
+  skipButton: {fileID: 910000030}
   skipRevealSeconds: 3
 --- !u!1 &910000030
 GameObject:
@@ -1440,7 +1440,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &910000031
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1877,7 +1877,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -48.00049}
+  m_AnchoredPosition: {x: 0, y: -48}
   m_SizeDelta: {x: 1080, y: 200}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1029687926
@@ -1948,8 +1948,8 @@ RectTransform:
   m_Children:
   - {fileID: 916472021}
   - {fileID: 1732495252}
-  - {fileID: 1865279875}
   - {fileID: 1457250725}
+  - {fileID: 1865279875}
   m_Father: {fileID: 1153466472}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1973,7 +1973,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1153466472
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2255,7 +2255,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -48}
+  m_AnchoredPosition: {x: 46, y: -20}
   m_SizeDelta: {x: 0, y: 2584}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1336443479
@@ -2330,8 +2330,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: -183}
-  m_SizeDelta: {x: 0, y: 1912.31}
+  m_AnchoredPosition: {x: 0, y: -728}
+  m_SizeDelta: {x: 0, y: 2288.78}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1397075481
 MonoBehaviour:
@@ -2931,9 +2931,9 @@ RectTransform:
   m_Father: {fileID: 826785380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: -215}
-  m_SizeDelta: {x: 0, y: 2175.3}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -203}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1525875698
 MonoBehaviour:
@@ -3483,7 +3483,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 906.5}
+  m_AnchoredPosition: {x: 0, y: 878}
   m_SizeDelta: {x: -80, y: 2007.25}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1732495253
@@ -3771,7 +3771,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -139, y: 0}
   m_SizeDelta: {x: -80, y: 2006.25}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1865279876
@@ -4242,7 +4242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -48.00049}
+  m_AnchoredPosition: {x: 76, y: -48}
   m_SizeDelta: {x: 1080, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2029358594

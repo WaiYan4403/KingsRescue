@@ -27,11 +27,14 @@ namespace KingsRescue.InputControl
 
         [SerializeField, Range(0f, 0.5f)] private float deadZone = 0.15f;
 
-        [Tooltip("Spawn the stick under the thumb instead of keeping it in a fixed spot.")]
+        [Tooltip("Spawn the stick under the thumb instead of keeping it in a fixed spot. Ignored while the fixed-joystick setting is on.")]
         [SerializeField] private bool floatingOrigin = true;
 
-        [Tooltip("Hide the stick until a finger is down. The touch zone still receives input.")]
+        [Tooltip("Hide the stick until a finger is down. The touch zone still receives input. A fixed stick stays visible.")]
         [SerializeField] private bool hideWhenIdle = true;
+
+        [Tooltip("Gap between the screen edge and the outside of a fixed stick.")]
+        [SerializeField] private float edgePadding = 64f;
 
         private RectTransform touchZone;
         private Canvas canvas;
@@ -39,6 +42,8 @@ namespace KingsRescue.InputControl
         private CanvasGroup canvasGroup;
         private Vector2 restPosition;
         private int activePointerId = int.MinValue;
+        private bool ready;
+        private bool placing;
 
         /// <summary>Normalised stick deflection, magnitude clamped to 1.</summary>
         public Vector2 Value { get; private set; }
@@ -79,23 +84,73 @@ namespace KingsRescue.InputControl
             }
 
             ShowStick(false);
+            ready = true;
+            ApplyPlacement();
             JoystickHandGuide.Ensure(this);
+        }
+
+        private void Start()
+        {
+            ApplyPlacement();
+        }
+
+        private void OnRectTransformDimensionsChange()
+        {
+            if (!ready || IsHeld || !GameSettings.FixedJoystick)
+            {
+                return;
+            }
+
+            ApplyPlacement();
+        }
+
+        /// <summary>Moves the stick to the saved corner, or back to its floating rest spot.</summary>
+        public void ApplyPlacement()
+        {
+            if (placing || background == null)
+            {
+                return;
+            }
+
+            placing = true;
+
+            if (GameSettings.FixedJoystick)
+            {
+                background.anchoredPosition = FixedCorner();
+            }
+            else if (!IsHeld)
+            {
+                background.anchoredPosition = restPosition;
+            }
+
+            ShowStick(IsHeld);
+            placing = false;
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            JoystickHandGuide.NotifyUsed();
             if (IsHeld)
             {
                 return;
             }
+
+            if (GameSettings.FixedJoystick)
+            {
+                ApplyPlacement();
+                if (!PointerOnStick(eventData))
+                {
+                    return;
+                }
+            }
+
+            JoystickHandGuide.NotifyUsed();
 
             activePointerId = eventData.pointerId;
             IsHeld = true;
 
             ShowStick(true);
 
-            if (floatingOrigin && background != null &&
+            if (!GameSettings.FixedJoystick && floatingOrigin && background != null &&
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(touchZone, eventData.position, uiCamera, out Vector2 local))
             {
                 background.anchoredPosition = local;
@@ -176,12 +231,48 @@ namespace KingsRescue.InputControl
                 handle.anchoredPosition = Vector2.zero;
             }
 
-            if (floatingOrigin && background != null)
+            if (GameSettings.FixedJoystick)
+            {
+                if (background != null)
+                {
+                    background.anchoredPosition = FixedCorner();
+                }
+            }
+            else if (floatingOrigin && background != null)
             {
                 background.anchoredPosition = restPosition;
             }
 
             ShowStick(false);
+        }
+
+        private bool PointerOnStick(PointerEventData eventData)
+        {
+            if (background == null)
+            {
+                return false;
+            }
+
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(background, eventData.position, uiCamera, out Vector2 local))
+            {
+                return false;
+            }
+
+            float radius = Mathf.Max(handleRange, background.rect.width * 0.5f);
+            return local.magnitude <= radius * 1.15f;
+        }
+
+        private Vector2 FixedCorner()
+        {
+            RectTransform space = canvas != null ? (RectTransform)canvas.transform : touchZone;
+            Rect area = space.rect;
+            float half = background != null ? background.rect.width * 0.5f : handleRange;
+            float inset = half + Mathf.Max(0f, edgePadding);
+            float x = GameSettings.JoystickOnRight ? area.xMax - inset : area.xMin + inset;
+            float y = area.yMin + inset;
+            Vector3 world = space.TransformPoint(new Vector3(x, y, 0f));
+            Vector3 local = touchZone.InverseTransformPoint(world);
+            return local;
         }
 
         private void ShowStick(bool visible)
@@ -191,12 +282,13 @@ namespace KingsRescue.InputControl
                 return;
             }
 
-            bool show = visible || !hideWhenIdle;
+            bool show = visible || !hideWhenIdle || GameSettings.FixedJoystick;
             background.gameObject.SetActive(show);
 
             if (canvasGroup != null)
             {
                 canvasGroup.alpha = show ? 1f : 0f;
+                canvasGroup.blocksRaycasts = GameSettings.FixedJoystick;
             }
         }
     }

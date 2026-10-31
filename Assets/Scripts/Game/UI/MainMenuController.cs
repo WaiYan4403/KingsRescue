@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using KingsRescue.Audio;
 using KingsRescue.Data;
+using KingsRescue.InputControl;
 using KingsRescue.Meta;
 using KingsRescue.Online;
 using ToggleSwitch = Poker.UI.ToggleSwitch.ToggleSwitch;
@@ -76,6 +77,15 @@ namespace KingsRescue.UI
         [SerializeField] private Slider sensitivitySlider;
         [SerializeField] private ToggleSwitch screenShakeToggle;
         [SerializeField] private ToggleSwitch damageTextToggle;
+        [SerializeField] private ToggleSwitch fixedJoystickToggle;
+        [Tooltip("Left and right controls. Hidden while fixed joystick is off.")]
+        [SerializeField] private GameObject joystickSideRow;
+        [Tooltip("Shown while the fixed stick sits in the bottom-left corner.")]
+        [SerializeField] private GameObject joystickLeftSelected;
+        [Tooltip("Shown while the fixed stick sits in the bottom-right corner.")]
+        [SerializeField] private GameObject joystickRightSelected;
+        [Tooltip("On parks the stick in the bottom-left corner. Off parks it in the bottom-right.")]
+        [SerializeField] private ToggleSwitch joystickLeftToggle;
 
         [Header("Leaderboards")]
         [SerializeField] private LeaderboardMenuView leaderboardView;
@@ -1059,6 +1069,42 @@ namespace KingsRescue.UI
             }
         }
 
+        public void OnFixedJoystickChanged(bool value)
+        {
+            if (holdSettings)
+            {
+                return;
+            }
+
+            GameSettings.FixedJoystick = value;
+            ApplyJoystickPlacement();
+            RefreshJoystickSide();
+        }
+
+        public void OnJoystickLeft()
+        {
+            if (holdSettings)
+            {
+                return;
+            }
+
+            GameSettings.JoystickOnRight = false;
+            ApplyJoystickPlacement();
+            RefreshJoystickSide();
+        }
+
+        public void OnJoystickRight()
+        {
+            if (holdSettings)
+            {
+                return;
+            }
+
+            GameSettings.JoystickOnRight = true;
+            ApplyJoystickPlacement();
+            RefreshJoystickSide();
+        }
+
         /// <summary>
         /// The scroll animator reports a collapsed slider as 0. Reapply the saved values after that pass.
         /// </summary>
@@ -1118,6 +1164,44 @@ namespace KingsRescue.UI
             if (damageTextToggle != null)
             {
                 damageTextToggle.SetValueWithoutNotify(GameSettings.ShowDamageText);
+            }
+
+            if (fixedJoystickToggle != null)
+            {
+                fixedJoystickToggle.SetValueWithoutNotify(GameSettings.FixedJoystick);
+            }
+
+            RefreshJoystickSide();
+        }
+
+        private void ApplyJoystickPlacement()
+        {
+            if (VirtualJoystick.Instance != null)
+            {
+                VirtualJoystick.Instance.ApplyPlacement();
+            }
+        }
+
+        private void RefreshJoystickSide()
+        {
+            if (joystickSideRow != null)
+            {
+                joystickSideRow.SetActive(GameSettings.FixedJoystick);
+            }
+
+            if (joystickLeftSelected != null)
+            {
+                joystickLeftSelected.SetActive(!GameSettings.JoystickOnRight);
+            }
+
+            if (joystickRightSelected != null)
+            {
+                joystickRightSelected.SetActive(GameSettings.JoystickOnRight);
+            }
+
+            if (joystickLeftToggle != null)
+            {
+                joystickLeftToggle.SetValueWithoutNotify(!GameSettings.JoystickOnRight);
             }
         }
 

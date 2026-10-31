@@ -215,7 +215,7 @@ MonoBehaviour:
     weight: 10
   - prefab: {fileID: 889982214784732533, guid: a78fab13a2b132144b4c28032bbad0d0, type: 3}
     weight: 10
-  decorationCount: {x: 6, y: 12}
+  decorationCount: {x: 12, y: 24}
   blockers:
   - prefab: {fileID: 3581756722814175934, guid: 8f08046994803488e8d8746410bb819e, type: 3}
     weight: 20
@@ -252,7 +252,7 @@ MonoBehaviour:
   - prefab: {fileID: 889982214784732533, guid: a78fab13a2b132144b4c28032bbad0d0, type: 3}
     weight: 15
   blockerCount: {x: 1, y: 2}
-  horizontalRange: 3
+  horizontalRange: 6
   verticalPadding: 1.2
   placementAttempts: 4
   minHorizontalSeparation: 2

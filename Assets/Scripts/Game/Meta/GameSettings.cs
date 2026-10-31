@@ -14,6 +14,8 @@ namespace KingsRescue.Meta
         private const string DamageTextKey = "KingsRescue.DamageText";
         private const string SensitivityKey = "KingsRescue.JoystickSensitivity";
         private const string SensitivityVersionKey = "KingsRescue.JoystickSensitivityVersion";
+        private const string FixedJoystickKey = "KingsRescue.FixedJoystick";
+        private const string JoystickSideKey = "KingsRescue.JoystickOnRight";
         private const string DefaultsVersionKey = "KingsRescue.SettingsDefaultsVersion";
 
         public const float MinJoystickSensitivity = 0.25f;
@@ -61,6 +63,28 @@ namespace KingsRescue.Meta
             set
             {
                 PlayerPrefs.SetInt(ShakeKey, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
+
+        /// <summary>When on, the stick stays in a bottom corner instead of appearing under the thumb.</summary>
+        public static bool FixedJoystick
+        {
+            get => PlayerPrefs.GetInt(FixedJoystickKey, 0) == 1;
+            set
+            {
+                PlayerPrefs.SetInt(FixedJoystickKey, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
+
+        /// <summary>Fixed stick sits in the bottom-right corner. Off keeps it in the bottom-left.</summary>
+        public static bool JoystickOnRight
+        {
+            get => PlayerPrefs.GetInt(JoystickSideKey, 0) == 1;
+            set
+            {
+                PlayerPrefs.SetInt(JoystickSideKey, value ? 1 : 0);
                 PlayerPrefs.Save();
             }
         }
