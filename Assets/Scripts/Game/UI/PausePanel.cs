@@ -102,8 +102,12 @@ namespace KingsRescue.UI
 
         private void Update()
         {
+            ButtonKeyCursor.Poll();
             Keyboard keyboard = Keyboard.current;
-            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame && !closing)
+            bool escape = keyboard != null && keyboard.escapeKey.wasPressedThisFrame;
+            bool pause = ButtonKeyCursor.PausePressed;
+            bool cancel = ButtonKeyCursor.CancelPressed;
+            if (!closing && (escape || pause || (cancel && open)))
             {
                 if (settingsOpen)
                 {
@@ -113,7 +117,7 @@ namespace KingsRescue.UI
                 {
                     Resume();
                 }
-                else
+                else if (escape || pause)
                 {
                     Open();
                 }

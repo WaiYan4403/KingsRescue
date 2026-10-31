@@ -23,6 +23,7 @@ namespace KingsRescue.Online
 
         private ApiClient api;
         private bool restoring;
+        private bool applyingRedirect;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics()
@@ -92,7 +93,9 @@ namespace KingsRescue.Online
                 return;
             }
 
+            Google.IdTokenReceived += OnRedirectToken;
             Google.Init(Config.googleWebClientId);
+            OnRedirectToken(Google.ConsumePendingToken());
 
             if (Account.Kind == AccountKind.None)
             {
@@ -108,6 +111,27 @@ namespace KingsRescue.Online
             finally
             {
                 restoring = false;
+            }
+        }
+
+        private async void OnRedirectToken(string idToken)
+        {
+            if (string.IsNullOrEmpty(idToken) || applyingRedirect || Account == null)
+            {
+                return;
+            }
+
+            applyingRedirect = true;
+            try
+            {
+                OnlineResult result = Account.Kind == AccountKind.Guest
+                    ? await Account.ConnectGoogle(idToken)
+                    : await Account.SignInWithGoogle(idToken);
+                Account.NoteGoogleFlow(result);
+            }
+            finally
+            {
+                applyingRedirect = false;
             }
         }
 

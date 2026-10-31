@@ -17,8 +17,8 @@ MonoBehaviour:
   description: Defeat 500 enemies to unlock Duplicate.
   kind: 0
   target: 500
-  enemy: {fileID: 0}
-  rewardCoins: 50
+  enemies: []
+  rewardCoins: 0
   rewardCharacter: {fileID: 0}
   rewardWeapon: {fileID: 0}
   rewardPassive: {fileID: 11400000, guid: 8b4a738f916755e4891a168829e871ee, type: 2}

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_KennelRules
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: kennel_rules
+  title: Kennel Rules
+  description: Kill 40 wolves with the Lance. Sit. Stay. Stop.
+  kind: 7
+  target: 40
+  enemies:
+  - {fileID: 11400000, guid: b8666681351d55943a6c27156cf021e5, type: 2}
+  weapon: {fileID: 11400000, guid: 601d542d4b3604ad2b77d5b4e0fa3a9b, type: 2}
+  rewardCoins: 400
+  rewardCharacter: {fileID: 0}
+  rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 0}

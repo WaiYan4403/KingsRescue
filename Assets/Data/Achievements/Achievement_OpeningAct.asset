@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_OpeningAct
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: opening_act
+  title: Opening Act
+  description: Kill 40 goblins with the Saung. They hated the melody. The melody won.
+  kind: 7
+  target: 40
+  enemies:
+  - {fileID: 11400000, guid: 5a51234f69da0bf4093fd1330267856c, type: 2}
+  - {fileID: 11400000, guid: 2e2cec80d33ea2545a403595083dda63, type: 2}
+  - {fileID: 11400000, guid: 0388d996a7d23e44287d586336993ceb, type: 2}
+  - {fileID: 11400000, guid: dd0c7f8bf5fa741159da596dace8f76f, type: 2}
+  - {fileID: 11400000, guid: 4f9de70f10a9f2648ba4397b36fa54ce, type: 2}
+  weapon: {fileID: 11400000, guid: 6d35377e7739c40048ee50b5cd4ef427, type: 2}
+  rewardCoins: 400
+  rewardCharacter: {fileID: 0}
+  rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 0}

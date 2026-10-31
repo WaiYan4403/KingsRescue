@@ -75,6 +75,17 @@ namespace KingsRescue.UI
             }
 
             SoundEffects.Play(SoundId.UiClick);
+            Choose();
+        }
+
+        /// <summary>Selects the slot without the click sound. Used while moving the menu cursor.</summary>
+        public void Choose()
+        {
+            if (!Collected)
+            {
+                return;
+            }
+
             clicked?.Invoke(this);
         }
     }

@@ -10,7 +10,8 @@ namespace KingsRescue.Data
         SurviveSeconds = 3,
         SmashChests = 4,
         CollectPowerUps = 5,
-        EarnCoins = 6
+        EarnCoins = 6,
+        KillWithWeapon = 7
     }
 
     [CreateAssetMenu(menuName = "King's Rescue/Achievement", fileName = "Achievement_")]
@@ -22,8 +23,11 @@ namespace KingsRescue.Data
         public AchievementKind kind = AchievementKind.KillAny;
         public int target = 1;
 
-        [Tooltip("KillEnemy only.")]
-        public EnemyDefinition enemy;
+        [Tooltip("KillEnemy: every listed enemy counts. KillWithWeapon: only these enemies, or any enemy when the list is empty.")]
+        public EnemyDefinition[] enemies;
+
+        [Tooltip("KillWithWeapon only. Kills landed by this weapon.")]
+        public WeaponDefinition weapon;
 
         [Header("Rewards")]
         public int rewardCoins;

@@ -71,6 +71,13 @@ namespace KingsRescue.Online
 
         public event Action Changed;
 
+        /// <summary>A Google redirect reloaded the page and the sign-in finished without a button click.</summary>
+        public event Action<OnlineResult> GoogleFlowFinished;
+
+        public bool HasGoogleFlow { get; private set; }
+
+        public OnlineResult LastGoogleFlow { get; private set; }
+
         public AccountStep GetStartStep()
         {
             if (Kind == AccountKind.None)
@@ -98,12 +105,22 @@ namespace KingsRescue.Online
             return OnlineResult.Success;
         }
 
-        public async Task<OnlineResult> SignInWithGoogle()
+        public Task<OnlineResult> SignInWithGoogle()
         {
-            (bool tokenOk, string idToken, OnlineResult failure) = await GetGoogleToken();
-            if (!tokenOk)
+            return SignInWithGoogle(null);
+        }
+
+        public async Task<OnlineResult> SignInWithGoogle(string idToken)
+        {
+            if (string.IsNullOrEmpty(idToken))
             {
-                return failure;
+                (bool tokenOk, string fetched, OnlineResult failure) = await GetGoogleToken();
+                if (!tokenOk)
+                {
+                    return failure;
+                }
+
+                idToken = fetched;
             }
 
             ApiResult<AuthResponse> result = await api.AuthGoogle(idToken);
@@ -122,7 +139,12 @@ namespace KingsRescue.Online
         /// Creates the backend account for a local guest and stores their chosen username on it.
         /// An existing Google profile is not overwritten; the player is asked before switching to it.
         /// </summary>
-        public async Task<OnlineResult> ConnectGoogle()
+        public Task<OnlineResult> ConnectGoogle()
+        {
+            return ConnectGoogle(null);
+        }
+
+        public async Task<OnlineResult> ConnectGoogle(string idToken)
         {
             if (Kind == AccountKind.None)
             {
@@ -134,10 +156,15 @@ namespace KingsRescue.Online
                 return OnlineResult.Fail("Choose a username first.");
             }
 
-            (bool tokenOk, string idToken, OnlineResult failure) = await GetGoogleToken();
-            if (!tokenOk)
+            if (string.IsNullOrEmpty(idToken))
             {
-                return failure;
+                (bool tokenOk, string fetched, OnlineResult failure) = await GetGoogleToken();
+                if (!tokenOk)
+                {
+                    return failure;
+                }
+
+                idToken = fetched;
             }
 
             string localName = Username;
@@ -213,6 +240,21 @@ namespace KingsRescue.Online
         public void ForgetPendingGoogleSwitch()
         {
             pendingGoogleIdToken = null;
+        }
+
+        public void NoteGoogleFlow(OnlineResult result)
+        {
+            LastGoogleFlow = result;
+            HasGoogleFlow = true;
+            GoogleFlowFinished?.Invoke(result);
+        }
+
+        public bool TakeGoogleFlow(out OnlineResult result)
+        {
+            result = LastGoogleFlow;
+            bool has = HasGoogleFlow;
+            HasGoogleFlow = false;
+            return has;
         }
 
         public async Task<OnlineResult> ClaimUsername(string requested)

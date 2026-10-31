@@ -360,7 +360,8 @@ namespace KingsRescue.Enemies
 
             deathBurst?.Trigger();
             GameManager.Instance?.RegisterKill(1, definition != null && definition.isBoss);
-            AchievementProgress.RecordKill(definition);
+            WeaponRuntime killer = info.Source != null ? info.Source.GetComponent<WeaponRuntime>() : null;
+            AchievementProgress.RecordKill(definition, killer != null ? killer.Definition : null);
             dropper?.DropRewards();
             slimeKing?.SpawnDeathSplit();
 

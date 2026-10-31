@@ -2,6 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.IO;
 
 [ExecuteInEditMode]
@@ -14,7 +15,8 @@ public class ScreenshotCapture : MonoBehaviour
         // ✔ Runtime screenshot (Play mode)
         if (Application.isPlaying)
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.LeftShift))
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && (keyboard.spaceKey.wasPressedThisFrame || keyboard.leftShiftKey.wasPressedThisFrame))
             {
                 TakeScreenshot();
             }

@@ -268,7 +268,7 @@ TextureImporter:
       name: LevelUpUI_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 129
         y: 278
         width: 114
         height: 43
@@ -422,8 +422,8 @@ TextureImporter:
       name: LevelUpUI_39
       rect:
         serializedVersion: 2
-        x: 0
-        y: 65
+        x: 1
+        y: 64
         width: 114
         height: 29
       alignment: 0

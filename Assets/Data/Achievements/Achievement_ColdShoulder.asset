@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_ColdShoulder
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: cold_shoulder
+  title: Cold Shoulder
+  description: Kill 60 enemies with Frozen. A polite way to say stop moving.
+  kind: 7
+  target: 60
+  enemies: []
+  weapon: {fileID: 11400000, guid: 5af9e4c084afaa04e95860cd9b8bc1b1, type: 2}
+  rewardCoins: 300
+  rewardCharacter: {fileID: 0}
+  rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 0}

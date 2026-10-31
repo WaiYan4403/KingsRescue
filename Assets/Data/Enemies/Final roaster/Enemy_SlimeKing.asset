@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eff0c62d1a843a9b459cfd968ad197, type: 3}
+  m_Name: Enemy_SlimeKing
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.EnemyDefinition
+  displayName: Slime King
+  voice: 1
+  prefab: {fileID: 1276373406001036176, guid: aff9a7c562deb86478241f7e4afe7b1b, type: 3}
+  isBoss: 1
+  healthBarHeight: 5.5
+  bossMinion: 1
+  isElite: 0
+  canFlipSprite: 0
+  bodyTint: {r: 1, g: 1, b: 1, a: 1}
+  bodyScale: 1
+  maxHealth: 1500
+  contactDamage: 20
+  contactInterval: 0.55
+  contactRadius: 0.95
+  dealsContactDamage: 1
+  knockbackResistance: 1
+  moveStyle: 3
+  moveSpeed: 1.5
+  scrollInfluence: 0
+  turnResponsiveness: 5
+  followChance: 1
+  giveUpWhenPassedChance: 0
+  separationRadius: 2.2
+  separationStrength: 4
+  preferredDistance: 4.5
+  spawnAsFlock: 0
+  flockMin: 8
+  flockMax: 12
+  attackStyle: 0
+  projectilePrefab: {fileID: 2716974212261402497, guid: 78f47d8c73559a14584034e48fc83df7, type: 3}
+  meteorDefinition: {fileID: 0}
+  attackInterval: 1.8
+  attackRange: 15
+  attackDamage: 20
+  projectileSpeed: 8
+  projectileLifetime: 3.2
+  projectileRadius: 0.4
+  projectileHoming: 0
+  projectileMaxDistance: 20
+  slowFactor: 0.1
+  slowDuration: 0
+  meteorWarning: 1.1
+  meteorRadius: 1.15
+  traits: 64
+  summonAlly: {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+  summonAllies:
+  - {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+  - {fileID: 11400000, guid: be1ca4bec745da341bcb4e5109f38763, type: 2}
+  - {fileID: 11400000, guid: d14b288b4f9d5fe48bbe2e69ca28e30c, type: 2}
+  summonCount: 10
+  specialInterval: 3.6
+  specialRadius: 1.3
+  bossKit: 4
+  hazardPrefab: {fileID: 0}
+  deathBurstDamage: 0
+  deathBurstRadius: 1.4
+  xpValue: 50
+  coinDropChance: 1
+  healthDropChance: 0.5
+  healthGrowthPerMinute: 0.2
+  damageGrowthPerMinute: 0.16

@@ -20,6 +20,14 @@ namespace KingsRescue.Meta
         }
 
         [Serializable]
+        private class WeaponKill
+        {
+            public string weaponId;
+            public string enemyId;
+            public int count;
+        }
+
+        [Serializable]
         private class SaveData
         {
             public string[] unlockedCharacters;
@@ -35,6 +43,7 @@ namespace KingsRescue.Meta
             public int lifetimeCoins;
             public float bestSurviveSeconds;
             public EnemyKill[] enemyKills;
+            public WeaponKill[] weaponKills;
         }
 
         private static SaveData data;
@@ -265,7 +274,7 @@ namespace KingsRescue.Meta
                 case AchievementKind.KillAny:
                     return data.totalKills;
                 case AchievementKind.KillEnemy:
-                    return CountEnemy(achievement.enemy);
+                    return CountEnemies(achievement.enemies);
                 case AchievementKind.PayCoins:
                     return IsCompleted(achievement) ? achievement.target : 0;
                 case AchievementKind.SurviveSeconds:
@@ -276,6 +285,8 @@ namespace KingsRescue.Meta
                     return data.powerUpsCollected;
                 case AchievementKind.EarnCoins:
                     return data.lifetimeCoins;
+                case AchievementKind.KillWithWeapon:
+                    return CountWeaponKills(achievement.weapon, achievement.enemies);
                 default:
                     return 0;
             }
@@ -305,13 +316,17 @@ namespace KingsRescue.Meta
             return true;
         }
 
-        public static void RecordKill(EnemyDefinition enemy)
+        public static void RecordKill(EnemyDefinition enemy, WeaponDefinition weapon = null)
         {
             EnsureLoaded();
             data.totalKills++;
             if (enemy != null)
             {
                 AddEnemyKill(enemy.name, 1);
+                if (weapon != null)
+                {
+                    AddWeaponKill(weapon.name, enemy.name, 1);
+                }
             }
 
             SweepCompletions();
@@ -458,14 +473,44 @@ namespace KingsRescue.Meta
             }
         }
 
-        private static int CountEnemy(EnemyDefinition enemy)
+        private static int CountEnemies(EnemyDefinition[] enemies)
         {
-            if (enemy == null || data.enemyKills == null)
+            if (enemies == null || enemies.Length == 0 || data.enemyKills == null)
             {
                 return 0;
             }
 
-            string id = enemy.name;
+            int total = 0;
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                EnemyDefinition enemy = enemies[i];
+                if (enemy == null)
+                {
+                    continue;
+                }
+
+                string id = enemy.name;
+                bool alreadyCounted = false;
+                for (int earlier = 0; earlier < i; earlier++)
+                {
+                    if (enemies[earlier] != null && enemies[earlier].name == id)
+                    {
+                        alreadyCounted = true;
+                        break;
+                    }
+                }
+
+                if (!alreadyCounted)
+                {
+                    total += CountNamedEnemy(id);
+                }
+            }
+
+            return total;
+        }
+
+        private static int CountNamedEnemy(string id)
+        {
             for (int i = 0; i < data.enemyKills.Length; i++)
             {
                 if (data.enemyKills[i] != null && data.enemyKills[i].id == id)
@@ -475,6 +520,75 @@ namespace KingsRescue.Meta
             }
 
             return 0;
+        }
+
+        private static int CountWeaponKills(WeaponDefinition weapon, EnemyDefinition[] enemies)
+        {
+            if (weapon == null || data.weaponKills == null)
+            {
+                return 0;
+            }
+
+            string weaponId = weapon.name;
+            bool anyEnemy = enemies == null || enemies.Length == 0;
+            int total = 0;
+            for (int i = 0; i < data.weaponKills.Length; i++)
+            {
+                WeaponKill kill = data.weaponKills[i];
+                if (kill == null || kill.weaponId != weaponId)
+                {
+                    continue;
+                }
+
+                if (anyEnemy || EnemyListed(enemies, kill.enemyId))
+                {
+                    total += kill.count;
+                }
+            }
+
+            return total;
+        }
+
+        private static bool EnemyListed(EnemyDefinition[] enemies, string id)
+        {
+            if (enemies == null || string.IsNullOrEmpty(id))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i] != null && enemies[i].name == id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void AddWeaponKill(string weaponId, string enemyId, int amount)
+        {
+            if (string.IsNullOrEmpty(weaponId) || string.IsNullOrEmpty(enemyId))
+            {
+                return;
+            }
+
+            data.weaponKills ??= Array.Empty<WeaponKill>();
+            for (int i = 0; i < data.weaponKills.Length; i++)
+            {
+                WeaponKill kill = data.weaponKills[i];
+                if (kill != null && kill.weaponId == weaponId && kill.enemyId == enemyId)
+                {
+                    kill.count += amount;
+                    return;
+                }
+            }
+
+            var expanded = new WeaponKill[data.weaponKills.Length + 1];
+            Array.Copy(data.weaponKills, expanded, data.weaponKills.Length);
+            expanded[expanded.Length - 1] = new WeaponKill { weaponId = weaponId, enemyId = enemyId, count = amount };
+            data.weaponKills = expanded;
         }
 
         private static void AddEnemyKill(string id, int amount)
@@ -510,7 +624,8 @@ namespace KingsRescue.Meta
                 collectedWeapons = Array.Empty<string>(),
                 collectedPassives = Array.Empty<string>(),
                 completedIds = Array.Empty<string>(),
-                enemyKills = Array.Empty<EnemyKill>()
+                enemyKills = Array.Empty<EnemyKill>(),
+                weaponKills = Array.Empty<WeaponKill>()
             };
         }
 
@@ -524,6 +639,7 @@ namespace KingsRescue.Meta
             save.collectedPassives ??= Array.Empty<string>();
             save.completedIds ??= Array.Empty<string>();
             save.enemyKills ??= Array.Empty<EnemyKill>();
+            save.weaponKills ??= Array.Empty<WeaponKill>();
         }
 
         private static bool Contains(string[] list, string id)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using KingsRescue.Core;
 
@@ -6,8 +7,8 @@ namespace KingsRescue.InputControl
 {
     /// <summary>
     /// Shows the authored Hand Guide after the run has been going for a moment,
-    /// and only when the player still has not touched the joystick.
-    /// One touch hides it for the rest of the run.
+    /// and only when the player still has not moved.
+    /// WASD, the arrow keys, or the joystick hides it for the rest of the run.
     /// </summary>
     public class JoystickHandGuide : MonoBehaviour
     {
@@ -78,7 +79,7 @@ namespace KingsRescue.InputControl
                 return;
             }
 
-            if (joystick != null && joystick.IsHeld)
+            if (PlayerMoved())
             {
                 Dismiss();
                 return;
@@ -133,6 +134,32 @@ namespace KingsRescue.InputControl
                 animator.Play("HandTuto", 0, 0f);
                 animator.Update(0f);
             }
+        }
+
+        bool PlayerMoved()
+        {
+            if (joystick != null && joystick.IsHeld)
+            {
+                return true;
+            }
+
+            Gamepad pad = Gamepad.current;
+            if (pad != null
+                && (pad.leftStick.ReadValue().sqrMagnitude > 0.04f || pad.dpad.ReadValue().sqrMagnitude > 0.04f))
+            {
+                return true;
+            }
+
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null)
+            {
+                return false;
+            }
+
+            return keyboard.wKey.isPressed || keyboard.aKey.isPressed
+                || keyboard.sKey.isPressed || keyboard.dKey.isPressed
+                || keyboard.upArrowKey.isPressed || keyboard.downArrowKey.isPressed
+                || keyboard.leftArrowKey.isPressed || keyboard.rightArrowKey.isPressed;
         }
 
         static bool RunHasStarted()

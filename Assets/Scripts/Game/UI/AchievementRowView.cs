@@ -113,6 +113,12 @@ namespace KingsRescue.UI
         public void OnPointerClick(PointerEventData eventData)
         {
             SoundEffects.Play(SoundId.UiClick);
+            Choose();
+        }
+
+        /// <summary>Selects the row without the click sound. Used while moving the menu cursor.</summary>
+        public void Choose()
+        {
             clicked?.Invoke(this);
         }
 

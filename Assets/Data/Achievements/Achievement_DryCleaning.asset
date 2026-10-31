@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_DryCleaning
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: dry_cleaning
+  title: Dry Cleaning
+  description: Kill 40 slimes with the Fire Grimoire. They evaporated. The smell did not.
+  kind: 7
+  target: 40
+  enemies:
+  - {fileID: 11400000, guid: 09301b85c3cde9b47ab268875914ac4b, type: 2}
+  - {fileID: 11400000, guid: be1ca4bec745da341bcb4e5109f38763, type: 2}
+  - {fileID: 11400000, guid: 0378decbd0e467a4ba43b2ec2436df5b, type: 2}
+  - {fileID: 11400000, guid: d14b288b4f9d5fe48bbe2e69ca28e30c, type: 2}
+  weapon: {fileID: 11400000, guid: a05bad6870b7df84abf220737f6c9cf1, type: 2}
+  rewardCoins: 400
+  rewardCharacter: {fileID: 0}
+  rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 0}

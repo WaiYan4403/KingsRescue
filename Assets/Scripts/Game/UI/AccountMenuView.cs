@@ -89,6 +89,18 @@ namespace KingsRescue.UI
             }
         }
 
+        public void NotifyExternalResult(OnlineResult result)
+        {
+            if (Account == null)
+            {
+                return;
+            }
+
+            switchPending = result.Code == OnlineAccount.CodeGoogleInUse;
+            ApplyAccountState(Account);
+            SetAccountStatus(result.Ok ? "Google connected." : result.Error, !result.Ok);
+        }
+
         public void RefreshAccount()
         {
             OnlineAccount account = Account;

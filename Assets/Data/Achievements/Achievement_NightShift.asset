@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fa87d2dbdedf84fa185b9a7646d251, type: 3}
+  m_Name: Achievement_NightShift
+  m_EditorClassIdentifier: Assembly-CSharp::KingsRescue.Data.AchievementDefinition
+  id: night_shift
+  title: Night Shift
+  description: Swat 800 bats. The moon can find someone else.
+  kind: 1
+  target: 800
+  enemies:
+  - {fileID: 11400000, guid: 7e309ae67654bd14581eac427c9a073c, type: 2}
+  - {fileID: 11400000, guid: dae62c6c566eeb046b22dbc420002bbe, type: 2}
+  weapon: {fileID: 0}
+  rewardCoins: 1200
+  rewardCharacter: {fileID: 0}
+  rewardWeapon: {fileID: 0}
+  rewardPassive: {fileID: 0}

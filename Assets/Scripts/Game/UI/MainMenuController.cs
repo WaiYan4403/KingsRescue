@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using KingsRescue.Audio;
 using KingsRescue.Data;
 using KingsRescue.Meta;
+using KingsRescue.Online;
 using ToggleSwitch = Poker.UI.ToggleSwitch.ToggleSwitch;
 
 namespace KingsRescue.UI
@@ -154,6 +155,17 @@ namespace KingsRescue.UI
 
         void Start()
         {
+            OnlineAccount account = OnlineServices.Instance != null ? OnlineServices.Instance.Account : null;
+            if (account != null)
+            {
+                account.GoogleFlowFinished += OnGoogleFlow;
+                if (account.TakeGoogleFlow(out OnlineResult pending))
+                {
+                    OnGoogleFlow(pending);
+                    return;
+                }
+            }
+
             // First launch (or an unfinished sign-up) lands on the account screens instead of home.
             if (accountView != null && accountView.TryBeginSetup())
             {
@@ -165,34 +177,145 @@ namespace KingsRescue.UI
 
         private void Update()
         {
+            ButtonKeyCursor.Poll();
             Keyboard keyboard = Keyboard.current;
-            if (keyboard == null || !keyboard.escapeKey.wasPressedThisFrame)
+            bool back = (keyboard != null && keyboard.escapeKey.wasPressedThisFrame) || ButtonKeyCursor.CancelPressed;
+            if (back && !UnfocusField())
             {
-                return;
-            }
-
-            // Escape is also the Android back key.
-            if (quitDialog != null && quitDialog.activeSelf)
-            {
-                CloseQuitConfirm();
-                return;
-            }
-
-            if (currentPanel == homePanel && currentPanel != null)
-            {
-                if (Application.platform != RuntimePlatform.WebGLPlayer)
+                // Escape is also the Android back key. East on a controller does the same.
+                if (quitDialog != null && quitDialog.activeSelf)
                 {
-                    OpenQuitConfirm();
+                    CloseQuitConfirm();
+                }
+                else if (currentPanel == homePanel && currentPanel != null)
+                {
+                    if (Application.platform != RuntimePlatform.WebGLPlayer)
+                    {
+                        OpenQuitConfirm();
+                    }
+                }
+                else
+                {
+                    GoBack();
+                }
+            }
+
+            bool menuOpen = quitDialog == null || !quitDialog.activeInHierarchy;
+            bool choosingHero = currentPanel == characterPanel && menuOpen;
+            bool choosingUpgrade = currentPanel == upgradePanel && menuOpen;
+            if (choosingHero && ButtonKeyCursor.Horizontal != 0)
+            {
+                if (StepCharacter(ButtonKeyCursor.Horizontal))
+                {
+                    SoundEffects.Play(SoundId.UiBrowse);
+                }
+
+                ButtonKeyCursor.ConsumeHorizontal();
+            }
+            else if (choosingUpgrade && ButtonKeyCursor.Horizontal != 0)
+            {
+                if (StepUpgrade(ButtonKeyCursor.Horizontal))
+                {
+                    SoundEffects.Play(SoundId.UiBrowse);
+                }
+
+                ButtonKeyCursor.ConsumeHorizontal();
+            }
+
+            Transform scope = null;
+            if (quitDialog != null && quitDialog.activeInHierarchy)
+            {
+                scope = quitDialog.transform;
+            }
+            else if (choosingHero)
+            {
+                scope = CharacterCursorRoot();
+            }
+            else if (currentPanel != null && currentPanel.activeInHierarchy)
+            {
+                scope = currentPanel.transform;
+            }
+
+            if (scope != null)
+            {
+                ButtonKeyCursor.Tick(scope);
+            }
+            else
+            {
+                ButtonKeyCursor.Release();
+            }
+        }
+
+        Transform CharacterCursorRoot()
+        {
+            if (characterPanel == null)
+            {
+                return null;
+            }
+
+            Transform parent = characterPanel.transform.parent;
+            if (parent == null || parent.GetComponent<Canvas>() != null)
+            {
+                return characterPanel.transform;
+            }
+
+            return parent;
+        }
+
+        bool UnfocusField()
+        {
+            if (currentPanel == null)
+            {
+                return false;
+            }
+
+            TMP_InputField field = currentPanel.GetComponentInChildren<TMP_InputField>();
+            if (field == null || !field.isFocused)
+            {
+                return false;
+            }
+
+            field.DeactivateInputField();
+            return true;
+        }
+
+        private void OnGoogleFlow(OnlineResult result)
+        {
+            OnlineAccount account = OnlineServices.Instance != null ? OnlineServices.Instance.Account : null;
+            if (account == null || accountView == null)
+            {
+                return;
+            }
+
+            account.TakeGoogleFlow(out _);
+
+            if (result.Ok)
+            {
+                if (account.HasUsername)
+                {
+                    ShowHome();
+                }
+                else
+                {
+                    ShowUsername();
                 }
 
                 return;
             }
 
-            GoBack();
+            ShowAccount();
+            accountView.NotifyExternalResult(result);
         }
 
         private void OnDestroy()
         {
+            ButtonKeyCursor.Release();
+            OnlineAccount account = OnlineServices.Instance != null ? OnlineServices.Instance.Account : null;
+            if (account != null)
+            {
+                account.GoogleFlowFinished -= OnGoogleFlow;
+            }
+
             if (resetUpgradesButton != null)
             {
                 resetUpgradesButton.onClick.RemoveListener(ResetSelectedUpgrades);
@@ -405,12 +528,12 @@ namespace KingsRescue.UI
             StepCharacter(-1);
         }
 
-        private void StepCharacter(int direction)
+        private bool StepCharacter(int direction)
         {
             List<CharacterDefinition> heroes = CollectHeroes();
             if (heroes.Count == 0)
             {
-                return;
+                return false;
             }
 
             int index = selected != null ? heroes.IndexOf(selected) : -1;
@@ -419,6 +542,7 @@ namespace KingsRescue.UI
                 : (index + direction + heroes.Count) % heroes.Count;
 
             SelectCharacter(heroes[index]);
+            return true;
         }
 
         /// <summary>Heroes in the order the portraits appear on screen, locked ones included.</summary>
@@ -574,6 +698,60 @@ namespace KingsRescue.UI
 
         // ---------------------------------------------------------------- upgrades
 
+        bool StepUpgrade(int direction)
+        {
+            if (upgradeRows == null || upgradeRows.Length == 0)
+            {
+                return false;
+            }
+
+            int count = 0;
+            int current = -1;
+            for (int i = 0; i < upgradeRows.Length; i++)
+            {
+                if (upgradeRows[i] == null)
+                {
+                    continue;
+                }
+
+                if (hasSelectedStat && upgradeRows[i].Stat == selectedStat)
+                {
+                    current = count;
+                }
+
+                count++;
+            }
+
+            if (count == 0)
+            {
+                return false;
+            }
+
+            int index = current < 0
+                ? (direction > 0 ? 0 : count - 1)
+                : (current + direction + count) % count;
+
+            int seen = 0;
+            for (int i = 0; i < upgradeRows.Length; i++)
+            {
+                UpgradeRowView row = upgradeRows[i];
+                if (row == null)
+                {
+                    continue;
+                }
+
+                if (seen == index)
+                {
+                    SelectUpgrade(row.Stat);
+                    return true;
+                }
+
+                seen++;
+            }
+
+            return false;
+        }
+
         /// <summary>A card was clicked. Shows its details, price and Buy button.</summary>
         public void SelectUpgrade(StatType stat)
         {
@@ -644,6 +822,26 @@ namespace KingsRescue.UI
                 resetUpgradesLabel.text = refund > 0
                     ? $"RESET  (refund {refund} coins)"
                     : "RESET UPGRADES";
+            }
+
+            RevealSelectedUpgrade();
+        }
+
+        void RevealSelectedUpgrade()
+        {
+            if (!hasSelectedStat || upgradeRows == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < upgradeRows.Length; i++)
+            {
+                UpgradeRowView row = upgradeRows[i];
+                if (row != null && row.Stat == selectedStat)
+                {
+                    ButtonKeyCursor.Reveal(row.transform as RectTransform);
+                    return;
+                }
             }
         }
 

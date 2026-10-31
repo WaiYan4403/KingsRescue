@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Spend 1,500 coins from your bank.
   kind: 2
   target: 1500
-  enemy: {fileID: 0}
+  enemies: []
   rewardCoins: 200
   rewardCharacter: {fileID: 0}
   rewardWeapon: {fileID: 0}

@@ -81,6 +81,12 @@ namespace Poker.UI.ToggleSwitch
             Toggle();
         }
 
+        /// <summary>Keyboard and controller activate the switch the same way a click does.</summary>
+        public void Press()
+        {
+            Toggle();
+        }
+
 
         private void Toggle()
         {

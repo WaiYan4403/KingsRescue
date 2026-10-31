@@ -71,6 +71,11 @@ namespace KingsRescue.InputControl
             else if (moveAction != null)
             {
                 axis = moveAction.ReadValue<Vector2>();
+                Vector2 dpad = ReadDpad();
+                if (dpad.sqrMagnitude > axis.sqrMagnitude)
+                {
+                    axis = dpad;
+                }
             }
             else
             {
@@ -90,6 +95,12 @@ namespace KingsRescue.InputControl
                 {
                     return stick;
                 }
+
+                Vector2 dpad = pad.dpad.ReadValue();
+                if (dpad.sqrMagnitude > 0.01f)
+                {
+                    return dpad;
+                }
             }
 
             Keyboard keyboard = Keyboard.current;
@@ -105,6 +116,12 @@ namespace KingsRescue.InputControl
                     - (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed ? 1f : 0f));
 
             return axis;
+        }
+
+        static Vector2 ReadDpad()
+        {
+            Gamepad pad = Gamepad.current;
+            return pad != null ? pad.dpad.ReadValue() : Vector2.zero;
         }
     }
 }
