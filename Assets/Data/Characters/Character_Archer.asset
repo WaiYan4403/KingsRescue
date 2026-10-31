@@ -30,5 +30,5 @@ MonoBehaviour:
   startingStats: []
   extraLives: 0
   unlockedByDefault: 0
-  unlockCost: 500
+  unlockCost: 2000
   comingSoon: 0
